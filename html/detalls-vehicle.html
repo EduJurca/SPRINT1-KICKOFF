@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMS - Detalls del Vehicle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .phone-frame {
+            border: 12px solid #212121;
+            border-radius: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            padding: 10px;
+            background-color: #212121;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div class="phone-frame w-full max-w-sm h-[667px] flex items-center justify-center">
+        <div class="bg-white p-8 rounded-2xl shadow-inner w-full h-full flex flex-col">
+            <div class="flex items-center justify-between mb-6">
+                <a href="reclamar-vehicle.html" class="text-[#1565C0] text-sm font-semibold hover:underline">← Tornar</a>
+                <h1 class="text-2xl font-bold text-gray-900 flex-1 text-center">Detalls del Vehicle</h1>
+            </div>
+
+            <div class="flex-1 overflow-y-auto space-y-6">
+                <div class="bg-gray-200 h-48 w-full rounded-lg flex items-center justify-center mb-4 text-gray-600">
+                    
+                </div>
+
+                <div class="space-y-4">
+                    <h2 class="text-xl font-bold text-gray-900">Informació general</h2>
+                    <div class="bg-[#F5F5F5] p-4 rounded-lg">
+                        <p class="text-gray-900 font-semibold text-lg">Matrícula: <span class="font-normal">AB 123 CD</span></p>
+                        <p class="text-gray-700">Model: <span class="font-normal">Motocicleta Y</span></p>
+                        <p class="text-gray-700">Estat: <span class="font-normal text-[#00C853]">Operatiu</span></p>
+                    </div>
+
+                    <h2 class="text-xl font-bold text-gray-900">Estat de la Bateria</h2>
+                    <div class="bg-[#F5F5F5] p-4 rounded-lg">
+                        <div class="w-full bg-gray-300 rounded-full h-6 overflow-hidden">
+                            <div class="bg-[#00C853] h-6 text-white flex items-center justify-center font-bold text-sm" style="width: 95%;">95%</div>
+                        </div>
+                    </div>
+
+                    <h2 class="text-xl font-bold text-gray-900">Ubicació</h2>
+                    <div class="bg-gray-300 h-48 w-full rounded-lg flex items-center justify-center text-gray-600">
+                        
+                    </div>
+                </div>
+            </div>
+
+            <a href="reclamar-vehicle.html" class="mt-6 block w-full bg-[#1565C0] text-white font-semibold py-3 px-6 rounded-lg hover:opacity-90 transition-opacity duration-300 text-center">
+                Reclamar Aquest Vehicle
+            </a>
+        </div>
+    </div>
+</body>
+</html>

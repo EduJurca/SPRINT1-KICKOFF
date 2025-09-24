@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMS - Comprar Temps</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .phone-frame {
+            border: 12px solid #212121;
+            border-radius: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            padding: 10px;
+            background-color: #212121;
+        }
+
+        /* Amagar la barra de desplaçament per a una aparença més neta */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+
+        /* Estils per al botó "pushable" daurat */
+        .pushable-premium {
+            position: relative;
+            background: transparent;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            outline-offset: 4px;
+            transition: filter 250ms;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .pushable-premium .shadow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            background: hsl(50, 60%, 40%);
+            will-change: transform;
+            transform: translateY(2px);
+            transition: transform 600ms cubic-bezier(.3, .7, .4, 1);
+        }
+        .pushable-premium .edge {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            background: linear-gradient(
+                to left,
+                hsl(50, 60%, 50%) 0%,
+                hsl(50, 70%, 60%) 8%,
+                hsl(50, 70%, 60%) 92%,
+                hsl(50, 60%, 50%) 100%
+            );
+        }
+        .pushable-premium .front {
+            display: block;
+            position: relative;
+            padding: 18px 24px;
+            border-radius: 12px;
+            font-size: 1.25rem;
+            color: #4a2d00;
+            font-weight: bold;
+            background: hsl(50, 70%, 60%);
+            will-change: transform;
+            transform: translateY(-6px);
+            transition: transform 600ms cubic-bezier(.3, .7, .4, 1);
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.4);
+        }
+        .pushable-premium:hover {
+            filter: brightness(110%);
+        }
+        .pushable-premium:active .front {
+            transform: translateY(-2px);
+            transition: transform 340ms cubic-bezier(.3, .7, .4, 1);
+        }
+        .pushable-premium:active .shadow {
+            transform: translateY(1px);
+            transition: transform 340ms cubic-bezier(.3, .7, .4, 1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div class="phone-frame w-full max-w-sm h-[667px] flex items-center justify-center">
+        <div class="bg-white p-5 rounded-2xl shadow-inner w-full h-full flex flex-col relative">
+            <!-- Logo de la aplicación dentro del frame -->
+            <img src="../img/logo.png" alt="Logo App" class="absolute top-4 left-4 h-10 w-10 z-20">
+            <a href="gestio.html" class="text-[#1565C0] text-sm font-semibold absolute top-[50.8px] left-4">← Tornar</a>
+            <header class="flex items-center justify-start mb-6">
+                <h1 class="text-2xl font-bold text-gray-900 flex-1 text-right">Comprar Temps</h1>
+            </header>
+
+            <main class="flex-1 overflow-y-auto no-scrollbar space-y-6 mt-3">
+                <div class="w-full text-center">
+                    <a href="premium.html" class="pushable-premium w-full block">
+                        <span class="shadow"></span>
+                        <span class="edge"></span>
+                        <span class="front">
+                            <span class="block text-sm">Passa a</span>
+                            <span class="block text-2xl">Premium</span>
+                            <span class="block text-sm">9,99€ / mes</span>
+                        </span>
+                    </a>
+                </div>
+
+                <div class="w-full text-center">
+                    <p class="text-gray-600 text-center text-sm">O selecciona una opció de temps:</p>
+                </div>
+                
+                <div class="w-full bg-yellow-100 p-3 rounded-lg flex items-center shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938-7a9 9 0 1113.876 0l-1.416 2.45a7 7 0 10-10.884 0L5.062 7z" />
+                    </svg>
+                    <p class="text-xs text-gray-700">Recorda: cada viatge té un cost de desbloqueig de **0,50€**.</p>
+                </div>
+
+                <ul class="space-y-4">
+                    <a href="#" class="block p-4 rounded-lg shadow-md flex justify-between items-center transition-all duration-300 transform hover:scale-105" style="background: linear-gradient(135deg, #f0f4f8, #e0e8f0);">
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-600 mr-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <div>
+                                <p class="font-bold text-lg text-gray-800">10 minuts</p>
+                                <p class="text-gray-600 text-sm">Per a viatges curts i urgents.</p>
+                            </div>
+                        </div>
+                        <span class="font-bold text-2xl text-gray-900">1,50€</span>
+                    </a>
+                    <a href="#" class="block p-4 rounded-lg shadow-md flex justify-between items-center transition-all duration-300 transform hover:scale-105" style="background: linear-gradient(135deg, #e6f7ff, #b3e0ff);">
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600 mr-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <div>
+                                <p class="font-bold text-lg text-blue-900">30 minuts</p>
+                                <p class="text-blue-700 text-sm">Per a desplaçaments mitjans.</p>
+                            </div>
+                        </div>
+                        <span class="font-bold text-2xl text-blue-900">4,00€</span>
+                    </a>
+                    <a href="#" class="block p-4 rounded-lg shadow-md flex justify-between items-center transition-all duration-300 transform hover:scale-105" style="background: linear-gradient(135deg, #e6ffec, #b3ffc7);">
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600 mr-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <div>
+                                <p class="font-bold text-lg text-green-900">60 minuts</p>
+                                <p class="text-green-700 text-sm">Ideal per a viatges més llargs.</p>
+                            </div>
+                        </div>
+                        <span class="font-bold text-2xl text-green-900">7,50€</span>
+                    </a>
+                    <a href="#" class="block p-4 rounded-lg shadow-md flex justify-between items-center transition-all duration-300 transform hover:scale-105" style="background: linear-gradient(135deg, #fff3e6, #ffe0b3);">
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-600 mr-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <div>
+                                <p class="font-bold text-lg text-yellow-900">120 minuts</p>
+                                <p class="text-yellow-700 text-sm">Dos hores completes de viatge.</p>
+                            </div>
+                        </div>
+                        <span class="font-bold text-2xl text-yellow-900">14,00€</span>
+                    </a>
+                    <a href="#" class="block p-4 rounded-lg shadow-md flex justify-between items-center transition-all duration-300 transform hover:scale-105" style="background: linear-gradient(135deg, #ffe0e6, #ffb3bf);">
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-600 mr-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <div>
+                                <p class="font-bold text-lg text-red-900">180 minuts</p>
+                                <p class="text-red-700 text-sm">Per a grans rutes o turisme.</p>
+                            </div>
+                        </div>
+                        <span class="font-bold text-2xl text-red-900">20,00€</span>
+                    </a>
+                    <a href="#" class="block p-4 rounded-lg shadow-md flex justify-between items-center transition-all duration-300 transform hover:scale-105" style="background: linear-gradient(135deg, #e6e6ff, #b3b3ff);">
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600 mr-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <div>
+                                <p class="font-bold text-lg text-indigo-900">240 minuts</p>
+                                <p class="text-indigo-700 text-sm">Un matí o tarda sencera.</p>
+                            </div>
+                        </div>
+                        <span class="font-bold text-2xl text-indigo-900">25,00€</span>
+                    </a>
+                </ul>
+            </main>
+            
+            <a href="resum-projecte.html" class="fixed bottom-10 right-10 block bg-[#1565C0] text-white p-4 rounded-full shadow-lg hover:bg-[#1151a3] transition-colors duration-300 z-50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

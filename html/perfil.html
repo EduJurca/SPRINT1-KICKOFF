@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMS - Perfil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .phone-frame {
+            border: 12px solid #212121;
+            border-radius: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            padding: 10px;
+            background-color: #212121;
+        }
+        /* Pushable button styles */
+        .pushable {
+            position: relative;
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 2rem;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            outline-offset: 4px;
+            background: linear-gradient(180deg, #1565C0 0%, #0D47A1 100%);
+            box-shadow: 0 6px #0D47A1;
+            user-select: none;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            flex: 0 0 auto;
+            width: 200px;
+            text-align: center;
+        }
+        .pushable:active {
+            box-shadow: 0 3px #0D47A1;
+            transform: translateY(3px);
+        }
+        /* Scroll container styles */
+        main.scroll-container {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            gap: 1rem;
+            padding-bottom: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        /* Hide scrollbar */
+        main.scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+        main.scroll-container {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;      /* Firefox */
+        }
+        /* Scroll snap children */
+        main.scroll-container > button {
+            scroll-snap-align: start;
+        }
+        /* Pagination dots */
+        .pagination-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .pagination-dots button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: none;
+            background-color: #cbd5e1; /* tailwind gray-300 */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .pagination-dots button.active {
+            background-color: #1565C0;
+        }
+        .active-section {
+            box-shadow: 0 0 0 3px #1565C0 inset;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div class="phone-frame w-full max-w-sm h-[667px] flex items-center justify-center">
+        <div class="bg-white p-8 rounded-2xl shadow-inner w-full h-full flex flex-col relative">
+            <!-- Logo de la aplicación dentro del frame -->
+            <img src="../img/logo.png" alt="Logo App" class="absolute top-4 left-4 h-10 w-10 z-20">
+            <a href="gestio.html" class="text-[#1565C0] text-sm font-semibold absolute top-[50.8px] left-4">← Tornar</a>
+            <header class="flex items-center justify-start mb-6">
+                <h1 class="text-2xl font-bold text-gray-900 flex-1 text-right">Dades Personals</h1>
+            </header>
+            
+            <div class="mb-6 border-b pb-4">
+                <h2 class="text-xl font-semibold mb-4 text-gray-900">Dades Personals</h2>
+                <div class="space-y-3">
+                    <p class="text-gray-700"><strong class="font-medium">Nom:</strong> <span id="user_firstname_span">Carregant...</span></p>
+                    <p class="text-gray-700"><strong class="font-medium">Cognoms:</strong> <span id="user_lastname_span">Carregant...</span></p>
+                    <p class="text-gray-700"><strong class="font-medium">Telèfon:</strong> <span id="user_phone_span">Carregant...</span></p>
+                    <p class="text-gray-700"><strong class="font-medium">Correu:</strong> <span id="user_email_span">Carregant...</span></p>
+                </div>
+                <div id="actionButtons" class="mt-4 flex space-x-2">
+                    <button id="editBtn" class="flex-1 bg-[#1565C0] text-white font-semibold py-2 px-4 rounded-lg hover:opacity-90 transition-opacity duration-300">
+                        Editar
+                    </button>
+                    <button id="saveBtn" class="flex-1 bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:opacity-90 transition-opacity duration-300 hidden">
+                        Guardar
+                    </button>
+                </div>
+                <!-- Botons per completar perfil i verificar carnet -->
+                <main class="scroll-container mt-4 flex snap-x snap-mandatory gap-4 px-2 no-scrollbar">
+                    <!-- Section 1: Completar i Verificar -->
+                    <div class="flex-none w-full flex flex-col items-center snap-start gap-4">
+                        <a href="completar-perfil.html" class="flex-1 bg-gray-200 text-gray-900 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors duration-300 text-center">
+                            Completar Perfil
+                        </a>
+                        <a href="verificar-conduir.html" class="flex-1 bg-gray-200 text-gray-900 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors duration-300 text-center">
+                            Verificar Carnet
+                        </a>
+                    </div>
+
+                    <!-- Section 2: Històric i Pagaments -->
+                    <div class="flex-none w-full flex flex-col items-center snap-start gap-4">
+                        <a href="historial.html" class="flex-1 bg-gray-200 text-gray-900 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors duration-300 text-center">
+                            Històric Viatges
+                        </a>
+                        <a href="pagaments.html" class="flex-1 bg-gray-200 text-gray-900 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors duration-300 text-center">
+                            Pagaments
+                        </a>
+                    </div>
+                </main>
+                <div id="paginationDots" class="flex justify-center gap-2 mt-2">
+                    <span class="dot w-3 h-3 rounded-full bg-gray-400"></span>
+                    <span class="dot w-3 h-3 rounded-full bg-gray-400"></span>
+                </div>
+            </div>
+            
+
+            </main>
+        </div>
+    </div>
+</body>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const userId = localStorage.getItem('user_id');
+    if (!userId) return;
+
+    const fields = ['firstname', 'lastname', 'phone', 'email'];
+    const userData = {};
+
+    const editBtn = document.getElementById('editBtn');
+    const saveBtn = document.getElementById('saveBtn');
+
+    // Carregar dades
+    fetch(`/api/user/${userId}`)
+        .then(res => res.json())
+        .then(data => {
+            if(data.success && data.user) {
+                userData.firstname = data.user.first_name || '';
+                userData.lastname = data.user.last_name || '';
+                userData.phone = data.user.phone || '';
+                userData.email = data.user.email || '';
+
+                document.getElementById('user_firstname_span').textContent = userData.firstname;
+                document.getElementById('user_lastname_span').textContent = userData.lastname;
+                document.getElementById('user_phone_span').textContent = userData.phone;
+                document.getElementById('user_email_span').textContent = userData.email;
+            }
+        })
+        .catch(err => console.error(err));
+
+    // Fer editable
+    editBtn.addEventListener('click', () => {
+        fields.forEach(f => {
+            const span = document.getElementById(`user_${f}_span`);
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = span.textContent;
+            input.id = `input_${f}`;
+            input.className = "w-full px-2 py-1 border rounded";
+            span.replaceWith(input);
+        });
+        editBtn.classList.add('hidden');
+        saveBtn.classList.remove('hidden');
+    });
+
+    // Guardar canvis
+    saveBtn.addEventListener('click', () => {
+        const updatedData = {};
+        fields.forEach(f => {
+            const input = document.getElementById(`input_${f}`);
+            updatedData[f] = input.value.trim();
+        });
+
+        fetch(`/api/user/update/${userId}`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(updatedData)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                fields.forEach(f => {
+                    const input = document.getElementById(`input_${f}`);
+                    const span = document.createElement('span');
+                    span.id = `user_${f}_span`;
+                    span.textContent = input.value;
+                    span.className = '';
+                    input.replaceWith(span);
+                });
+                editBtn.classList.remove('hidden');
+                saveBtn.classList.add('hidden');
+            } else {
+                alert(data.msg || "Error al desar dades");
+            }
+        })
+        .catch(err => console.error(err));
+    });
+
+    // Highlight active section buttons on scroll and update pagination dots
+    const scrollContainer = document.querySelector('main.scroll-container');
+    if (!scrollContainer) return;
+
+    const sectionContainers = Array.from(scrollContainer.children);
+    const paginationDots = document.querySelectorAll('#paginationDots .dot');
+
+    function updateActiveSection() {
+        const scrollLeft = scrollContainer.scrollLeft;
+        const containerCenter = scrollLeft + scrollContainer.offsetWidth / 2;
+
+        let activeIndex = 0;
+        let minDistance = Infinity;
+
+        sectionContainers.forEach((section, idx) => {
+            const sectionLeft = section.offsetLeft;
+            const sectionRight = section.offsetLeft + section.offsetWidth;
+            const sectionCenter = (sectionLeft + sectionRight) / 2;
+            const distance = Math.abs(containerCenter - sectionCenter);
+            if (distance < minDistance) {
+                minDistance = distance;
+                activeIndex = idx;
+            }
+        });
+
+        // Update buttons' active-section class
+        sectionContainers.forEach((section, idx) => {
+            section.querySelectorAll('a').forEach(btn => {
+                btn.classList.toggle('active-section', idx === activeIndex);
+            });
+        });
+
+        // Update pagination dots
+        paginationDots.forEach((dot, idx) => {
+            dot.classList.toggle('bg-gray-700', idx === activeIndex);
+            dot.classList.toggle('bg-gray-400', idx !== activeIndex);
+        });
+    }
+
+    // Initial highlight
+    updateActiveSection();
+
+    scrollContainer.addEventListener('scroll', () => {
+        window.requestAnimationFrame(updateActiveSection);
+    });
+});
+</script>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMS - Pagaments</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .phone-frame {
+            border: 12px solid #212121;
+            border-radius: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            padding: 10px;
+            background-color: #212121;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div class="phone-frame w-full max-w-sm h-[667px] flex items-center justify-center">
+        <div class="bg-white p-8 rounded-2xl shadow-inner w-full h-full flex flex-col">
+            <div class="flex items-center justify-between mb-6">
+                <a href="perfil.html" class="text-[#1565C0] text-sm font-semibold hover:underline">← Tornar</a>
+                <h1 class="text-2xl font-bold text-gray-900 flex-1 text-center">Pagaments</h1>
+            </div>
+            
+            <div class="mb-6 border-b pb-4">
+                <h2 class="text-xl font-semibold mb-4 text-gray-900">Targetes Actuals</h2>
+                <ul class="space-y-2">
+                    <li class="bg-[#F5F5F5] p-3 rounded-lg shadow-sm">
+                        <p class="text-gray-700">VISA **** **** **** 1234</p>
+                    </li>
+                </ul>
+            </div>
+            
+            <a href="#" class="block w-full bg-[#1565C0] text-white font-semibold py-3 px-6 rounded-lg hover:opacity-90 transition-opacity duration-300 text-center">
+                Afegir Targeta
+            </a>
+        </div>
+    </div>
+</body>
+</html>

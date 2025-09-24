@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMS - Subscripció Premium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .phone-frame {
+            border: 12px solid #212121;
+            border-radius: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            padding: 10px;
+            background-color: #212121;
+        }
+        
+        /* Amagar la barra de desplaçament per a una aparença més neta */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div class="phone-frame w-full max-w-sm h-[667px] flex items-center justify-center">
+        <div class="bg-white p-8 rounded-2xl shadow-inner w-full h-full flex flex-col">
+            <header class="flex items-center justify-start mb-6">
+                <a href="comprar-temps.html" class="text-[#1565C0] text-sm font-semibold hover:underline">← Tornar</a>
+                <h1 class="text-2xl font-bold text-gray-900 flex-1 text-center">Subscripció Premium</h1>
+            </header>
+            
+            <main class="flex-1 overflow-y-auto no-scrollbar space-y-6">
+                <div class="text-center bg-yellow-100 p-4 rounded-lg">
+                    <p class="text-xl font-bold text-yellow-800">Només per 9,99€ / mes</p>
+                    <p class="text-gray-600 text-sm mt-1">Cancel·la en qualsevol moment.</p>
+                </div>
+                
+                <h2 class="text-xl font-bold text-gray-900 mt-4">Què inclou el teu pla Premium?</h2>
+                <ul class="space-y-4 text-gray-700">
+                    <li class="flex items-start">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500 mr-3 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <div>
+                            <p class="font-bold">Desbloqueig Gratuït</p>
+                            <p class="text-sm">No paguis la tarifa de desbloqueig de 0,50€ per a cada viatge.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500 mr-3 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <div>
+                            <p class="font-bold">25 Minuts Gratuïts cada mes</p>
+                            <p class="text-sm">Utilitza'ls com vulguis, el temps es reinicia mensualment.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500 mr-3 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <div>
+                            <p class="font-bold">Prioritat en el Servei Tècnic</p>
+                            <p class="text-sm">Atenció prioritària i ràpida en cas d'incidència.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500 mr-3 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <div>
+                            <p class="font-bold">Notificacions Personalitzades</p>
+                            <p class="text-sm">Alertes sobre vehicles amb bateria baixa a prop teu.</p>
+                        </div>
+                    </li>
+                </ul>
+            </main>
+            
+            <div class="mt-8 text-center w-full">
+                <button class="inline-block w-full bg-[#00C853] text-white font-bold py-3 px-6 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105 hover:bg-[#00a845] focus:outline-none focus:ring-2 focus:ring-[#00C853] focus:ring-offset-2">
+                    Activar Subscripció
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

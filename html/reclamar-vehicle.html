@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMS - Reclamar Vehicle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .phone-frame {
+            border: 12px solid #212121;
+            border-radius: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            padding: 10px;
+            background-color: #212121;
+        }
+
+        /* Amagar la barra de desplaçament per a una aparença més neta */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div class="phone-frame w-full max-w-sm h-[667px] flex items-center justify-center">
+        <div class="bg-white p-8 rounded-2xl shadow-inner w-full h-full flex flex-col relative">
+            <!-- Logo de la aplicación -->
+            <img src="../img/logo.png" alt="Logo App" class="absolute top-4 left-4 h-10 w-10 z-20">
+            <a href="gestio.html" class="text-[#1565C0] text-sm font-semibold absolute top-[50.8px] left-4">← Tornar</a>
+            <header class="flex items-center justify-start mb-6">
+                <h1 class="text-2xl font-bold text-gray-900 flex-1 text-right">Localitzar Vehicles</h1>
+            </header>
+
+            <!-- Contenido principal -->
+            <main class="flex-1 flex flex-col min-h-0">
+                <!-- Mapa de vehículos disponibles -->
+                <div class="bg-gray-300 h-48 w-full rounded-lg flex items-center justify-center text-gray-600 font-medium text-sm shadow-inner mb-4">
+                    [Mapa amb vehicles disponibles]
+                </div>
+
+                <!-- Sección de Vehicles propers -->
+                <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-bold text-gray-900">Vehicles propers</h2>
+                        <button id="toggle-vehicles" class="flex items-center bg-gray-200 p-2 rounded-lg text-gray-700 hover:bg-gray-300 transition-colors duration-300">
+                            <img src="../img/discapacidad.png" alt="Vehicles discapacitats" class="h-6 w-6">
+                        </button>
+                    </div>
+
+                    <!-- Listas de vehículos con scroll -->
+                    <div class="flex-1 min-h-0 overflow-y-auto no-scrollbar">
+                        <ul id="normal-list" class="space-y-4">
+                            <li class="bg-gray-100 p-4 rounded-lg shadow-sm flex items-center justify-between">
+                                <div>
+                                    <h3 class="font-bold text-base">ID: T44-23</h3>
+                                    <p class="text-gray-700 text-sm">Bateria: 85%</p>
+                                    <p class="text-gray-700 text-xs">Ubicació: Carrer Major, 15</p>
+                                </div>
+                                <button class="bg-[#1565C0] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#1151a3] transition-colors duration-300">Reclamar</button>
+                            </li>
+                            <li class="bg-gray-100 p-4 rounded-lg shadow-sm flex items-center justify-between">
+                                <div>
+                                    <h3 class="font-bold text-base">ID: B21-09</h3>
+                                    <p class="text-gray-700 text-sm">Bateria: 60%</p>
+                                    <p class="text-gray-700 text-xs">Ubicació: Plaça Catalunya</p>
+                                </div>
+                                <button class="bg-[#1565C0] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#1151a3] transition-colors duration-300">Reclamar</button>
+                            </li>
+                            <li class="bg-gray-100 p-4 rounded-lg shadow-sm flex items-center justify-between">
+                                <div>
+                                    <h3 class="font-bold text-base">ID: S88-41</h3>
+                                    <p class="text-gray-700 text-sm">Bateria: 95%</p>
+                                    <p class="text-gray-700 text-xs">Ubicació: Avinguda de la Llibertat</p>
+                                </div>
+                                <button class="bg-[#1565C0] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#1151a3] transition-colors duration-300">Reclamar</button>
+                            </li>
+                            <li class="bg-gray-100 p-4 rounded-lg shadow-sm flex items-center justify-between">
+                                <div>
+                                    <h3 class="font-bold text-base">ID: R12-78</h3>
+                                    <p class="text-gray-700 text-sm">Bateria: 70%</p>
+                                    <p class="text-gray-700 text-xs">Ubicació: Carrer de la Pau</p>
+                                </div>
+                                <button class="bg-[#1565C0] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#1151a3] transition-colors duration-300">Reclamar</button>
+                            </li>
+                            <li class="bg-gray-100 p-4 rounded-lg shadow-sm flex items-center justify-between">
+                                <div>
+                                    <h3 class="font-bold text-base">ID: F54-32</h3>
+                                    <p class="text-gray-700 text-sm">Bateria: 55%</p>
+                                    <p class="text-gray-700 text-xs">Ubicació: Passeig Marítim</p>
+                                </div>
+                                <button class="bg-[#1565C0] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#1151a3] transition-colors duration-300">Reclamar</button>
+                            </li>
+                            <li class="bg-gray-100 p-4 rounded-lg shadow-sm flex items-center justify-between">
+                                <div>
+                                    <h3 class="font-bold text-base">ID: V90-65</h3>
+                                    <p class="text-gray-700 text-sm">Bateria: 90%</p>
+                                    <p class="text-gray-700 text-xs">Ubicació: Ronda Universitat</p>
+                                </div>
+                                <button class="bg-[#1565C0] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#1151a3] transition-colors duration-300">Reclamar</button>
+                            </li>
+                        </ul>
+
+                        <ul id="special-list" class="space-y-4 hidden">
+                            <li class="bg-gray-100 p-4 rounded-lg shadow-sm flex items-center justify-between">
+                                <div>
+                                    <h3 class="font-bold text-base">ID: W11-22</h3>
+                                    <p class="text-gray-700 text-sm">Bateria: 92%</p>
+                                    <p class="text-gray-700 text-sm font-semibold">Adaptat per: Mobilitat reduïda</p>
+                                    <p class="text-gray-700 text-xs">Ubicació: Carrer Major, 15</p>
+                                </div>
+                                <button class="bg-[#1565C0] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#1151a3] transition-colors duration-300">Reclamar</button>
+                            </li>
+                            <li class="bg-gray-100 p-4 rounded-lg shadow-sm flex items-center justify-between">
+                                <div>
+                                    <h3 class="font-bold text-base">ID: D33-44</h3>
+                                    <p class="text-gray-700 text-sm">Bateria: 75%</p>
+                                    <p class="text-gray-700 text-sm font-semibold">Adaptat per: Discapacitat auditiva</p>
+                                </div>
+                                <button class="bg-[#1565C0] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#1151a3] transition-colors duration-300">Reclamar</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('toggle-vehicles').addEventListener('click', function() {
+            const normalList = document.getElementById('normal-list');
+            const specialList = document.getElementById('special-list');
+            
+            normalList.classList.toggle('hidden');
+            specialList.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>
