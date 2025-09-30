@@ -1,0 +1,7 @@
+FROM php:8.2-apache
+# Habilita el mòdul d'Apache de reescriptura
+RUN a2enmod rewrite
+# Instal·la les extensions de PHP per a bases de dades
+RUN docker-php-ext-install pdo pdo_mysql mysqli
+# Instal·la l'extensió de MongoDB per a PHP
+RUN pecl install mongodb && docker-php-ext-enable mongodb

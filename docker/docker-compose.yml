@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # Contenidor per al servidor web amb Apache i PHP
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile-web
+    container_name: VC-web
+    networks:
+      - sims-net
+    ports:
+      - "8080:80"
+    volumes:
+      - ../public_html:/var/www/html
+      - ../src:/var/www/src
+    depends_on:
+      - mariadb
+      - mongodb
+
+  # Contenidor per a MariaDB
+  mariadb:
+    image: mariadb:latest
+    container_name: VC-mariadb
+    networks:
+      - sims-net
+    environment:
+      MYSQL_ROOT_PASSWORD: Putamare123.
+      MYSQL_DATABASE: simsdb
+      MYSQL_USER: simsuser
+      MYSQL_PASSWORD: Putamare123
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  # Contenidor per a MongoDB
+  mongodb:
+    image: mongo:latest
+    container_name: VC-mongodb
+    networks:
+      - sims-net
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: simsadmin
+      MONGO_INITDB_ROOT_PASSWORD: Putamare123.
+      MONGO_INITDB_DATABASE: simsdb
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27017:27017"
+
+networks:
+  sims-net:
+    driver: bridge
+
+volumes:
+  mariadb_data:
+  mongodb_data:
