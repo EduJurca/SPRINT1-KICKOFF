@@ -1,5 +1,58 @@
-config
-database.py
-requirements.txt
-.vscode
-.venv
+# ----------------------------------------------------------------------
+# Dependències i Entorn
+# ----------------------------------------------------------------------
+
+# Entorns Virtuals de Python (si n'utilitzes un per al database.py)
+# Només cal si el teu entorn es diu 'venv'
+venv/
+.venv/
+
+# Paquets de Python instal·lats localment (si fas 'pip install' sense Docker)
+__pycache__/
+*.pyc
+.mypy_cache/
+.pytest_cache/
+
+# ----------------------------------------------------------------------
+# Docker
+# ----------------------------------------------------------------------
+
+# Imatges de Docker construïdes localment i cache (opcional, però útil)
+# També exclou la carpeta on Docker pot guardar volums persistents
+.docker/
+.docker-build/
+
+# ----------------------------------------------------------------------
+# Dades Sensibles i Configuració Local
+# ----------------------------------------------------------------------
+
+# Fitxers de configuració local. Si configures variables d'entorn
+# amb un fitxer .env o config local, s'ha d'excloure.
+# Això evita pujar credencials reals a Git.
+.env
+config/local.ini
+config/secrets.php
+config/config.local.php
+
+# Les carpetes on es guarden les imatges pujades pels usuaris
+# El codi PHP apunta a una ubicació, però aquesta carpeta no ha de ser
+# versionada un cop desplegada, ja que pot tenir molts fitxers grans.
+/public_html/uploads/
+/public_html/temp/
+
+# ----------------------------------------------------------------------
+# Configuració d'IDE (VS Code)
+# ----------------------------------------------------------------------
+
+# Carpeta de configuració local de l'IDE
+.vscode/
+
+# ----------------------------------------------------------------------
+# Fitxers del sistema i Logs
+# ----------------------------------------------------------------------
+
+*.log
+*.tmp
+# Logs generats pel servidor (si no es guarden a la carpeta 'logs/')
+/public_html/error_log
+/public_html/logs/
