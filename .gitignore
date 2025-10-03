@@ -56,3 +56,6 @@ config/config.local.php
 # Logs generats pel servidor (si no es guarden a la carpeta 'logs/')
 /public_html/error_log
 /public_html/logs/
+
+# Fitxers de sistema
+.DS_Store
