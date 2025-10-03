@@ -109,10 +109,10 @@
 
         <!-- Botó Tancar Sessió -->
         <div class="mt-8">
-          <a href="../../index.html"
-             class="block w-full bg-gray-300 text-gray-900 font-semibold py-3 px-6 rounded-lg hover:bg-gray-400 transition-colors duration-300 text-center">
+          <button id="logoutButton"
+            class="block w-full bg-gray-300 text-gray-900 font-semibold py-3 px-6 rounded-lg hover:bg-gray-400 transition-colors duration-300 text-center">
             Tancar Sessió
-          </a>
+          </button>
         </div>
       </main>
       
@@ -142,7 +142,7 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  fetch('../../src/controllers/gestio.php', { credentials: 'include' })
+  fetch('/src/api/gestio.php', { credentials: 'include' })
     .then(response => response.json())
     .then(data => {
       const tempsDisponible = document.querySelector('.text-4xl');
@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", function () {
               { element: document.querySelector('a[href="../vehicle/localitzar-vehicle.html"]'), intro: "Aquí pots reclamar un vehicle disponible." },
               { element: document.querySelector('a[href="../vehicle/comprar-temps.html"]'), intro: "Aquí pots comprar més temps d'ús." },
               { element: document.querySelector('a[href="../profile/perfil.html"]'), intro: "Aquí pots veure i editar el teu perfil." },
-              { element: document.querySelector('a[href="../../index.html"]'), intro: "Finalment, aquí pots tancar la sessió." }
+              { element: document.querySelector('button#logoutButton'), intro: "Finalment, aquí pots tancar la sessió." }
             ],
             showProgress: true,
             showBullets: false,
@@ -187,6 +187,28 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error(error);
       // Podries afegir aquí el tutorial fallback si vols
     });
+
+  // Afegir funcionalitat de logout
+  const logoutButton = document.getElementById('logoutButton');
+  if (logoutButton) {
+    logoutButton.addEventListener('click', function () {
+      fetch('/src/api/logout.php', {
+        method: 'POST',
+        credentials: 'include'
+      })
+      .then(response => {
+        if (response.ok) {
+          // Redirigir a la pàgina d'inici de sessió o pàgina principal
+          window.location.href = '../../index.html';
+        } else {
+          alert('Error en tancar la sessió. Torna-ho a intentar.');
+        }
+      })
+      .catch(() => {
+        alert('Error en tancar la sessió. Torna-ho a intentar.');
+      });
+    });
+  }
 });
 </script>
 

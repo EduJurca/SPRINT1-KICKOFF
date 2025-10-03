@@ -47,7 +47,7 @@
             return;
         }
         // Ruta del servidor PHP dins de l'entorn Docker
-        fetch('../../src/controllers/login.php', {
+        fetch('/src/api/login.php', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',

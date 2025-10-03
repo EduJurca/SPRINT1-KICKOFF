@@ -1,2 +1,5 @@
 config
 database.py
+requirements.txt
+.vscode
+.venv

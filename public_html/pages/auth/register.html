@@ -46,7 +46,7 @@
             email: document.getElementById('email').value,
             password: document.getElementById('password').value
         };
-        fetch('../../src/controllers/register.php', {
+        fetch('/src/api/register.php', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)

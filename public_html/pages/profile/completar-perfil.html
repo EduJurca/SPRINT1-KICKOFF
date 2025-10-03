@@ -65,7 +65,7 @@
   </div>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      fetch('../../src/controllers/completar-perfil.php', { credentials: 'include' })
+      fetch('/src/api/completar-perfil.php', { credentials: 'include' })
         .then(response => response.json())
         .then(data => {
           if (data && data.success && data.data) {
@@ -94,7 +94,7 @@
         address: form.address.value,
         sex: form.sex.value
       };
-      fetch('../../src/controllers/completar-perfil.php', {
+      fetch('/src/api/completar-perfil.php', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         credentials: 'include',
