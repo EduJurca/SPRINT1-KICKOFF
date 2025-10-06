@@ -1,0 +1,412 @@
+{
+  "dashboard": {
+    "title": "Tutorial del Panel de Control",
+    "steps": [
+      {
+        "element": ".text-4xl, .text-5xl, h1",
+        "title": "Bienvenido a VoltiaCar",
+        "intro": "Esta es tu pantalla principal. Aquí puedes ver toda la información importante sobre tu cuenta y acceder a todas las funciones del servicio de carsharing."
+      },
+      {
+        "element": ".text-4xl, .text-5xl",
+        "title": "Tiempo Disponible",
+        "intro": "Aquí puedes ver el tiempo que te queda para utilizar los vehículos. Este tiempo se descuenta mientras usas un vehículo. Cuando se acabe, puedes comprar más tiempo."
+      },
+      {
+        "element": "a[href*='localitzar-vehicle'], a[href*='search.php']",
+        "title": "Buscar y Localizar Vehículos",
+        "intro": "Haz clic aquí para ver un mapa con todos los vehículos disponibles cerca de ti. Puedes buscar vehículos por ubicación, tipo o disponibilidad."
+      },
+      {
+        "element": "a[href*='administrar-vehicle']",
+        "title": "Control del Vehículo",
+        "intro": "Cuando tengas un vehículo reservado, aquí puedes controlarlo: arrancar el motor, activar luces, claxon y más funciones."
+      },
+      {
+        "element": "a[href*='comprar-temps']",
+        "title": "Comprar Tiempo",
+        "intro": "Cuando te quedes sin tiempo, puedes comprar más minutos aquí. Hay diferentes paquetes disponibles según tus necesidades."
+      },
+      {
+        "element": "a[href*='perfil'], a[href*='profile']",
+        "title": "Tu Perfil",
+        "intro": "Aquí puedes ver y editar tu información personal, cambiar la contraseña, gestionar métodos de pago y configurar tus preferencias."
+      },
+      {
+        "element": "#logoutButton, button[onclick*='logout'], a[href*='logout']",
+        "title": "Cerrar Sesión",
+        "intro": "Cuando termines de usar la aplicación, haz clic aquí para cerrar sesión de forma segura y proteger tu cuenta."
+      },
+      {
+        "element": "button[id*='accessibility'], a[href*='accessibility']",
+        "title": "Opciones de Accesibilidad",
+        "intro": "Puedes acceder a las opciones de accesibilidad para ajustar el tamaño del texto, contraste y otras configuraciones para mejorar tu experiencia."
+      }
+    ]
+  },
+  "registration": {
+    "title": "Tutorial de Registro",
+    "steps": [
+      {
+        "element": "form, .registration-form",
+        "title": "Formulario de Registro",
+        "intro": "Completa este formulario con tus datos personales para crear una cuenta nueva en VoltiaCar."
+      },
+      {
+        "element": "input[name='name'], input[name='nom'], input[type='text']:first-of-type",
+        "title": "Nombre Completo",
+        "intro": "Introduce tu nombre completo. Esta información se utilizará para identificarte en el sistema."
+      },
+      {
+        "element": "input[name='email'], input[type='email']",
+        "title": "Correo Electrónico",
+        "intro": "Introduce tu correo electrónico. Lo utilizaremos para enviarte confirmaciones y notificaciones importantes."
+      },
+      {
+        "element": "input[name='password'], input[type='password']:first-of-type",
+        "title": "Contraseña",
+        "intro": "Crea una contraseña segura con al menos 8 caracteres, incluyendo letras mayúsculas, minúsculas y números."
+      },
+      {
+        "element": "input[type='password']:last-of-type",
+        "title": "Confirmar Contraseña",
+        "intro": "Vuelve a introducir la misma contraseña para confirmarla y evitar errores."
+      },
+      {
+        "element": "button[type='submit'], input[type='submit']",
+        "title": "Crear Cuenta",
+        "intro": "Cuando hayas completado todos los campos, haz clic aquí para crear tu cuenta y empezar a usar VoltiaCar."
+      }
+    ]
+  },
+  "login": {
+    "title": "Tutorial de Inicio de Sesión",
+    "steps": [
+      {
+        "element": "form, .login-form",
+        "title": "Iniciar Sesión",
+        "intro": "Introduce tus credenciales para acceder a tu cuenta de VoltiaCar."
+      },
+      {
+        "element": "input[name='email'], input[type='email']",
+        "title": "Correo Electrónico",
+        "intro": "Introduce el correo electrónico que utilizaste para registrarte."
+      },
+      {
+        "element": "input[name='password'], input[type='password']",
+        "title": "Contraseña",
+        "intro": "Introduce tu contraseña. Si la has olvidado, puedes utilizar la opción de recuperación."
+      },
+      {
+        "element": "button[type='submit'], input[type='submit']",
+        "title": "Entrar",
+        "intro": "Haz clic aquí para iniciar sesión y acceder a tu panel de control."
+      }
+    ]
+  },
+  "profile": {
+    "title": "Tutorial del Perfil de Usuario",
+    "steps": [
+      {
+        "element": ".profile-container, .profile-section",
+        "title": "Tu Perfil",
+        "intro": "Esta es la página de tu perfil donde puedes ver y editar toda tu información personal."
+      },
+      {
+        "element": ".avatar, img[alt*='avatar'], .profile-image",
+        "title": "Foto de Perfil",
+        "intro": "Puedes cambiar tu foto de perfil haciendo clic sobre ella. Esto te ayudará a personalizar tu cuenta."
+      },
+      {
+        "element": "input[name='name'], input[name='nom']",
+        "title": "Editar Nombre",
+        "intro": "Puedes actualizar tu nombre en cualquier momento. Los cambios se guardarán automáticamente."
+      },
+      {
+        "element": "input[name='email'], input[type='email']",
+        "title": "Correo Electrónico",
+        "intro": "Tu correo electrónico es importante para recibir notificaciones. Asegúrate de que esté actualizado."
+      },
+      {
+        "element": "input[name='phone'], input[type='tel']",
+        "title": "Teléfono",
+        "intro": "Añade o actualiza tu número de teléfono para comunicaciones urgentes o verificación de la cuenta."
+      },
+      {
+        "element": "button[onclick*='password'], a[href*='password']",
+        "title": "Cambiar Contraseña",
+        "intro": "Por seguridad, puedes cambiar tu contraseña regularmente. Haz clic aquí para acceder a esta opción."
+      },
+      {
+        "element": "button[type='submit'], .save-button",
+        "title": "Guardar Cambios",
+        "intro": "Después de hacer cualquier modificación, no olvides guardar los cambios haciendo clic en este botón."
+      }
+    ]
+  },
+  "vehicleSearch": {
+    "title": "Tutorial de Búsqueda de Vehículos",
+    "steps": [
+      {
+        "element": ".search-container, form",
+        "title": "Búsqueda de Vehículos",
+        "intro": "Utiliza esta página para buscar vehículos disponibles según tus criterios de búsqueda."
+      },
+      {
+        "element": "input[name*='location'], input[placeholder*='ubicación']",
+        "title": "Ubicación",
+        "intro": "Introduce la ubicación donde necesitas el vehículo. Puedes usar direcciones, código postal o nombres de barrios."
+      },
+      {
+        "element": "input[type='date'], input[name*='date']",
+        "title": "Fecha y Hora",
+        "intro": "Selecciona cuándo necesitas el vehículo. Puedes reservar con antelación o para uso inmediato."
+      },
+      {
+        "element": "select[name*='type'], select[name*='vehicle']",
+        "title": "Tipo de Vehículo",
+        "intro": "Elige el tipo de vehículo que necesitas: coche eléctrico, moto, bicicleta, etc."
+      },
+      {
+        "element": "button[type='submit'], .search-button",
+        "title": "Buscar",
+        "intro": "Haz clic aquí para ver todos los vehículos disponibles que coincidan con tus criterios."
+      },
+      {
+        "element": ".vehicle-list, .results",
+        "title": "Resultados de Búsqueda",
+        "intro": "Aquí verás todos los vehículos disponibles con información sobre modelo, batería, distancia y precio."
+      },
+      {
+        "element": ".vehicle-card, .vehicle-item",
+        "title": "Detalles del Vehículo",
+        "intro": "Haz clic en cualquier vehículo para ver más detalles y opciones de reserva."
+      }
+    ]
+  },
+  "vehicleLocation": {
+    "title": "Tutorial de Localización de Vehículos",
+    "steps": [
+      {
+        "element": "#map, .map-container",
+        "title": "Mapa de Vehículos",
+        "intro": "Este mapa muestra todos los vehículos disponibles cerca de ti en tiempo real. El punto azul eres tú, y los marcadores son vehículos."
+      },
+      {
+        "element": "#map",
+        "title": "Navegar por el Mapa",
+        "intro": "Puedes hacer zoom con los botones + y -, o arrastrar el mapa para explorar diferentes zonas de la ciudad."
+      },
+      {
+        "element": ".vehicle-marker, #map",
+        "title": "Marcadores de Vehículos",
+        "intro": "Cada marcador representa un vehículo disponible. Los colores indican el nivel de batería: verde (alta), amarillo (media), rojo (baja)."
+      },
+      {
+        "element": "#map",
+        "title": "Información del Vehículo",
+        "intro": "Haz clic en cualquier marcador del mapa para ver la información del vehículo: modelo, matrícula, batería y distancia hasta ti."
+      },
+      {
+        "element": ".vehicle-info, .popup",
+        "title": "Detalles y Reserva",
+        "intro": "En la ventana emergente puedes ver todos los detalles del vehículo y hacer clic en 'Reservar' para reclamarlo."
+      },
+      {
+        "element": "button[onclick*='location'], .location-button",
+        "title": "Tu Ubicación",
+        "intro": "Haz clic en este botón para centrar el mapa en tu ubicación actual y ver los vehículos más cercanos."
+      },
+      {
+        "element": ".vehicle-list, .sidebar",
+        "title": "Lista de Vehículos",
+        "intro": "Además del mapa, puedes ver una lista de todos los vehículos con su distancia ordenada de más cercano a más lejano."
+      }
+    ]
+  },
+  "booking": {
+    "title": "Tutorial de Reserva",
+    "steps": [
+      {
+        "element": ".booking-form, form",
+        "title": "Formulario de Reserva",
+        "intro": "Completa este formulario para completar la reserva del vehículo que has seleccionado."
+      },
+      {
+        "element": ".vehicle-details, .vehicle-info",
+        "title": "Detalles del Vehículo",
+        "intro": "Revisa la información del vehículo que has seleccionado: modelo, matrícula, ubicación y estado de la batería."
+      },
+      {
+        "element": "input[type='datetime-local'], input[name*='start']",
+        "title": "Fecha y Hora de Inicio",
+        "intro": "Selecciona cuándo quieres empezar a usar el vehículo. Puedes reservar para ahora mismo o para más tarde."
+      },
+      {
+        "element": "input[type='datetime-local']:last-of-type, input[name*='end']",
+        "title": "Fecha y Hora de Finalización",
+        "intro": "Indica cuándo prevés devolver el vehículo. Esto nos ayuda a planificar la disponibilidad."
+      },
+      {
+        "element": ".price-summary, .cost-breakdown",
+        "title": "Resumen de Precios",
+        "intro": "Aquí puedes ver el coste estimado de la reserva: tarifa de desbloqueo, coste por minuto y total aproximado."
+      },
+      {
+        "element": "input[type='checkbox'], .terms-checkbox",
+        "title": "Términos y Condiciones",
+        "intro": "Lee y acepta los términos y condiciones del servicio antes de confirmar la reserva."
+      },
+      {
+        "element": "button[type='submit'], .confirm-button",
+        "title": "Confirmar Reserva",
+        "intro": "Cuando estés listo, haz clic aquí para confirmar la reserva. Recibirás una confirmación por correo electrónico."
+      },
+      {
+        "element": ".payment-info",
+        "title": "Información de Pago",
+        "intro": "Se hará una pre-autorización en tu tarjeta como depósito de seguridad. El cobro final se hará después de devolver el vehículo."
+      }
+    ]
+  },
+  "vehicleControl": {
+    "title": "Tutorial de Control del Vehículo",
+    "steps": [
+      {
+        "element": ".vehicle-controls, .control-panel",
+        "title": "Panel de Control",
+        "intro": "Desde aquí puedes controlar remotamente tu vehículo reservado. Asegúrate de estar cerca del vehículo antes de usar estas funciones."
+      },
+      {
+        "element": "#hornButton, button[onclick*='horn']",
+        "title": "Claxon",
+        "intro": "Activa el claxon del vehículo para encontrarlo más fácilmente si no lo ves. Es especialmente útil en aparcamientos grandes."
+      },
+      {
+        "element": "#lightsButton, button[onclick*='lights']",
+        "title": "Luces",
+        "intro": "Enciende las luces del vehículo para identificarlo mejor, especialmente de noche o en zonas poco iluminadas."
+      },
+      {
+        "element": "#lockButton, button[onclick*='lock']",
+        "title": "Bloquear/Desbloquear",
+        "intro": "Puedes bloquear o desbloquear las puertas del vehículo remotamente. Asegúrate de estar cerca para usar esta función."
+      },
+      {
+        "element": "#startButton, button[onclick*='start']",
+        "title": "Arrancar Motor",
+        "intro": "Cuando estés dentro del vehículo y listo para empezar el viaje, haz clic aquí para arrancar el motor."
+      },
+      {
+        "element": "#stopButton, button[onclick*='stop']",
+        "title": "Apagar Motor",
+        "intro": "Cuando llegues a tu destino, apaga el motor aquí para finalizar el viaje y calcular el coste final."
+      },
+      {
+        "element": ".battery-indicator, .battery-level",
+        "title": "Nivel de Batería",
+        "intro": "Puedes ver el nivel de batería actual del vehículo. Asegúrate de que tenga suficiente carga para tu trayecto."
+      },
+      {
+        "element": ".trip-info, .timer",
+        "title": "Información del Viaje",
+        "intro": "Aquí puedes ver el tiempo transcurrido, distancia recorrida y coste acumulado del viaje actual."
+      }
+    ]
+  },
+  "purchaseTime": {
+    "title": "Tutorial de Compra de Tiempo",
+    "steps": [
+      {
+        "element": ".packages-grid, .grid",
+        "title": "Paquetes de Tiempo",
+        "intro": "Aquí puedes ver los diferentes paquetes de tiempo disponibles. Elige el que mejor se adapte a tus necesidades de uso."
+      },
+      {
+        "element": ".package-card:first-child, .grid > div:first-child",
+        "title": "Paquete Básico",
+        "intro": "El paquete básico es ideal para usos ocasionales. Incluye una cantidad pequeña de minutos a un precio accesible."
+      },
+      {
+        "element": ".package-card, .grid > div",
+        "title": "Información del Paquete",
+        "intro": "Cada paquete muestra claramente cuántos minutos obtendrás, el precio total y el precio por minuto. Los paquetes más grandes ofrecen mejor valor."
+      },
+      {
+        "element": ".recommended, .popular",
+        "title": "Paquete Recomendado",
+        "intro": "Este es el paquete más popular entre nuestros usuarios. Ofrece un buen equilibrio entre precio y cantidad de minutos."
+      },
+      {
+        "element": "button[onclick*='buy'], .buy-button",
+        "title": "Comprar Paquete",
+        "intro": "Haz clic en el botón de compra del paquete que quieras. Serás redirigido a la página de pago seguro."
+      },
+      {
+        "element": ".payment-methods",
+        "title": "Métodos de Pago",
+        "intro": "Aceptamos tarjetas de crédito/débito, PayPal y otros métodos de pago seguros. Los minutos se añadirán inmediatamente a tu cuenta."
+      }
+    ]
+  },
+  "accessibility": {
+    "title": "Tutorial de Accesibilidad",
+    "steps": [
+      {
+        "element": ".accessibility-panel, .accessibility-options",
+        "title": "Opciones de Accesibilidad",
+        "intro": "Aquí puedes ajustar varias opciones para mejorar tu experiencia de uso según tus necesidades."
+      },
+      {
+        "element": "button[onclick*='fontSize'], .font-size-control",
+        "title": "Tamaño del Texto",
+        "intro": "Puedes aumentar o reducir el tamaño del texto de toda la aplicación para facilitar la lectura."
+      },
+      {
+        "element": "button[onclick*='contrast'], .contrast-toggle",
+        "title": "Alto Contraste",
+        "intro": "Activa el modo de alto contraste para mejorar la visibilidad del texto y los elementos de la interfaz."
+      },
+      {
+        "element": "button[onclick*='dyslexia'], .font-toggle",
+        "title": "Fuente para Dislexia",
+        "intro": "Puedes cambiar a una fuente especialmente diseñada para facilitar la lectura a personas con dislexia."
+      },
+      {
+        "element": ".language-selector, select[name='language']",
+        "title": "Idioma",
+        "intro": "Cambia el idioma de la aplicación entre catalán, castellano e inglés según tus preferencias."
+      },
+      {
+        "element": "button[onclick*='voice'], .voice-control",
+        "title": "Control por Voz",
+        "intro": "Activa el control por voz para navegar por la aplicación usando comandos de voz."
+      },
+      {
+        "element": ".save-preferences, button[type='submit']",
+        "title": "Guardar Preferencias",
+        "intro": "Tus preferencias de accesibilidad se guardan automáticamente y se aplicarán cada vez que inicies sesión."
+      }
+    ]
+  },
+  "common": {
+    "navigation": {
+      "next": "Siguiente →",
+      "previous": "← Anterior",
+      "skip": "Saltar tutorial",
+      "finish": "Finalizar",
+      "close": "Cerrar"
+    },
+    "progress": "Paso {{current}} de {{total}}",
+    "buttons": {
+      "startTutorial": "Comenzar Tutorial",
+      "restartTutorial": "Reiniciar Tutorial",
+      "help": "Ayuda"
+    },
+    "messages": {
+      "welcome": "¡Bienvenido a VoltiaCar! ¿Quieres hacer un rápido tutorial para conocer todas las funciones?",
+      "completed": "¡Has completado el tutorial! Ahora ya puedes usar todas las funciones de VoltiaCar.",
+      "skipped": "Has saltado el tutorial. Puedes volver a verlo en cualquier momento desde el menú de ayuda."
+    }
+  }
+}

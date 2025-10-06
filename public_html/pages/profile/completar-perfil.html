@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIMS - Completar Perfil</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .phone-frame { border: 12px solid #212121; border-radius: 40px; box-shadow: 0 0 20px rgba(0,0,0,0.5); padding: 10px; background-color: #212121; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    #scrollShadow.active {
+      opacity: 1;
+      box-shadow: inset 0px 10px 15px -5px rgba(0,128,0,0.3);
+    }
+  </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+  <div class="phone-frame w-full max-w-sm h-[667px] flex items-center justify-center">
+    <div class="bg-white p-6 rounded-2xl shadow-inner w-full h-full flex flex-col relative">
+      <img
+src="../../../../images/logo.png"
+alt="Logo App"
+class="absolute top-4 left-4 h-10 w-10 z-20"
+>
+      <a href="../dashboard/gestio.html" class="text-[#1565C0] text-sm font-semibold absolute top-[50.8px] left-4">← Tornar</a>
+      <header class="flex items-center justify-start mb-6">
+        <h1 class="text-2xl font-bold text-gray-900 flex-1 text-right">Completar Perfil</h1>
+      </header>
+
+      <div class="relative flex-1 overflow-hidden">
+        <form id="completeForm" class="overflow-y-auto no-scrollbar space-y-4 pr-1 h-full">
+          <div>
+            <label for="fullname" class="block text-gray-900 font-semibold mb-2">Nom complet</label>
+            <input
+type="text"
+id="fullname"
+name="fullname"
+class="w-full px-4 py-2 bg-[#F5F5F5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1565C0]"
+required
+>
+          </div>
+          <div>
+            <label for="dni" class="block text-gray-900 font-semibold mb-2">DNI</label>
+            <input
+type="text"
+id="dni"
+name="dni"
+class="w-full px-4 py-2 bg-[#F5F5F5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1565C0]"
+required
+>
+          </div>
+          <div>
+            <label for="phone" class="block text-gray-900 font-semibold mb-2">Telèfon</label>
+            <input
+type="tel"
+id="phone"
+name="phone"
+class="w-full px-4 py-2 bg-[#F5F5F5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1565C0]"
+required
+>
+          </div>
+          <div>
+            <label for="birthdate" class="block text-gray-900 font-semibold mb-2">Data de naixement</label>
+            <input
+type="date"
+id="birthdate"
+name="birthdate"
+class="w-full px-4 py-2 bg-[#F5F5F5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1565C0]"
+required
+>
+          </div>
+          <div>
+            <label for="address" class="block text-gray-900 font-semibold mb-2">Adreça</label>
+            <input
+type="text"
+id="address"
+name="address"
+class="w-full px-4 py-2 bg-[#F5F5F5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1565C0]"
+>
+          </div>
+          <div>
+            <label for="sex" class="block text-gray-900 font-semibold mb-2">Sexe</label>
+            <select
+id="sex"
+name="sex"
+class="w-full px-4 py-2 bg-[#F5F5F5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1565C0]"
+>
+              <option value="">Selecciona</option>
+              <option value="home">Home</option>
+              <option value="dona">Dona</option>
+              <option value="altre">Altres</option>
+            </select>
+          </div>
+          <button type="submit" class="w-full bg-[#1565C0] text-white py-3 rounded-lg font-semibold">Guardar</button>
+        </form>
+        <div id="scrollShadow" class="pointer-events-none absolute bottom-0 left-0 w-full h-10 bg-gradient-to-t from-green-500 via-transparent to-transparent opacity-0 transition-opacity duration-300 rounded-b-2xl"></div>
+      </div>
+
+      <div id="msg" class="text-sm text-center text-gray-700 mt-2"></div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      fetch('/../../php/api/completar-perfil.php', { credentials: 'include' })
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.success && data.data) {
+            const d = data.data;
+            if (d.fullname !== undefined) document.getElementById('fullname').value = d.fullname;
+            if (d.dni !== undefined) document.getElementById('dni').value = d.dni;
+            if (d.phone !== undefined) document.getElementById('phone').value = d.phone;
+            if (d.birthdate !== undefined) document.getElementById('birthdate').value = d.birthdate;
+            if (d.address !== undefined) document.getElementById('address').value = d.address;
+            if (d.sex !== undefined) document.getElementById('sex').value = d.sex;
+          }
+        }).catch(() => {});
+    });
+
+    const form = document.getElementById('completeForm');
+    const msg = document.getElementById('msg');
+    const scrollShadow = document.getElementById('scrollShadow');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const data = {
+        fullname: form.fullname.value,
+        dni: form.dni.value,
+        phone: form.phone.value,
+        birthdate: form.birthdate.value,
+        address: form.address.value,
+        sex: form.sex.value
+      };
+      fetch('/../../php/api/completar-perfil.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        credentials: 'include',
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(result => {
+        msg.textContent = result.success ? 'Perfil completat correctament.' : (result.msg || 'Error.');
+      })
+      .catch(() => {
+        msg.textContent = 'Error de xarxa.';
+      });
+    });
+
+    function updateShadow() {
+      if (form.scrollHeight > form.clientHeight && form.scrollTop + form.clientHeight < form.scrollHeight - 1) {
+        scrollShadow.style.opacity = '1';
+      } else {
+        scrollShadow.style.opacity = '0';
+      }
+    }
+
+    form.addEventListener('scroll', updateShadow);
+    updateShadow();
+  </script>
+</body>
+</html>
