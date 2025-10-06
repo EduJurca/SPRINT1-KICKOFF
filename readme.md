@@ -1,84 +1,124 @@
-# Proyecto SPRINT1-KICKOFF
+# SPRINT1-KICKOFF – Gestió de Mobilitat Intel·ligent
 
-Este proyecto es un sistema web desarrollado con PHP, HTML, CSS, JavaScript y Python (para funcionalidades adicionales), que utiliza bases de datos MariaDB y MongoDB. Se ejecuta en contenedores Docker y está organizado siguiendo buenas prácticas de estructura de archivos.
+Aquest projecte és una plataforma web per gestionar la mobilitat intel·ligent, pensada per flotes de vehicles, usuaris i administradors. Està desenvolupat amb PHP, HTML, CSS, JavaScript i Python, i utilitza MariaDB i MongoDB com a bases de dades. Tot el sistema s’executa en contenidors Docker per facilitar la instal·lació i el desplegament.
 
-## 📁 Estructura del proyecto
+---
+
+## 📦 Estructura del Projecte
 
 ```
-project-root/
-├── public_html/               # DocumentRoot de Apache
-│   ├── assets/                # CSS, JS e imágenes
-│   ├── index.html             # Página principal
-│   └── pages/                 # Vistas HTML organizadas por módulo
-│       ├── auth/
-│       ├── dashboard/
-│       ├── profile/
-│       ├── vehicle/
-│       └── accessibility/
-├── src/                       # Backend y lógica de la aplicación
-│   ├── controllers/           # Scripts PHP que manejan la lógica
-│   ├── models/                # Modelos de datos (usuarios, vehículos, etc.)
-│   └── core/                  # Clases base (Router, Controller, Database)
-├── config/                    # Configuración de la aplicación y Apache
-├── docker/                    # Dockerfiles y docker-compose
-├── assets/                    # Recursos generales (opcional, ya dentro de public_html)
-└── README.md                  # Documentación del proyecto
+final_editar_usar/
+├── config/                # Configuració global, scripts d’inicialització, Docker
+├── public_html/           # Frontend i backend web (DocumentRoot Apache)
+├── python_gui/            # Eina administrativa en Python
+├── database_schema.sql    # Esquema de la base de dades relacional
+├── bones_practiques.md    # Bones pràctiques i normes de programació
+├── .gitignore             # Exclusió d’arxius sensibles i temporals
+├── readme.md              # Documentació principal (aquest fitxer)
+├── readme_cat.md          # Documentació en català
 ```
 
-## 🐳 Docker
+### Detall de carpetes principals
 
-El proyecto se ejecuta en contenedores Docker con `docker-compose`.
+- **config/**: Scripts SQL, configuració PHP, Dockerfile, docker-compose, inicialització de bases de dades.
+- **public_html/**: 
+  - **index.html / index.php**: Entrada principal.
+  - **css/**: Estils, inclou accessibilitat i personalització.
+  - **images/**: Imatges, icones i avatars.
+  - **js/**: Scripts JavaScript modulars (autenticació, reserves, vehicles, accessibilitat, etc.).
+  - **lang/**: Fitxers d’idioma (JSON) i tutorials per cada idioma.
+  - **pages/**: Vistes HTML/PHP organitzades per funcionalitat (auth, dashboard, perfil, vehicle, accessibilitat).
+  - **php/**: Backend PHP (API, components, controladors, models, admin, auth, etc.).
+- **python_gui/**: Eina GUI per administradors, amb dependències a `requirements.txt`.
 
-### Servicios
+---
 
-- **web**: Servidor Apache con PHP. DocumentRoot: `public_html/`.
-- **mariadb**: Base de datos relacional para usuarios y otros datos.
-- **mongodb**: Base de datos NoSQL para información adicional (logs, historial, etc.).
+## 🚀 Instal·lació i Execució
 
-### Montajes importantes
+### Requisits previs
 
-- `../public_html:/var/www/html` → HTML y assets.
-- `../src:/var/www/src` → PHP backend (controladores y modelos).
-- Volumen para logs de Apache.
+- Docker i Docker Compose instal·lats.
+- Opcional: Python 3 per la GUI administrativa.
 
-### Comandos útiles
+### Passos bàsics
 
-```bash
-# Iniciar el proyecto
-docker-compose up --build
+1. **Configura les variables i credencials** a `config/docker-compose.yml` i `config/database.php`.
+2. **Inicia els serveis** amb Docker:
+   ```sh
+   cd config
+   docker-compose up --build
+   ```
+3. **Accedeix a l’aplicació** via navegador a `http://localhost:8080` (o el port configurat).
+4. **Administra la flota** amb la GUI Python:
+   ```sh
+   cd python_gui
+   pip install -r requirements.txt
+   python admin_tool.py
+   ```
 
-# Detener el proyecto
-docker-compose down
+---
 
-# Limpiar todo (contenedores, volúmenes y redes)
-docker-compose down -v
-```
+## 🖥️ Arquitectura i Flux de Treball
 
-## ⚙️ Configuración de PHP y Base de Datos
+- **Frontend**: HTML, CSS (Tailwind, custom), JS modular. Vistes organitzades per mòdul.
+- **Backend**: PHP organitzat per components, controladors, models i APIs.
+- **Bases de dades**:
+  - **MariaDB**: Usuaris, vehicles, reserves, pagaments.
+  - **MongoDB**: Logs, historial, dades de sensors.
+- **Docker**: Orquestració de serveis web, MariaDB i MongoDB. Scripts d’inicialització automàtica.
 
-- Los scripts PHP usan `mariadb` como host para conectarse a MariaDB dentro de Docker.
-- Se usa `utf8mb4` para el charset de la base de datos.
-- Los controladores PHP están en `src/controllers/` y los modelos en `src/models/`.
-- `.gitignore` excluye archivos temporales y sensibles (`*.env`, `*.log`, `.vscode/`, `__pycache__/`).
+### Flux d’usuari
 
-## 🖥️ Flujo del proyecto
+1. L’usuari accedeix a la web i es registra o inicia sessió.
+2. Pot gestionar el perfil, reservar vehicles, consultar historial i pagaments.
+3. Les accions frontend envien dades a APIs PHP via AJAX/fetch.
+4. El backend valida, processa i retorna la resposta (JSON/HTML).
+5. L’administrador pot gestionar usuaris, vehicles i reserves via web o GUI Python.
 
-1. El navegador solicita una página a Apache (`public_html/index.html` o páginas dentro de `pages/`).
-2. Los formularios o fetch requests envían datos a PHP (`src/controllers/`).
-3. Los controladores llaman a los modelos (`src/models/`) para interactuar con la base de datos.
-4. La respuesta se devuelve en JSON o se renderiza en HTML según el caso.
+---
 
-## 🔹 Buenas prácticas incluidas
+## 🌍 Internacionalització i Accessibilitat
 
-- Estructura tipo MVC (controllers, models, views).
-- DocumentRoot separado de la lógica backend.
-- Controladores PHP montados dentro de Docker correctamente.
-- Uso de Docker Compose para levantar contenedores y redes.
-- `.gitignore` actualizado para limpiar archivos no deseados.
-- CORS habilitado para desarrollo local.
+- **Idiomes disponibles**: Català, Castellà, Anglès.
+- **Traduccions**: Fitxers JSON a `public_html/lang/` i gestió dinàmica en PHP/JS.
+- **Accessibilitat**: 
+  - Estils dedicats (`accessibility.css`), widget UserWay, navegació per teclat, contrast, mida de text, reducció de moviment.
+  - Etiquetes semàntiques i ARIA a les vistes.
 
-## ⚡ Notas adicionales
+---
 
-- Para que los fetch de PHP funcionen, se recomienda usar rutas relativas dentro de `public_html` o montar controladores correctamente en Docker.
-- Las credenciales de las bases de datos se encuentran en `docker-compose.yml` y deben coincidir con las usadas en los scripts PHP.
-- Para colaboración, se recomienda fork + pull requests si no se tiene permiso de escritura en el repositorio principal.
+## 🔒 Seguretat i Bones Pràctiques
+
+- **Autenticació**: Gestió de sessions PHP, control d’accés a zones privades.
+- **Validació**: Formularis i APIs validen dades tant al frontend com al backend.
+- **Pagaments**: Pre-autorizació de targeta, tarifa de desbloqueig i preu per minut configurables.
+- **Control de versions**: `.gitignore` actualitzat, sense credencials ni dades sensibles al repositori.
+- **Rate limiting i logging**: Configurables a `config/configuration_template.php`.
+- **Estructura MVC**: Separació clara entre models, vistes i controladors.
+- **Escalabilitat**: Arquitectura preparada per milers d’usuaris i vehicles.
+
+---
+
+## 🛠️ Desenvolupament i Col·laboració
+
+- **Forks i pull requests** recomanats per col·laborar.
+- **Comentaris i documentació** als fitxers clau.
+- **bones_practiques.md**: Consulta les normes de programació i estil.
+
+---
+
+## 📚 Recursos Addicionals
+
+- **Resum tècnic**: `public_html/pages/dashboard/resum-projecte.html`
+- **Tutorials**: `public_html/lang/ca/tutorial.json`, `en/tutorial.json`, `es/tutorial.json`
+- **Panel d’administració**: `public_html/php/admin/`
+
+---
+
+## ⚡ Notes finals
+
+- Utilitza rutes relatives per AJAX/fetch en desenvolupament.
+- Revisa la configuració de credencials entre Docker i PHP.
+- Realitza proves d’usuari i accessibilitat abans de desplegar.
+
+---
