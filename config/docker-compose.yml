@@ -113,7 +113,7 @@ services:
       PMA_HOST: mariadb
       PMA_PORT: 3306
       PMA_USER: simsuser
-      PMA_PASSWORD: simspassword
+      PMA_PASSWORD: Putamare123
     ports:
       - "8081:80"
     networks:
