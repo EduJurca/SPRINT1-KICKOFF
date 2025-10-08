@@ -1,9 +1,5 @@
 final_editar_usar.code-workspace
 final_editar.code-workspace
-<<<<<<< HEAD
 venv
 .venv
-=======
-.venv
 .env
->>>>>>> 23137d4 (Refactor: Remove legacy database initialization scripts for MariaDB and MongoDB)
