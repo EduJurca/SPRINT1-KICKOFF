@@ -1,0 +1,134 @@
+# Carsharing Platform - Docker Ignore File
+# Date: October 2025
+# Purpose: Exclude unnecessary files from Docker build context
+
+# Git files
+.git
+.gitignore
+.gitattributes
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Documentation
+*.md
+!README.md
+docs/
+documentation/
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Cache files
+cache/
+.cache/
+*.cache
+
+# Node modules (if any)
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Composer (PHP)
+vendor/
+composer.phar
+
+# Database files
+*.sql
+*.db
+*.sqlite
+*.sqlite3
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+
+# OS files
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Docker files (don't include in build)
+docker-compose.yml
+docker-compose.*.yml
+Dockerfile
+.dockerignore
+
+# Test files
+tests/
+test/
+*.test.js
+*.test.php
+phpunit.xml
+.phpunit.result.cache
+
+# CI/CD files
+.github/
+.gitlab-ci.yml
+.travis.yml
+Jenkinsfile
+
+# Build artifacts
+dist/
+build/
+*.min.js
+*.min.css
+
+# Coverage reports
+coverage/
+.coverage
+htmlcov/
+
+# Python files (if any)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+pip-log.txt
+
+# Archives
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
+# Media files (large files)
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.flv
+*.mp3
+*.wav
+
+# Sensitive files
+*.key
+*.pem
+*.crt
+*.p12
+secrets/
+credentials/

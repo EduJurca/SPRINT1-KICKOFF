@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CarShare Vehicle Management">
+  <title>Vehicle Management - CarShare Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .keyboard-navigation *:focus {
+      outline: 2px solid #3b82f6;
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased bg-gray-50">
+  <!-- Navigation -->
+  <nav
+class="bg-white shadow-lg sticky top-0 z-50"
+role="navigation"
+aria-label="Main navigation"
+>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <a href="../index.html" class="flex items-center space-x-2">
+            <svg
+class="w-8 h-8 text-blue-600"
+fill="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+              <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+            </svg>
+            <span class="text-xl font-bold text-gray-900">CarShare Admin</span>
+          </a>
+        </div>
+
+        <div class="flex items-center space-x-6">
+          <a
+href="./index.html"
+class="text-gray-700 hover:text-blue-600 transition-colors"
+data-i18n="admin.dashboard"
+>Admin Dashboard</a>
+          <a
+href="./users.html"
+class="text-gray-700 hover:text-blue-600 transition-colors"
+data-i18n="admin.users"
+>Users</a>
+          <a
+href="./vehicles.html"
+class="text-blue-600 font-semibold"
+data-i18n="admin.vehicles"
+>Vehicles</a>
+          
+          <!-- Language Switcher -->
+          <div class="flex items-center space-x-2 border-l pl-4">
+            <button
+data-lang="es"
+class="px-2 py-1 rounded hover:bg-gray-100 transition-colors"
+aria-label="Español"
+>ES</button>
+            <button
+data-lang="en"
+class="px-2 py-1 rounded hover:bg-gray-100 transition-colors"
+aria-label="English"
+>EN</button>
+          </div>
+
+          <div class="flex items-center space-x-4">
+            <span class="text-gray-700" data-user-name>Admin</span>
+            <button
+data-logout
+class="text-gray-700 hover:text-blue-600 transition-colors"
+data-i18n="nav.logout"
+>Logout</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main id="main-content" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900 mb-2" data-i18n="admin.vehicle_management">Vehicle Management</h1>
+        <p class="text-gray-600">Manage fleet vehicles and their status</p>
+      </div>
+      <button class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2" onclick="openAddVehicleModal()">
+        <svg
+class="w-5 h-5"
+fill="none"
+stroke="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+          <path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M12 4v16m8-8H4"
+/>
+        </svg>
+        <span data-i18n="admin.add_vehicle">Add Vehicle</span>
+      </button>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div>
+          <label
+for="search"
+class="block text-sm font-medium text-gray-700 mb-2"
+data-i18n="admin.search"
+>Search</label>
+          <input
+            type="text"
+            id="search"
+            placeholder="Search by model or plate..."
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+        </div>
+        <div>
+          <label
+for="typeFilter"
+class="block text-sm font-medium text-gray-700 mb-2"
+data-i18n="admin.type"
+>Type</label>
+          <select
+            id="typeFilter"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="all">All Types</option>
+            <option value="electric">Electric</option>
+            <option value="hybrid">Hybrid</option>
+          </select>
+        </div>
+        <div>
+          <label
+for="statusFilter"
+class="block text-sm font-medium text-gray-700 mb-2"
+data-i18n="admin.status"
+>Status</label>
+          <select
+            id="statusFilter"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="all">All Status</option>
+            <option value="available">Available</option>
+            <option value="in_use">In Use</option>
+            <option value="maintenance">Maintenance</option>
+          </select>
+        </div>
+        <div>
+          <label
+for="batteryFilter"
+class="block text-sm font-medium text-gray-700 mb-2"
+data-i18n="admin.battery"
+>Battery</label>
+          <select
+            id="batteryFilter"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="all">All Levels</option>
+            <option value="high">High (&gt;80%)</option>
+            <option value="medium">Medium (50-80%)</option>
+            <option value="low">Low (&lt;50%)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vehicles Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Vehicle Card 1 -->
+      <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-br from-blue-100 to-blue-200 h-40 flex items-center justify-center">
+          <svg
+class="w-24 h-24 text-blue-600"
+fill="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+            <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+          </svg>
+        </div>
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-lg font-bold text-gray-900">Tesla Model 3</h3>
+            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Available</span>
+          </div>
+          <div class="space-y-2 text-sm text-gray-600 mb-4">
+            <p><span class="font-semibold" data-i18n="admin.plate">Plate</span>: ABC-1234</p>
+            <p><span class="font-semibold" data-i18n="admin.type">Type</span>: Electric</p>
+            <p><span class="font-semibold" data-i18n="admin.battery">Battery</span>: 85%</p>
+            <p><span class="font-semibold" data-i18n="admin.location">Location</span>: Madrid Centro</p>
+          </div>
+          <div class="flex space-x-2">
+            <button class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm" data-i18n="admin.edit">Edit</button>
+            <button class="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm" data-i18n="admin.delete">Delete</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vehicle Card 2 -->
+      <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-br from-green-100 to-green-200 h-40 flex items-center justify-center">
+          <svg
+class="w-24 h-24 text-green-600"
+fill="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+            <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+          </svg>
+        </div>
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-lg font-bold text-gray-900">Nissan Leaf</h3>
+            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Available</span>
+          </div>
+          <div class="space-y-2 text-sm text-gray-600 mb-4">
+            <p><span class="font-semibold" data-i18n="admin.plate">Plate</span>: DEF-5678</p>
+            <p><span class="font-semibold" data-i18n="admin.type">Type</span>: Electric</p>
+            <p><span class="font-semibold" data-i18n="admin.battery">Battery</span>: 92%</p>
+            <p><span class="font-semibold" data-i18n="admin.location">Location</span>: Madrid Norte</p>
+          </div>
+          <div class="flex space-x-2">
+            <button class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm" data-i18n="admin.edit">Edit</button>
+            <button class="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm" data-i18n="admin.delete">Delete</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vehicle Card 3 -->
+      <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-br from-red-100 to-red-200 h-40 flex items-center justify-center">
+          <svg
+class="w-24 h-24 text-red-600"
+fill="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+            <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+          </svg>
+        </div>
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-lg font-bold text-gray-900">Toyota Prius</h3>
+            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">In Use</span>
+          </div>
+          <div class="space-y-2 text-sm text-gray-600 mb-4">
+            <p><span class="font-semibold" data-i18n="admin.plate">Plate</span>: GHI-9012</p>
+            <p><span class="font-semibold" data-i18n="admin.type">Type</span>: Hybrid</p>
+            <p><span class="font-semibold" data-i18n="admin.battery">Battery</span>: 65%</p>
+            <p><span class="font-semibold" data-i18n="admin.location">Location</span>: Madrid Sur</p>
+          </div>
+          <div class="flex space-x-2">
+            <button class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm" data-i18n="admin.edit">Edit</button>
+            <button class="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm" data-i18n="admin.delete">Delete</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vehicle Card 4 -->
+      <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-br from-purple-100 to-purple-200 h-40 flex items-center justify-center">
+          <svg
+class="w-24 h-24 text-purple-600"
+fill="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+            <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+          </svg>
+        </div>
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-lg font-bold text-gray-900">BMW i3</h3>
+            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Available</span>
+          </div>
+          <div class="space-y-2 text-sm text-gray-600 mb-4">
+            <p><span class="font-semibold" data-i18n="admin.plate">Plate</span>: JKL-3456</p>
+            <p><span class="font-semibold" data-i18n="admin.type">Type</span>: Electric</p>
+            <p><span class="font-semibold" data-i18n="admin.battery">Battery</span>: 78%</p>
+            <p><span class="font-semibold" data-i18n="admin.location">Location</span>: Madrid Este</p>
+          </div>
+          <div class="flex space-x-2">
+            <button class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm" data-i18n="admin.edit">Edit</button>
+            <button class="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm" data-i18n="admin.delete">Delete</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vehicle Card 5 -->
+      <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-br from-yellow-100 to-yellow-200 h-40 flex items-center justify-center">
+          <svg
+class="w-24 h-24 text-yellow-600"
+fill="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+            <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+          </svg>
+        </div>
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-lg font-bold text-gray-900">Renault Zoe</h3>
+            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-800">Maintenance</span>
+          </div>
+          <div class="space-y-2 text-sm text-gray-600 mb-4">
+            <p><span class="font-semibold" data-i18n="admin.plate">Plate</span>: MNO-7890</p>
+            <p><span class="font-semibold" data-i18n="admin.type">Type</span>: Electric</p>
+            <p><span class="font-semibold" data-i18n="admin.battery">Battery</span>: 45%</p>
+            <p><span class="font-semibold" data-i18n="admin.location">Location</span>: Workshop</p>
+          </div>
+          <div class="flex space-x-2">
+            <button class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm" data-i18n="admin.edit">Edit</button>
+            <button class="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm" data-i18n="admin.delete">Delete</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vehicle Card 6 -->
+      <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-br from-indigo-100 to-indigo-200 h-40 flex items-center justify-center">
+          <svg
+class="w-24 h-24 text-indigo-600"
+fill="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+            <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+          </svg>
+        </div>
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-lg font-bold text-gray-900">Hyundai Kona</h3>
+            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Available</span>
+          </div>
+          <div class="space-y-2 text-sm text-gray-600 mb-4">
+            <p><span class="font-semibold" data-i18n="admin.plate">Plate</span>: PQR-2345</p>
+            <p><span class="font-semibold" data-i18n="admin.type">Type</span>: Electric</p>
+            <p><span class="font-semibold" data-i18n="admin.battery">Battery</span>: 95%</p>
+            <p><span class="font-semibold" data-i18n="admin.location">Location</span>: Madrid Oeste</p>
+          </div>
+          <div class="flex space-x-2">
+            <button class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm" data-i18n="admin.edit">Edit</button>
+            <button class="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm" data-i18n="admin.delete">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Add Vehicle Modal (Hidden by default) -->
+  <div id="addVehicleModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-bold text-gray-900" data-i18n="admin.add_vehicle">Add Vehicle</h2>
+        <button
+onclick="closeAddVehicleModal()"
+class="text-gray-400 hover:text-gray-600"
+aria-label="Close modal"
+>
+          <svg
+class="w-6 h-6"
+fill="none"
+stroke="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+            <path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M6 18L18 6M6 6l12 12"
+/>
+          </svg>
+        </button>
+      </div>
+      <form id="addVehicleForm" data-validate-form>
+        <div class="space-y-4">
+          <div>
+            <label
+for="vehicleModel"
+class="block text-sm font-medium text-gray-700 mb-1"
+data-i18n="admin.model"
+>Model</label>
+            <input
+type="text"
+id="vehicleModel"
+name="model"
+data-validate="required"
+class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+>
+          </div>
+          <div>
+            <label
+for="vehiclePlate"
+class="block text-sm font-medium text-gray-700 mb-1"
+data-i18n="admin.plate"
+>Plate</label>
+            <input
+type="text"
+id="vehiclePlate"
+name="plate"
+data-validate="required|alphanumeric"
+class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+>
+          </div>
+          <div>
+            <label
+for="vehicleType"
+class="block text-sm font-medium text-gray-700 mb-1"
+data-i18n="admin.type"
+>Type</label>
+            <select
+id="vehicleType"
+name="type"
+class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+>
+              <option value="electric">Electric</option>
+              <option value="hybrid">Hybrid</option>
+            </select>
+          </div>
+          <div>
+            <label
+for="vehicleLocation"
+class="block text-sm font-medium text-gray-700 mb-1"
+data-i18n="admin.location"
+>Location</label>
+            <input
+type="text"
+id="vehicleLocation"
+name="location"
+data-validate="required"
+class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+>
+          </div>
+        </div>
+        <div class="flex space-x-3 mt-6">
+          <button
+type="submit"
+class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+data-i18n="admin.save"
+>Save</button>
+          <button
+type="button"
+onclick="closeAddVehicleModal()"
+class="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"
+data-i18n="admin.cancel"
+>Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/auth.js"></script>
+  <script src="../../js/validation.js"></script>
+  <script src="../../js/main.js"></script>
+  
+  <script>
+    function openAddVehicleModal() {
+      document.getElementById('addVehicleModal').classList.remove('hidden');
+    }
+    
+    function closeAddVehicleModal() {
+      document.getElementById('addVehicleModal').classList.add('hidden');
+      document.getElementById('addVehicleForm').reset();
+    }
+    
+    // Close modal on outside click
+    document.getElementById('addVehicleModal').addEventListener('click', (e) => {
+      if (e.target.id === 'addVehicleModal') {
+        closeAddVehicleModal();
+      }
+    });
+  </script>
+</body>
+</html>

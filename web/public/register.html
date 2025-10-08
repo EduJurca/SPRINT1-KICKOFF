@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="VoltiaCar Registration - Join our community">
+  <title>Register - VoltiaCar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .keyboard-navigation *:focus {
+      outline: 2px solid #3b82f6;
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased bg-gray-50">
+  <!-- Navigation -->
+  <nav
+class="bg-white shadow-lg"
+role="navigation"
+aria-label="Main navigation"
+>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <a href="./index.html" class="flex items-center space-x-2">
+            <svg
+class="w-8 h-8 text-blue-600"
+fill="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+              <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+            </svg>
+            <span class="text-xl font-bold text-gray-900">VoltiaCar</span>
+          </a>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <!-- Language Switcher -->
+          <div class="flex items-center space-x-2">
+            <button
+data-lang="es"
+class="px-2 py-1 rounded hover:bg-gray-100 transition-colors"
+aria-label="Español"
+>ES</button>
+            <button
+data-lang="en"
+class="px-2 py-1 rounded hover:bg-gray-100 transition-colors"
+aria-label="English"
+>EN</button>
+          </div>
+          
+          <a
+href="./index.html"
+class="text-gray-700 hover:text-blue-600 transition-colors"
+data-i18n="nav.home"
+>Home</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main id="main-content" class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+      <!-- Header -->
+      <div class="text-center">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2" data-i18n="register.title">Create Account</h1>
+        <p class="text-gray-600" data-i18n="register.subtitle">Join our community</p>
+      </div>
+
+      <!-- Register Form -->
+      <div class="bg-white rounded-lg shadow-lg p-8">
+        <form
+id="register-form"
+data-validate-form
+novalidate
+>
+          <!-- Full Name Field -->
+          <div class="mb-4">
+            <label
+for="fullName"
+class="block text-sm font-medium text-gray-700 mb-2"
+data-i18n="register.full_name"
+>
+              Full Name
+            </label>
+            <input
+              type="text"
+              id="fullName"
+              name="full_name"
+              data-validate="required|minLength:3"
+              data-i18n-placeholder="register.full_name_placeholder"
+              placeholder="John Doe"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              aria-required="true"
+              autocomplete="name"
+            >
+          </div>
+
+          <!-- Email Field -->
+          <div class="mb-4">
+            <label
+for="email"
+class="block text-sm font-medium text-gray-700 mb-2"
+data-i18n="register.email"
+>
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              data-validate="required|email"
+              data-i18n-placeholder="register.email_placeholder"
+              placeholder="you@email.com"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              aria-required="true"
+              autocomplete="email"
+            >
+          </div>
+
+          <!-- Phone Field -->
+          <div class="mb-4">
+            <label
+for="phone"
+class="block text-sm font-medium text-gray-700 mb-2"
+data-i18n="register.phone"
+>
+              Phone
+            </label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              data-validate="required|phone"
+              data-i18n-placeholder="register.phone_placeholder"
+              placeholder="+1 555 000 0000"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              aria-required="true"
+              autocomplete="tel"
+            >
+          </div>
+
+          <!-- License Number Field -->
+          <div class="mb-4">
+            <label
+for="licenseNumber"
+class="block text-sm font-medium text-gray-700 mb-2"
+data-i18n="register.license_number"
+>
+              License Number
+            </label>
+            <input
+              type="text"
+              id="licenseNumber"
+              name="license_number"
+              data-validate="required|alphanumeric"
+              data-i18n-placeholder="register.license_number_placeholder"
+              placeholder="DL123456"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              aria-required="true"
+            >
+          </div>
+
+          <!-- Password Field -->
+          <div class="mb-4">
+            <label
+for="password"
+class="block text-sm font-medium text-gray-700 mb-2"
+data-i18n="register.password"
+>
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              data-validate="required|password"
+              data-i18n-placeholder="register.password_placeholder"
+              placeholder="Minimum 8 characters"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              aria-required="true"
+              autocomplete="new-password"
+            >
+          </div>
+
+          <!-- Confirm Password Field -->
+          <div class="mb-4">
+            <label
+for="confirmPassword"
+class="block text-sm font-medium text-gray-700 mb-2"
+data-i18n="register.confirm_password"
+>
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              data-validate="required|password"
+              data-match="password"
+              data-i18n-placeholder="register.confirm_password_placeholder"
+              placeholder="Repeat your password"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              aria-required="true"
+              autocomplete="new-password"
+            >
+          </div>
+
+          <!-- Terms Checkbox -->
+          <div class="mb-6">
+            <div class="flex items-start">
+              <input
+                type="checkbox"
+                id="terms"
+                name="terms"
+                data-validate="required"
+                class="w-4 h-4 mt-1 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                aria-required="true"
+              >
+              <label
+for="terms"
+class="ml-2 text-sm text-gray-700"
+data-i18n="register.terms"
+>
+                I accept the terms and conditions
+              </label>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button
+            type="submit"
+            class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition-colors"
+            data-i18n="register.submit"
+          >
+            Register
+          </button>
+
+          <!-- Login Link -->
+          <div class="mt-6 text-center">
+            <span class="text-gray-600" data-i18n="register.have_account">Already have an account?</span>
+            <a
+href="./login.html"
+class="text-blue-600 hover:text-blue-700 font-semibold ml-1"
+data-i18n="register.login_link"
+>
+              Login here
+            </a>
+          </div>
+        </form>
+      </div>
+
+      <!-- Additional Info -->
+      <div class="text-center text-sm text-gray-600">
+        <p>By registering, you agree to our Terms of Service and Privacy Policy</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="../js/i18n.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/validation.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

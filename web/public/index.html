@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Carsharing platform - Share your ride, share the future">
+  <title>VoltiaCar - Smart Urban Mobility</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .keyboard-navigation *:focus {
+      outline: 2px solid #3b82f6;
+      outline-offset: 2px;
+    }
+    #skip-to-main:focus {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+      padding: 1rem;
+      background: #3b82f6;
+      color: white;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased">
+  <!-- Skip to main content link for accessibility -->
+  <a
+href="#main-content"
+id="skip-to-main"
+class="sr-only focus:not-sr-only"
+data-i18n="common.skip_to_main"
+>Skip to main content</a>
+
+  <!-- Navigation -->
+  <nav
+class="bg-white shadow-lg sticky top-0 z-50"
+role="navigation"
+aria-label="Main navigation"
+>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <a href="./index.html" class="flex items-center space-x-2">
+            <svg
+class="w-8 h-8 text-blue-600"
+fill="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+              <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+            </svg>
+            <span class="text-xl font-bold text-gray-900">VoltiaCar</span>
+          </a>
+        </div>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center space-x-8">
+          <a
+href="#features"
+class="text-gray-700 hover:text-blue-600 transition-colors"
+data-i18n="nav.features"
+>Features</a>
+          <a
+href="#pricing"
+class="text-gray-700 hover:text-blue-600 transition-colors"
+data-i18n="nav.pricing"
+>Pricing</a>
+          <a
+href="#about"
+class="text-gray-700 hover:text-blue-600 transition-colors"
+data-i18n="nav.about"
+>About</a>
+          
+          <!-- Language Switcher -->
+          <div class="flex items-center space-x-2 border-l pl-4">
+            <button
+data-lang="es"
+class="px-2 py-1 rounded hover:bg-gray-100 transition-colors"
+aria-label="Español"
+>ES</button>
+            <button
+data-lang="en"
+class="px-2 py-1 rounded hover:bg-gray-100 transition-colors"
+aria-label="English"
+>EN</button>
+          </div>
+
+          <!-- Auth Links -->
+          <div class="flex items-center space-x-4" data-guest-only>
+            <a
+href="./login.html"
+class="text-gray-700 hover:text-blue-600 transition-colors"
+data-i18n="nav.login"
+>Login</a>
+            <a
+href="./register.html"
+class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+data-i18n="nav.register"
+>Register</a>
+          </div>
+
+          <div class="hidden items-center space-x-4" data-auth-required>
+            <a
+href="./dashboard.html"
+class="text-gray-700 hover:text-blue-600 transition-colors"
+data-i18n="nav.dashboard"
+>Dashboard</a>
+            <a
+href="./map.html"
+class="text-gray-700 hover:text-blue-600 transition-colors"
+data-i18n="nav.map"
+>Map</a>
+            <a
+href="./admin/index.html"
+class="hidden text-gray-700 hover:text-blue-600 transition-colors"
+data-admin-only
+data-i18n="nav.admin"
+>Admin</a>
+            <button
+data-logout
+class="text-gray-700 hover:text-blue-600 transition-colors"
+data-i18n="nav.logout"
+>Logout</button>
+          </div>
+        </div>
+
+        <!-- Mobile menu button -->
+        <div class="md:hidden flex items-center">
+          <button
+id="mobile-menu-button"
+type="button"
+class="text-gray-700 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600"
+aria-expanded="false"
+aria-controls="mobile-menu"
+aria-label="Toggle menu"
+>
+            <svg
+class="w-6 h-6"
+fill="none"
+stroke="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+              <path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M4 6h16M4 12h16M4 18h16"
+/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+      <div class="px-4 pt-2 pb-4 space-y-2">
+        <a
+href="#features"
+class="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded"
+data-i18n="nav.features"
+>Features</a>
+        <a
+href="#pricing"
+class="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded"
+data-i18n="nav.pricing"
+>Pricing</a>
+        <a
+href="#about"
+class="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded"
+data-i18n="nav.about"
+>About</a>
+        
+        <div class="flex space-x-2 px-3 py-2">
+          <button
+data-lang="es"
+class="px-3 py-1 rounded bg-gray-100 hover:bg-gray-200"
+aria-label="Español"
+>ES</button>
+          <button
+data-lang="en"
+class="px-3 py-1 rounded bg-gray-100 hover:bg-gray-200"
+aria-label="English"
+>EN</button>
+        </div>
+
+        <div class="border-t pt-2" data-guest-only>
+          <a
+href="./login.html"
+class="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded"
+data-i18n="nav.login"
+>Login</a>
+          <a
+href="./register.html"
+class="block px-3 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded text-center"
+data-i18n="nav.register"
+>Register</a>
+        </div>
+
+        <div class="hidden border-t pt-2" data-auth-required>
+          <a
+href="./dashboard.html"
+class="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded"
+data-i18n="nav.dashboard"
+>Dashboard</a>
+          <a
+href="./map.html"
+class="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded"
+data-i18n="nav.map"
+>Map</a>
+          <a
+href="./admin/index.html"
+class="hidden block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded"
+data-admin-only
+data-i18n="nav.admin"
+>Admin</a>
+          <button
+data-logout
+class="block w-full text-left px-3 py-2 text-gray-700 hover:bg-gray-100 rounded"
+data-i18n="nav.logout"
+>Logout</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main id="main-content">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-blue-50 to-indigo-100 py-20 lg:py-32">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6" data-i18n="hero.title">
+            Share your ride, share the future
+          </h1>
+          <p class="text-xl sm:text-2xl text-gray-700 mb-8 max-w-3xl mx-auto" data-i18n="hero.subtitle">
+            The smartest way to move around the city. Rent a vehicle in minutes.
+          </p>
+          <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <a
+href="./register.html"
+class="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg"
+data-i18n="hero.cta_primary"
+>
+              Get Started
+            </a>
+            <a
+href="./map.html"
+class="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-50 transition-colors shadow-lg"
+data-i18n="hero.cta_secondary"
+>
+              View Vehicles
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4" data-i18n="features.title">
+            Why choose us?
+          </h2>
+          <p class="text-xl text-gray-600" data-i18n="features.subtitle">
+            Experience the freedom of shared mobility
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- Feature 1 -->
+          <div class="text-center p-6 rounded-lg hover:shadow-lg transition-shadow">
+            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg
+class="w-8 h-8 text-blue-600"
+fill="none"
+stroke="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+                <path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M13 10V3L4 14h7v7l9-11h-7z"
+/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2" data-i18n="features.instant_booking">
+              Instant Booking
+            </h3>
+            <p class="text-gray-600" data-i18n="features.instant_booking_desc">
+              Find and book nearby vehicles in seconds
+            </p>
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="text-center p-6 rounded-lg hover:shadow-lg transition-shadow">
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg
+class="w-8 h-8 text-green-600"
+fill="none"
+stroke="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+                <path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2" data-i18n="features.flexible_pricing">
+              Flexible Pricing
+            </h3>
+            <p class="text-gray-600" data-i18n="features.flexible_pricing_desc">
+              Pay only for the time you use, no hidden fees
+            </p>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="text-center p-6 rounded-lg hover:shadow-lg transition-shadow">
+            <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg
+class="w-8 h-8 text-emerald-600"
+fill="none"
+stroke="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+                <path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2" data-i18n="features.eco_friendly">
+              Eco-Friendly
+            </h3>
+            <p class="text-gray-600" data-i18n="features.eco_friendly_desc">
+              Reduce your carbon footprint with our electric fleet
+            </p>
+          </div>
+
+          <!-- Feature 4 -->
+          <div class="text-center p-6 rounded-lg hover:shadow-lg transition-shadow">
+            <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg
+class="w-8 h-8 text-purple-600"
+fill="none"
+stroke="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+                <path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"
+/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2" data-i18n="features.24_7_support">
+              24/7 Support
+            </h3>
+            <p class="text-gray-600" data-i18n="features.24_7_support_desc">
+              Our team is always available to help you
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4" data-i18n="nav.pricing">
+            Pricing
+          </h2>
+          <p class="text-xl text-gray-600">Simple, transparent pricing for everyone</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <!-- Basic Plan -->
+          <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow">
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">Basic</h3>
+            <div class="mb-6">
+              <span class="text-4xl font-bold text-gray-900">€8</span>
+              <span class="text-gray-600">/hour</span>
+            </div>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center">
+                <svg
+class="w-5 h-5 text-green-500 mr-2"
+fill="currentColor"
+viewBox="0 0 20 20"
+aria-hidden="true"
+>
+                  <path
+fill-rule="evenodd"
+d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+clip-rule="evenodd"
+/>
+                </svg>
+                <span class="text-gray-700">Standard vehicles</span>
+              </li>
+              <li class="flex items-center">
+                <svg
+class="w-5 h-5 text-green-500 mr-2"
+fill="currentColor"
+viewBox="0 0 20 20"
+aria-hidden="true"
+>
+                  <path
+fill-rule="evenodd"
+d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+clip-rule="evenodd"
+/>
+                </svg>
+                <span class="text-gray-700">Basic insurance</span>
+              </li>
+              <li class="flex items-center">
+                <svg
+class="w-5 h-5 text-green-500 mr-2"
+fill="currentColor"
+viewBox="0 0 20 20"
+aria-hidden="true"
+>
+                  <path
+fill-rule="evenodd"
+d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+clip-rule="evenodd"
+/>
+                </svg>
+                <span class="text-gray-700">24/7 support</span>
+              </li>
+            </ul>
+            <a href="./register.html" class="block w-full bg-gray-200 text-gray-900 text-center px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors">Get Started</a>
+          </div>
+
+          <!-- Premium Plan -->
+          <div class="bg-blue-600 rounded-lg shadow-lg p-8 transform scale-105 hover:shadow-xl transition-all">
+            <div class="text-center mb-2">
+              <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-semibold">Popular</span>
+            </div>
+            <h3 class="text-2xl font-bold text-white mb-4">Premium</h3>
+            <div class="mb-6">
+              <span class="text-4xl font-bold text-white">€12</span>
+              <span class="text-blue-100">/hour</span>
+            </div>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center">
+                <svg
+class="w-5 h-5 text-yellow-400 mr-2"
+fill="currentColor"
+viewBox="0 0 20 20"
+aria-hidden="true"
+>
+                  <path
+fill-rule="evenodd"
+d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+clip-rule="evenodd"
+/>
+                </svg>
+                <span class="text-white">Electric vehicles</span>
+              </li>
+              <li class="flex items-center">
+                <svg
+class="w-5 h-5 text-yellow-400 mr-2"
+fill="currentColor"
+viewBox="0 0 20 20"
+aria-hidden="true"
+>
+                  <path
+fill-rule="evenodd"
+d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+clip-rule="evenodd"
+/>
+                </svg>
+                <span class="text-white">Premium insurance</span>
+              </li>
+              <li class="flex items-center">
+                <svg
+class="w-5 h-5 text-yellow-400 mr-2"
+fill="currentColor"
+viewBox="0 0 20 20"
+aria-hidden="true"
+>
+                  <path
+fill-rule="evenodd"
+d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+clip-rule="evenodd"
+/>
+                </svg>
+                <span class="text-white">Priority support</span>
+              </li>
+              <li class="flex items-center">
+                <svg
+class="w-5 h-5 text-yellow-400 mr-2"
+fill="currentColor"
+viewBox="0 0 20 20"
+aria-hidden="true"
+>
+                  <path
+fill-rule="evenodd"
+d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+clip-rule="evenodd"
+/>
+                </svg>
+                <span class="text-white">Free cancellation</span>
+              </li>
+            </ul>
+            <a href="./register.html" class="block w-full bg-white text-blue-600 text-center px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">Get Started</a>
+          </div>
+
+          <!-- Business Plan -->
+          <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow">
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">Business</h3>
+            <div class="mb-6">
+              <span class="text-4xl font-bold text-gray-900">€15</span>
+              <span class="text-gray-600">/hour</span>
+            </div>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center">
+                <svg
+class="w-5 h-5 text-green-500 mr-2"
+fill="currentColor"
+viewBox="0 0 20 20"
+aria-hidden="true"
+>
+                  <path
+fill-rule="evenodd"
+d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+clip-rule="evenodd"
+/>
+                </svg>
+                <span class="text-gray-700">Luxury vehicles</span>
+              </li>
+              <li class="flex items-center">
+                <svg
+class="w-5 h-5 text-green-500 mr-2"
+fill="currentColor"
+viewBox="0 0 20 20"
+aria-hidden="true"
+>
+                  <path
+fill-rule="evenodd"
+d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+clip-rule="evenodd"
+/>
+                </svg>
+                <span class="text-gray-700">Full coverage insurance</span>
+              </li>
+              <li class="flex items-center">
+                <svg
+class="w-5 h-5 text-green-500 mr-2"
+fill="currentColor"
+viewBox="0 0 20 20"
+aria-hidden="true"
+>
+                  <path
+fill-rule="evenodd"
+d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+clip-rule="evenodd"
+/>
+                </svg>
+                <span class="text-gray-700">Dedicated account manager</span>
+              </li>
+              <li class="flex items-center">
+                <svg
+class="w-5 h-5 text-green-500 mr-2"
+fill="currentColor"
+viewBox="0 0 20 20"
+aria-hidden="true"
+>
+                  <path
+fill-rule="evenodd"
+d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+clip-rule="evenodd"
+/>
+                </svg>
+                <span class="text-gray-700">Monthly invoicing</span>
+              </li>
+            </ul>
+            <a href="./register.html" class="block w-full bg-gray-200 text-gray-900 text-center px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors">Get Started</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-6" data-i18n="footer.about_us">
+              About Us
+            </h2>
+            <p class="text-lg text-gray-700 mb-4">
+              We're revolutionizing urban mobility by making car sharing accessible, affordable, and sustainable. Our mission is to reduce traffic congestion and carbon emissions while providing convenient transportation solutions.
+            </p>
+            <p class="text-lg text-gray-700 mb-6">
+              With a fleet of modern electric and hybrid vehicles strategically located throughout the city, we're making it easier than ever to get where you need to go without the hassle of car ownership.
+            </p>
+            <div class="grid grid-cols-3 gap-6 text-center">
+              <div>
+                <div class="text-3xl font-bold text-blue-600 mb-2">500+</div>
+                <div class="text-gray-600">Vehicles</div>
+              </div>
+              <div>
+                <div class="text-3xl font-bold text-blue-600 mb-2">50K+</div>
+                <div class="text-gray-600">Users</div>
+              </div>
+              <div>
+                <div class="text-3xl font-bold text-blue-600 mb-2">100+</div>
+                <div class="text-gray-600">Cities</div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-gradient-to-br from-blue-100 to-indigo-200 rounded-lg p-12 flex items-center justify-center">
+            <svg
+class="w-64 h-64 text-blue-600"
+fill="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+              <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <!-- Company -->
+        <div>
+          <h3 class="text-lg font-semibold mb-4" data-i18n="footer.company">Company</h3>
+          <ul class="space-y-2">
+            <li><a
+href="#about"
+class="text-gray-400 hover:text-white transition-colors"
+data-i18n="footer.about_us"
+>About Us</a></li>
+            <li><a
+href="#"
+class="text-gray-400 hover:text-white transition-colors"
+data-i18n="footer.careers"
+>Careers</a></li>
+            <li><a
+href="#"
+class="text-gray-400 hover:text-white transition-colors"
+data-i18n="footer.press"
+>Press</a></li>
+          </ul>
+        </div>
+
+        <!-- Support -->
+        <div>
+          <h3 class="text-lg font-semibold mb-4" data-i18n="footer.support">Support</h3>
+          <ul class="space-y-2">
+            <li><a
+href="#"
+class="text-gray-400 hover:text-white transition-colors"
+data-i18n="footer.help_center"
+>Help Center</a></li>
+            <li><a
+href="#"
+class="text-gray-400 hover:text-white transition-colors"
+data-i18n="footer.contact"
+>Contact</a></li>
+            <li><a
+href="#"
+class="text-gray-400 hover:text-white transition-colors"
+data-i18n="footer.faq"
+>FAQ</a></li>
+          </ul>
+        </div>
+
+        <!-- Legal -->
+        <div>
+          <h3 class="text-lg font-semibold mb-4" data-i18n="footer.legal">Legal</h3>
+          <ul class="space-y-2">
+            <li><a
+href="#"
+class="text-gray-400 hover:text-white transition-colors"
+data-i18n="footer.privacy"
+>Privacy</a></li>
+            <li><a
+href="#"
+class="text-gray-400 hover:text-white transition-colors"
+data-i18n="footer.terms"
+>Terms</a></li>
+            <li><a
+href="#"
+class="text-gray-400 hover:text-white transition-colors"
+data-i18n="footer.cookies"
+>Cookies</a></li>
+          </ul>
+        </div>
+
+        <!-- Social -->
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Social</h3>
+          <div class="flex space-x-4">
+            <a
+href="#"
+class="text-gray-400 hover:text-white transition-colors"
+aria-label="Facebook"
+>
+              <svg
+class="w-6 h-6"
+fill="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+                <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/>
+              </svg>
+            </a>
+            <a
+href="#"
+class="text-gray-400 hover:text-white transition-colors"
+aria-label="Twitter"
+>
+              <svg
+class="w-6 h-6"
+fill="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+                <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"/>
+              </svg>
+            </a>
+            <a
+href="#"
+class="text-gray-400 hover:text-white transition-colors"
+aria-label="Instagram"
+>
+              <svg
+class="w-6 h-6"
+fill="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+                <path d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-800 pt-8 text-center text-gray-400">
+        <p>&copy; 2025 VoltiaCar. <span data-i18n="footer.rights">All rights reserved</span>.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../js/i18n.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/validation.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

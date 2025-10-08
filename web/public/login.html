@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="VoltiaCar Login - Access your account">
+  <title>Login - VoltiaCar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .keyboard-navigation *:focus {
+      outline: 2px solid #3b82f6;
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased bg-gray-50">
+  <!-- Navigation -->
+  <nav
+class="bg-white shadow-lg"
+role="navigation"
+aria-label="Main navigation"
+>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <a href="./index.html" class="flex items-center space-x-2">
+            <svg
+class="w-8 h-8 text-blue-600"
+fill="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+              <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+            </svg>
+            <span class="text-xl font-bold text-gray-900">VoltiaCar</span>
+          </a>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <!-- Language Switcher -->
+          <div class="flex items-center space-x-2">
+            <button
+data-lang="es"
+class="px-2 py-1 rounded hover:bg-gray-100 transition-colors"
+aria-label="Español"
+>ES</button>
+            <button
+data-lang="en"
+class="px-2 py-1 rounded hover:bg-gray-100 transition-colors"
+aria-label="English"
+>EN</button>
+          </div>
+          
+          <a
+href="./index.html"
+class="text-gray-700 hover:text-blue-600 transition-colors"
+data-i18n="nav.home"
+>Home</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main id="main-content" class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+      <!-- Header -->
+      <div class="text-center">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2" data-i18n="login.title">Login</h1>
+        <p class="text-gray-600" data-i18n="login.subtitle">Welcome back</p>
+      </div>
+
+      <!-- Login Form -->
+      <div class="bg-white rounded-lg shadow-lg p-8">
+        <form
+id="login-form"
+data-validate-form
+novalidate
+>
+          <!-- Email Field -->
+          <div class="mb-6">
+            <label
+for="email"
+class="block text-sm font-medium text-gray-700 mb-2"
+data-i18n="login.email"
+>
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              data-validate="required|email"
+              data-i18n-placeholder="login.email_placeholder"
+              placeholder="you@email.com"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              aria-required="true"
+              autocomplete="email"
+            >
+          </div>
+
+          <!-- Password Field -->
+          <div class="mb-6">
+            <label
+for="password"
+class="block text-sm font-medium text-gray-700 mb-2"
+data-i18n="login.password"
+>
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              data-validate="required|password"
+              data-i18n-placeholder="login.password_placeholder"
+              placeholder="Enter your password"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              aria-required="true"
+              autocomplete="current-password"
+            >
+          </div>
+
+          <!-- Remember Me & Forgot Password -->
+          <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center">
+              <input
+                type="checkbox"
+                id="remember"
+                name="remember"
+                class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              >
+              <label
+for="remember"
+class="ml-2 text-sm text-gray-700"
+data-i18n="login.remember_me"
+>
+                Remember me
+              </label>
+            </div>
+            <a
+href="#"
+class="text-sm text-blue-600 hover:text-blue-700"
+data-i18n="login.forgot_password"
+>
+              Forgot password?
+            </a>
+          </div>
+
+          <!-- Submit Button -->
+          <button
+            type="submit"
+            class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition-colors"
+            data-i18n="login.submit"
+          >
+            Login
+          </button>
+
+          <!-- Register Link -->
+          <div class="mt-6 text-center">
+            <span class="text-gray-600" data-i18n="login.no_account">Don't have an account?</span>
+            <a
+href="./register.html"
+class="text-blue-600 hover:text-blue-700 font-semibold ml-1"
+data-i18n="login.register_link"
+>
+              Register here
+            </a>
+          </div>
+        </form>
+      </div>
+
+      <!-- Additional Info -->
+      <div class="text-center text-sm text-gray-600">
+        <p>By logging in, you agree to our Terms of Service and Privacy Policy</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="../js/i18n.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/validation.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

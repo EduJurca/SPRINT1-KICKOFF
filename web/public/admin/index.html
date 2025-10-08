@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CarShare Admin Dashboard">
+  <title>Admin Dashboard - CarShare</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .keyboard-navigation *:focus {
+      outline: 2px solid #3b82f6;
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased bg-gray-50">
+  <!-- Navigation -->
+  <nav
+class="bg-white shadow-lg sticky top-0 z-50"
+role="navigation"
+aria-label="Main navigation"
+>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <a href="../index.html" class="flex items-center space-x-2">
+            <svg
+class="w-8 h-8 text-blue-600"
+fill="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+              <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+            </svg>
+            <span class="text-xl font-bold text-gray-900">CarShare Admin</span>
+          </a>
+        </div>
+
+        <div class="flex items-center space-x-6">
+          <a
+href="./index.html"
+class="text-blue-600 font-semibold"
+data-i18n="admin.dashboard"
+>Admin Dashboard</a>
+          <a
+href="./users.html"
+class="text-gray-700 hover:text-blue-600 transition-colors"
+data-i18n="admin.users"
+>Users</a>
+          <a
+href="./vehicles.html"
+class="text-gray-700 hover:text-blue-600 transition-colors"
+data-i18n="admin.vehicles"
+>Vehicles</a>
+          
+          <!-- Language Switcher -->
+          <div class="flex items-center space-x-2 border-l pl-4">
+            <button
+data-lang="es"
+class="px-2 py-1 rounded hover:bg-gray-100 transition-colors"
+aria-label="Español"
+>ES</button>
+            <button
+data-lang="en"
+class="px-2 py-1 rounded hover:bg-gray-100 transition-colors"
+aria-label="English"
+>EN</button>
+          </div>
+
+          <div class="flex items-center space-x-4">
+            <span class="text-gray-700" data-user-name>Admin</span>
+            <button
+data-logout
+class="text-gray-700 hover:text-blue-600 transition-colors"
+data-i18n="nav.logout"
+>Logout</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main id="main-content" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2" data-i18n="admin.dashboard">Admin Dashboard</h1>
+      <p class="text-gray-600">Overview of system statistics and metrics</p>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <!-- Total Users -->
+      <div class="bg-white rounded-lg shadow-lg p-6">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+            <svg
+class="w-6 h-6 text-blue-600"
+fill="none"
+stroke="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+              <path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+/>
+            </svg>
+          </div>
+        </div>
+        <p class="text-gray-600 text-sm mb-1" data-i18n="admin.total_users">Total Users</p>
+        <p class="text-3xl font-bold text-gray-900">1,247</p>
+        <p class="text-sm text-green-600 mt-2">↑ 12% from last month</p>
+      </div>
+
+      <!-- Total Vehicles -->
+      <div class="bg-white rounded-lg shadow-lg p-6">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+            <svg
+class="w-6 h-6 text-green-600"
+fill="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+              <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+            </svg>
+          </div>
+        </div>
+        <p class="text-gray-600 text-sm mb-1" data-i18n="admin.total_vehicles">Total Vehicles</p>
+        <p class="text-3xl font-bold text-gray-900">156</p>
+        <p class="text-sm text-green-600 mt-2">↑ 8% from last month</p>
+      </div>
+
+      <!-- Active Bookings -->
+      <div class="bg-white rounded-lg shadow-lg p-6">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+            <svg
+class="w-6 h-6 text-purple-600"
+fill="none"
+stroke="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+              <path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+/>
+            </svg>
+          </div>
+        </div>
+        <p class="text-gray-600 text-sm mb-1" data-i18n="admin.active_bookings">Active Bookings</p>
+        <p class="text-3xl font-bold text-gray-900">89</p>
+        <p class="text-sm text-blue-600 mt-2">Currently active</p>
+      </div>
+
+      <!-- Revenue -->
+      <div class="bg-white rounded-lg shadow-lg p-6">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+            <svg
+class="w-6 h-6 text-yellow-600"
+fill="none"
+stroke="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+              <path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+/>
+            </svg>
+          </div>
+        </div>
+        <p class="text-gray-600 text-sm mb-1" data-i18n="admin.revenue">Revenue</p>
+        <p class="text-3xl font-bold text-gray-900">€45,892</p>
+        <p class="text-sm text-green-600 mt-2">↑ 23% from last month</p>
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <!-- Recent Activity -->
+      <div class="bg-white rounded-lg shadow-lg p-6">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">Recent Activity</h2>
+        <div class="space-y-4">
+          <div class="flex items-start space-x-3 pb-4 border-b">
+            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg
+class="w-5 h-5 text-blue-600"
+fill="none"
+stroke="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+                <path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+/>
+              </svg>
+            </div>
+            <div class="flex-1">
+              <p class="text-sm font-medium text-gray-900">New user registered</p>
+              <p class="text-xs text-gray-600">maria.garcia@email.com</p>
+              <p class="text-xs text-gray-500 mt-1">2 minutes ago</p>
+            </div>
+          </div>
+
+          <div class="flex items-start space-x-3 pb-4 border-b">
+            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg
+class="w-5 h-5 text-green-600"
+fill="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+                <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+              </svg>
+            </div>
+            <div class="flex-1">
+              <p class="text-sm font-medium text-gray-900">Vehicle added</p>
+              <p class="text-xs text-gray-600">Tesla Model 3 - ABC-1234</p>
+              <p class="text-xs text-gray-500 mt-1">15 minutes ago</p>
+            </div>
+          </div>
+
+          <div class="flex items-start space-x-3 pb-4 border-b">
+            <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg
+class="w-5 h-5 text-purple-600"
+fill="none"
+stroke="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+                <path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+/>
+              </svg>
+            </div>
+            <div class="flex-1">
+              <p class="text-sm font-medium text-gray-900">Booking completed</p>
+              <p class="text-xs text-gray-600">BMW i3 - 3 hours - €33</p>
+              <p class="text-xs text-gray-500 mt-1">1 hour ago</p>
+            </div>
+          </div>
+
+          <div class="flex items-start space-x-3">
+            <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg
+class="w-5 h-5 text-yellow-600"
+fill="none"
+stroke="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+                <path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+/>
+              </svg>
+            </div>
+            <div class="flex-1">
+              <p class="text-sm font-medium text-gray-900">Maintenance required</p>
+              <p class="text-xs text-gray-600">Renault Zoe - Low battery</p>
+              <p class="text-xs text-gray-500 mt-1">2 hours ago</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vehicle Status -->
+      <div class="bg-white rounded-lg shadow-lg p-6">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">Vehicle Status</h2>
+        <div class="space-y-4">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-medium text-gray-700">Available</span>
+              <span class="text-sm font-bold text-green-600">67 vehicles</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-3">
+              <div class="bg-green-500 h-3 rounded-full" style="width: 43%"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-medium text-gray-700">In Use</span>
+              <span class="text-sm font-bold text-blue-600">89 vehicles</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-3">
+              <div class="bg-blue-500 h-3 rounded-full" style="width: 57%"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-medium text-gray-700">Maintenance</span>
+              <span class="text-sm font-bold text-orange-600">12 vehicles</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-3">
+              <div class="bg-orange-500 h-3 rounded-full" style="width: 8%"></div>
+            </div>
+          </div>
+
+          <div class="pt-4 border-t">
+            <h3 class="text-sm font-semibold text-gray-700 mb-3">Fleet Composition</h3>
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-gray-600">Electric</span>
+                <span class="text-sm font-semibold text-gray-900">124 (79%)</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-gray-600">Hybrid</span>
+                <span class="text-sm font-semibold text-gray-900">32 (21%)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      <h2 class="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <a href="./users.html" class="flex items-center justify-center space-x-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+          <svg
+class="w-5 h-5"
+fill="none"
+stroke="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+            <path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+/>
+          </svg>
+          <span data-i18n="admin.user_management">Manage Users</span>
+        </a>
+
+        <a href="./vehicles.html" class="flex items-center justify-center space-x-2 bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors">
+          <svg
+class="w-5 h-5"
+fill="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+            <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+          </svg>
+          <span data-i18n="admin.vehicle_management">Manage Vehicles</span>
+        </a>
+
+        <button class="flex items-center justify-center space-x-2 bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors">
+          <svg
+class="w-5 h-5"
+fill="none"
+stroke="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+            <path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+/>
+          </svg>
+          <span>Generate Report</span>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/auth.js"></script>
+  <script src="../../js/validation.js"></script>
+  <script src="../../js/main.js"></script>
+</body>
+</html>

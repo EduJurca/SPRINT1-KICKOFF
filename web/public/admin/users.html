@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CarShare User Management">
+  <title>User Management - CarShare Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .keyboard-navigation *:focus {
+      outline: 2px solid #3b82f6;
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased bg-gray-50">
+  <!-- Navigation -->
+  <nav
+class="bg-white shadow-lg sticky top-0 z-50"
+role="navigation"
+aria-label="Main navigation"
+>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <a href="../index.html" class="flex items-center space-x-2">
+            <svg
+class="w-8 h-8 text-blue-600"
+fill="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+              <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+            </svg>
+            <span class="text-xl font-bold text-gray-900">CarShare Admin</span>
+          </a>
+        </div>
+
+        <div class="flex items-center space-x-6">
+          <a
+href="./index.html"
+class="text-gray-700 hover:text-blue-600 transition-colors"
+data-i18n="admin.dashboard"
+>Admin Dashboard</a>
+          <a
+href="./users.html"
+class="text-blue-600 font-semibold"
+data-i18n="admin.users"
+>Users</a>
+          <a
+href="./vehicles.html"
+class="text-gray-700 hover:text-blue-600 transition-colors"
+data-i18n="admin.vehicles"
+>Vehicles</a>
+          
+          <!-- Language Switcher -->
+          <div class="flex items-center space-x-2 border-l pl-4">
+            <button
+data-lang="es"
+class="px-2 py-1 rounded hover:bg-gray-100 transition-colors"
+aria-label="Español"
+>ES</button>
+            <button
+data-lang="en"
+class="px-2 py-1 rounded hover:bg-gray-100 transition-colors"
+aria-label="English"
+>EN</button>
+          </div>
+
+          <div class="flex items-center space-x-4">
+            <span class="text-gray-700" data-user-name>Admin</span>
+            <button
+data-logout
+class="text-gray-700 hover:text-blue-600 transition-colors"
+data-i18n="nav.logout"
+>Logout</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main id="main-content" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900 mb-2" data-i18n="admin.user_management">User Management</h1>
+        <p class="text-gray-600">Manage user accounts and permissions</p>
+      </div>
+      <button class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2" onclick="openAddUserModal()">
+        <svg
+class="w-5 h-5"
+fill="none"
+stroke="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+          <path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M12 4v16m8-8H4"
+/>
+        </svg>
+        <span data-i18n="admin.add_user">Add User</span>
+      </button>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label
+for="search"
+class="block text-sm font-medium text-gray-700 mb-2"
+data-i18n="admin.search"
+>Search</label>
+          <input
+            type="text"
+            id="search"
+            placeholder="Search by name or email..."
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+        </div>
+        <div>
+          <label
+for="roleFilter"
+class="block text-sm font-medium text-gray-700 mb-2"
+data-i18n="admin.role"
+>Role</label>
+          <select
+            id="roleFilter"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="all">All Roles</option>
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div>
+          <label
+for="statusFilter"
+class="block text-sm font-medium text-gray-700 mb-2"
+data-i18n="admin.status"
+>Status</label>
+          <select
+            id="statusFilter"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="all">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="admin.name">Name</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="admin.email">Email</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="admin.role">Role</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="admin.status">Status</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Joined</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="admin.actions">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <!-- User Row 1 -->
+            <tr class="hover:bg-gray-50">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">1</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                    <span class="text-blue-600 font-semibold">JD</span>
+                  </div>
+                  <div class="font-medium text-gray-900">John Doe</div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">john.doe@email.com</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">Admin</span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800" data-i18n="admin.active">Active</span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Jan 15, 2024</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">
+                <button
+class="text-blue-600 hover:text-blue-800 mr-3"
+aria-label="Edit user"
+data-i18n="admin.edit"
+>Edit</button>
+                <button
+class="text-red-600 hover:text-red-800"
+aria-label="Delete user"
+data-i18n="admin.delete"
+>Delete</button>
+              </td>
+            </tr>
+
+            <!-- User Row 2 -->
+            <tr class="hover:bg-gray-50">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                    <span class="text-green-600 font-semibold">MG</span>
+                  </div>
+                  <div class="font-medium text-gray-900">Maria Garcia</div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">maria.garcia@email.com</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">User</span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800" data-i18n="admin.active">Active</span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Mar 22, 2024</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">
+                <button
+class="text-blue-600 hover:text-blue-800 mr-3"
+aria-label="Edit user"
+data-i18n="admin.edit"
+>Edit</button>
+                <button
+class="text-red-600 hover:text-red-800"
+aria-label="Delete user"
+data-i18n="admin.delete"
+>Delete</button>
+              </td>
+            </tr>
+
+            <!-- User Row 3 -->
+            <tr class="hover:bg-gray-50">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">3</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+                    <span class="text-purple-600 font-semibold">AL</span>
+                  </div>
+                  <div class="font-medium text-gray-900">Alex Lopez</div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">alex.lopez@email.com</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">User</span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800" data-i18n="admin.active">Active</span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Apr 10, 2024</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">
+                <button
+class="text-blue-600 hover:text-blue-800 mr-3"
+aria-label="Edit user"
+data-i18n="admin.edit"
+>Edit</button>
+                <button
+class="text-red-600 hover:text-red-800"
+aria-label="Delete user"
+data-i18n="admin.delete"
+>Delete</button>
+              </td>
+            </tr>
+
+            <!-- User Row 4 -->
+            <tr class="hover:bg-gray-50">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">4</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center mr-3">
+                    <span class="text-yellow-600 font-semibold">SM</span>
+                  </div>
+                  <div class="font-medium text-gray-900">Sofia Martinez</div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">sofia.martinez@email.com</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">User</span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800" data-i18n="admin.inactive">Inactive</span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">May 5, 2024</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">
+                <button
+class="text-blue-600 hover:text-blue-800 mr-3"
+aria-label="Edit user"
+data-i18n="admin.edit"
+>Edit</button>
+                <button
+class="text-red-600 hover:text-red-800"
+aria-label="Delete user"
+data-i18n="admin.delete"
+>Delete</button>
+              </td>
+            </tr>
+
+            <!-- User Row 5 -->
+            <tr class="hover:bg-gray-50">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">5</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-3">
+                    <span class="text-red-600 font-semibold">DR</span>
+                  </div>
+                  <div class="font-medium text-gray-900">David Rodriguez</div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">david.rodriguez@email.com</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">User</span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800" data-i18n="admin.active">Active</span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Jun 18, 2024</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">
+                <button
+class="text-blue-600 hover:text-blue-800 mr-3"
+aria-label="Edit user"
+data-i18n="admin.edit"
+>Edit</button>
+                <button
+class="text-red-600 hover:text-red-800"
+aria-label="Delete user"
+data-i18n="admin.delete"
+>Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="bg-gray-50 px-6 py-4 flex items-center justify-between border-t">
+        <div class="text-sm text-gray-700">
+          Showing <span class="font-semibold">1</span> to <span class="font-semibold">5</span> of <span class="font-semibold">1,247</span> users
+        </div>
+        <div class="flex space-x-2">
+          <button class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50" disabled>
+            Previous
+          </button>
+          <button class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
+            1
+          </button>
+          <button class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+            2
+          </button>
+          <button class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+            3
+          </button>
+          <button class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Add User Modal (Hidden by default) -->
+  <div id="addUserModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-bold text-gray-900" data-i18n="admin.add_user">Add User</h2>
+        <button
+onclick="closeAddUserModal()"
+class="text-gray-400 hover:text-gray-600"
+aria-label="Close modal"
+>
+          <svg
+class="w-6 h-6"
+fill="none"
+stroke="currentColor"
+viewBox="0 0 24 24"
+aria-hidden="true"
+>
+            <path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M6 18L18 6M6 6l12 12"
+/>
+          </svg>
+        </button>
+      </div>
+      <form id="addUserForm" data-validate-form>
+        <div class="space-y-4">
+          <div>
+            <label
+for="userName"
+class="block text-sm font-medium text-gray-700 mb-1"
+data-i18n="admin.name"
+>Name</label>
+            <input
+type="text"
+id="userName"
+name="name"
+data-validate="required"
+class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+>
+          </div>
+          <div>
+            <label
+for="userEmail"
+class="block text-sm font-medium text-gray-700 mb-1"
+data-i18n="admin.email"
+>Email</label>
+            <input
+type="email"
+id="userEmail"
+name="email"
+data-validate="required|email"
+class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+>
+          </div>
+          <div>
+            <label
+for="userRole"
+class="block text-sm font-medium text-gray-700 mb-1"
+data-i18n="admin.role"
+>Role</label>
+            <select
+id="userRole"
+name="role"
+class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+>
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+        </div>
+        <div class="flex space-x-3 mt-6">
+          <button
+type="submit"
+class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+data-i18n="admin.save"
+>Save</button>
+          <button
+type="button"
+onclick="closeAddUserModal()"
+class="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"
+data-i18n="admin.cancel"
+>Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../../js/i18n.js"></script>
+  <script src="../../js/auth.js"></script>
+  <script src="../../js/validation.js"></script>
+  <script src="../../js/main.js"></script>
+  
+  <script>
+    function openAddUserModal() {
+      document.getElementById('addUserModal').classList.remove('hidden');
+    }
+    
+    function closeAddUserModal() {
+      document.getElementById('addUserModal').classList.add('hidden');
+      document.getElementById('addUserForm').reset();
+    }
+    
+    // Close modal on outside click
+    document.getElementById('addUserModal').addEventListener('click', (e) => {
+      if (e.target.id === 'addUserModal') {
+        closeAddUserModal();
+      }
+    });
+  </script>
+</body>
+</html>

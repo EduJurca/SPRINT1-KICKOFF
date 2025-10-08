@@ -1,0 +1,18 @@
+# Carsharing Platform - Admin Tool Dependencies
+# Python 3.8+ required
+# Install with: pip install -r requirements.txt
+
+# Docker SDK for Python - Container management
+docker>=7.0.0
+
+# Colorama - Cross-platform colored terminal output
+colorama>=0.4.6
+
+# Python-dotenv - Environment variable management
+python-dotenv>=1.0.0
+
+# tqdm - Progress bars for CLI
+tqdm>=4.66.0
+
+# Additional utilities
+requests>=2.31.0

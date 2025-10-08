@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test - VoltiaCar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="font-sans antialiased bg-gray-100">
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">VoltiaCar - Test de Sesión</h1>
+    
+    <div class="bg-white rounded-lg shadow p-6 mb-6">
+      <h2 class="text-xl font-semibold mb-4">Estado de Autenticación</h2>
+      <div id="auth-status" class="mb-4">
+        <p>Verificando...</p>
+      </div>
+      
+      <div class="space-x-4">
+        <button id="check-auth" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+          Verificar Sesión
+        </button>
+        <button id="test-api" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+          Probar API
+        </button>
+        <a href="./dashboard.html" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 inline-block">
+          Ir a Dashboard
+        </a>
+        <a href="./map.html" class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700 inline-block">
+          Ir a Mapa
+        </a>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-xl font-semibold mb-4">Login Rápido</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <input type="email" id="email" placeholder="Email" class="w-full p-2 border rounded" value="admin@carshare.com">
+          <input type="password" id="password" placeholder="Password" class="w-full p-2 border rounded mt-2" value="AdminPassword123!">
+          <button id="quick-login" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 mt-2">
+            Login Rápido
+          </button>
+        </div>
+        <div>
+          <button id="logout" class="w-full bg-red-600 text-white p-2 rounded hover:bg-red-700">
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="logs" class="bg-gray-800 text-green-400 p-4 rounded mt-6 font-mono text-sm">
+      <div>Logs del sistema:</div>
+    </div>
+  </div>
+
+  <script src="../js/auth.js"></script>
+  <script>
+    function log(message) {
+      const logs = document.getElementById('logs');
+      const time = new Date().toLocaleTimeString();
+      logs.innerHTML += `<div>[${time}] ${message}</div>`;
+      logs.scrollTop = logs.scrollHeight;
+    }
+
+    function updateStatus() {
+      const status = document.getElementById('auth-status');
+      const isAuth = auth.isAuthenticated();
+      const user = auth.getCurrentUser();
+      
+      status.innerHTML = `
+        <p><strong>Autenticado:</strong> ${isAuth ? 'SÍ' : 'NO'}</p>
+        <p><strong>Usuario:</strong> ${user ? user.email : 'Ninguno'}</p>
+        <p><strong>Rol:</strong> ${user ? user.role : 'N/A'}</p>
+        <p><strong>Token:</strong> ${auth.getToken() ? 'Existe' : 'No existe'}</p>
+      `;
+      
+      log(`Estado: ${isAuth ? 'Autenticado' : 'No autenticado'} - Usuario: ${user ? user.email : 'Ninguno'}`);
+    }
+
+    document.getElementById('check-auth').addEventListener('click', () => {
+      log('Verificando autenticación...');
+      updateStatus();
+    });
+
+    document.getElementById('test-api').addEventListener('click', async () => {
+      try {
+        log('Probando API...');
+        const response = await auth.apiRequest('/auth/verify');
+        log('API Response: ' + JSON.stringify(response));
+        updateStatus();
+      } catch (error) {
+        log('API Error: ' + error.message);
+      }
+    });
+
+    document.getElementById('quick-login').addEventListener('click', async () => {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      log(`Intentando login con ${email}...`);
+      try {
+        const result = await auth.login(email, password);
+        if (result.success) {
+          log('Login exitoso!');
+          updateStatus();
+        } else {
+          log('Login falló: ' + result.error);
+        }
+      } catch (error) {
+        log('Login error: ' + error.message);
+      }
+    });
+
+    document.getElementById('logout').addEventListener('click', async () => {
+      log('Cerrando sesión...');
+      await auth.logout();
+    });
+
+    // Initial status check
+    setTimeout(updateStatus, 1000);
+  </script>
+</body>
+</html>
