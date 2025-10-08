@@ -7,20 +7,6 @@ __pycache__/
 # Node modules (if used)
 node_modules/
 
-# Composer dependencies (vendor folder)
-web/vendor/
-
-# Environment files
-docker/.env
-docker/.env.*
-*.env
-
-# Database backups and dumps
-backups/
-*.sql
-*.tar.gz
-*.gz
-*.bak
 
 # Log files
 *.log
