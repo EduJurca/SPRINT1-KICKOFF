@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     echo json_encode($profile ? ['success'=>true,'data'=>$profile] : ['success'=>false,'message'=>'Usuario no encontrado']);
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = json_decode(file_get_contents('php://input'), true);
-    $allowedFields = ['fullname', 'phone', 'birthdate', 'address', 'sex'];
+    $allowedFields = ['fullname', 'dni', 'phone', 'birthdate', 'address', 'sex'];
     $data = [];
     foreach ($allowedFields as $field) {
         if (isset($input[$field])) $data[$field] = $input[$field];
