@@ -9,16 +9,13 @@
     <link rel="stylesheet" href="../../css/custom.css">
 
     <style>
-        /* Amagar la barra de desplaçament per a una aparença més neta */
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
 
         .no-scrollbar {
             -ms-overflow-style: none;
-            /* IE and Edge */
             scrollbar-width: none;
-            /* Firefox */
         }
 
 
@@ -264,10 +261,6 @@ function confirmarCompra() {
       cerrarModal();
     }
   })
-  .catch(err => {
-    showToast('Error en la connexió amb el servidor', 'info');
-    console.error(err);
-    cerrarModal();    
-  });
-}
+};
+
 </script>
