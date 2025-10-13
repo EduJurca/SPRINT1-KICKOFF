@@ -26,7 +26,6 @@ final_editar_usar/
   - **css/**: Estils, inclou accessibilitat i personalització.
   - **images/**: Imatges, icones i avatars.
   - **js/**: Scripts JavaScript modulars (autenticació, reserves, vehicles, accessibilitat, etc.).
-  - **lang/**: Fitxers d’idioma (JSON) i tutorials per cada idioma.
   - **pages/**: Vistes HTML/PHP organitzades per funcionalitat (auth, dashboard, perfil, vehicle, accessibilitat).
   - **php/**: Backend PHP (API, components, controladors, models, admin, auth, etc.).
 - **python_gui/**: Eina GUI per administradors, amb dependències a `requirements.txt`.
@@ -80,10 +79,8 @@ final_editar_usar/
 
 ---
 
-## 🌍 Internacionalització i Accessibilitat
+## 🌍 Accessibilitat
 
-- **Idiomes disponibles**: Català, Castellà, Anglès.
-- **Traduccions**: Fitxers JSON a `public_html/lang/` i gestió dinàmica en PHP/JS.
 - **Accessibilitat**: 
   - Estils dedicats (`accessibility.css`), widget UserWay, navegació per teclat, contrast, mida de text, reducció de moviment.
   - Etiquetes semàntiques i ARIA a les vistes.
@@ -113,8 +110,7 @@ final_editar_usar/
 ## 📚 Recursos Addicionals
 
 - **Resum tècnic**: `public_html/pages/dashboard/resum-projecte.html`
-- **Tutorials**: `public_html/lang/ca/tutorial.json`, `en/tutorial.json`, `es/tutorial.json`
-- **Panel d’administració**: `public_html/php/admin/`
+- **Panel d'administració**: `public_html/php/admin/`
 
 ---
 
