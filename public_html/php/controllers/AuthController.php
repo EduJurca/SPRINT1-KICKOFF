@@ -16,6 +16,10 @@ class AuthController {
                 'samesite' => 'Lax'
             ]);
             session_start();
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['is_admin'] = $user['is_admin'];
+            return ['success' => true, 'msg' => 'Login exitoso'];
         }
 
         // --- 2. Find user in the database ---

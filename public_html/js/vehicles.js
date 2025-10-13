@@ -156,7 +156,7 @@ const Vehicles = {
      */
     async getVehicleDetails(vehicleId) {
         try {
-            const response = await fetch(`/src/api/vehicles.php?action=details&id=${vehicleId}`, {
+            const response = await fetch(`/php/api/vehicles.php?action=details&id=${vehicleId}`, {
                 method: 'GET',
                 credentials: 'include'
             });
