@@ -14,18 +14,26 @@ class Database {
      */
     public static function getMariaDBConnection() {
         if (self::$mariadb_connection === null) {
-            // Load environment variables
-            $env_file = __DIR__ . '/.env';
-            if (file_exists($env_file)) {
+            // Load environment variables: prefer repo-root .env, fallback to config/.env
+            $rootEnv = dirname(__DIR__) . '/.env';
+            $configEnv = __DIR__ . '/.env';
+            $env_file = null;
+            if (file_exists($rootEnv)) {
+                $env_file = $rootEnv;
+            } elseif (file_exists($configEnv)) {
+                $env_file = $configEnv;
+            }
+
+            if ($env_file !== null) {
                 $lines = file($env_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
                 foreach ($lines as $line) {
-                    if (strpos($line, '=') !== false && strpos($line, '#') !== 0) {
+                    if (strpos($line, '=') !== false && strpos(trim($line), '#') !== 0) {
                         list($key, $value) = explode('=', $line, 2);
                         $_ENV[trim($key)] = trim($value);
                     }
                 }
             }
-            
+
             $host = $_ENV['DB_HOST'] ?? 'mariadb';
             $user = $_ENV['DB_USER'] ?? 'simsuser';
             $pass = $_ENV['DB_PASS'] ?? 'Putamare123';
@@ -57,11 +65,12 @@ class Database {
             try {
                 require_once __DIR__ . '/../vendor/autoload.php';
                 
-                $mongo_host = 'mongodb';
-                $mongo_user = 'simsadmin';
-                $mongo_pass = 'Putamare123.';
-                $mongo_db = 'simsdb';
-                
+                // Allow overriding Mongo credentials via env
+                $mongo_host = $_ENV['MONGO_HOST'] ?? 'mongodb';
+                $mongo_user = $_ENV['MONGO_INITDB_ROOT_USERNAME'] ?? $_ENV['MONGO_USER'] ?? 'simsadmin';
+                $mongo_pass = $_ENV['MONGO_INITDB_ROOT_PASSWORD'] ?? $_ENV['MONGO_PASS'] ?? 'Putamare123.';
+                $mongo_db = $_ENV['MONGO_INITDB_DATABASE'] ?? $_ENV['MONGO_DB'] ?? 'simsdb';
+
                 $uri = "mongodb://{$mongo_user}:{$mongo_pass}@{$mongo_host}:27017/{$mongo_db}";
                 
                 self::$mongodb_connection = new MongoDB\Client($uri);
