@@ -23,8 +23,8 @@ class User {
     public static function create($data) {
         $db = DatabaseMariaDB::getConnection();
         $stmt = $db->prepare("INSERT INTO users 
-            (username, nationality_id, phone, birth_date, email, password, iban, driver_license_photo, minute_balance, is_admin, created_at) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            (username, nationality_id, phone, birth_date, sex, dni, address, email, password, iban, driver_license_photo, minute_balance, is_admin, created_at) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )");
 
         $nationality_id = $data['nationality_id'] ?? null;
         $phone = $data['phone'] ?? null;
