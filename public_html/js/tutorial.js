@@ -634,7 +634,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // Purchase time
-    else if (path.includes('comprar-temps.html')) {
+    else if (path.includes('purchase-time.html')) {
         Tutorial.init('purchaseTime');
     }
     
