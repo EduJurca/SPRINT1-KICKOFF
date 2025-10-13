@@ -156,7 +156,7 @@ const Vehicles = {
      */
     async getVehicleDetails(vehicleId) {
         try {
-            const response = await fetch(`/src/api/vehicles.php?action=details&id=${vehicleId}`, {
+            const response = await fetch(`/php/api/vehicles.php?action=details&id=${vehicleId}`, {
                 method: 'GET',
                 credentials: 'include'
             });
@@ -182,7 +182,7 @@ const Vehicles = {
         try {
             Utils.showLoading();
             
-            const response = await fetch('/src/api/vehicles.php', {
+            const response = await fetch('/php/api/vehicles.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -226,7 +226,7 @@ const Vehicles = {
         try {
             Utils.showLoading();
             
-            const response = await fetch('/src/api/vehicles.php', {
+            const response = await fetch('/php/api/vehicles.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -272,7 +272,7 @@ const Vehicles = {
      */
     async activateHorn() {
         try {
-            const response = await fetch('/src/api/vehicle-control.php', {
+            const response = await fetch('/php/api/vehicle-control.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -304,7 +304,7 @@ const Vehicles = {
      */
     async activateLights() {
         try {
-            const response = await fetch('/src/api/vehicle-control.php', {
+            const response = await fetch('/php/api/vehicle-control.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -338,7 +338,7 @@ const Vehicles = {
         try {
             Utils.showLoading();
             
-            const response = await fetch('/src/api/vehicle-control.php', {
+            const response = await fetch('/php/api/vehicle-control.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -374,7 +374,7 @@ const Vehicles = {
         try {
             Utils.showLoading();
             
-            const response = await fetch('/src/api/vehicle-control.php', {
+            const response = await fetch('/php/api/vehicle-control.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -408,7 +408,7 @@ const Vehicles = {
      */
     async toggleDoors(lock = true) {
         try {
-            const response = await fetch('/src/api/vehicle-control.php', {
+            const response = await fetch('/php/api/vehicle-control.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
