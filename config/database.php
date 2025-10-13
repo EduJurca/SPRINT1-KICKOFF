@@ -1,20 +1,11 @@
 <?php
-/**
- * Database Configuration and Connection Handler
- * Supports both MariaDB and MongoDB connections
- */
 
 class Database {
     private static $mariadb_connection = null;
     private static $mongodb_connection = null;
-    
-    /**
-     * Get MariaDB connection
-     * @return mysqli
-     */
+
     public static function getMariaDBConnection() {
         if (self::$mariadb_connection === null) {
-            // Load environment variables: prefer repo-root .env, fallback to config/.env
             $rootEnv = dirname(__DIR__) . '/.env';
             $configEnv = __DIR__ . '/.env';
             $env_file = null;
@@ -56,16 +47,12 @@ class Database {
         return self::$mariadb_connection;
     }
     
-    /**
-     * Get MongoDB connection
-     * @return MongoDB\Client
-     */
+
     public static function getMongoDBConnection() {
         if (self::$mongodb_connection === null) {
             try {
                 require_once __DIR__ . '/../vendor/autoload.php';
                 
-                // Allow overriding Mongo credentials via env
                 $mongo_host = $_ENV['MONGO_HOST'] ?? 'mongodb';
                 $mongo_user = $_ENV['MONGO_INITDB_ROOT_USERNAME'] ?? $_ENV['MONGO_USER'] ?? 'simsadmin';
                 $mongo_pass = $_ENV['MONGO_INITDB_ROOT_PASSWORD'] ?? $_ENV['MONGO_PASS'] ?? 'Putamare123.';
@@ -75,7 +62,6 @@ class Database {
                 
                 self::$mongodb_connection = new MongoDB\Client($uri);
                 
-                // Test connection
                 self::$mongodb_connection->listDatabases();
             } catch (Exception $e) {
                 error_log("MongoDB Error: " . $e->getMessage());
@@ -85,34 +71,25 @@ class Database {
         
         return self::$mongodb_connection;
     }
-    
-    /**
-     * Get MongoDB database
-     * @return MongoDB\Database
-     */
+
     public static function getMongoDatabase() {
         $client = self::getMongoDBConnection();
         return $client->simsdb;
     }
     
-    /**
-     * Close all connections
-     */
+
     public static function closeConnections() {
         if (self::$mariadb_connection !== null) {
             self::$mariadb_connection->close();
             self::$mariadb_connection = null;
         }
-        // MongoDB connections are closed automatically
     }
 }
 
-// Helper function for quick MariaDB access
 function getDB() {
     return Database::getMariaDBConnection();
 }
 
-// Helper function for quick MongoDB access
 function getMongoDB() {
     return Database::getMongoDatabase();
 }

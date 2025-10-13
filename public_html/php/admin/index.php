@@ -6,9 +6,6 @@
 
 session_start();
 
-// Check if user is logged in and is admin
-require_once __DIR__ . '/../languages/language.php';
-$lang = new Language();
 
 // Check authentication (simplified - implement proper auth)
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
@@ -19,7 +16,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['is_admin']) || $_SESSION['
 $pageTitle = 'Tauler d\'Administració';
 ?>
 <!DOCTYPE html>
-<html lang="<?php echo $lang->getCurrentLang(); ?>">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -235,7 +232,6 @@ $pageTitle = 'Tauler d\'Administració';
 
     <!-- Scripts -->
     <script src="../assets/js/main.js"></script>
-    <script src="../assets/js/language-switcher.js"></script>
     <script>
         // Load dashboard statistics
         async function loadStatistics() {

@@ -6,7 +6,6 @@
 
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../auth/session.php';
-require_once __DIR__ . '/../language.php';
 
 // Require admin authentication
 requireAdmin();
@@ -84,15 +83,14 @@ while ($row = $result->fetch_assoc()) {
     $recent_activity[] = $row;
 }
 
-// Get current language
-$lang = getCurrentLanguage();
+
 ?>
 <!DOCTYPE html>
-<html lang="<?php echo $lang; ?>">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo translate('admin_dashboard'); ?> - VoltiaCar</title>
+    <title><?Tauler d'Administració - VoltiaCar</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="../../css/accessibility.css">
@@ -105,15 +103,15 @@ $lang = getCurrentLanguage();
                 <div class="flex items-center space-x-4">
                     <h1 class="text-2xl font-bold">VoltiaCar Admin</h1>
                     <span class="text-green-100">|</span>
-                    <span class="text-green-100"><?php echo translate('dashboard'); ?></span>
+                    <span class="text-green-100"><?Tauler</span>
                 </div>
                 <div class="flex items-center space-x-4">
                     <span><?php echo getCurrentUsername(); ?></span>
                     <a href="../../index.php" class="bg-green-700 hover:bg-green-800 px-4 py-2 rounded transition">
-                        <?php echo translate('back_to_site'); ?>
+                        <?Tornar al lloc
                     </a>
                     <a href="../../php/auth/logout.php" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded transition">
-                        <?php echo translate('logout'); ?>
+                        <?Tancar sessió
                     </a>
                 </div>
             </div>
@@ -125,16 +123,16 @@ $lang = getCurrentLanguage();
         <div class="container mx-auto px-4">
             <div class="flex space-x-6 py-3">
                 <a href="dashboard.php" class="text-green-600 font-semibold border-b-2 border-green-600 pb-2">
-                    <?php echo translate('dashboard'); ?>
+                    <?Tauler
                 </a>
                 <a href="vehicles.php" class="text-gray-600 hover:text-green-600 pb-2 transition">
-                    <?php echo translate('vehicles'); ?>
+                    <?Vehicles
                 </a>
                 <a href="users.php" class="text-gray-600 hover:text-green-600 pb-2 transition">
-                    <?php echo translate('users'); ?>
+                    <?Usuaris
                 </a>
                 <a href="bookings.php" class="text-gray-600 hover:text-green-600 pb-2 transition">
-                    <?php echo translate('bookings'); ?>
+                    <?Reserves
                 </a>
             </div>
         </div>
@@ -148,7 +146,7 @@ $lang = getCurrentLanguage();
             <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-gray-500 text-sm"><?php echo translate('total_users'); ?></p>
+                        <p class="text-gray-500 text-sm"><?Total usuaris</p>
                         <p class="text-3xl font-bold text-gray-800"><?php echo number_format($stats['total_users']); ?></p>
                     </div>
                     <div class="bg-blue-100 rounded-full p-3">
@@ -163,7 +161,7 @@ $lang = getCurrentLanguage();
             <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-gray-500 text-sm"><?php echo translate('total_vehicles'); ?></p>
+                        <p class="text-gray-500 text-sm"><?Total vehicles</p>
                         <p class="text-3xl font-bold text-gray-800"><?php echo number_format($stats['total_vehicles']); ?></p>
                     </div>
                     <div class="bg-green-100 rounded-full p-3">
@@ -178,7 +176,7 @@ $lang = getCurrentLanguage();
             <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-gray-500 text-sm"><?php echo translate('active_bookings'); ?></p>
+                        <p class="text-gray-500 text-sm"><?Reserves actives</p>
                         <p class="text-3xl font-bold text-gray-800"><?php echo number_format($stats['active_bookings']); ?></p>
                     </div>
                     <div class="bg-yellow-100 rounded-full p-3">
@@ -193,7 +191,7 @@ $lang = getCurrentLanguage();
             <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-gray-500 text-sm"><?php echo translate('total_revenue'); ?></p>
+                        <p class="text-gray-500 text-sm"><?Ingressos totals</p>
                         <p class="text-3xl font-bold text-gray-800">€<?php echo number_format($stats['total_revenue'], 2); ?></p>
                     </div>
                     <div class="bg-purple-100 rounded-full p-3">
@@ -209,57 +207,57 @@ $lang = getCurrentLanguage();
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <!-- Booking Trends Chart -->
             <div class="bg-white rounded-lg shadow-md p-6">
-                <h2 class="text-xl font-semibold text-gray-800 mb-4"><?php echo translate('booking_trends'); ?></h2>
+                <h2 class="text-xl font-semibold text-gray-800 mb-4"><?Tendències de reserves</h2>
                 <canvas id="bookingTrendsChart"></canvas>
             </div>
 
             <!-- Vehicle Status Chart -->
             <div class="bg-white rounded-lg shadow-md p-6">
-                <h2 class="text-xl font-semibold text-gray-800 mb-4"><?php echo translate('vehicle_status'); ?></h2>
+                <h2 class="text-xl font-semibold text-gray-800 mb-4"><?Estat dels vehicles</h2>
                 <canvas id="vehicleStatusChart"></canvas>
             </div>
         </div>
 
         <!-- Quick Actions -->
         <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4"><?php echo translate('quick_actions'); ?></h2>
+            <h2 class="text-xl font-semibold text-gray-800 mb-4"><?Accions ràpides</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <a href="vehicles.php?action=add" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg text-center transition">
-                    <?php echo translate('add_vehicle'); ?>
+                    <?Afegir vehicle
                 </a>
                 <a href="users.php" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg text-center transition">
-                    <?php echo translate('manage_users'); ?>
+                    <?Gestionar usuaris
                 </a>
                 <a href="bookings.php?status=pending" class="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-3 rounded-lg text-center transition">
-                    <?php echo translate('pending_bookings'); ?>
+                    <?Reserves pendents
                 </a>
                 <a href="bookings.php?action=report" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg text-center transition">
-                    <?php echo translate('generate_report'); ?>
+                    <?Generar informe
                 </a>
             </div>
         </div>
 
         <!-- Recent Activity -->
         <div class="bg-white rounded-lg shadow-md p-6">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4"><?php echo translate('recent_activity'); ?></h2>
+            <h2 class="text-xl font-semibold text-gray-800 mb-4"><?Activitat recent</h2>
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('booking_id'); ?>
+                                <?ID Reserva
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('user'); ?>
+                                <?Usuari
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('vehicle'); ?>
+                                <?Vehicle
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('status'); ?>
+                                <?Estat
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('date'); ?>
+                                <?Data
                             </th>
                         </tr>
                     </thead>
@@ -286,7 +284,7 @@ $lang = getCurrentLanguage();
                                         default => 'bg-yellow-100 text-yellow-800'
                                     };
                                     ?>">
-                                    <?php echo translate('status_' . $activity['status']); ?>
+                                    <?<?php echo match(\$activity['status']) { 'pending' => 'Pendent', 'confirmed' => 'Confirmat', 'active' => 'Actiu', 'completed' => 'Completat', 'cancelled' => 'Cancel·lat', default => \$activity['status'] }; ?>
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -310,7 +308,7 @@ $lang = getCurrentLanguage();
             data: {
                 labels: bookingTrendsData.map(item => item.date),
                 datasets: [{
-                    label: '<?php echo translate('bookings'); ?>',
+                    label: '<?Reserves',
                     data: bookingTrendsData.map(item => item.count),
                     borderColor: 'rgb(34, 197, 94)',
                     backgroundColor: 'rgba(34, 197, 94, 0.1)',
