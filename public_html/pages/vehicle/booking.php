@@ -19,13 +19,13 @@ include_once __DIR__ . '/../../php/components/header.php';
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
-                <?Tornar
+                Tornar
             </a>
             <h1 class="text-3xl font-bold text-gray-800">
-                <?Reservar Vehicle
+                Reservar Vehicle
             </h1>
             <p class="text-gray-600 mt-2">
-                <?Selecciona les dates per a la teva reserva
+                Selecciona les dates per a la teva reserva
             </p>
         </div>
 
@@ -33,7 +33,7 @@ include_once __DIR__ . '/../../php/components/header.php';
             <!-- Vehicle Details Section -->
             <div>
                 <h2 class="text-xl font-bold text-gray-800 mb-4">
-                    <?Detalls del Vehicle
+                    Detalls del Vehicle
                 </h2>
                 <div id="vehicle-details">
                     <div class="bg-white rounded-lg shadow-md p-6">
@@ -48,12 +48,12 @@ include_once __DIR__ . '/../../php/components/header.php';
                 <!-- Cancellation Policy -->
                 <div class="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
                     <h3 class="font-bold text-blue-900 mb-2">
-                        <?Política de Cancel·lació
+                        Política de Cancel·lació
                     </h3>
                     <ul class="text-sm text-blue-800 space-y-1">
-                        <li>• <?Cancel·lació gratuïta fins a 24h abans</li>
-                        <li>• <?Reemborsament complet si es cancel·la amb antelació</li>
-                        <li>• <?Penalització del 50% per no presentació</li>
+                        <li>• Cancel·lació gratuïta fins a 24h abans</li>
+                        <li>• Reemborsament complet si es cancel·la amb antelació</li>
+                        <li>• Penalització del 50% per no presentació</li>
                     </ul>
                 </div>
             </div>
@@ -61,14 +61,14 @@ include_once __DIR__ . '/../../php/components/header.php';
             <!-- Booking Form Section -->
             <div>
                 <h2 class="text-xl font-bold text-gray-800 mb-4">
-                    <?Detalls de la Reserva
+                    Detalls de la Reserva
                 </h2>
                 
                 <form id="booking-form" class="bg-white rounded-lg shadow-md p-6">
                     <!-- Start Date/Time -->
                     <div class="mb-6">
                         <label for="start_datetime" class="block text-sm font-semibold text-gray-700 mb-2">
-                            <?Data i Hora d'Inici
+                            Data i Hora d'Inici
                         </label>
                         <input 
                             type="datetime-local" 
@@ -82,7 +82,7 @@ include_once __DIR__ . '/../../php/components/header.php';
                     <!-- End Date/Time -->
                     <div class="mb-6">
                         <label for="end_datetime" class="block text-sm font-semibold text-gray-700 mb-2">
-                            <?Data i Hora de Finalització
+                            Data i Hora de Finalització
                         </label>
                         <input 
                             type="datetime-local" 
@@ -97,7 +97,7 @@ include_once __DIR__ . '/../../php/components/header.php';
                     <div class="mb-6 p-4 bg-gray-50 rounded-lg">
                         <div class="flex justify-between items-center mb-2">
                             <span class="text-gray-700 font-semibold">
-                                <?Durada:
+                                Durada:
                             </span>
                             <span id="duration" class="text-gray-900 font-bold">0 minutes</span>
                         </div>
@@ -105,25 +105,25 @@ include_once __DIR__ . '/../../php/components/header.php';
 
                     <!-- Cost Breakdown -->
                     <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                        <h3 class="font-bold text-green-900 mb-3">
-                            <?Resum del Cost
+                            <h3 class="font-bold text-green-900 mb-3">
+                            Resum del Cost
                         </h3>
                         <div id="cost-breakdown">
                             <div class="text-sm text-gray-600 space-y-1">
                                 <div class="flex justify-between">
-                                    <span><?Durada:</span>
-                                    <span>0 <?minuts</span>
+                                    <span>Durada:</span>
+                                    <span>0 minuts</span>
                                 </div>
                                 <div class="flex justify-between">
-                                    <span><?Cost temps (€0.30/min):</span>
+                                    <span>Cost temps (€0.30/min):</span>
                                     <span>€0.00</span>
                                 </div>
                                 <div class="flex justify-between">
-                                    <span><?Tarifa desbloqueig:</span>
+                                    <span>Tarifa desbloqueig:</span>
                                     <span>€0.50</span>
                                 </div>
                                 <div class="flex justify-between font-bold text-gray-800 pt-2 border-t border-green-300">
-                                    <span><?Total:</span>
+                                    <span>Total:</span>
                                     <span>€0.50</span>
                                 </div>
                             </div>
@@ -133,7 +133,7 @@ include_once __DIR__ . '/../../php/components/header.php';
                     <!-- Total Cost Display -->
                     <div class="mb-6 p-4 bg-primary-green text-white rounded-lg text-center">
                         <div class="text-sm font-semibold mb-1">
-                            <?Cost Total
+                            Cost Total
                         </div>
                         <div id="total-cost" class="text-3xl font-bold">€0.00</div>
                     </div>
@@ -148,8 +148,8 @@ include_once __DIR__ . '/../../php/components/header.php';
                                 class="mt-1 mr-3 h-5 w-5 text-primary-green focus:ring-primary-green border-gray-300 rounded"
                                 required
                             >
-                            <span class="text-sm text-gray-700">
-                                <?Accepto els termes i condicions i la política de cancel·lació
+                                <span class="text-sm text-gray-700">
+                                Accepto els termes i condicions i la política de cancel·lació
                             </span>
                         </label>
                     </div>
@@ -159,19 +159,19 @@ include_once __DIR__ . '/../../php/components/header.php';
                         type="submit" 
                         class="w-full bg-primary-green hover:bg-primary-green-dark text-white font-bold py-4 rounded-lg transition-colors duration-300 shadow-lg hover:shadow-xl"
                     >
-                        <?Confirmar Reserva
+                        Confirmar Reserva
                     </button>
                 </form>
 
                 <!-- Additional Information -->
                 <div class="mt-6 bg-gray-50 border border-gray-200 rounded-lg p-4">
                     <h3 class="font-bold text-gray-900 mb-2">
-                        <?Informació Important
+                        Informació Important
                     </h3>
                     <ul class="text-sm text-gray-700 space-y-1">
-                        <li>• <?El vehicle estarà reservat durant el temps seleccionat</li>
-                        <li>• <?El cobrament es realitzarà en finalitzar la reserva</li>
-                        <li>• <?Si us plau, arriba puntualment a l'hora d'inici</li>
+                        <li>• El vehicle estarà reservat durant el temps seleccionat</li>
+                        <li>• El cobrament es realitzarà en finalitzar la reserva</li>
+                        <li>• Si us plau, arriba puntualment a l'hora d'inici</li>
                     </ul>
                 </div>
             </div>
