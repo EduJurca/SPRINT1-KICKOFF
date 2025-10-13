@@ -54,7 +54,7 @@ class User {
         return $stmt->execute();
     }
 
-    // Perfil
+    // Profile
     public static function getProfile($user_id) {
         $db = DatabaseMariaDB::getConnection();
         $stmt = $db->prepare("SELECT fullname, dni, phone, birth_date AS birthdate, address, sex FROM users WHERE id = ?");
@@ -79,7 +79,7 @@ class User {
         return $stmt->execute();
     }
 
-    // Gestio
+    // Management
     public static function getUserInfo($user_id) {
         $db = DatabaseMariaDB::getConnection();
         $stmt = $db->prepare("SELECT username, email, minute_balance, is_admin FROM users WHERE id = ?");
