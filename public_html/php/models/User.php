@@ -57,7 +57,7 @@ class User {
     // Perfil
     public static function getProfile($user_id) {
         $db = DatabaseMariaDB::getConnection();
-        $stmt = $db->prepare("SELECT fullname, phone, birth_date AS birthdate, address, sex FROM users WHERE id = ?");
+        $stmt = $db->prepare("SELECT fullname, dni,phone, birth_date AS birthdate, address, sex FROM users WHERE id = ?");
         $stmt->bind_param('i', $user_id);
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
@@ -65,10 +65,11 @@ class User {
 
     public static function updateProfile($user_id, $data) {
         $db = DatabaseMariaDB::getConnection();
-        $stmt = $db->prepare("UPDATE users SET fullname = ?, phone = ?, birth_date = ?, address = ?, sex = ? WHERE id = ?");
+        $stmt = $db->prepare("UPDATE users SET fullname = ?, dni = ?, phone = ?, birth_date = ?, address = ?, sex = ? WHERE id = ?");
         $stmt->bind_param(
             'sssssi',
             $data['fullname'],
+            $data['dni'], 
             $data['phone'],
             $data['birthdate'],
             $data['address'],
