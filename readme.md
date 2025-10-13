@@ -42,19 +42,22 @@ final_editar_usar/
 
 ### Passos bàsics
 
-1. **Configura les variables i credencials** a `config/docker-compose.yml` i `config/database.php`.
+1. **Configura les variables i credencials** a `.env` (a la arrel) o a `config/.env` i, si ho prefereixes, revisa `config/docker-compose.yml`.
 2. **Inicia els serveis** amb Docker:
-   ```sh
-   cd config
-   docker-compose up --build
-   ```
+  ```sh
+  # Forma recomanada: utilitza el docker-compose situat a la arrel del projecte
+  docker compose up --build
+
+  # Alternativa: usar el docker-compose situat a config/
+  # docker compose -f config/docker-compose.yml up --build
+  ```
 3. **Accedeix a l’aplicació** via navegador a `http://localhost:8080` (o el port configurat).
 4. **Administra la flota** amb la GUI Python:
-   ```sh
-   cd python_gui
-   pip install -r requirements.txt
-   python admin_tool.py
-   ```
+  ```sh
+  cd python_gui
+  pip install -r requirements.txt
+  python admin_tool.py
+  ```
 
 ---
 
