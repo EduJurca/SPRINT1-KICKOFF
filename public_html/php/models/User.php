@@ -5,7 +5,7 @@ class User {
     // Login
     public static function findByUsername($username) {
         $db = DatabaseMariaDB::getConnection();
-        $stmt = $db->prepare("SELECT id, username, password FROM users WHERE username = ?");
+        $stmt = $db->prepare("SELECT id, username, password, is_admin FROM users WHERE username = ?");
         $stmt->bind_param("s", $username);
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
@@ -29,6 +29,9 @@ class User {
         $nationality_id = $data['nationality_id'] ?? null;
         $phone = $data['phone'] ?? null;
         $birth_date = $data['fecha_nacimiento'] ?? null;
+        $sex = $data['sex'] ?? null;
+        $dni = $data['dni'] ?? null;
+        $address = $data['address'] ?? null;
         $iban = $data['iban'] ?? null;
         $driver_license_photo = $data['driver_license_photo'] ?? null;
         $minute_balance = 0;
@@ -37,11 +40,14 @@ class User {
         $password_hash = password_hash($data['password'], PASSWORD_DEFAULT);
 
         $stmt->bind_param(
-            "sisssssssis",
+            "sisssssssssiis",
             $data['username'],
             $nationality_id,
             $phone,
             $birth_date,
+            $sex,
+            $dni,
+            $address,
             $data['email'],
             $password_hash,
             $iban,
