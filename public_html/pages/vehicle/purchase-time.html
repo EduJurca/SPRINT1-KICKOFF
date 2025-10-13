@@ -76,7 +76,7 @@
                 </div>
 
                 <ul class="space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-4">
-                    <div onclick="abrirModal(event)"
+                    <div onclick="openModal(event)"
                     data-minutes="10"
                     data-price="1.50"                      
                         class="block p-4 rounded-lg shadow-md flex-col md:flex-row justify-between items-center md:space-x-4 transition-all duration-300 transform hover:scale-105 mb-1 md:mb-0"
@@ -95,7 +95,7 @@
                         </div>
                         <span class="font-bold text-2xl text-gray-900">1,50€</span>
                     </div>
-                    <div onclick="abrirModal(event)"
+                    <div onclick="openModal(event)"
                     data-minutes="30"
                     data-price="4.00"                      
                         class="block p-4 rounded-lg shadow-md flex-col md:flex-row justify-between items-center md:space-x-4 transition-all duration-300 transform hover:scale-105 mb-1 md:mb-0"
@@ -114,7 +114,7 @@
                         </div>
                         <span class="font-bold text-2xl text-blue-900">4,00€</span>
                     </div>
-                    <div onclick="abrirModal(event)"
+                    <div onclick="openModal(event)"
                     data-minutes="60"
                     data-price="7.50"                     
                     class="block p-4 rounded-lg shadow-md flex-col md:flex-row justify-between items-center md:space-x-4 transition-all duration-300 transform hover:scale-105 mb-1 md:mb-0"
@@ -133,7 +133,7 @@
                         </div>
                         <span class="font-bold text-2xl text-green-900">7,50€</span>
                     </div>
-                    <div onclick="abrirModal(event)"
+                    <div onclick="openModal(event)"
                     data-minutes="120"
                     data-price="14.00"                    
                     class="block p-4 rounded-lg shadow-md flex-col md:flex-row justify-between items-center md:space-x-4 transition-all duration-300 transform hover:scale-105 mb-1 md:mb-0"
@@ -152,7 +152,7 @@
                         </div>
                     <span class="font-bold text-2xl text-yellow-900">14,00€</span>
                     </div>
-                    <div onclick="abrirModal(event)"
+                    <div onclick="openModal(event)"
                     data-minutes="180"
                     data-price="20.00"                        
                     class="block p-4 rounded-lg shadow-md flex-col md:flex-row justify-between items-center md:space-x-4 transition-all duration-300 transform hover:scale-105 mb-1 md:mb-0"
@@ -172,7 +172,7 @@
                         <span class="font-bold text-2xl text-red-900">20,00€</span>
                     </div>
                     <div 
-                    onclick="abrirModal(event)" 
+                    onclick="openModal(event)" 
                     data-minutes="240"
                     data-price="25.00"
                     class="block p-4 rounded-lg shadow-md flex-col md:flex-row justify-between items-center md:space-x-4 transition-all duration-300 transform hover:scale-105 mb-1 md:mb-0"
@@ -196,75 +196,69 @@
             </div>
         </main>
 
-                <!-- MODAL -->
-    <div id="modalCompra" class="hidden w-full fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-80 text-center">
-            <h2 class="text-xl font-semibold mb-4 text-blue-800">Confirmar compra</h2>
-            <p class="text-gray-700 mb-6">¿Deseas confirmar esta compra?</p>
-            <div class="flex justify-around">
-            <button onclick="confirmarCompra()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Confirmar</button>
-            <button onclick="cerrarModal()" class="bg-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400">Cancelar</button>
-            </div>
-        </div>
+</a>
+                </div>
+
+        <!-- purchase modal moved outside the centered container to ensure overlay covers full viewport -->
+        <div id="purchaseModal" class="hidden w-full fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50">
+                <div class="bg-white p-6 rounded-lg shadow-lg w-80 text-center">
+                        <h2 class="text-xl font-semibold mb-4 text-blue-800">Confirmar compra</h2>
+                        <p class="text-gray-700 mb-6">¿Deseas confirmar esta compra?</p>
+                        <div class="flex justify-around">
+                        <button onclick="confirmPurchase()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Confirmar</button>
+                        <button onclick="closeModal()" class="bg-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400">Cancelar</button>
+                        </div>
+                </div>
         </div>
 
-        <a href="../dashboard/resum-projecte.html"
-            class="fixed bottom-10 right-10 block bg-[#1565C0] text-white p-4 rounded-full shadow-lg hover:bg-[#1151a3] transition-colors duration-300 z-50">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-        </a>
-    </div>
 </body>
-</html>
 
 <script>
 let minutesSelected = 0;
 let priceSelected = 0;
 
-function abrirModal(e) {
-  const target = e.currentTarget;
-  minutesSelected = parseInt(target.dataset.minutes);
-  priceSelected = parseFloat(target.dataset.price);
+function openModal(e) {
+        const target = e.currentTarget;
+        minutesSelected = parseInt(target.dataset.minutes);
+        priceSelected = parseFloat(target.dataset.price);
 
-  const modalText = document.querySelector('#modalCompra p.text-gray-700');
-  modalText.textContent = `Vols comprar ${minutesSelected} minuts per ${priceSelected.toFixed(2)}€?`;
+        const modalText = document.querySelector('#purchaseModal p.text-gray-700');
+        modalText.textContent = `Vols comprar ${minutesSelected} minuts per ${priceSelected.toFixed(2)}€?`;
 
-    const modal = document.getElementById('modalCompra');
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
+                const modal = document.getElementById('purchaseModal');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
 }
 
-function cerrarModal() {
-    const modal = document.getElementById('modalCompra');
-    modal.classList.remove('flex');
-    modal.classList.add('hidden');
+function closeModal() {
+                const modal = document.getElementById('purchaseModal');
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
 }
 
-function confirmarCompra() {
-  fetch('../../php/api/purchase-time.php', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({
-      minutes: minutesSelected,
-      price: priceSelected
+function confirmPurchase() {
+    fetch('../../php/api/purchase-time.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            minutes: minutesSelected,
+            price: priceSelected
+        })
     })
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.success) {
-      showToast(
-        `✅ Compra feta!\nSaldo restant: ${data.data.new_balance.toFixed(2)}€\nMinuts totals: ${data.data.new_minutes}`, 
-        'success'
-      );      
-      cerrarModal();
-    } else {
-      showToast(`⚠️ ${data.message}`, 'warning');
-      cerrarModal();
-    }
-  })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            showToast(
+                `Compra acceptada!`, 
+                'success'
+            );      
+        closeModal();
+        } else {
+            showToast(`${data.message}`, 'warning');
+        closeModal();
+        }
+    })
 };
 
 </script>
+</html>
