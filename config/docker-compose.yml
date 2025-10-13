@@ -103,7 +103,6 @@ services:
       - sims-net
     restart: unless-stopped
 
-  # phpMyAdmin
   phpmyadmin:
     image: phpmyadmin:latest
     container_name: VC-phpmyadmin
