@@ -68,6 +68,23 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+      
+  # phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: VC-phpmyadmin
+    depends_on:
+      - mariadb
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+      PMA_USER: simsuser
+      PMA_PASSWORD: Putamare123
+    ports:
+      - "8081:80"
+    networks:
+      - sims-net
+    restart: unless-stopped
 
 networks:
   sims-net:
