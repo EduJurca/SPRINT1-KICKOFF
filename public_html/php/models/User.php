@@ -37,11 +37,14 @@ class User {
         $password_hash = password_hash($data['password'], PASSWORD_DEFAULT);
 
         $stmt->bind_param(
-            "sisssssssis",
+            "sissssssssiiis",
             $data['username'],
             $nationality_id,
             $phone,
             $birth_date,
+            $data['sex'],
+            $data['dni'],
+            $data['address'],
             $data['email'],
             $password_hash,
             $iban,
