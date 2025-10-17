@@ -5,8 +5,6 @@
  */
 
 session_start();
-require_once __DIR__ . '/../languages/language.php';
-$lang = new Language();
 
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
     header('Location: ../pages/auth/login.html');
@@ -16,7 +14,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['is_admin']) || $_SESSION['
 $pageTitle = 'Configuració';
 ?>
 <!DOCTYPE html>
-<html lang="<?php echo $lang->getCurrentLang(); ?>">
+<html lang="ca">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

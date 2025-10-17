@@ -6,7 +6,6 @@
 
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../auth/session.php';
-require_once __DIR__ . '/../language.php';
 
 // Require admin authentication
 requireAdmin();
@@ -21,7 +20,7 @@ $message_type = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verify CSRF token
     if (!isset($_POST['csrf_token']) || !verifyCsrfToken($_POST['csrf_token'])) {
-        $message = translate('invalid_csrf_token');
+        $message = 'Token CSRF invàlid';
         $message_type = 'error';
     } else {
         $action = $_POST['action'] ?? '';
@@ -40,10 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->bind_param('sssii', $fullname, $email, $phone, $is_admin, $user_id);
                 
                 if ($stmt->execute()) {
-                    $message = translate('user_updated_successfully');
+                    $message = 'Usuari actualitzat correctament';
                     $message_type = 'success';
                 } else {
-                    $message = translate('error_updating_user');
+                    $message = "Error en actualitzar l'usuari";
                     $message_type = 'error';
                 }
                 break;
@@ -55,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 // For now, we'll just log this action
                 // In a real system, you'd add a 'suspended' or 'status' field to users table
-                $message = $suspend ? translate('user_suspended') : translate('user_activated');
+                $message = $suspend ? 'Usuari suspès' : 'Usuari activat';
                 $message_type = 'success';
                 break;
                 
@@ -64,15 +63,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $user_id = intval($_POST['user_id']);
                 
                 // Don't allow deleting yourself
-                if ($user_id == getCurrentUserId()) {
-                    $message = translate('cannot_delete_yourself');
+                if ($user_id == $_SESSION['user_id']) {
+                    $message = 'No pots eliminar-te a tu mateix';
                     $message_type = 'error';
                 } else {
                     if ($db->query("DELETE FROM users WHERE id = $user_id")) {
-                        $message = translate('user_deleted_successfully');
+                        $message = 'Usuari eliminat correctament';
                         $message_type = 'success';
                     } else {
-                        $message = translate('error_deleting_user');
+                        $message = "Error en eliminar l'usuari";
                         $message_type = 'error';
                     }
                 }
@@ -172,16 +171,15 @@ while ($row = $result->fetch_assoc()) {
     $users[] = $row;
 }
 
-// Get current language
-$lang = getCurrentLanguage();
 $csrf_token = getCsrfToken();
+$current_username = $_SESSION['username'] ?? 'Admin';
 ?>
 <!DOCTYPE html>
-<html lang="<?php echo $lang; ?>">
+<html lang="ca">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo translate('user_management'); ?> - VoltiaCar Admin</title>
+    <title>Gestió d'Usuaris - VoltiaCar Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../../css/accessibility.css">
 </head>
@@ -193,15 +191,15 @@ $csrf_token = getCsrfToken();
                 <div class="flex items-center space-x-4">
                     <h1 class="text-2xl font-bold">VoltiaCar Admin</h1>
                     <span class="text-green-100">|</span>
-                    <span class="text-green-100"><?php echo translate('user_management'); ?></span>
+                    <span class="text-green-100">Gestió d'Usuaris</span>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <span><?php echo getCurrentUsername(); ?></span>
+                    <span><?php echo htmlspecialchars($current_username); ?></span>
                     <a href="../../index.php" class="bg-green-700 hover:bg-green-800 px-4 py-2 rounded transition">
-                        <?php echo translate('back_to_site'); ?>
+                        Tornar al lloc
                     </a>
                     <a href="../auth/logout.php" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded transition">
-                        <?php echo translate('logout'); ?>
+                        Tancar sessió
                     </a>
                 </div>
             </div>
@@ -213,16 +211,16 @@ $csrf_token = getCsrfToken();
         <div class="container mx-auto px-4">
             <div class="flex space-x-6 py-3">
                 <a href="dashboard.php" class="text-gray-600 hover:text-green-600 pb-2 transition">
-                    <?php echo translate('dashboard'); ?>
+                    Tauler
                 </a>
                 <a href="vehicles.php" class="text-gray-600 hover:text-green-600 pb-2 transition">
-                    <?php echo translate('vehicles'); ?>
+                    Vehicles
                 </a>
                 <a href="users.php" class="text-green-600 font-semibold border-b-2 border-green-600 pb-2">
-                    <?php echo translate('users'); ?>
+                    Usuaris
                 </a>
                 <a href="bookings.php" class="text-gray-600 hover:text-green-600 pb-2 transition">
-                    <?php echo translate('bookings'); ?>
+                    Reserves
                 </a>
             </div>
         </div>
@@ -241,27 +239,27 @@ $csrf_token = getCsrfToken();
         <div class="bg-white rounded-lg shadow-md p-6 mb-6">
             <form method="GET" class="flex flex-wrap gap-4 items-end">
                 <div class="flex-1 min-w-64">
-                    <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('search'); ?></label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Cercar</label>
                     <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>" 
-                           placeholder="<?php echo translate('search_users'); ?>" 
+                           placeholder="Cercar usuaris" 
                            class="w-full border border-gray-300 rounded px-3 py-2">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('filter_by_role'); ?></label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Filtrar per rol</label>
                     <select name="filter_admin" class="border border-gray-300 rounded px-3 py-2">
-                        <option value=""><?php echo translate('all_users'); ?></option>
-                        <option value="1" <?php echo $filter_admin === '1' ? 'selected' : ''; ?>><?php echo translate('admins_only'); ?></option>
-                        <option value="0" <?php echo $filter_admin === '0' ? 'selected' : ''; ?>><?php echo translate('regular_users'); ?></option>
+                        <option value="">Tots els usuaris</option>
+                        <option value="1" <?php echo $filter_admin === '1' ? 'selected' : ''; ?>>Només administradors</option>
+                        <option value="0" <?php echo $filter_admin === '0' ? 'selected' : ''; ?>>Usuaris regulars</option>
                     </select>
                 </div>
                 <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded transition">
-                    <?php echo translate('search'); ?>
+                    Cercar
                 </button>
                 <form method="POST" class="inline">
                     <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                     <input type="hidden" name="action" value="export">
                     <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded transition">
-                        <?php echo translate('export_csv'); ?>
+                        Exportar CSV
                     </button>
                 </form>
             </form>
@@ -274,25 +272,25 @@ $csrf_token = getCsrfToken();
                     <thead class="bg-gray-50">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('username'); ?>
+                                Nom d'usuari
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('email'); ?>
+                                Correu electrònic
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('full_name'); ?>
+                                Nom complet
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('bookings'); ?>
+                                Reserves
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('role'); ?>
+                                Rol
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('created'); ?>
+                                Creat
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('actions'); ?>
+                                Accions
                             </th>
                         </tr>
                     </thead>
@@ -313,7 +311,7 @@ $csrf_token = getCsrfToken();
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <?php echo $user['is_admin'] ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'; ?>">
-                                    <?php echo $user['is_admin'] ? translate('admin') : translate('user'); ?>
+                                    <?php echo $user['is_admin'] ? 'Administrador' : 'Usuari'; ?>
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -321,14 +319,14 @@ $csrf_token = getCsrfToken();
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                                 <button onclick='viewUser(<?php echo json_encode($user); ?>)' class="text-blue-600 hover:text-blue-900">
-                                    <?php echo translate('view'); ?>
+                                    Veure
                                 </button>
                                 <button onclick='editUser(<?php echo json_encode($user); ?>)' class="text-green-600 hover:text-green-900">
-                                    <?php echo translate('edit'); ?>
+                                    Editar
                                 </button>
                                 <?php if ($user['id'] != getCurrentUserId()): ?>
                                 <button onclick="deleteUser(<?php echo $user['id']; ?>, '<?php echo htmlspecialchars($user['username']); ?>')" class="text-red-600 hover:text-red-900">
-                                    <?php echo translate('delete'); ?>
+                                    Eliminar
                                 </button>
                                 <?php endif; ?>
                             </td>
@@ -358,7 +356,7 @@ $csrf_token = getCsrfToken();
     <div id="viewModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
         <div class="relative top-20 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-semibold text-gray-900"><?php echo translate('user_details'); ?></h3>
+                <h3 class="text-xl font-semibold text-gray-900">Detalls de l'usuari</h3>
                 <button onclick="closeViewModal()" class="text-gray-400 hover:text-gray-600">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -368,7 +366,7 @@ $csrf_token = getCsrfToken();
             <div id="viewUserContent" class="space-y-4"></div>
             <div class="flex justify-end mt-6">
                 <button onclick="closeViewModal()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-2 rounded transition">
-                    <?php echo translate('close'); ?>
+                    Tancar
                 </button>
             </div>
         </div>
@@ -378,7 +376,7 @@ $csrf_token = getCsrfToken();
     <div id="editModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
         <div class="relative top-20 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-semibold text-gray-900"><?php echo translate('edit_user'); ?></h3>
+                <h3 class="text-xl font-semibold text-gray-900">Editar Usuari</h3>
                 <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-600">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -393,39 +391,39 @@ $csrf_token = getCsrfToken();
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('username'); ?></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nom d'usuari</label>
                         <input type="text" id="editUsername" disabled class="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('full_name'); ?></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nom complet</label>
                         <input type="text" name="fullname" id="editFullname" class="w-full border border-gray-300 rounded px-3 py-2">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('email'); ?></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Correu electrònic</label>
                         <input type="email" name="email" id="editEmail" required class="w-full border border-gray-300 rounded px-3 py-2">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('phone'); ?></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Telèfon</label>
                         <input type="text" name="phone" id="editPhone" class="w-full border border-gray-300 rounded px-3 py-2">
                     </div>
                     
                     <div>
                         <label class="flex items-center mt-8">
                             <input type="checkbox" name="is_admin" id="editIsAdmin" class="mr-2">
-                            <span class="text-sm font-medium text-gray-700"><?php echo translate('admin_privileges'); ?></span>
+                            <span class="text-sm font-medium text-gray-700">Privilegis d'administrador</span>
                         </label>
                     </div>
                 </div>
                 
                 <div class="flex justify-end space-x-4 mt-6">
                     <button type="button" onclick="closeEditModal()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-2 rounded transition">
-                        <?php echo translate('cancel'); ?>
+                        Cancel·lar
                     </button>
                     <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded transition">
-                        <?php echo translate('save'); ?>
+                        Desar
                     </button>
                 </div>
             </form>
@@ -435,18 +433,18 @@ $csrf_token = getCsrfToken();
     <!-- Delete Confirmation Modal -->
     <div id="deleteModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
         <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4"><?php echo translate('confirm_delete'); ?></h3>
-            <p class="text-gray-600 mb-6"><?php echo translate('delete_user_confirmation'); ?></p>
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Confirmar eliminació</h3>
+            <p class="text-gray-600 mb-6">Estàs segur que vols eliminar aquest usuari?</p>
             <form method="POST" id="deleteForm">
                 <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                 <input type="hidden" name="action" value="delete">
                 <input type="hidden" name="user_id" id="deleteUserId">
                 <div class="flex justify-end space-x-4">
                     <button type="button" onclick="closeDeleteModal()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded transition">
-                        <?php echo translate('cancel'); ?>
+                        Cancel·lar
                     </button>
                     <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition">
-                        <?php echo translate('delete'); ?>
+                        Eliminar
                     </button>
                 </div>
             </form>
@@ -458,14 +456,14 @@ $csrf_token = getCsrfToken();
             const content = document.getElementById('viewUserContent');
             content.innerHTML = `
                 <div class="grid grid-cols-2 gap-4">
-                    <div><strong><?php echo translate('username'); ?>:</strong> ${user.username}</div>
-                    <div><strong><?php echo translate('email'); ?>:</strong> ${user.email}</div>
-                    <div><strong><?php echo translate('full_name'); ?>:</strong> ${user.fullname || '-'}</div>
-                    <div><strong><?php echo translate('phone'); ?>:</strong> ${user.phone || '-'}</div>
-                    <div><strong><?php echo translate('role'); ?>:</strong> ${user.is_admin ? '<?php echo translate('admin'); ?>' : '<?php echo translate('user'); ?>'}</div>
-                    <div><strong><?php echo translate('created'); ?>:</strong> ${new Date(user.created_at).toLocaleDateString()}</div>
-                    <div><strong><?php echo translate('total_bookings'); ?>:</strong> ${user.total_bookings}</div>
-                    <div><strong><?php echo translate('active_bookings'); ?>:</strong> ${user.active_bookings}</div>
+                    <div><strong>Nom d'usuari:</strong> ${user.username}</div>
+                    <div><strong>Correu electrònic:</strong> ${user.email}</div>
+                    <div><strong>Nom complet:</strong> ${user.fullname || '-'}</div>
+                    <div><strong>Telèfon:</strong> ${user.phone || '-'}</div>
+                    <div><strong>Rol:</strong> ${user.is_admin ? 'Administrador' : 'Usuari'}</div>
+                    <div><strong>Creat:</strong> ${new Date(user.created_at).toLocaleDateString()}</div>
+                    <div><strong>Total reserves:</strong> ${user.total_bookings}</div>
+                    <div><strong>Reserves actives:</strong> ${user.active_bookings}</div>
                 </div>
             `;
             document.getElementById('viewModal').classList.remove('hidden');
