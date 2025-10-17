@@ -6,7 +6,6 @@
 
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../auth/session.php';
-require_once __DIR__ . '/../language.php';
 
 // Require admin authentication
 requireAdmin();
@@ -21,7 +20,7 @@ $message_type = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verify CSRF token
     if (!isset($_POST['csrf_token']) || !verifyCsrfToken($_POST['csrf_token'])) {
-        $message = translate('invalid_csrf_token');
+        $message = 'Token CSRF invàlid';
         $message_type = 'error';
     } else {
         $action = $_POST['action'] ?? '';
@@ -37,10 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->bind_param('si', $new_status, $booking_id);
                 
                 if ($stmt->execute()) {
-                    $message = translate('booking_updated_successfully');
+                    $message = 'Reserva actualitzada correctament';
                     $message_type = 'success';
                 } else {
-                    $message = translate('error_updating_booking');
+                    $message = 'Error en actualitzar la reserva';
                     $message_type = 'error';
                 }
                 break;
@@ -153,12 +152,10 @@ if (!empty($where_clauses)) {
     $where_sql = 'WHERE ' . implode(' AND ', $where_clauses);
 }
 
-// Fetch bookings with pagination
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
 $per_page = 20;
 $offset = ($page - 1) * $per_page;
 
-// Count total bookings
 $count_sql = "SELECT COUNT(*) as total 
               FROM bookings b
               JOIN users u ON b.user_id = u.id
@@ -212,16 +209,14 @@ $stats['active'] = $db->query("SELECT COUNT(*) as count FROM bookings WHERE stat
 $stats['completed'] = $db->query("SELECT COUNT(*) as count FROM bookings WHERE status='completed'")->fetch_assoc()['count'];
 $stats['cancelled'] = $db->query("SELECT COUNT(*) as count FROM bookings WHERE status='cancelled'")->fetch_assoc()['count'];
 
-// Get current language
-$lang = getCurrentLanguage();
 $csrf_token = getCsrfToken();
 ?>
 <!DOCTYPE html>
-<html lang="<?php echo $lang; ?>">
+<html lang="ca">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo translate('booking_management'); ?> - VoltiaCar Admin</title>
+    <title>Gestió de Reserves - VoltiaCar Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../../css/accessibility.css">
 </head>
@@ -233,15 +228,15 @@ $csrf_token = getCsrfToken();
                 <div class="flex items-center space-x-4">
                     <h1 class="text-2xl font-bold">VoltiaCar Admin</h1>
                     <span class="text-green-100">|</span>
-                    <span class="text-green-100"><?php echo translate('booking_management'); ?></span>
+                    <span class="text-green-100">Gestió de Reserves</span>
                 </div>
                 <div class="flex items-center space-x-4">
                     <span><?php echo getCurrentUsername(); ?></span>
                     <a href="../../index.php" class="bg-green-700 hover:bg-green-800 px-4 py-2 rounded transition">
-                        <?php echo translate('back_to_site'); ?>
+                        Tornar al lloc
                     </a>
                     <a href="../auth/logout.php" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded transition">
-                        <?php echo translate('logout'); ?>
+                        Tancar sessió
                     </a>
                 </div>
             </div>
@@ -253,16 +248,16 @@ $csrf_token = getCsrfToken();
         <div class="container mx-auto px-4">
             <div class="flex space-x-6 py-3">
                 <a href="dashboard.php" class="text-gray-600 hover:text-green-600 pb-2 transition">
-                    <?php echo translate('dashboard'); ?>
+                    Tauler
                 </a>
                 <a href="vehicles.php" class="text-gray-600 hover:text-green-600 pb-2 transition">
-                    <?php echo translate('vehicles'); ?>
+                    Vehicles
                 </a>
                 <a href="users.php" class="text-gray-600 hover:text-green-600 pb-2 transition">
-                    <?php echo translate('users'); ?>
+                    Usuaris
                 </a>
                 <a href="bookings.php" class="text-green-600 font-semibold border-b-2 border-green-600 pb-2">
-                    <?php echo translate('bookings'); ?>
+                    Reserves
                 </a>
             </div>
         </div>
@@ -280,27 +275,27 @@ $csrf_token = getCsrfToken();
         <!-- Statistics Cards -->
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
             <div class="bg-white rounded-lg shadow p-4">
-                <p class="text-gray-500 text-sm"><?php echo translate('total'); ?></p>
+                <p class="text-gray-500 text-sm">Total</p>
                 <p class="text-2xl font-bold text-gray-800"><?php echo $stats['total']; ?></p>
             </div>
             <div class="bg-white rounded-lg shadow p-4">
-                <p class="text-gray-500 text-sm"><?php echo translate('pending'); ?></p>
+                <p class="text-gray-500 text-sm">Pendent</p>
                 <p class="text-2xl font-bold text-yellow-600"><?php echo $stats['pending']; ?></p>
             </div>
             <div class="bg-white rounded-lg shadow p-4">
-                <p class="text-gray-500 text-sm"><?php echo translate('confirmed'); ?></p>
+                <p class="text-gray-500 text-sm">Confirmat</p>
                 <p class="text-2xl font-bold text-blue-600"><?php echo $stats['confirmed']; ?></p>
             </div>
             <div class="bg-white rounded-lg shadow p-4">
-                <p class="text-gray-500 text-sm"><?php echo translate('active'); ?></p>
+                <p class="text-gray-500 text-sm">Actiu</p>
                 <p class="text-2xl font-bold text-green-600"><?php echo $stats['active']; ?></p>
             </div>
             <div class="bg-white rounded-lg shadow p-4">
-                <p class="text-gray-500 text-sm"><?php echo translate('completed'); ?></p>
+                <p class="text-gray-500 text-sm">Completat</p>
                 <p class="text-2xl font-bold text-gray-600"><?php echo $stats['completed']; ?></p>
             </div>
             <div class="bg-white rounded-lg shadow p-4">
-                <p class="text-gray-500 text-sm"><?php echo translate('cancelled'); ?></p>
+                <p class="text-gray-500 text-sm">Cancel·lat</p>
                 <p class="text-2xl font-bold text-red-600"><?php echo $stats['cancelled']; ?></p>
             </div>
         </div>
@@ -309,41 +304,41 @@ $csrf_token = getCsrfToken();
         <div class="bg-white rounded-lg shadow-md p-6 mb-6">
             <form method="GET" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('status'); ?></label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Estat</label>
                     <select name="status" class="w-full border border-gray-300 rounded px-3 py-2">
-                        <option value=""><?php echo translate('all_statuses'); ?></option>
-                        <option value="pending" <?php echo $status_filter === 'pending' ? 'selected' : ''; ?>><?php echo translate('pending'); ?></option>
-                        <option value="confirmed" <?php echo $status_filter === 'confirmed' ? 'selected' : ''; ?>><?php echo translate('confirmed'); ?></option>
-                        <option value="active" <?php echo $status_filter === 'active' ? 'selected' : ''; ?>><?php echo translate('active'); ?></option>
-                        <option value="completed" <?php echo $status_filter === 'completed' ? 'selected' : ''; ?>><?php echo translate('completed'); ?></option>
-                        <option value="cancelled" <?php echo $status_filter === 'cancelled' ? 'selected' : ''; ?>><?php echo translate('cancelled'); ?></option>
+                        <option value="">Tots els estats</option>
+                        <option value="pending" <?php echo $status_filter === 'pending' ? 'selected' : ''; ?>>Pendent</option>
+                        <option value="confirmed" <?php echo $status_filter === 'confirmed' ? 'selected' : ''; ?>>Confirmat</option>
+                        <option value="active" <?php echo $status_filter === 'active' ? 'selected' : ''; ?>>Actiu</option>
+                        <option value="completed" <?php echo $status_filter === 'completed' ? 'selected' : ''; ?>>Completat</option>
+                        <option value="cancelled" <?php echo $status_filter === 'cancelled' ? 'selected' : ''; ?>>Cancel·lat</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('date_from'); ?></label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Data des de</label>
                     <input type="date" name="date_from" value="<?php echo htmlspecialchars($date_from); ?>" class="w-full border border-gray-300 rounded px-3 py-2">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('date_to'); ?></label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Data fins</label>
                     <input type="date" name="date_to" value="<?php echo htmlspecialchars($date_to); ?>" class="w-full border border-gray-300 rounded px-3 py-2">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('user'); ?></label>
-                    <input type="text" name="user_search" value="<?php echo htmlspecialchars($user_search); ?>" placeholder="<?php echo translate('search_user'); ?>" class="w-full border border-gray-300 rounded px-3 py-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Usuari</label>
+                    <input type="text" name="user_search" value="<?php echo htmlspecialchars($user_search); ?>" placeholder="Cercar usuari" class="w-full border border-gray-300 rounded px-3 py-2">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('vehicle'); ?></label>
-                    <input type="text" name="vehicle_search" value="<?php echo htmlspecialchars($vehicle_search); ?>" placeholder="<?php echo translate('search_vehicle'); ?>" class="w-full border border-gray-300 rounded px-3 py-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Vehicle</label>
+                    <input type="text" name="vehicle_search" value="<?php echo htmlspecialchars($vehicle_search); ?>" placeholder="Cercar vehicle" class="w-full border border-gray-300 rounded px-3 py-2">
                 </div>
                 <div class="md:col-span-2 lg:col-span-5 flex gap-4">
                     <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded transition">
-                        <?php echo translate('filter'); ?>
+                        Filtrar
                     </button>
                     <a href="bookings.php" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-2 rounded transition inline-block">
-                        <?php echo translate('clear_filters'); ?>
+                        Netejar filtres
                     </a>
                     <button type="button" onclick="showExportModal()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded transition">
-                        <?php echo translate('export_report'); ?>
+                        Exportar informe
                     </button>
                 </div>
             </form>
@@ -356,28 +351,28 @@ $csrf_token = getCsrfToken();
                     <thead class="bg-gray-50">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('booking_id'); ?>
+                                ID Reserva
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('user'); ?>
+                                Usuari
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('vehicle'); ?>
+                                Vehicle
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('start_date'); ?>
+                                Data inici
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('end_date'); ?>
+                                Data fi
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('cost'); ?>
+                                Cost
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('status'); ?>
+                                Estat
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('actions'); ?>
+                                Accions
                             </th>
                         </tr>
                     </thead>
@@ -414,15 +409,15 @@ $csrf_token = getCsrfToken();
                                         default => 'bg-gray-100 text-gray-800'
                                     };
                                     ?>">
-                                    <?php echo translate('status_' . $booking['status']); ?>
+                                    <?php echo match($booking['status']) { 'pending' => 'Pendent', 'confirmed' => 'Confirmat', 'active' => 'Actiu', 'completed' => 'Completat', 'cancelled' => 'Cancel·lat', default => $booking['status'] }; ?>
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                                 <button onclick='viewBooking(<?php echo json_encode($booking); ?>)' class="text-blue-600 hover:text-blue-900">
-                                    <?php echo translate('view'); ?>
+                                    Veure
                                 </button>
                                 <button onclick='editBookingStatus(<?php echo $booking['id']; ?>, "<?php echo $booking['status']; ?>")' class="text-green-600 hover:text-green-900">
-                                    <?php echo translate('edit_status'); ?>
+                                    Editar estat
                                 </button>
                             </td>
                         </tr>
@@ -451,7 +446,7 @@ $csrf_token = getCsrfToken();
     <div id="viewModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
         <div class="relative top-20 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-semibold text-gray-900"><?php echo translate('booking_details'); ?></h3>
+                <h3 class="text-xl font-semibold text-gray-900">Detalls de la Reserva</h3>
                 <button onclick="closeViewModal()" class="text-gray-400 hover:text-gray-600">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -461,7 +456,7 @@ $csrf_token = getCsrfToken();
             <div id="viewBookingContent" class="space-y-4"></div>
             <div class="flex justify-end mt-6">
                 <button onclick="closeViewModal()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-2 rounded transition">
-                    <?php echo translate('close'); ?>
+                    Tancar
                 </button>
             </div>
         </div>
@@ -470,29 +465,29 @@ $csrf_token = getCsrfToken();
     <!-- Edit Status Modal -->
     <div id="editStatusModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
         <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4"><?php echo translate('update_booking_status'); ?></h3>
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Actualitzar Estat de Reserva</h3>
             <form method="POST" id="editStatusForm">
                 <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                 <input type="hidden" name="action" value="update_status">
                 <input type="hidden" name="booking_id" id="editBookingId">
                 
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('status'); ?></label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Estat</label>
                     <select name="status" id="editStatus" class="w-full border border-gray-300 rounded px-3 py-2">
-                        <option value="pending"><?php echo translate('pending'); ?></option>
-                        <option value="confirmed"><?php echo translate('confirmed'); ?></option>
-                        <option value="active"><?php echo translate('active'); ?></option>
-                        <option value="completed"><?php echo translate('completed'); ?></option>
-                        <option value="cancelled"><?php echo translate('cancelled'); ?></option>
+                        <option value="pending">Pendent</option>
+                        <option value="confirmed">Confirmat</option>
+                        <option value="active">Actiu</option>
+                        <option value="completed">Completat</option>
+                        <option value="cancelled">Cancel·lat</option>
                     </select>
                 </div>
                 
                 <div class="flex justify-end space-x-4">
                     <button type="button" onclick="closeEditStatusModal()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded transition">
-                        <?php echo translate('cancel'); ?>
+                        Cancel·lar
                     </button>
                     <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition">
-                        <?php echo translate('update'); ?>
+                        Actualitzar
                     </button>
                 </div>
             </form>
@@ -502,39 +497,39 @@ $csrf_token = getCsrfToken();
     <!-- Export Modal -->
     <div id="exportModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
         <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4"><?php echo translate('export_bookings'); ?></h3>
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Exportar Reserves</h3>
             <form method="POST">
                 <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                 <input type="hidden" name="action" value="export">
                 
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('status'); ?></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Estat</label>
                         <select name="export_status" class="w-full border border-gray-300 rounded px-3 py-2">
-                            <option value=""><?php echo translate('all_statuses'); ?></option>
-                            <option value="pending"><?php echo translate('pending'); ?></option>
-                            <option value="confirmed"><?php echo translate('confirmed'); ?></option>
-                            <option value="active"><?php echo translate('active'); ?></option>
-                            <option value="completed"><?php echo translate('completed'); ?></option>
-                            <option value="cancelled"><?php echo translate('cancelled'); ?></option>
+                            <option value="">Tots els estats</option>
+                            <option value="pending">Pendent</option>
+                            <option value="confirmed">Confirmat</option>
+                            <option value="active">Actiu</option>
+                            <option value="completed">Completat</option>
+                            <option value="cancelled">Cancel·lat</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('date_from'); ?></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Data des de</label>
                         <input type="date" name="export_date_from" class="w-full border border-gray-300 rounded px-3 py-2">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('date_to'); ?></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Data fins</label>
                         <input type="date" name="export_date_to" class="w-full border border-gray-300 rounded px-3 py-2">
                     </div>
                 </div>
                 
                 <div class="flex justify-end space-x-4 mt-6">
                     <button type="button" onclick="closeExportModal()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded transition">
-                        <?php echo translate('cancel'); ?>
+                        Cancel·lar
                     </button>
                     <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition">
-                        <?php echo translate('export'); ?>
+                        Exportar
                     </button>
                 </div>
             </form>
@@ -546,15 +541,15 @@ $csrf_token = getCsrfToken();
             const content = document.getElementById('viewBookingContent');
             content.innerHTML = `
                 <div class="grid grid-cols-2 gap-4">
-                    <div><strong><?php echo translate('booking_id'); ?>:</strong> #${booking.id}</div>
-                    <div><strong><?php echo translate('status'); ?>:</strong> ${booking.status}</div>
-                    <div><strong><?php echo translate('user'); ?>:</strong> ${booking.username}</div>
-                    <div><strong><?php echo translate('email'); ?>:</strong> ${booking.email}</div>
-                    <div class="col-span-2"><strong><?php echo translate('vehicle'); ?>:</strong> ${booking.brand} ${booking.model} (${booking.plate})</div>
-                    <div><strong><?php echo translate('start_date'); ?>:</strong> ${new Date(booking.start_datetime).toLocaleString()}</div>
-                    <div><strong><?php echo translate('end_date'); ?>:</strong> ${new Date(booking.end_datetime).toLocaleString()}</div>
-                    <div><strong><?php echo translate('total_cost'); ?>:</strong> €${parseFloat(booking.total_cost).toFixed(2)}</div>
-                    <div><strong><?php echo translate('created'); ?>:</strong> ${new Date(booking.created_at).toLocaleString()}</div>
+                    <div><strong>ID Reserva:</strong> #${booking.id}</div>
+                    <div><strong>Estat:</strong> ${booking.status}</div>
+                    <div><strong>Usuari:</strong> ${booking.username}</div>
+                    <div><strong>Correu:</strong> ${booking.email}</div>
+                    <div class="col-span-2"><strong>Vehicle:</strong> ${booking.brand} ${booking.model} (${booking.plate})</div>
+                    <div><strong>Data inici:</strong> ${new Date(booking.start_datetime).toLocaleString()}</div>
+                    <div><strong>Data fi:</strong> ${new Date(booking.end_datetime).toLocaleString()}</div>
+                    <div><strong>Cost total:</strong> €${parseFloat(booking.total_cost).toFixed(2)}</div>
+                    <div><strong>Creat:</strong> ${new Date(booking.created_at).toLocaleString()}</div>
                 </div>
             `;
             document.getElementById('viewModal').classList.remove('hidden');

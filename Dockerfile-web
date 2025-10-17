@@ -27,7 +27,7 @@ WORKDIR /var/www/html
 # Copy application files
 #COPY public_html/ /var/www/html/
 
-# (Opcional) copiar config si necesitas accesibilidad desde PHP
+# (Optional) copy config if you need it in PHP
 # COPY config/ /var/www/html/config/
 
 # Set proper permissions

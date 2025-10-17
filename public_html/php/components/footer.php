@@ -8,21 +8,21 @@
                 <div>
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">VoltiaCar</h3>
                     <p class="text-gray-600 text-sm">
-                        <?php echo $lang->get('footer_about', 'Servei de carsharing sostenible i accessible per a tothom.'); ?>
+                        Servei de carsharing sostenible i accessible per a tothom.
                     </p>
                 </div>
                 
                 <!-- Links -->
                 <div>
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">
-                        <?php echo $lang->get('enlla_os', 'Enllaços'); ?>
+                        Enllaços
                     </h3>
                     <ul class="space-y-2 text-sm">
                         <li><a href="/pages/accessibility/accessibilitat.html" class="text-gray-600 hover:text-primary-green">
-                            <?php echo $lang->get('accessibilitat', 'Accessibilitat'); ?>
+                            Accessibilitat
                         </a></li>
                         <li><a href="/pages/dashboard/resum-projecte.html" class="text-gray-600 hover:text-primary-green">
-                            <?php echo $lang->get('sobre_el_projecte', 'Sobre el Projecte'); ?>
+                            Sobre el Projecte
                         </a></li>
                     </ul>
                 </div>
@@ -30,7 +30,7 @@
                 <!-- Contact -->
                 <div>
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">
-                        <?php echo $lang->get('contacte', 'Contacte'); ?>
+                        Contacte
                     </h3>
                     <p class="text-gray-600 text-sm">
                         Email: info@voltiacar.cat<br>
@@ -40,14 +40,13 @@
             </div>
             
             <div class="border-t border-gray-200 mt-8 pt-8 text-center text-gray-600 text-sm">
-                <p>&copy; <?php echo date('Y'); ?> VoltiaCar. <?php echo $lang->get('tots_els_drets_reservats', 'Tots els drets reservats.'); ?></p>
+                <p>&copy; <?php echo date('Y'); ?> VoltiaCar. Tots els drets reservats.</p>
             </div>
         </div>
     </footer>
     
     <!-- JavaScript -->
     <script src="/js/main.js"></script>
-    <script src="/js/language-switcher.js"></script>
     
     <?php if (isset($additionalJS)): ?>
         <?php foreach ($additionalJS as $js): ?>

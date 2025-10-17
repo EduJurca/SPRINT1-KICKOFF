@@ -1,6 +1,5 @@
 /**
  * Tutorial System for VoltiaCar Application
- * Provides guided tours with multi-language support
  * Shows on first visit and can be restarted anytime
  */
 
@@ -11,12 +10,11 @@ const Tutorial = {
     tooltip: null,
     isActive: false,
     tutorialKey: 'tutorial_completed',
-    currentLanguage: 'ca',
     tutorialData: null,
     tutorialType: null,
     
     /**
-     * Initialize tutorial system with multi-language support
+     * Initialize tutorial system
      */
     async init(tutorialType, options = {}) {
         const defaultOptions = {
@@ -24,16 +22,14 @@ const Tutorial = {
             storageKey: `tutorial_${tutorialType}_completed`,
             skipButton: true,
             autoStart: true,
-            language: this.getCurrentLanguage()
         };
         
         const config = { ...defaultOptions, ...options };
         this.tutorialKey = config.storageKey;
         this.tutorialType = tutorialType;
-        this.currentLanguage = config.language;
         
-        // Load tutorial content from JSON
-        await this.loadTutorialContent(tutorialType, config.language);
+        // Load tutorial content from embedded data
+        this.loadTutorialContent(tutorialType);
         
         if (!this.tutorialData) {
             console.warn('Tutorial content not loaded');
@@ -52,33 +48,73 @@ const Tutorial = {
             }
         }
     },
-    
+
     /**
-     * Get current language from localStorage or default
+     * Load tutorial content from embedded data (Catalan only)
      */
-    getCurrentLanguage() {
-        return localStorage.getItem('language') || 'ca';
-    },
-    
-    /**
-     * Load tutorial content from JSON file
-     */
-    async loadTutorialContent(tutorialType, language) {
-        try {
-            const response = await fetch(`../../lang/${language}/tutorial.json`);
-            if (!response.ok) {
-                throw new Error('Failed to load tutorial content');
+    loadTutorialContent(tutorialType) {
+        // Embedded tutorial data in Catalan
+        const tutorialData = {
+            common: {
+                progress: 'Pas {{current}} de {{total}}',
+                navigation: {
+                    skip: 'Saltar tutorial',
+                    previous: '← Anterior',
+                    next: 'Següent →',
+                    finish: 'Finalitzar',
+                    close: 'Tancar'
+                },
+                messages: {
+                    welcome: 'Benvingut a VoltiaCar! Vols fer un ràpid tutorial per conèixer totes les funcions?'
+                },
+                buttons: {
+                    startTutorial: 'Començar Tutorial'
+                }
+            },
+            dashboard: {
+                title: 'Tutorial del Tauler',
+                steps: []
+            },
+            vehicleLocation: {
+                title: 'Tutorial de Localització de Vehicles',
+                steps: []
+            },
+            vehicleControl: {
+                title: 'Tutorial de Control de Vehicles',
+                steps: []
+            },
+            purchaseTime: {
+                title: 'Tutorial de Compra de Temps',
+                steps: []
+            },
+            vehicleSearch: {
+                title: 'Tutorial de Cerca de Vehicles',
+                steps: []
+            },
+            booking: {
+                title: 'Tutorial de Reserva',
+                steps: []
+            },
+            profile: {
+                title: 'Tutorial del Perfil',
+                steps: []
+            },
+            registration: {
+                title: 'Tutorial de Registre',
+                steps: []
+            },
+            login: {
+                title: 'Tutorial d\'Inici de Sessió',
+                steps: []
+            },
+            accessibility: {
+                title: 'Tutorial d\'Accessibilitat',
+                steps: []
             }
-            const data = await response.json();
-            this.tutorialData = data[tutorialType];
-            this.commonData = data.common;
-        } catch (error) {
-            console.error('Error loading tutorial content:', error);
-            // Fallback to default language
-            if (language !== 'ca') {
-                await this.loadTutorialContent(tutorialType, 'ca');
-            }
-        }
+        };
+        
+        this.tutorialData = tutorialData[tutorialType];
+        this.commonData = tutorialData.common;
     },
     
     /**
@@ -220,7 +256,7 @@ const Tutorial = {
     },
     
     /**
-     * Create tooltip with multi-language support
+     * Create tooltip
      */
     createTooltip(target, step) {
         const tooltip = document.createElement('div');
@@ -389,7 +425,7 @@ const Tutorial = {
     },
     
     /**
-     * Get progress text with current language
+     * Get progress text
      */
     getProgressText() {
         const template = this.commonData?.progress || 'Pas {{current}} de {{total}}';
@@ -634,7 +670,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // Purchase time
-    else if (path.includes('comprar-temps.html')) {
+    else if (path.includes('purchase-time.html')) {
         Tutorial.init('purchaseTime');
     }
     

@@ -6,7 +6,6 @@
 
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../auth/session.php';
-require_once __DIR__ . '/../language.php';
 
 // Require admin authentication
 requireAdmin();
@@ -22,7 +21,7 @@ $message_type = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verify CSRF token
     if (!isset($_POST['csrf_token']) || !verifyCsrfToken($_POST['csrf_token'])) {
-        $message = translate('invalid_csrf_token');
+        $message = 'Token CSRF invàlid';
         $message_type = 'error';
     } else {
         $action = $_POST['action'] ?? '';
@@ -78,10 +77,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         'last_updated' => new MongoDB\BSON\UTCDateTime()
                     ]);
                     
-                    $message = translate('vehicle_added_successfully');
+                    $message = 'Vehicle afegit correctament';
                     $message_type = 'success';
                 } else {
-                    $message = translate('error_adding_vehicle');
+                    $message = 'Error en afegir el vehicle';
                     $message_type = 'error';
                 }
                 break;
@@ -137,10 +136,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         ]]
                     );
                     
-                    $message = translate('vehicle_updated_successfully');
+                    $message = 'Vehicle actualitzat correctament';
                     $message_type = 'success';
                 } else {
-                    $message = translate('error_updating_vehicle');
+                    $message = 'Error en actualitzar el vehicle';
                     $message_type = 'error';
                 }
                 break;
@@ -159,10 +158,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         // Also delete from MongoDB
                         $mongodb->cars->deleteOne(['license_plate' => $plate]);
                         
-                        $message = translate('vehicle_deleted_successfully');
+                        $message = 'Vehicle eliminat correctament';
                         $message_type = 'success';
                     } else {
-                        $message = translate('error_deleting_vehicle');
+                        $message = 'Error en eliminar el vehicle';
                         $message_type = 'error';
                     }
                 }
@@ -191,10 +190,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             ['$set' => ['status' => $new_status, 'last_updated' => new MongoDB\BSON\UTCDateTime()]]
                         );
                         
-                        $message = translate('vehicles_updated_successfully');
+                        $message = 'Vehicles actualitzats correctament';
                         $message_type = 'success';
                     } else {
-                        $message = translate('error_updating_vehicles');
+                        $message = 'Error en actualitzar els vehicles';
                         $message_type = 'error';
                     }
                 }
@@ -210,16 +209,15 @@ while ($row = $result->fetch_assoc()) {
     $vehicles[] = $row;
 }
 
-// Get current language
-$lang = getCurrentLanguage();
 $csrf_token = getCsrfToken();
+$current_username = $_SESSION['username'] ?? 'Admin';
 ?>
 <!DOCTYPE html>
-<html lang="<?php echo $lang; ?>">
+<html lang="ca">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo translate('vehicle_management'); ?> - VoltiaCar Admin</title>
+    <title>Gestió de Vehicles - VoltiaCar Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../../css/accessibility.css">
 </head>
@@ -231,15 +229,15 @@ $csrf_token = getCsrfToken();
                 <div class="flex items-center space-x-4">
                     <h1 class="text-2xl font-bold">VoltiaCar Admin</h1>
                     <span class="text-green-100">|</span>
-                    <span class="text-green-100"><?php echo translate('vehicle_management'); ?></span>
+                    <span class="text-green-100">Gestió de Vehicles</span>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <span><?php echo getCurrentUsername(); ?></span>
+                    <span><?php echo htmlspecialchars($current_username); ?></span>
                     <a href="../../index.php" class="bg-green-700 hover:bg-green-800 px-4 py-2 rounded transition">
-                        <?php echo translate('back_to_site'); ?>
+                        Tornar al lloc
                     </a>
                     <a href="../auth/logout.php" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded transition">
-                        <?php echo translate('logout'); ?>
+                        Tancar sessió
                     </a>
                 </div>
             </div>
@@ -251,16 +249,16 @@ $csrf_token = getCsrfToken();
         <div class="container mx-auto px-4">
             <div class="flex space-x-6 py-3">
                 <a href="dashboard.php" class="text-gray-600 hover:text-green-600 pb-2 transition">
-                    <?php echo translate('dashboard'); ?>
+                    Tauler
                 </a>
                 <a href="vehicles.php" class="text-green-600 font-semibold border-b-2 border-green-600 pb-2">
-                    <?php echo translate('vehicles'); ?>
+                    Vehicles
                 </a>
                 <a href="users.php" class="text-gray-600 hover:text-green-600 pb-2 transition">
-                    <?php echo translate('users'); ?>
+                    Usuaris
                 </a>
                 <a href="bookings.php" class="text-gray-600 hover:text-green-600 pb-2 transition">
-                    <?php echo translate('bookings'); ?>
+                    Reserves
                 </a>
             </div>
         </div>
@@ -278,9 +276,9 @@ $csrf_token = getCsrfToken();
         <!-- Actions Bar -->
         <div class="bg-white rounded-lg shadow-md p-6 mb-6">
             <div class="flex justify-between items-center">
-                <h2 class="text-xl font-semibold text-gray-800"><?php echo translate('vehicles'); ?></h2>
+                <h2 class="text-xl font-semibold text-gray-800">Vehicles</h2>
                 <button onclick="showAddVehicleModal()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition">
-                    <?php echo translate('add_vehicle'); ?>
+                    Afegir Vehicle
                 </button>
             </div>
         </div>
@@ -292,13 +290,13 @@ $csrf_token = getCsrfToken();
                 <input type="hidden" name="action" value="bulk_status">
                 <span class="text-gray-700" id="selectedCount">0 selected</span>
                 <select name="bulk_status" class="border border-gray-300 rounded px-4 py-2">
-                    <option value="available"><?php echo translate('available'); ?></option>
-                    <option value="in_use"><?php echo translate('in_use'); ?></option>
-                    <option value="maintenance"><?php echo translate('maintenance'); ?></option>
-                    <option value="out_of_service"><?php echo translate('out_of_service'); ?></option>
+                    <option value="available">Disponible</option>
+                    <option value="in_use">En ús</option>
+                    <option value="maintenance">Manteniment</option>
+                    <option value="out_of_service">Fora de servei</option>
                 </select>
                 <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition">
-                    <?php echo translate('update_status'); ?>
+                    Actualitzar estat
                 </button>
             </form>
         </div>
@@ -313,25 +311,25 @@ $csrf_token = getCsrfToken();
                                 <input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)">
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('plate'); ?>
+                                Matrícula
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('vehicle'); ?>
+                                Vehicle
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('battery'); ?>
+                                Bateria
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('status'); ?>
+                                Estat
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('price'); ?>
+                                Preu
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('accessible'); ?>
+                                Accessible
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <?php echo translate('actions'); ?>
+                                Accions
                             </th>
                         </tr>
                     </thead>
@@ -366,7 +364,15 @@ $csrf_token = getCsrfToken();
                                         default => 'bg-gray-100 text-gray-800'
                                     };
                                     ?>">
-                                    <?php echo translate('status_' . $vehicle['status']); ?>
+                                    <?php 
+                                    echo match($vehicle['status']) {
+                                        'available' => 'Disponible',
+                                        'in_use' => 'En ús',
+                                        'maintenance' => 'Manteniment',
+                                        'out_of_service' => 'Fora de servei',
+                                        default => $vehicle['status']
+                                    };
+                                    ?>
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -377,10 +383,10 @@ $csrf_token = getCsrfToken();
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                                 <button onclick='editVehicle(<?php echo json_encode($vehicle); ?>)' class="text-blue-600 hover:text-blue-900">
-                                    <?php echo translate('edit'); ?>
+                                    Editar
                                 </button>
                                 <button onclick="deleteVehicle(<?php echo $vehicle['id']; ?>, '<?php echo htmlspecialchars($vehicle['plate']); ?>')" class="text-red-600 hover:text-red-900">
-                                    <?php echo translate('delete'); ?>
+                                    Eliminar
                                 </button>
                             </td>
                         </tr>
@@ -395,7 +401,7 @@ $csrf_token = getCsrfToken();
     <div id="vehicleModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
         <div class="relative top-20 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-semibold text-gray-900" id="modalTitle"><?php echo translate('add_vehicle'); ?></h3>
+                <h3 class="text-xl font-semibold text-gray-900" id="modalTitle">Afegir Vehicle</h3>
                 <button onclick="closeVehicleModal()" class="text-gray-400 hover:text-gray-600">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -410,86 +416,86 @@ $csrf_token = getCsrfToken();
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('plate'); ?></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Matrícula</label>
                         <input type="text" name="plate" id="plate" required class="w-full border border-gray-300 rounded px-3 py-2">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('brand'); ?></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Marca</label>
                         <input type="text" name="brand" id="brand" required class="w-full border border-gray-300 rounded px-3 py-2">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('model'); ?></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Model</label>
                         <input type="text" name="model" id="model" required class="w-full border border-gray-300 rounded px-3 py-2">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('year'); ?></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Any</label>
                         <input type="number" name="year" id="year" required min="2000" max="2030" class="w-full border border-gray-300 rounded px-3 py-2">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('battery_level'); ?> (%)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nivell de bateria (%)</label>
                         <input type="number" name="battery_level" id="battery_level" required min="0" max="100" class="w-full border border-gray-300 rounded px-3 py-2">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('status'); ?></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Estat</label>
                         <select name="status" id="status" required class="w-full border border-gray-300 rounded px-3 py-2">
-                            <option value="available"><?php echo translate('available'); ?></option>
-                            <option value="in_use"><?php echo translate('in_use'); ?></option>
-                            <option value="maintenance"><?php echo translate('maintenance'); ?></option>
-                            <option value="out_of_service"><?php echo translate('out_of_service'); ?></option>
+                            <option value="available">Disponible</option>
+                            <option value="in_use">En ús</option>
+                            <option value="maintenance">Manteniment</option>
+                            <option value="out_of_service">Fora de servei</option>
                         </select>
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('latitude'); ?></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Latitud</label>
                         <input type="number" name="latitude" id="latitude" required step="0.00000001" class="w-full border border-gray-300 rounded px-3 py-2">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('longitude'); ?></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Longitud</label>
                         <input type="number" name="longitude" id="longitude" required step="0.00000001" class="w-full border border-gray-300 rounded px-3 py-2">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('vehicle_type'); ?></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tipus de vehicle</label>
                         <input type="text" name="vehicle_type" id="vehicle_type" value="electric" class="w-full border border-gray-300 rounded px-3 py-2">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('price_per_minute'); ?> (€)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Preu per minut (€)</label>
                         <input type="number" name="price_per_minute" id="price_per_minute" required step="0.01" min="0" value="0.30" class="w-full border border-gray-300 rounded px-3 py-2">
                     </div>
                     
                     <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('image_url'); ?></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">URL imatge</label>
                         <input type="text" name="image_url" id="image_url" class="w-full border border-gray-300 rounded px-3 py-2">
                     </div>
                     
                     <div class="md:col-span-2">
                         <label class="flex items-center">
                             <input type="checkbox" name="is_accessible" id="is_accessible" class="mr-2">
-                            <span class="text-sm font-medium text-gray-700"><?php echo translate('accessible_vehicle'); ?></span>
+                            <span class="text-sm font-medium text-gray-700">Vehicle accessible</span>
                         </label>
                     </div>
                     
                     <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-2"><?php echo translate('accessibility_features'); ?></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Característiques d'accessibilitat</label>
                         <div class="space-y-2">
                             <label class="flex items-center">
                                 <input type="checkbox" name="accessibility_features[]" value="wheelchair_ramp" class="mr-2 accessibility-feature">
-                                <span class="text-sm"><?php echo translate('wheelchair_ramp'); ?></span>
+                                <span class="text-sm">Rampa per cadira de rodes</span>
                             </label>
                             <label class="flex items-center">
                                 <input type="checkbox" name="accessibility_features[]" value="hand_controls" class="mr-2 accessibility-feature">
-                                <span class="text-sm"><?php echo translate('hand_controls'); ?></span>
+                                <span class="text-sm">Controls manuals</span>
                             </label>
                             <label class="flex items-center">
                                 <input type="checkbox" name="accessibility_features[]" value="swivel_seat" class="mr-2 accessibility-feature">
-                                <span class="text-sm"><?php echo translate('swivel_seat'); ?></span>
+                                <span class="text-sm">Seient giratori</span>
                             </label>
                         </div>
                     </div>
@@ -497,10 +503,10 @@ $csrf_token = getCsrfToken();
                 
                 <div class="flex justify-end space-x-4 mt-6">
                     <button type="button" onclick="closeVehicleModal()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-2 rounded transition">
-                        <?php echo translate('cancel'); ?>
+                        Cancel·lar
                     </button>
                     <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded transition">
-                        <?php echo translate('save'); ?>
+                        Desar
                     </button>
                 </div>
             </form>
@@ -510,18 +516,18 @@ $csrf_token = getCsrfToken();
     <!-- Delete Confirmation Modal -->
     <div id="deleteModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
         <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4"><?php echo translate('confirm_delete'); ?></h3>
-            <p class="text-gray-600 mb-6"><?php echo translate('delete_vehicle_confirmation'); ?></p>
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Confirmar eliminació</h3>
+            <p class="text-gray-600 mb-6">Estàs segur que vols eliminar aquest vehicle?</p>
             <form method="POST" id="deleteForm">
                 <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                 <input type="hidden" name="action" value="delete">
                 <input type="hidden" name="vehicle_id" id="deleteVehicleId">
                 <div class="flex justify-end space-x-4">
                     <button type="button" onclick="closeDeleteModal()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded transition">
-                        <?php echo translate('cancel'); ?>
+                        Cancel·lar
                     </button>
                     <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition">
-                        <?php echo translate('delete'); ?>
+                        Eliminar
                     </button>
                 </div>
             </form>
@@ -530,14 +536,14 @@ $csrf_token = getCsrfToken();
 
     <script>
         function showAddVehicleModal() {
-            document.getElementById('modalTitle').textContent = '<?php echo translate('add_vehicle'); ?>';
+            document.getElementById('modalTitle').textContent = 'Afegir Vehicle';
             document.getElementById('formAction').value = 'add';
             document.getElementById('vehicleForm').reset();
             document.getElementById('vehicleModal').classList.remove('hidden');
         }
 
         function editVehicle(vehicle) {
-            document.getElementById('modalTitle').textContent = '<?php echo translate('edit_vehicle'); ?>';
+            document.getElementById('modalTitle').textContent = 'Editar Vehicle';
             document.getElementById('formAction').value = 'edit';
             document.getElementById('vehicleId').value = vehicle.id;
             document.getElementById('plate').value = vehicle.plate;

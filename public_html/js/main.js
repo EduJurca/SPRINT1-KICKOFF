@@ -7,7 +7,6 @@
 const APP_CONFIG = {
     apiBaseUrl: '/src/api',
     assetsPath: '/assets',
-    defaultLanguage: 'ca',
     sessionTimeout: 30 * 60 * 1000, // 30 minutes
     colors: {
         primary: '#1565C0',

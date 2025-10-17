@@ -1,46 +1,33 @@
-/* global db */
-/* eslint-disable no-global-assign */
-// VoltiaCar MongoDB Initialization Script
-// Creates collections, indexes, and sample data
-// Note: 'db' reassignment is standard in MongoDB shell scripts
-
-// Switch to simsdb database
 db = db.getSiblingDB('simsdb');
 
-// Drop existing collections
 db.cars.drop();
 db.history.drop();
 db.sensors.drop();
 db.logs.drop();
 
-// Collection: cars
 db.createCollection('cars');
 db.cars.createIndex({ "license_plate": 1 }, { unique: true });
 db.cars.createIndex({ "status": 1 });
 db.cars.createIndex({ "location": "2dsphere" });
 
-// Collection: history
 db.createCollection('history');
 db.history.createIndex({ "user_id": 1 });
 db.history.createIndex({ "car_id": 1 });
 db.history.createIndex({ "date": -1 });
 db.history.createIndex({ "action_type": 1 });
 
-// Collection: sensors
 db.createCollection('sensors');
 db.sensors.createIndex({ "car_id": 1 });
 db.sensors.createIndex({ "sensor_id": 1 });
 db.sensors.createIndex({ "timestamp": -1 });
 db.sensors.createIndex({ "car_id": 1, "timestamp": -1 });
 
-// Collection: logs
 db.createCollection('logs');
 db.logs.createIndex({ "car_id": 1 });
 db.logs.createIndex({ "timestamp": -1 });
 db.logs.createIndex({ "level": 1 });
 db.logs.createIndex({ "car_id": 1, "timestamp": -1 });
 
-// Insert sample car data
 db.cars.insertMany([
     {
         license_plate: "1234ABC",
@@ -51,7 +38,7 @@ db.cars.insertMany([
         battery_level: 85,
         location: {
             type: "Point",
-            coordinates: [2.17009700, 41.38706100] // [longitude, latitude]
+            coordinates: [2.17009700, 41.38706100]
         },
         location_name: "Plaça Catalunya",
         last_updated: new Date()
@@ -114,7 +101,6 @@ db.cars.insertMany([
     }
 ]);
 
-// Insert sample sensor data
 db.sensors.insertMany([
     {
         car_id: "1234ABC",
@@ -150,7 +136,6 @@ db.sensors.insertMany([
     }
 ]);
 
-// Insert sample logs
 db.logs.insertMany([
     {
         car_id: "1234ABC",

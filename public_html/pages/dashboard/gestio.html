@@ -102,7 +102,7 @@ class="h-12 w-12 mb-2"
 
             <!-- Comprar Temps -->
             <a
-href="../vehicle/comprar-temps.html"
+href="../vehicle/purchase-time.html"
 class="block bg-gray-100 p-4 rounded-lg shadow-sm flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105"
 aria-label="Comprar Temps"
 >
@@ -276,7 +276,7 @@ class="h-16 w-16 mb-4"
 
       <!-- Comprar Temps -->
       <a
-href="../vehicle/comprar-temps.html"
+href="../vehicle/purchase-time.html"
 class="block bg-gray-100 p-6 rounded-lg shadow-sm flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105"
 aria-label="Comprar Temps"
 >
@@ -339,7 +339,7 @@ document.addEventListener("DOMContentLoaded", function () {
     .then(data => {
       const tempsDisponibleMobile = document.querySelector('.text-4xl');
       const tempsDisponibleDesktop = document.querySelector('.text-5xl');
-      const btnComprarTemps = document.querySelector('a[href="../vehicle/comprar-temps.html"]');
+      const btnComprarTemps = document.querySelector('a[href="../vehicle/purchase-time.html"]');
       if ((tempsDisponibleMobile || tempsDisponibleDesktop) && data.success && data.user) {
           const text = data.user.minute_balance + ' min';
           if (tempsDisponibleMobile) tempsDisponibleMobile.textContent = text;
