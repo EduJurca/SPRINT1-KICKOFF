@@ -30,7 +30,7 @@ MONGO_HOST = 'localhost'
 MONGO_PORT = '27017'
 MONGO_DB = os.getenv('MONGO_INITDB_DATABASE')
 
-MONGO_URI = f"mongodb://{MONGO_USER}:{MONGO_PASS}@{MONGO_HOST}:{MONGO_PORT}/" if all([MONGO_USER, MONGO_PASS]) else None
+MONGO_URI = ( f"mongodb://{MONGO_USER}:{MONGO_PASS}@{MONGO_HOST}:{MONGO_PORT}/?authSource=admin" if all([MONGO_USER, MONGO_PASS]) else None )
 
 # MariaDB Configuration
 DB_HOST = 'localhost'
