@@ -25,10 +25,10 @@ class Database {
                 }
             }
 
-            $host = $_ENV['DB_HOST'] ?? 'mariadb';
-            $user = $_ENV['DB_USER'] ?? 'simsuser';
-            $pass = $_ENV['DB_PASS'] ?? 'Putamare123';
-            $dbname = $_ENV['DB_NAME'] ?? 'simsdb';
+            $host = $_ENV['DB_HOST'];
+            $user = $_ENV['DB_USER'];
+            $pass = $_ENV['DB_PASS'];
+            $dbname = $_ENV['DB_NAME'];
             
             try {
                 self::$mariadb_connection = new mysqli($host, $user, $pass, $dbname);
@@ -53,10 +53,10 @@ class Database {
             try {
                 require_once __DIR__ . '/../vendor/autoload.php';
                 
-                $mongo_host = $_ENV['MONGO_HOST'] ?? 'mongodb';
-                $mongo_user = $_ENV['MONGO_INITDB_ROOT_USERNAME'] ?? $_ENV['MONGO_USER'] ?? 'simsadmin';
-                $mongo_pass = $_ENV['MONGO_INITDB_ROOT_PASSWORD'] ?? $_ENV['MONGO_PASS'] ?? 'Putamare123.';
-                $mongo_db = $_ENV['MONGO_INITDB_DATABASE'] ?? $_ENV['MONGO_DB'] ?? 'simsdb';
+                $mongo_host = $_ENV['MONGO_HOST'];
+                $mongo_user = $_ENV['MONGO_INITDB_ROOT_USERNAME'];
+                $mongo_pass = $_ENV['MONGO_INITDB_ROOT_PASSWORD'];
+                $mongo_db = $_ENV['MONGO_INITDB_DATABASE'];
 
                 $uri = "mongodb://{$mongo_user}:{$mongo_pass}@{$mongo_host}:27017/{$mongo_db}";
                 
