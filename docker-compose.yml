@@ -72,7 +72,6 @@ services:
       timeout: 5s
       retries: 5
       
-  # phpMyAdmin
   phpmyadmin:
     image: phpmyadmin:latest
     container_name: VC-phpmyadmin
