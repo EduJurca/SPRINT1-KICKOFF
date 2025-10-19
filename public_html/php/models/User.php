@@ -26,6 +26,7 @@ class User {
             (username, nationality_id, phone, birth_date, sex, dni, address, email, password, iban, driver_license_photo, minute_balance, is_admin, created_at) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )");
 
+        $username = $data['username'] ?? null;
         $nationality_id = $data['nationality_id'] ?? null;
         $phone = $data['phone'] ?? null;
         $birth_date = $data['fecha_nacimiento'] ?? null;
@@ -33,6 +34,7 @@ class User {
         $dni = $data['dni'] ?? null;
         $address = $data['address'] ?? null;
         $iban = $data['iban'] ?? null;
+        $email = $data['email'] ?? null;
         $driver_license_photo = $data['driver_license_photo'] ?? null;
         $minute_balance = 0;
         $is_admin = 0;
@@ -41,17 +43,14 @@ class User {
 
         $stmt->bind_param(
             "sisssssssssiis",
-            $data['username'],
+            $username,
             $nationality_id,
             $phone,
             $birth_date,
-            $data['sex'],
-            $data['dni'],
-            $data['address'],
             $sex,
             $dni,
             $address,
-            $data['email'],
+            $email,
             $password_hash,
             $iban,
             $driver_license_photo,
