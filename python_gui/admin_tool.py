@@ -28,7 +28,7 @@ MONGO_USER = os.getenv('MONGO_INITDB_ROOT_USERNAME')
 MONGO_PASS = os.getenv('MONGO_INITDB_ROOT_PASSWORD')
 MONGO_HOST = 'localhost'
 MONGO_PORT = '27017'
-MONGO_DB = os.getenv('MONGO_INITDB_DATABASE') or 'simsdb'
+MONGO_DB = os.getenv('MONGO_INITDB_DATABASE')
 
 MONGO_URI = f"mongodb://{MONGO_USER}:{MONGO_PASS}@{MONGO_HOST}:{MONGO_PORT}/" if all([MONGO_USER, MONGO_PASS]) else None
 
@@ -36,7 +36,7 @@ MONGO_URI = f"mongodb://{MONGO_USER}:{MONGO_PASS}@{MONGO_HOST}:{MONGO_PORT}/" if
 DB_HOST = 'localhost'
 DB_USER = os.getenv('DB_USER')
 DB_PASS = os.getenv('DB_PASS')
-DB_NAME = os.getenv('DB_NAME') or 'simsdb'
+DB_NAME = os.getenv('DB_NAME')
 
 MYSQL_CONFIG = {
     "host": DB_HOST,
@@ -317,8 +317,8 @@ Password will be hashed using bcrypt."""
         try:
             conn = mysql.connector.connect(**MYSQL_CONFIG_NO_DB)
             cursor = conn.cursor()
-            cursor.execute(f"CREATE DATABASE IF NOT EXISTS {DB_NAME};")
-            self.log(f"✅ MariaDB database '{DB_NAME}' created/ready.")
+            cursor.execute(f"CREATE DATABASE IF NOT EXISTS")
+            self.log(f"✅ MariaDB database created/ready.")
             cursor.close()
             conn.close()
         except Exception as e:
@@ -330,11 +330,11 @@ Password will be hashed using bcrypt."""
     
     def drop_db_maria(self):
         """Drop MariaDB database"""
-        if messagebox.askyesno("Confirm", f"Are you sure you want to drop the '{DB_NAME}' database?\nThis will delete all data!"):
+        if messagebox.askyesno("Confirm", f"Are you sure you want to drop the database?\nThis will delete all data!"):
             try:
                 conn = mysql.connector.connect(**MYSQL_CONFIG_NO_DB)
                 cursor = conn.cursor()
-                cursor.execute(f"DROP DATABASE IF EXISTS {DB_NAME};")
+                cursor.execute(f"DROP DATABASE IF EXISTS")
                 cursor.close()
                 conn.close()
             except Exception as e:
