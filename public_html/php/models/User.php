@@ -75,14 +75,17 @@ class User {
     public static function updateProfile($user_id, $data) {
         $db = DatabaseMariaDB::getConnection();
         $stmt = $db->prepare("UPDATE users SET fullname = ?, dni = ?, phone = ?, birth_date = ?, address = ?, sex = ? WHERE id = ?");
+        $birthdate = !empty($data['birthdate']) ? $data['birthdate'] : null;
+        $sex = !empty($data['sex']) ? $data['sex'] : null;
+
         $stmt->bind_param(
             'ssssssi',
             $data['fullname'],
             $data['dni'], 
             $data['phone'],
-            $data['birthdate'],
+            $birthdate,
             $data['address'],
-            $data['sex'],
+            $sex,
             $user_id
         );
         return $stmt->execute();
