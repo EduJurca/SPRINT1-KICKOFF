@@ -121,16 +121,15 @@
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
 
     <div class="mobile-view md:hidden">
-        <div class="bg-white p-8 rounded-2xl shadow-inner w-full max-w-sm flex flex-col relative">
-            <!-- Logo de la aplicación -->
-            <img
-src="../../../../images/logo.png"
-alt="Logo App"
-class="absolute top-4 left-4 h-10 w-10 z-20"
->
-            <a href="../dashboard/gestio.html" class="text-[#1565C0] text-sm font-semibold absolute top-[50.8px] left-4">← Tornar</a>
-            <header class="flex items-center justify-start mb-6">
-                <h1 class="text-2xl font-bold text-gray-900 flex-1 text-right">Controlar Vehicle</h1>
+        <div class="bg-white p-5 rounded-2xl shadow-inner w-full max-w-sm flex flex-col relative">
+            <header class="grid grid-cols-3 items-center mb-6 w-full">
+                <div class="text-left">
+                    <a href="../dashboard/gestio.html" class="text-[#1565C0] text-sm font-semibold">← Tornar</a>
+                </div>
+                <h1 class="text-2xl font-bold text-gray-900 text-center">Controlar Vehicle</h1>
+                <div class="flex justify-end">
+                    <img src="../../images/logo.png" alt="Logo" class="h-10 w-10">
+                </div>
             </header>
 
             <!-- Parte superior fija: Estat del Servei y Bateria en fila -->
@@ -243,16 +242,15 @@ class="h-12 w-12 mb-2"
         </div>
     </div>
 
-    <div class="desktop-view hidden md:block bg-white p-8 rounded-2xl shadow-inner w-full max-w-5xl mx-auto flex flex-col relative">
-        <!-- Logo de la aplicación -->
-        <img
-src="../../../../images/logo.png"
-alt="Logo App"
-class="absolute top-4 left-4 h-10 w-10 z-20"
->
-        <a href="../dashboard/gestio.html" class="text-[#1565C0] text-sm font-semibold absolute top-[50.8px] left-4">← Tornar</a>
-        <header class="flex items-center justify-start mb-6">
-            <h2 class="text-3xl font-bold text-gray-900 flex-1 text-right">Controlar Vehicle</h2>
+    <div class="desktop-view hidden md:block bg-white p-8 rounded-2xl shadow-inner w-full max-w-5xl mx-auto">
+        <header class="grid grid-cols-3 items-center mb-6 w-full">
+            <div class="text-left">
+                <a href="../dashboard/gestio.html" class="text-[#1565C0] text-sm font-semibold">← Tornar</a>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-900 text-center">Controlar Vehicle</h2>
+            <div class="flex justify-end">
+                <img src="../../images/logo.png" alt="Logo" class="h-10 w-10">
+            </div>
         </header>
 
         <!-- Sticky status and battery bar adapted for desktop -->

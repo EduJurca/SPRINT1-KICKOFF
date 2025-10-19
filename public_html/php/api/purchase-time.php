@@ -96,8 +96,8 @@ function process_purchase(mysqli $db, int $userId, array $input): array {
     $newBalance = (float)$user['balance'] - $price;
     $newMinutes = (int)$user['minute_balance'] + $minutes;
 
-    $succes = update_user($db, $userId, $newBalance, $newMinutes);
-    if (!$succes) {
+    $success = update_user($db, $userId, $newBalance, $newMinutes);
+    if (!$success) {
         http_response_code(500);
         return ['success' => false, 'message' => 'Error en actualitzar l’usuari'];
     }
