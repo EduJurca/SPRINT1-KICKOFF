@@ -9,22 +9,47 @@ from tkinter import ttk, scrolledtext, messagebox
 import mysql.connector
 from pymongo import MongoClient
 import sys
+import os
+from pathlib import Path
 
-# --- Configuration ---
-MONGO_URI = "mongodb://simsadmin:Putamare123.@localhost:27017/"
-MONGO_DB = "simsdb"
+
+env_file = Path(__file__).parent.parent / '.env'
+if env_file.exists():
+    with open(env_file) as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith('#') and '=' in line:
+                key, value = line.split('=', 1)
+                if key not in os.environ:
+                    os.environ[key] = value
+
+# MongoDB Configuration
+MONGO_USER = os.getenv('MONGO_INITDB_ROOT_USERNAME')
+MONGO_PASS = os.getenv('MONGO_INITDB_ROOT_PASSWORD')
+MONGO_HOST = 'localhost'
+MONGO_PORT = '27017'
+MONGO_DB = os.getenv('MONGO_INITDB_DATABASE')
+
+MONGO_URI = ( f"mongodb://{MONGO_USER}:{MONGO_PASS}@{MONGO_HOST}:{MONGO_PORT}/?authSource=admin" if all([MONGO_USER, MONGO_PASS]) else None )
+
+# MariaDB Configuration
+DB_HOST = 'localhost'
+DB_USER = os.getenv('DB_USER')
+DB_PASS = os.getenv('DB_PASS')
+DB_NAME = os.getenv('DB_NAME')
 
 MYSQL_CONFIG = {
-    "host": "localhost",
-    "user": "simsuser",
-    "password": "Putamare123",
-    "database": "simsdb"
-}
+    "host": DB_HOST,
+    "user": DB_USER,
+    "password": DB_PASS,
+    "database": DB_NAME
+} if all([DB_USER, DB_PASS]) else None
+
 MYSQL_CONFIG_NO_DB = {
-    "host": "localhost",
-    "user": "simsuser",
-    "password": "Putamare123"
-}
+    "host": DB_HOST,
+    "user": DB_USER,
+    "password": DB_PASS
+} if all([DB_USER, DB_PASS]) else None
 
 class DatabaseAdminGUI:
     def __init__(self, root):
@@ -106,7 +131,21 @@ class DatabaseAdminGUI:
                   command=self.clear_output).grid(row=1, column=0, pady=5)
         
         self.log("Welcome to VoltiaCar Database Administration Tool")
-        self.log("Please check database connections before performing operations.")
+        
+        # Check if environment variables are loaded
+        if not MYSQL_CONFIG_NO_DB:
+            self.log("⚠️  MariaDB environment variables not configured!")
+            self.log("   Please check your .env file for DB_USER and DB_PASS")
+        
+        if not MONGO_URI:
+            self.log("⚠️  MongoDB environment variables not configured!")
+            self.log("   Please check your .env file for MONGO credentials")
+        
+        if MYSQL_CONFIG_NO_DB or MONGO_URI:
+            self.log("Checking database connections...")
+            self.root.after(100, self.check_connections)  # Check after GUI loads
+        else:
+            self.log("⚠️  No database credentials found. Operations will not work.")
     
     def create_mariadb_tab(self, parent):
         """Create MariaDB operations tab"""
@@ -242,6 +281,10 @@ Password will be hashed using bcrypt."""
     
     def check_mariadb(self):
         """Check MariaDB connection"""
+        if not MYSQL_CONFIG_NO_DB:
+            self.mariadb_status.config(text="MariaDB: Not configured ⚠️", foreground="orange")
+            self.log("⚠️  MariaDB environment variables not set. Please configure .env file.")
+            return
         try:
             conn = mysql.connector.connect(**MYSQL_CONFIG_NO_DB)
             conn.close()
@@ -253,6 +296,10 @@ Password will be hashed using bcrypt."""
     
     def check_mongodb(self):
         """Check MongoDB connection"""
+        if not MONGO_URI:
+            self.mongodb_status.config(text="MongoDB: Not configured ⚠️", foreground="orange")
+            self.log("⚠️  MongoDB environment variables not set. Please configure .env file.")
+            return
         try:
             client = MongoClient(MONGO_URI)
             client.admin.command("ping")
@@ -264,24 +311,28 @@ Password will be hashed using bcrypt."""
     
     def create_db_maria(self):
         """Create MariaDB database"""
+        if not MYSQL_CONFIG_NO_DB:
+            self.log("⚠️  MariaDB not configured. Please set environment variables.")
+            return
         try:
             conn = mysql.connector.connect(**MYSQL_CONFIG_NO_DB)
             cursor = conn.cursor()
-            cursor.execute("CREATE DATABASE IF NOT EXISTS simsdb;")
-            self.log("✅ MariaDB database created/ready.")
+            cursor.execute(f"CREATE DATABASE IF NOT EXISTS {DB_NAME}")
+            self.log(f"✅ MariaDB database created/ready.")
             cursor.close()
             conn.close()
         except Exception as e:
             self.log(f"❌ Error creating MariaDB DB: {e}")
-    
+            cursor.close()
+            conn.close()
+
     def drop_db_maria(self):
         """Drop MariaDB database"""
-        if messagebox.askyesno("Confirm", "Are you sure you want to drop the MariaDB database?\nThis will delete all data!"):
+        if messagebox.askyesno("Confirm", f"Are you sure you want to drop the database?\nThis will delete all data!"):
             try:
                 conn = mysql.connector.connect(**MYSQL_CONFIG_NO_DB)
                 cursor = conn.cursor()
-                cursor.execute("DROP DATABASE IF EXISTS simsdb;")
-                self.log("✅ MariaDB database dropped.")
+                cursor.execute(f"DROP DATABASE IF EXISTS {DB_NAME}")
                 cursor.close()
                 conn.close()
             except Exception as e:
@@ -322,11 +373,15 @@ Password will be hashed using bcrypt."""
                 fullname VARCHAR(50),
                 phone VARCHAR(20),
                 birth_date DATE,
+                sex ENUM('M', 'F', 'O') DEFAULT NULL,  
+                address VARCHAR(255),                       
+                dni VARCHAR(20),
                 is_admin BOOLEAN NOT NULL DEFAULT FALSE,
                 iban VARCHAR(34),
                 driver_license_photo VARCHAR(255),
                 nationality_id INT,
                 minute_balance INT DEFAULT 0,
+                balance INT DEFAULT 0,
                 created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (nationality_id) REFERENCES nationalities(id)
             );

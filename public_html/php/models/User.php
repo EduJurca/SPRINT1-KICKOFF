@@ -5,7 +5,7 @@ class User {
     // Login
     public static function findByUsername($username) {
         $db = DatabaseMariaDB::getConnection();
-        $stmt = $db->prepare("SELECT id, username, password FROM users WHERE username = ?");
+        $stmt = $db->prepare("SELECT id, username, password, is_admin FROM users WHERE username = ?");
         $stmt->bind_param("s", $username);
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
@@ -23,13 +23,18 @@ class User {
     public static function create($data) {
         $db = DatabaseMariaDB::getConnection();
         $stmt = $db->prepare("INSERT INTO users 
-            (username, nationality_id, phone, birth_date, email, password, iban, driver_license_photo, minute_balance, is_admin, created_at) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            (username, nationality_id, phone, birth_date, sex, dni, address, email, password, iban, driver_license_photo, minute_balance, is_admin, created_at) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )");
 
+        $username = $data['username'] ?? null;
         $nationality_id = $data['nationality_id'] ?? null;
         $phone = $data['phone'] ?? null;
         $birth_date = $data['fecha_nacimiento'] ?? null;
+        $sex = $data['sex'] ?? null;
+        $dni = $data['dni'] ?? null;
+        $address = $data['address'] ?? null;
         $iban = $data['iban'] ?? null;
+        $email = $data['email'] ?? null;
         $driver_license_photo = $data['driver_license_photo'] ?? null;
         $minute_balance = 0;
         $is_admin = 0;
@@ -37,12 +42,15 @@ class User {
         $password_hash = password_hash($data['password'], PASSWORD_DEFAULT);
 
         $stmt->bind_param(
-            "sisssssssis",
-            $data['username'],
+            "sisssssssssiis",
+            $username,
             $nationality_id,
             $phone,
             $birth_date,
-            $data['email'],
+            $sex,
+            $dni,
+            $address,
+            $email,
             $password_hash,
             $iban,
             $driver_license_photo,
@@ -54,10 +62,11 @@ class User {
         return $stmt->execute();
     }
 
-    // Perfil
+    // Profile
     public static function getProfile($user_id) {
         $db = DatabaseMariaDB::getConnection();
-        $stmt = $db->prepare("SELECT fullname, phone, birth_date AS birthdate, address, sex FROM users WHERE id = ?");
+        $stmt = $db->prepare("SELECT fullname, dni, phone, birth_date AS birthdate, address, sex FROM users WHERE id = ?");
+
         $stmt->bind_param('i', $user_id);
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
@@ -65,20 +74,24 @@ class User {
 
     public static function updateProfile($user_id, $data) {
         $db = DatabaseMariaDB::getConnection();
-        $stmt = $db->prepare("UPDATE users SET fullname = ?, phone = ?, birth_date = ?, address = ?, sex = ? WHERE id = ?");
+        $stmt = $db->prepare("UPDATE users SET fullname = ?, dni = ?, phone = ?, birth_date = ?, address = ?, sex = ? WHERE id = ?");
+        $birthdate = !empty($data['birthdate']) ? $data['birthdate'] : null;
+        $sex = !empty($data['sex']) ? $data['sex'] : null;
+
         $stmt->bind_param(
-            'sssssi',
+            'ssssssi',
             $data['fullname'],
+            $data['dni'], 
             $data['phone'],
-            $data['birthdate'],
+            $birthdate,
             $data['address'],
-            $data['sex'],
+            $sex,
             $user_id
         );
         return $stmt->execute();
     }
 
-    // Gestio
+    // Management
     public static function getUserInfo($user_id) {
         $db = DatabaseMariaDB::getConnection();
         $stmt = $db->prepare("SELECT username, email, minute_balance, is_admin FROM users WHERE id = ?");

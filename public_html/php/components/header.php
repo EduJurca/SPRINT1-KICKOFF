@@ -1,7 +1,7 @@
 <?php
 /**
  * Header Component
- * Reusable header with navigation bar and language switcher
+ * Reusable header with navigation bar
  */
 
 // Start session if not already started
@@ -9,17 +9,11 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Include language handler
-require_once __DIR__ . '/../language.php';
-
-// Initialize language
-$lang = new Language();
-$currentLang = $lang->getCurrentLang();
 $isLoggedIn = isset($_SESSION['user_id']);
 $username = $_SESSION['username'] ?? '';
 ?>
 <!DOCTYPE html>
-<html lang="<?php echo $currentLang; ?>">
+<html lang="ca">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -75,42 +69,33 @@ $username = $_SESSION['username'] ?? '';
                     <?php if ($isLoggedIn): ?>
                         <!-- Logged in menu -->
                         <a href="/pages/vehicle/localitzar-vehicle.html" class="text-gray-700 hover:text-primary-green transition-colors">
-                            <?php echo $lang->get('localitzar_vehicle', 'Localitzar Vehicle'); ?>
+                            Localitzar Vehicle
                         </a>
                         <a href="/pages/dashboard/gestio.html" class="text-gray-700 hover:text-primary-green transition-colors">
-                            <?php echo $lang->get('gesti', 'Gestió'); ?>
+                            Gestió
                         </a>
                         <a href="/pages/profile/perfil.html" class="text-gray-700 hover:text-primary-green transition-colors">
-                            <?php echo $lang->get('perfil', 'Perfil'); ?>
+                            Perfil
                         </a>
                         <a href="/pages/dashboard/historial.html" class="text-gray-700 hover:text-primary-green transition-colors">
-                            <?php echo $lang->get('historial', 'Historial'); ?>
+                            Historial
                         </a>
                     <?php else: ?>
                         <!-- Guest menu -->
                         <a href="/pages/auth/login.html" class="text-gray-700 hover:text-primary-green transition-colors">
-                            <?php echo $lang->get('iniciar_sessi', 'Iniciar Sessió'); ?>
+                            Iniciar Sessió
                         </a>
                         <a href="/pages/auth/register.html" class="text-gray-700 hover:text-primary-green transition-colors">
-                            <?php echo $lang->get('registrar_se', 'Registrar-se'); ?>
+                            Registrar-se
                         </a>
                     <?php endif; ?>
-                    
-                    <!-- Language Switcher -->
-                    <div class="relative inline-block text-left">
-                        <select id="languageSwitcher" class="bg-gray-100 border border-gray-300 text-gray-700 py-2 px-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-green">
-                            <option value="ca" <?php echo $currentLang === 'ca' ? 'selected' : ''; ?>>Català</option>
-                            <option value="es" <?php echo $currentLang === 'es' ? 'selected' : ''; ?>>Español</option>
-                            <option value="en" <?php echo $currentLang === 'en' ? 'selected' : ''; ?>>English</option>
-                        </select>
-                    </div>
                     
                     <?php if ($isLoggedIn): ?>
                         <!-- User Profile / Logout -->
                         <div class="flex items-center space-x-3">
                             <span class="text-gray-700 font-medium"><?php echo htmlspecialchars($username); ?></span>
                             <button id="logoutBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors">
-                                <?php echo $lang->get('tancar_sessi', 'Tancar Sessió'); ?>
+                                Tancar Sessió
                             </button>
                         </div>
                     <?php endif; ?>
