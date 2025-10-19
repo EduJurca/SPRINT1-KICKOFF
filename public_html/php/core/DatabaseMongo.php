@@ -24,6 +24,6 @@ class DatabaseMongo {
         }
         
         $dbName = getenv($mongoDb);
-        return self::$client->$dbName;
+        return self::$client->$mongoDb;
     }
 }

@@ -317,7 +317,7 @@ Password will be hashed using bcrypt."""
         try:
             conn = mysql.connector.connect(**MYSQL_CONFIG_NO_DB)
             cursor = conn.cursor()
-            cursor.execute(f"CREATE DATABASE IF NOT EXISTS")
+            cursor.execute(f"CREATE DATABASE IF NOT EXISTS {DB_NAME}")
             self.log(f"✅ MariaDB database created/ready.")
             cursor.close()
             conn.close()
@@ -325,16 +325,14 @@ Password will be hashed using bcrypt."""
             self.log(f"❌ Error creating MariaDB DB: {e}")
             cursor.close()
             conn.close()
-        except Exception as e:
-            self.log(f"❌ Error creating MariaDB DB: {e}")
-    
+
     def drop_db_maria(self):
         """Drop MariaDB database"""
         if messagebox.askyesno("Confirm", f"Are you sure you want to drop the database?\nThis will delete all data!"):
             try:
                 conn = mysql.connector.connect(**MYSQL_CONFIG_NO_DB)
                 cursor = conn.cursor()
-                cursor.execute(f"DROP DATABASE IF EXISTS")
+                cursor.execute(f"DROP DATABASE IF EXISTS {DB_NAME}")
                 cursor.close()
                 conn.close()
             except Exception as e:
