@@ -56,7 +56,6 @@ CREATE TABLE users (
     driver_license_photo VARCHAR(255),
     nationality_id INT,
     minute_balance INT DEFAULT 0,
-    balance INT DEFAULT 0,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (nationality_id) REFERENCES nationalities(id) ON DELETE SET NULL,
     INDEX idx_email (email),
@@ -232,7 +231,7 @@ INSERT INTO vehicles (plate, brand, model, year, battery_level, latitude, longit
 
 -- Create admin user (password: admin123 - hashed with PASSWORD_DEFAULT)
 -- Note: In production, change this password immediately after deployment
-INSERT INTO users (email, username, password, sex, dni, address, fullname, is_admin, minute_balance, balance, created_at) VALUES
+INSERT INTO users (email, username, password, sex, dni, address, fullname, is_admin, minute_balance, created_at) VALUES
 ('admin@voltiacar.com', 'admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'System Administrator', TRUE, 0, 0, NOW());
 
 -- Success message
