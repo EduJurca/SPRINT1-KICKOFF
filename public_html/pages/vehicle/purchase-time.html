@@ -235,24 +235,33 @@
         fetch('../../php/api/purchase-time.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
             body: JSON.stringify({
                 minutes: minutesSelected,
-                price: priceSelected
             })
         })
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
                     showToast(
-                        `Compra acceptada!`,
+                        `Compra acceptada! Has rebut ${minutesSelected} minuts.`,
                         'success'
                     );
                     closeModal();
+                    // Opcional: redirigir o actualizar la UI
+                    setTimeout(() => {
+                        window.location.href = '../dashboard/gestio.html';
+                    }, 2000);
                 } else {
                     showToast(`${data.message}`, 'error');
                     closeModal();
                 }
             })
+            .catch(err => {
+                console.error('Error:', err);
+                showToast('Error de connexió amb el servidor', 'error');
+                closeModal();
+            });
     };
 
 </script>
