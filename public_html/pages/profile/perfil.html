@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SIMS - Perfil</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../../js/toast.js"></script>
   <style>
     .pushable {
       position: relative;
@@ -184,7 +185,10 @@
               editBtn.classList.remove('hidden');
               saveBtn.classList.add('hidden');
             } else {
-              alert(data.message || 'Error al actualizar');
+              showToast(
+                data.message || 'Error al actualizar',
+                'error'
+              )
             }
           })
           .catch(console.error);

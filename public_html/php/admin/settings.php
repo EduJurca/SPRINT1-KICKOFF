@@ -109,6 +109,7 @@ $pageTitle = 'Configuració';
     </main>
 
     <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/toast.js"></script>    
     <script>
         function logout() {
             if (confirm('Estàs segur que vols tancar la sessió?')) {
@@ -118,12 +119,18 @@ $pageTitle = 'Configuració';
 
         document.getElementById('pricingForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            alert('Preus guardats correctament');
+            showToast(
+                'Preus guardats correctament',
+                "success"
+            )
         });
 
         document.getElementById('systemForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            alert('Configuració guardada correctament');
+            showToast(
+                'Configuració guardada correctament',
+                "success"
+            )
         });
     </script>
 </body>
