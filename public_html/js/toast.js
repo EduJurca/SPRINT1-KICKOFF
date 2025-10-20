@@ -15,9 +15,15 @@ window.showToast = function(message, type = 'info', duration = 3000) {
     const container = document.getElementById('toast-container');
     if (!container) return;
 
-    let bgColor = 'bg-blue-500';
-    if (type === 'success') bgColor = 'bg-green-500';
-    if (type === 'warning') bgColor = 'bg-red-500';
+    const bgColors = {
+        success: 'bg-green-500',
+        alert: 'bg-blue-500',
+        warning: 'bg-orange-500',
+        error: 'bg-red-500',
+        info: 'bg-blue-500'
+    };
+
+    const bgColor = bgColors[type] || bgColors.info;
 
     const toast = document.createElement('div');
     toast.setAttribute('role', 'status');

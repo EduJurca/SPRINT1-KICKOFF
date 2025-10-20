@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SIMS - Perfil</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../../js/toast.js"></script>
   <style>
     .pushable {
       position: relative;
@@ -200,6 +201,10 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
               span.textContent = updatedData[f];
               profileData[f] = updatedData[f]; // Update global profile
+              showToast(
+                data.message || 'Error al actualizar',
+                'error'
+              )
             }
 
             input.replaceWith(span);
