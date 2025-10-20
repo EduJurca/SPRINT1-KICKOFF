@@ -70,3 +70,4 @@ class AuthController {
         session_destroy();
         return ['success' => true, 'msg' => 'Session closed'];
     }
+}
