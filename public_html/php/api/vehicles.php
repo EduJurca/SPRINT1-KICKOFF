@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Vehicles API Endpoint
  * Combina datos de MariaDB y MongoDB
@@ -39,15 +40,25 @@ try {
     switch ($action) {
         case 'available':
         default:
-            // 🔹 Obtener vehículos desde MariaDB
+            // 🔹 Obtener vehículos desde MariaDB con todos los campos necesarios
             $stmt = $db->prepare("
                 SELECT 
                     v.id,
                     v.plate as license_plate,
                     v.brand,
                     v.model,
-                    v.year
+                    v.year,
+                    v.battery_level,
+                    v.latitude,
+                    v.longitude,
+                    v.status,
+                    v.vehicle_type,
+                    v.is_accessible,
+                    v.accessibility_features,
+                    v.price_per_minute,
+                    v.image_url
                 FROM vehicles v
+                WHERE v.status != 'maintenance'
             ");
             $stmt->execute();
             $result = $stmt->get_result();
@@ -89,8 +100,8 @@ try {
                 
                 if ($mongoAvailable && isset($mongoIndex[$plate])) {
                     $carData = $mongoIndex[$plate];
-                    $vehicle['status'] = $carData['status'] ?? 'available';
-                    $vehicle['battery'] = $carData['battery_level'] ?? 85;
+                    $vehicle['status'] = $carData['status'] ?? $vehicle['status'] ?? 'available';
+                    $vehicle['battery'] = $carData['battery_level'] ?? $vehicle['battery_level'] ?? 85;
                     
                     // Convertir location de MongoDB a formato esperado
                     if (isset($carData['location']['coordinates'])) {
@@ -99,30 +110,51 @@ try {
                             'lat' => $carData['location']['coordinates'][1]
                         ];
                     } else {
-                        // Ubicación por defecto (Barcelona)
+                        // Usar ubicación de MariaDB si está disponible
                         $vehicle['location'] = [
-                            'lat' => 41.3851 + (rand(-100, 100) / 10000),
-                            'lng' => 2.1734 + (rand(-100, 100) / 10000)
+                            'lat' => isset($vehicle['latitude']) ? (float)$vehicle['latitude'] : 40.7117 + (rand(-100, 100) / 10000),
+                            'lng' => isset($vehicle['longitude']) ? (float)$vehicle['longitude'] : 0.5783 + (rand(-100, 100) / 10000)
                         ];
                     }
                     $vehicle['last_updated'] = $carData['last_updated'] ?? null;
-                    $vehicle['is_accessible'] = (bool)($carData['is_accessible'] ?? false);
+                    $vehicle['is_accessible'] = (bool)($carData['is_accessible'] ?? $vehicle['is_accessible'] ?? false);
                 } else {
                     // Valores por defecto si MongoDB no está disponible
-                    $vehicle['status'] = 'available';
-                    $vehicle['battery'] = rand(20, 100);
-                    $vehicle['location'] = [
-                        'lat' => 41.3851 + (rand(-100, 100) / 10000),
-                        'lng' => 2.1734 + (rand(-100, 100) / 10000)
-                    ];
+                    $vehicle['status'] = $vehicle['status'] ?? 'available';
+                    $vehicle['battery'] = $vehicle['battery_level'] ?? rand(60, 100);
+                    
+                    // Usar ubicación de MariaDB si existe, sino generar una aleatoria en Amposta
+                    if (isset($vehicle['latitude']) && isset($vehicle['longitude'])) {
+                        $vehicle['location'] = [
+                            'lat' => (float)$vehicle['latitude'],
+                            'lng' => (float)$vehicle['longitude']
+                        ];
+                    } else {
+                        $vehicle['location'] = [
+                            'lat' => 40.7117 + (rand(-100, 100) / 10000),
+                            'lng' => 0.5783 + (rand(-100, 100) / 10000)
+                        ];
+                    }
+                    
                     $vehicle['last_updated'] = date('Y-m-d H:i:s');
-                    $vehicle['is_accessible'] = (rand(0, 10) > 8); // 20% de vehículos accesibles
+                    $vehicle['is_accessible'] = (bool)($vehicle['is_accessible'] ?? (rand(0, 10) > 8));
                 }
+                
+                // Asegurar que todos los campos necesarios existen
+                $vehicle['type'] = $vehicle['vehicle_type'] ?? 'car';
+                $vehicle['price_per_minute'] = (float)($vehicle['price_per_minute'] ?? 0.35);
+                $vehicle['image_url'] = $vehicle['image_url'] ?? '/images/default-car.jpg';
+                
+                // Limpiar campos duplicados de la base de datos
+                unset($vehicle['latitude']);
+                unset($vehicle['longitude']);
+                unset($vehicle['battery_level']);
+                unset($vehicle['vehicle_type']);
             }
 
             echo json_encode([
                 'success' => true,
-                'data' => $vehicles,
+                'vehicles' => $vehicles,
                 'mongodb_available' => $mongoAvailable
             ]);
             break;

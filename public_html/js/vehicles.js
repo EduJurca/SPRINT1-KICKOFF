@@ -41,13 +41,15 @@ const Vehicles = {
                 const contentType = response.headers.get('content-type');
                 if (contentType && contentType.includes('application/json')) {
                     const data = await response.json();
-                    if (data.success && data.data) {
-                        return data.data;
+                    console.log('🚗 Vehicles API response:', data);
+                    if (data.success && data.vehicles) {
+                        return data.vehicles;
                     }
                 }
             }
             
             // Return mock data for development
+            console.log('⚠️ Using mock vehicles data');
             return this.getMockVehicles();
         } catch (error) {
             console.error('Error fetching vehicles:', error);
@@ -85,8 +87,9 @@ const Vehicles = {
                 const contentType = response.headers.get('content-type');
                 if (contentType && contentType.includes('application/json')) {
                     const data = await response.json();
-                    if (data.success && data.data) {
-                        return data.data;
+                    console.log('🔍 Nearby vehicles API response:', data);
+                    if (data.success && data.vehicles) {
+                        return data.vehicles;
                     }
                 }
             }
