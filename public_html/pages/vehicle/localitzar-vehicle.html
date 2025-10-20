@@ -51,32 +51,25 @@ crossorigin=""
     <script>
         // Verificación de sesión INMEDIATA - se ejecuta antes de cualquier otra cosa
         (async function() {
-            console.log('🔍 Iniciando verificación de sesión...');
             try {
                 const response = await fetch('/php/api/session-check.php', {
                     credentials: 'include'
                 });
-                
-                console.log('📡 Respuesta recibida:', response.status);
                 
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}`);
                 }
                 
                 const data = await response.json();
-                console.log('📊 Datos de sesión:', data);
                 
                 if (data.success && data.session.is_logged_in) {
-                    console.log('✅ Sesión válida');
                     // Remover el overlay de loading
                     document.getElementById('auth-loading').style.display = 'none';
                 } else {
-                    console.error('❌ No autenticado');
                     alert('Debes iniciar sesión para acceder a esta página');
                     window.location.href = '/pages/auth/login.html';
                 }
             } catch (error) {
-                console.error('💥 Error:', error);
                 alert('Error al verificar la sesión: ' + error.message);
                 window.location.href = '/pages/auth/login.html';
             }
@@ -193,13 +186,10 @@ class="h-6 w-6"
         
         // Initialize maps for both mobile and desktop
         document.addEventListener('DOMContentLoaded', async () => {
-            console.log('� Inicializando mapas...');
-            
             try {
                 // Initialize mobile map
                 const mapContainer = document.getElementById('map');
                 if (mapContainer && !mapContainer._leaflet_id) {
-                    console.log('📱 Inicializando mapa móvil...');
                     await Maps.initMap('map', {
                         center: [41.3851, 2.1734],
                         zoom: 14
@@ -208,14 +198,11 @@ class="h-6 w-6"
                     // Load and display vehicles on mobile map
                     const vehicles = await Maps.loadVehicles();
                     Maps.updateVehicleLists(vehicles);
-                } else if (mapContainer && mapContainer._leaflet_id) {
-                    console.log('⚠️ Mapa móvil ya inicializado');
                 }
                 
                 // Initialize desktop map
                 const mapDesktopContainer = document.getElementById('map-desktop');
                 if (mapDesktopContainer && !mapDesktopContainer._leaflet_id) {
-                    console.log('🖥️ Inicializando mapa desktop...');
                     // Create a separate map instance for desktop
                     desktopMapInstance = L.map('map-desktop').setView([41.3851, 2.1734], 14);
                     
@@ -230,12 +217,11 @@ class="h-6 w-6"
                     
                     if ('geolocation' in navigator) {
                         try {
-                            console.log('📍 Solicitando ubicación del usuario...');
                             const position = await new Promise((resolve, reject) => {
                                 navigator.geolocation.getCurrentPosition(resolve, reject, {
-                                    enableHighAccuracy: false, // Cambiar a false para evitar demoras
+                                    enableHighAccuracy: false,
                                     timeout: 5000,
-                                    maximumAge: 60000 // Aceptar ubicación de hasta 1 minuto
+                                    maximumAge: 60000
                                 });
                             });
                             
@@ -243,8 +229,6 @@ class="h-6 w-6"
                                 lat: position.coords.latitude,
                                 lng: position.coords.longitude
                             };
-                            
-                            console.log('✅ Ubicación obtenida:', userLocation);
                             
                             // Center map on user location
                             desktopMapInstance.setView([userLocation.lat, userLocation.lng], 15);
@@ -263,17 +247,12 @@ class="h-6 w-6"
                             }).addTo(desktopMapInstance).bindPopup('<b>La teva ubicació</b>');
                             
                         } catch (error) {
-                            console.warn('⚠️ No se pudo obtener la ubicación:', error.message);
-                            console.log('📍 Usando ubicación por defecto (Barcelona)');
                             // userLocation ya tiene Barcelona como default
                         }
-                    } else {
-                        console.warn('⚠️ Geolocalización no disponible en este navegador');
                     }
                     
                     // Load vehicles on desktop map
                     const vehicles = await Vehicles.getAvailableVehicles(userLocation);
-                    console.log(`📊 ${vehicles.length} vehículos cargados`);
                     
                     // Display vehicles on desktop map
                     vehicles.forEach(vehicle => {
@@ -330,7 +309,6 @@ class="h-6 w-6"
                 }
                 
             } catch (error) {
-                console.error('❌ Error initializing maps:', error);
                 // Show error message to user
                 const lists = document.querySelectorAll('#normal-list, #normal-list-2');
                 lists.forEach(list => {
