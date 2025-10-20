@@ -76,10 +76,11 @@ class User {
     $db = DatabaseMariaDB::getConnection();
     $stmt = $db->prepare("UPDATE users SET fullname = ?, dni = ?, phone = ?, birth_date = ?, address = ?, sex = ? WHERE id = ?");
 
-    // Normalizar los campos
+    // Normalize the fields
     $birthdate = !empty($data['birthdate']) ? $data['birthdate'] : null;
+    
+// Normalize the value of sex to 'M', 'F', 'O', or NULL if it's empty or invalid
 
-    // Normalizar el valor de sex a 'M', 'F', 'O' o NULL si está vacío o inválido
     $sex = isset($data['sex']) ? strtoupper($data['sex']) : null;
     if (!in_array($sex, ['M', 'F', 'O'])) {
         $sex = null; // evita errores de truncamiento
