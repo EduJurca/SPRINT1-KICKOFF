@@ -17,11 +17,11 @@ crossorigin=""
 >
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../../../../css/custom.css">
-    <link rel="stylesheet" href="../../../../css/accessibility.css">
+    <link rel="stylesheet" href="../../css/custom.css">
+    <link rel="stylesheet" href="../../css/accessibility.css">
     
     <!-- Tailwind Config -->
-    <script src="../../../../css/tailwind.config.js"></script>
+    <script src="../../css/tailwind.config.js"></script>
     
     <style>
         /* Amagar la barra de desplaçament per a una aparença més neta */
@@ -43,6 +43,46 @@ crossorigin=""
     </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <!-- Loading overlay -->
+    <div id="auth-loading" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); color: white; display: flex; align-items: center; justify-content: center; z-index: 9999; font-size: 24px;">
+        Verificando sesión...
+    </div>
+    
+    <script>
+        // Verificación de sesión INMEDIATA - se ejecuta antes de cualquier otra cosa
+        (async function() {
+            console.log('🔍 Iniciando verificación de sesión...');
+            try {
+                const response = await fetch('/php/api/session-check.php', {
+                    credentials: 'include'
+                });
+                
+                console.log('📡 Respuesta recibida:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('📊 Datos de sesión:', data);
+                
+                if (data.success && data.session.is_logged_in) {
+                    console.log('✅ Sesión válida');
+                    // Remover el overlay de loading
+                    document.getElementById('auth-loading').style.display = 'none';
+                } else {
+                    console.error('❌ No autenticado');
+                    alert('Debes iniciar sesión para acceder a esta página');
+                    window.location.href = '/pages/auth/login.html';
+                }
+            } catch (error) {
+                console.error('💥 Error:', error);
+                alert('Error al verificar la sesión: ' + error.message);
+                window.location.href = '/pages/auth/login.html';
+            }
+        })();
+    </script>
+    
     <div class="mobile-view md:hidden w-full max-w-sm h-[667px] flex items-center justify-center">
         <div class="bg-white p-5 rounded-2xl shadow-inner w-full h-full flex flex-col relative space-y-6">
             <header class="grid grid-cols-3 items-center mb-6 w-full">
@@ -66,7 +106,7 @@ crossorigin=""
                         <h2 class="text-lg font-bold text-gray-900">Vehicles propers</h2>
                         <button id="toggle-vehicles" class="flex items-center bg-gray-200 p-2 rounded-lg text-gray-700 hover:bg-gray-300 transition-colors duration-300">
                             <img
-src="../../../../images/discapacidad.png"
+src="../../images/discapacidad.png"
 alt="Vehicles discapacitats"
 class="h-6 w-6"
 >
@@ -97,7 +137,7 @@ class="h-6 w-6"
         <div class="flex-shrink-0 w-1/2 flex flex-col">
             <div class="flex items-center space-x-6 mb-6">
                 <img
-src="../../../../images/logo.png"
+src="../../images/logo.png"
 alt="Logo App"
 class="h-12 w-12"
 >
@@ -112,7 +152,7 @@ class="h-12 w-12"
                 <h2 class="text-xl font-bold text-gray-900">Vehicles propers</h2>
                 <button id="toggle-vehicles-2" class="flex items-center bg-gray-200 p-2 rounded-lg text-gray-700 hover:bg-gray-300 transition-colors duration-300">
                     <img
-src="../../../../images/discapacidad.png"
+src="../../images/discapacidad.png"
 alt="Vehicles discapacitats"
 class="h-6 w-6"
 >
@@ -139,6 +179,13 @@ class="h-6 w-6"
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
             crossorigin=""></script>
     
+
+    <!-- Session Check - MUST BE FIRST -->
+    <script>
+        // Variable global para indicar que la sesión está siendo verificada
+        window.sessionCheckInProgress = true;
+        window.sessionValid = false;
+
     <!-- Application Scripts -->
     <script src="../../js/main.js"></script>
     <script src="../../js/auth.js"></script>
@@ -146,6 +193,13 @@ class="h-6 w-6"
     <script src="../../js/maps.js"></script>
     <script src="../../js/tutorial.js"></script>
     
+    <!-- Application Scripts -->
+    <script src="../../js/main.js"></script>
+    <script src="../../js/auth.js"></script>
+    <script src="../../js/vehicles.js"></script>
+    <script src="../../js/maps.js"></script>
+    <script src="../../js/tutorial.js"></script>
+        
     <script>
         // Store desktop map instance
         let desktopMapInstance = null;
@@ -153,16 +207,13 @@ class="h-6 w-6"
         
         // Initialize maps for both mobile and desktop
         document.addEventListener('DOMContentLoaded', async () => {
-            // Check authentication
-            if (!Auth.isAuthenticated()) {
-                Auth.requireAuth();
-                return;
-            }
+            console.log('� Inicializando mapas...');
             
             try {
                 // Initialize mobile map
                 const mapContainer = document.getElementById('map');
-                if (mapContainer) {
+                if (mapContainer && !mapContainer._leaflet_id) {
+                    console.log('📱 Inicializando mapa móvil...');
                     await Maps.initMap('map', {
                         center: [41.3851, 2.1734],
                         zoom: 14
@@ -171,11 +222,14 @@ class="h-6 w-6"
                     // Load and display vehicles on mobile map
                     const vehicles = await Maps.loadVehicles();
                     Maps.updateVehicleLists(vehicles);
+                } else if (mapContainer && mapContainer._leaflet_id) {
+                    console.log('⚠️ Mapa móvil ya inicializado');
                 }
                 
                 // Initialize desktop map
                 const mapDesktopContainer = document.getElementById('map-desktop');
-                if (mapDesktopContainer) {
+                if (mapDesktopContainer && !mapDesktopContainer._leaflet_id) {
+                    console.log('🖥️ Inicializando mapa desktop...');
                     // Create a separate map instance for desktop
                     desktopMapInstance = L.map('map-desktop').setView([41.3851, 2.1734], 14);
                     
@@ -186,14 +240,16 @@ class="h-6 w-6"
                     }).addTo(desktopMapInstance);
                     
                     // Get user location for desktop map
-                    let userLocation = null;
+                    let userLocation = { lat: 41.3851, lng: 2.1734 }; // Default: Barcelona
+                    
                     if ('geolocation' in navigator) {
                         try {
+                            console.log('📍 Solicitando ubicación del usuario...');
                             const position = await new Promise((resolve, reject) => {
                                 navigator.geolocation.getCurrentPosition(resolve, reject, {
-                                    enableHighAccuracy: true,
+                                    enableHighAccuracy: false, // Cambiar a false para evitar demoras
                                     timeout: 5000,
-                                    maximumAge: 0
+                                    maximumAge: 60000 // Aceptar ubicación de hasta 1 minuto
                                 });
                             });
                             
@@ -201,6 +257,8 @@ class="h-6 w-6"
                                 lat: position.coords.latitude,
                                 lng: position.coords.longitude
                             };
+                            
+                            console.log('✅ Ubicación obtenida:', userLocation);
                             
                             // Center map on user location
                             desktopMapInstance.setView([userLocation.lat, userLocation.lng], 15);
@@ -219,14 +277,17 @@ class="h-6 w-6"
                             }).addTo(desktopMapInstance).bindPopup('<b>La teva ubicació</b>');
                             
                         } catch (error) {
-                            console.warn('Geolocation error:', error);
-                            // Use default location (Barcelona)
-                            userLocation = { lat: 41.3851, lng: 2.1734 };
+                            console.warn('⚠️ No se pudo obtener la ubicación:', error.message);
+                            console.log('📍 Usando ubicación por defecto (Barcelona)');
+                            // userLocation ya tiene Barcelona como default
                         }
+                    } else {
+                        console.warn('⚠️ Geolocalización no disponible en este navegador');
                     }
                     
                     // Load vehicles on desktop map
                     const vehicles = await Vehicles.getAvailableVehicles(userLocation);
+                    console.log(`📊 ${vehicles.length} vehículos cargados`);
                     
                     // Display vehicles on desktop map
                     vehicles.forEach(vehicle => {
@@ -278,10 +339,12 @@ class="h-6 w-6"
                     if (specialList2) {
                         Maps.renderVehicleList(specialList2, vehicles.filter(v => v.is_accessible));
                     }
+                } else if (mapDesktopContainer && mapDesktopContainer._leaflet_id) {
+                    console.log('⚠️ Mapa desktop ya inicializado');
                 }
                 
             } catch (error) {
-                console.error('Error initializing maps:', error);
+                console.error('❌ Error initializing maps:', error);
                 // Show error message to user
                 const lists = document.querySelectorAll('#normal-list, #normal-list-2');
                 lists.forEach(list => {

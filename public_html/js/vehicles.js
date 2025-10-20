@@ -41,8 +41,8 @@ const Vehicles = {
                 const contentType = response.headers.get('content-type');
                 if (contentType && contentType.includes('application/json')) {
                     const data = await response.json();
-                    if (data.success && data.vehicles) {
-                        return data.vehicles;
+                    if (data.success && data.data) {
+                        return data.data;
                     }
                 }
             }
@@ -85,8 +85,8 @@ const Vehicles = {
                 const contentType = response.headers.get('content-type');
                 if (contentType && contentType.includes('application/json')) {
                     const data = await response.json();
-                    if (data.success && data.vehicles) {
-                        return data.vehicles;
+                    if (data.success && data.data) {
+                        return data.data;
                     }
                 }
             }
