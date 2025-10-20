@@ -39,7 +39,6 @@ CREATE TABLE users (
     driver_license_photo VARCHAR(255),
     nationality_id INT,
     minute_balance INT DEFAULT 0,
-    balance INT DEFAULT 0,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (nationality_id) REFERENCES nationalities(id) ON DELETE SET NULL,
     INDEX idx_email (email),
