@@ -47,6 +47,19 @@ class AuthController {
     }
 
     public static function register($data) {
+        // Iniciar sesión si no está iniciada
+        if (session_status() === PHP_SESSION_NONE) {
+            session_set_cookie_params([
+                'lifetime' => 3600,
+                'path' => '/',
+                'domain' => '',
+                'secure' => false,
+                'httponly' => true,
+                'samesite' => 'Lax'
+            ]);
+            session_start();
+        }
+
         if (!isset($data['username'], $data['password'], $data['email'])) {
             return ['success' => false, 'msg' => 'Missing required fields'];
         }
@@ -56,6 +69,26 @@ class AuthController {
         }
 
         if (User::create($data)) {
+            // Después de registrar exitosamente, iniciar sesión automáticamente
+            $user = User::findByUsername($data['username']);
+            
+            if ($user) {
+                $_SESSION['user_id']  = $user['id'];
+                $_SESSION['username'] = $user['username'];
+                $_SESSION['is_admin'] = $user['is_admin'] ?? 0;
+                
+                return [
+                    'success' => true, 
+                    'msg' => 'User registered successfully',
+                    'auto_login' => true,
+                    'user' => [
+                        'id' => $user['id'],
+                        'username' => $user['username'],
+                        'is_admin' => $user['is_admin'] ?? 0
+                    ]
+                ];
+            }
+            
             return ['success' => true, 'msg' => 'User registered successfully'];
         }
 

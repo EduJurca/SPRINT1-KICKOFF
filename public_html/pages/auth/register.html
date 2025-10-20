@@ -88,6 +88,7 @@
             fetch('/../../php/api/register.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
                 body: JSON.stringify(data)
             })
                 .then(r => r.json())
@@ -95,7 +96,8 @@
                     if (res.success) {
                         msg.textContent = "Registre completat! Redirigint...";
                         msg.className = "mt-4 text-green-600 text-center";
-                        setTimeout(() => window.location.href = "login.html", 1200);
+                        // Redirigir a gestió.html directamente
+                        setTimeout(() => window.location.href = "../dashboard/gestio.html", 1200);
                     } else {
                         msg.textContent = res.msg || "Error en el registre";
                         msg.className = "mt-4 text-red-600 text-center";
