@@ -1,11 +1,7 @@
 <?php
-require_once __DIR__ . '/../controllers/ProfileController.php';
+require_once __DIR__ . '/../models/User.php';
 
-// Set response headers for JSON and CORS
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *'); 
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
+class AuthController {
 
     public static function login($username, $password) {
         if (session_status() === PHP_SESSION_NONE) {
