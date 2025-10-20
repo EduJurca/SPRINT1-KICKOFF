@@ -191,7 +191,7 @@ class="h-6 w-6"
                 const mapContainer = document.getElementById('map');
                 if (mapContainer && !mapContainer._leaflet_id) {
                     await Maps.initMap('map', {
-                        center: [41.3851, 2.1734],
+                        center: [40.7117, 0.5783], // Amposta, Tarragona
                         zoom: 14
                     });
                     
@@ -204,7 +204,7 @@ class="h-6 w-6"
                 const mapDesktopContainer = document.getElementById('map-desktop');
                 if (mapDesktopContainer && !mapDesktopContainer._leaflet_id) {
                     // Create a separate map instance for desktop
-                    desktopMapInstance = L.map('map-desktop').setView([41.3851, 2.1734], 14);
+                    desktopMapInstance = L.map('map-desktop').setView([40.7117, 0.5783], 14); // Amposta, Tarragona
                     
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         attribution: '© OpenStreetMap contributors',
@@ -213,7 +213,7 @@ class="h-6 w-6"
                     }).addTo(desktopMapInstance);
                     
                     // Get user location for desktop map
-                    let userLocation = { lat: 41.3851, lng: 2.1734 }; // Default: Barcelona
+                    let userLocation = { lat: 40.7117, lng: 0.5783 }; // Default: Amposta
                     
                     if ('geolocation' in navigator) {
                         try {
