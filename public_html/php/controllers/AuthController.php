@@ -4,9 +4,7 @@ require_once __DIR__ . '/../models/User.php';
 class AuthController {
 
     public static function login($username, $password) {
-        // --- 1. Start session BEFORE any output ---
         if (session_status() === PHP_SESSION_NONE) {
-            // Configure secure session cookie settings (adjusted for localhost)
             session_set_cookie_params([
                 'lifetime' => 3600, // 1 hora
                 'path' => '/',
@@ -16,32 +14,22 @@ class AuthController {
                 'samesite' => 'Lax'
             ]);
             session_start();
-
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['username'] = $user['username'];
-            $_SESSION['is_admin'] = $user['is_admin'];
-            return ['success' => true, 'msg' => 'Login exitoso'];
-
         }
 
-        // --- 2. Find user in the database ---
         $user = User::findByUsername($username);
 
         if (!$user) {
             return ['success' => false, 'msg' => 'User not found'];
         }
 
-        // --- 3. Verify password ---
         if (!password_verify($password, $user['password'])) {
             return ['success' => false, 'msg' => 'Incorrect password'];
         }
 
-        // --- 4. Store user data in the session ---
         $_SESSION['user_id']  = $user['id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION['is_admin'] = $user['is_admin'] ?? 0;
 
-        // --- 5. Return result (no echo here) ---
         return [
             'success' => true, 
             'msg' => 'Login successful',
@@ -59,17 +47,14 @@ class AuthController {
     }
 
     public static function register($data) {
-        // --- Validate required fields ---
         if (!isset($data['username'], $data['password'], $data['email'])) {
             return ['success' => false, 'msg' => 'Missing required fields'];
         }
 
-        // --- Check if username or email already exists ---
         if (User::findByUsernameOrEmail($data['username'], $data['email'])) {
             return ['success' => false, 'msg' => 'Username or email already exists'];
         }
 
-        // --- Create user in database ---
         if (User::create($data)) {
             return ['success' => true, 'msg' => 'User registered successfully'];
         }
@@ -78,7 +63,6 @@ class AuthController {
     }
 
     public static function logout() {
-        // --- Safely destroy session ---
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
