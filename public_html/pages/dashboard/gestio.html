@@ -219,7 +219,7 @@
         })
         .then(data => {
           const tempsDisponibleMobile = document.querySelector('#minutes');
-          const tempsDisponibleDesktop = document.querySelector('#minutes ');
+          const tempsDisponibleDesktop = document.querySelector('#minutes');
           const btnComprarTemps = document.querySelector('a[href="../vehicle/purchase-time.html"]');
           if ((tempsDisponibleMobile || tempsDisponibleDesktop) && data.success && data.user) {
             const text = data.user.minute_balance + ' min';
