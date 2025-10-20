@@ -73,23 +73,33 @@ class User {
     }
 
     public static function updateProfile($user_id, $data) {
-        $db = DatabaseMariaDB::getConnection();
-        $stmt = $db->prepare("UPDATE users SET fullname = ?, dni = ?, phone = ?, birth_date = ?, address = ?, sex = ? WHERE id = ?");
-        $birthdate = !empty($data['birthdate']) ? $data['birthdate'] : null;
-        $sex = !empty($data['sex']) ? $data['sex'] : null;
+    $db = DatabaseMariaDB::getConnection();
+    $stmt = $db->prepare("UPDATE users SET fullname = ?, dni = ?, phone = ?, birth_date = ?, address = ?, sex = ? WHERE id = ?");
 
-        $stmt->bind_param(
-            'ssssssi',
-            $data['fullname'],
-            $data['dni'], 
-            $data['phone'],
-            $birthdate,
-            $data['address'],
-            $sex,
-            $user_id
-        );
-        return $stmt->execute();
+    // Normalize the fields
+    $birthdate = !empty($data['birthdate']) ? $data['birthdate'] : null;
+    
+// Normalize the value of sex to 'M', 'F', 'O', or NULL if it's empty or invalid
+
+    $sex = isset($data['sex']) ? strtoupper($data['sex']) : null;
+    if (!in_array($sex, ['M', 'F', 'O'])) {
+        $sex = null; // evita errores de truncamiento
     }
+
+    $stmt->bind_param(
+        'ssssssi',
+        $data['fullname'],
+        $data['dni'],
+        $data['phone'],
+        $birthdate,
+        $data['address'],
+        $sex,
+        $user_id
+    );
+
+    return $stmt->execute();
+}
+
 
     // Management
     public static function getUserInfo($user_id) {

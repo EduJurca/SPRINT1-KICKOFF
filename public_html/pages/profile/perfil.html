@@ -129,72 +129,100 @@
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const fields = ['fullname', 'dni', 'phone', 'birthdate', 'address', 'sex'];
-      const editBtn = document.getElementById('editBtn');
-      const saveBtn = document.getElementById('saveBtn');
+document.addEventListener('DOMContentLoaded', function () {
+  const fields = ['fullname', 'dni', 'phone', 'birthdate', 'address', 'sex'];
+  const editBtn = document.getElementById('editBtn');
+  const saveBtn = document.getElementById('saveBtn');
+  let profileData = {}; // Global variable to store fetched profile
 
-      fetch('/php/api/completar-perfil.php', { credentials: 'include' })
-        .then(res => res.json())
-        .then(data => {
-          if (data.success && data.data) {
-            fields.forEach(f => {
-              const span = document.getElementById(f + '_span');
-              if (span && data.data[f] !== undefined) span.textContent = data.data[f];
-            });
-          }
-        }).catch(console.error);
-
-      editBtn.addEventListener('click', () => {
+  // Fetch profile on load
+  fetch('/php/api/completar-perfil.php', { credentials: 'include' })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success && data.data) {
+        profileData = data.data; // Store profile globally
         fields.forEach(f => {
           const span = document.getElementById(f + '_span');
-          const input = document.createElement('input');
-          input.type = f === 'birthdate' ? 'date' : 'text';
-          input.id = 'input_' + f;
-          input.value = span.textContent;
-          input.className = 'w-full px-2 py-1 border rounded';
-          span.replaceWith(input);
+          if (span) {
+            if (f === 'fullname') {
+              span.textContent = data.data[f] || data.data.username || 'Carregant...';
+            } else if (data.data[f] !== undefined) {
+              span.textContent = data.data[f];
+            }
+          }
         });
-        editBtn.classList.add('hidden');
-        saveBtn.classList.remove('hidden');
-      });
+      }
+    }).catch(console.error);
 
-      saveBtn.addEventListener('click', () => {
-        const updatedData = {};
-        fields.forEach(f => {
-          const input = document.getElementById('input_' + f);
-          updatedData[f] = input.value.trim();
-        });
+  // Edit button click
+  editBtn.addEventListener('click', () => {
+    fields.forEach(f => {
+      const span = document.getElementById(f + '_span');
+      const input = document.createElement('input');
+      input.type = f === 'birthdate' ? 'date' : 'text';
+      input.id = 'input_' + f;
 
-        fetch('/php/api/completar-perfil.php', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify(updatedData)
-        })
-          .then(res => res.json())
-          .then(data => {
-            if (data.success) {
-              fields.forEach(f => {
-                const input = document.getElementById('input_' + f);
-                const span = document.createElement('span');
-                span.id = f + '_span';
-                span.textContent = input.value;
-                input.replaceWith(span);
-              });
-              editBtn.classList.remove('hidden');
-              saveBtn.classList.add('hidden');
+      // If fullname is showing username, start with empty input
+      input.value = (f === 'fullname' && span.textContent === profileData.username) ? '' : span.textContent;
+      input.className = 'w-full px-2 py-1 border rounded';
+      span.replaceWith(input);
+    });
+
+    editBtn.classList.add('hidden');
+    saveBtn.classList.remove('hidden');
+  });
+
+  // Save button click
+  saveBtn.addEventListener('click', () => {
+    const updatedData = {};
+    fields.forEach(f => {
+      const input = document.getElementById('input_' + f);
+      updatedData[f] = input.value.trim();
+    });
+
+    fetch('/php/api/completar-perfil.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(updatedData)
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          fields.forEach(f => {
+            const input = document.getElementById('input_' + f);
+            const span = document.createElement('span');
+            span.id = f + '_span';
+
+            // Show fullname if set, otherwise fallback to username
+            if (f === 'fullname') {
+              span.textContent = updatedData[f] || profileData.username || 'Carregant...';
+              profileData.fullname = updatedData[f] || null; // Update global profile
             } else {
+              span.textContent = updatedData[f];
+              profileData[f] = updatedData[f]; // Update global profile
               showToast(
                 data.message || 'Error al actualizar',
                 'error'
               )
             }
-          })
-          .catch(console.error);
-      });
-    });
-  </script>
+
+            input.replaceWith(span);
+          });
+
+          editBtn.classList.remove('hidden');
+          saveBtn.classList.add('hidden');
+        } else {
+          alert(data.message || 'Error al actualizar');
+        }
+      })
+      .catch(console.error);
+  });
+});
+</script>
+
+
+
 </body>
 
 </html>
