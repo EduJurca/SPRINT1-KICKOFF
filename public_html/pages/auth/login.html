@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIMS - Inicia Sessió</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../../js/toast.js"></script>
     <style>
     </style>
 </head>
@@ -67,17 +68,21 @@
             })
                 .then(res => res.json())
                 .then(data => {
-                    if (data.success) {
-                        // Login correcto, redirigir a gestio.html
-                        window.location.href = '../dashboard/gestio.html';
+                    if (data.success) {               
+                    window.location.href = '../dashboard/gestio.html';
                     } else {
-                        // Mostrar mensaje de error
-                        alert(data.message || 'Login failed');
+                    showToast(
+                        `Login incorrecte`,
+                        'error'
+                    );         
                     }
                 })
                 .catch(err => {
                     console.error(err);
-                    alert('Error connecting to the server');
+                    showToast(
+                        `Error conectantse al servidor`,
+                        'error'
+                    );      
                 });
         });
     </script>
