@@ -13,7 +13,7 @@ const Auth = {
         try {
             Utils.showLoading();
             
-            const response = await fetch('/src/api/login.php', {
+            const response = await fetch('/php/api/login.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -52,7 +52,7 @@ const Auth = {
         try {
             Utils.showLoading();
             
-            const response = await fetch('/src/api/register.php', {
+            const response = await fetch('/php/api/register.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -94,7 +94,7 @@ const Auth = {
      */
     async logout() {
         try {
-            const response = await fetch('/src/api/logout.php', {
+            const response = await fetch('/php/api/logout.php', {
                 method: 'POST',
                 credentials: 'include'
             });

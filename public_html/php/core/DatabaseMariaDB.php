@@ -12,7 +12,7 @@ class DatabaseMariaDB {
             );
 
             if (self::$conn->connect_error) {
-                die("MariaDB connection failed: " . self::$conn->connect_error);
+                throw new Exception("MariaDB connection failed: " . self::$conn->connect_error);
             }
 
             self::$conn->set_charset('utf8mb4');

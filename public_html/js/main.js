@@ -5,7 +5,7 @@
 
 // Global configuration
 const APP_CONFIG = {
-    apiBaseUrl: '/src/api',
+    apiBaseUrl: '/php/api',
     assetsPath: '/assets',
     defaultLanguage: 'ca',
     sessionTimeout: 30 * 60 * 1000, // 30 minutes

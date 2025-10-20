@@ -41,8 +41,8 @@ const Vehicles = {
                 const contentType = response.headers.get('content-type');
                 if (contentType && contentType.includes('application/json')) {
                     const data = await response.json();
-                    if (data.success && data.vehicles) {
-                        return data.vehicles;
+                    if (data.success && data.data) {
+                        return data.data;
                     }
                 }
             }
@@ -85,8 +85,8 @@ const Vehicles = {
                 const contentType = response.headers.get('content-type');
                 if (contentType && contentType.includes('application/json')) {
                     const data = await response.json();
-                    if (data.success && data.vehicles) {
-                        return data.vehicles;
+                    if (data.success && data.data) {
+                        return data.data;
                     }
                 }
             }
@@ -182,7 +182,7 @@ const Vehicles = {
         try {
             Utils.showLoading();
             
-            const response = await fetch('/src/api/vehicles.php', {
+            const response = await fetch('/php/api/vehicles.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -226,7 +226,7 @@ const Vehicles = {
         try {
             Utils.showLoading();
             
-            const response = await fetch('/src/api/vehicles.php', {
+            const response = await fetch('/php/api/vehicles.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -272,7 +272,7 @@ const Vehicles = {
      */
     async activateHorn() {
         try {
-            const response = await fetch('/src/api/vehicle-control.php', {
+            const response = await fetch('/php/api/vehicle-control.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -304,7 +304,7 @@ const Vehicles = {
      */
     async activateLights() {
         try {
-            const response = await fetch('/src/api/vehicle-control.php', {
+            const response = await fetch('/php/api/vehicle-control.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -338,7 +338,7 @@ const Vehicles = {
         try {
             Utils.showLoading();
             
-            const response = await fetch('/src/api/vehicle-control.php', {
+            const response = await fetch('/php/api/vehicle-control.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -374,7 +374,7 @@ const Vehicles = {
         try {
             Utils.showLoading();
             
-            const response = await fetch('/src/api/vehicle-control.php', {
+            const response = await fetch('/php/api/vehicle-control.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -408,7 +408,7 @@ const Vehicles = {
      */
     async toggleDoors(lock = true) {
         try {
-            const response = await fetch('/src/api/vehicle-control.php', {
+            const response = await fetch('/php/api/vehicle-control.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
