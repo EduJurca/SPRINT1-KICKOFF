@@ -83,7 +83,7 @@ class User {
 
     $sex = isset($data['sex']) ? strtoupper($data['sex']) : null;
     if (!in_array($sex, ['M', 'F', 'O'])) {
-        $sex = null; // evita errores de truncamiento
+        $sex = null; // prevents truncation errors
     }
 
     $stmt->bind_param(

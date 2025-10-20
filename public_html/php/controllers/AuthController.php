@@ -6,10 +6,10 @@ class AuthController {
     public static function login($username, $password) {
         if (session_status() === PHP_SESSION_NONE) {
             session_set_cookie_params([
-                'lifetime' => 3600, // 1 hora
+                'lifetime' => 3600, // 1 hour
                 'path' => '/',
-                'domain' => '', // Dejar vacío para localhost
-                'secure' => false, // false para HTTP, true para HTTPS
+                'domain' => '', // Leave empty for localhost
+                'secure' => false, // false for HTTP, true for HTTPS
                 'httponly' => true,
                 'samesite' => 'Lax'
             ]);
