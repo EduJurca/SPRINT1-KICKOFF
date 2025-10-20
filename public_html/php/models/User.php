@@ -42,15 +42,15 @@ class User {
         $password_hash = password_hash($data['password'], PASSWORD_DEFAULT);
 
         $stmt->bind_param(
-            "sissssssssiiis",
-            $data['username'],
+            "sisssssssssiis",
+            $username,
             $nationality_id,
             $phone,
             $birth_date,
-            $data['sex'],
-            $data['dni'],
-            $data['address'],
-            $data['email'],
+            $sex,
+            $dni,
+            $address,
+            $email,
             $password_hash,
             $iban,
             $driver_license_photo,
