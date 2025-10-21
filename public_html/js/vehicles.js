@@ -111,7 +111,7 @@ const Vehicles = {
                 license_plate: 'AB 123 CD',
                 model: 'Tesla Model 3',
                 battery: 85,
-                location: { lat: 41.3851, lng: 2.1734 },
+                location: { lat: 40.7117, lng: 0.5783 },
                 status: 'available',
                 features: ['Mobilitat reduïda', 'Discapacitat auditiva']
             },
@@ -120,7 +120,7 @@ const Vehicles = {
                 license_plate: 'EF 456 GH',
                 model: 'Nissan Leaf',
                 battery: 70,
-                location: { lat: 41.3879, lng: 2.1699 },
+                location: { lat: 40.7135, lng: 0.5765 },
                 status: 'available',
                 features: []
             },
@@ -129,7 +129,7 @@ const Vehicles = {
                 license_plate: 'IJ 789 KL',
                 model: 'BMW i3',
                 battery: 60,
-                location: { lat: 41.3901, lng: 2.1740 },
+                location: { lat: 40.7100, lng: 0.5810 },
                 status: 'available',
                 features: ['Mobilitat reduïda']
             },
@@ -138,7 +138,7 @@ const Vehicles = {
                 license_plate: 'MN 012 OP',
                 model: 'Renault Zoe',
                 battery: 90,
-                location: { lat: 41.3825, lng: 2.1765 },
+                location: { lat: 40.7145, lng: 0.5750 },
                 status: 'available',
                 features: []
             },
@@ -147,7 +147,7 @@ const Vehicles = {
                 license_plate: 'QR 345 ST',
                 model: 'Volkswagen ID.3',
                 battery: 75,
-                location: { lat: 41.3890, lng: 2.1710 },
+                location: { lat: 40.7095, lng: 0.5830 },
                 status: 'available',
                 features: ['Discapacitat auditiva']
             }

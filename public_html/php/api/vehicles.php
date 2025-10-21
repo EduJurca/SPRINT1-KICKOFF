@@ -98,6 +98,9 @@ try {
             foreach ($vehicles as &$vehicle) {
                 $plate = $vehicle['license_plate'];
                 
+                // Debug: verificar si tiene coordenadas de MariaDB
+                $hasCoords = isset($vehicle['latitude']) && isset($vehicle['longitude']);
+                
                 if ($mongoAvailable && isset($mongoIndex[$plate])) {
                     $carData = $mongoIndex[$plate];
                     $vehicle['status'] = $carData['status'] ?? $vehicle['status'] ?? 'available';
@@ -112,24 +115,25 @@ try {
                     } else {
                         // Usar ubicación de MariaDB si está disponible
                         $vehicle['location'] = [
-                            'lat' => isset($vehicle['latitude']) ? (float)$vehicle['latitude'] : 40.7117 + (rand(-100, 100) / 10000),
-                            'lng' => isset($vehicle['longitude']) ? (float)$vehicle['longitude'] : 0.5783 + (rand(-100, 100) / 10000)
+                            'lat' => $hasCoords ? (float)$vehicle['latitude'] : 40.7117 + (rand(-100, 100) / 10000),
+                            'lng' => $hasCoords ? (float)$vehicle['longitude'] : 0.5783 + (rand(-100, 100) / 10000)
                         ];
                     }
                     $vehicle['last_updated'] = $carData['last_updated'] ?? null;
                     $vehicle['is_accessible'] = (bool)($carData['is_accessible'] ?? $vehicle['is_accessible'] ?? false);
                 } else {
-                    // Valores por defecto si MongoDB no está disponible
+                    // Valores por defecto si MongoDB no está disponible - USAR SIEMPRE MariaDB
                     $vehicle['status'] = $vehicle['status'] ?? 'available';
                     $vehicle['battery'] = $vehicle['battery_level'] ?? rand(60, 100);
                     
-                    // Usar ubicación de MariaDB si existe, sino generar una aleatoria en Amposta
-                    if (isset($vehicle['latitude']) && isset($vehicle['longitude'])) {
+                    // SIEMPRE usar ubicación de MariaDB si existe
+                    if ($hasCoords) {
                         $vehicle['location'] = [
                             'lat' => (float)$vehicle['latitude'],
                             'lng' => (float)$vehicle['longitude']
                         ];
                     } else {
+                        // Fallback a Amposta centro si no hay coordenadas
                         $vehicle['location'] = [
                             'lat' => 40.7117 + (rand(-100, 100) / 10000),
                             'lng' => 0.5783 + (rand(-100, 100) / 10000)
@@ -154,7 +158,8 @@ try {
 
             echo json_encode([
                 'success' => true,
-                'vehicles' => $vehicles,
+                'data' => $vehicles,
+                'count' => count($vehicles),
                 'mongodb_available' => $mongoAvailable
             ]);
             break;
