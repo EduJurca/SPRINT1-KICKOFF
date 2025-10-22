@@ -381,7 +381,6 @@ Password will be hashed using bcrypt."""
                 driver_license_photo VARCHAR(255),
                 nationality_id INT,
                 minute_balance INT DEFAULT 0,
-                balance INT DEFAULT 0,
                 created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (nationality_id) REFERENCES nationalities(id)
             );
@@ -497,6 +496,10 @@ Password will be hashed using bcrypt."""
                 db.create_collection("cars")
                 db["cars"].create_index("_id")
                 db["cars"].create_index("license_plate", unique=True)
+                db["cars"].create_index("location")                
+                db["cars"].create_index("battery_level")
+                db["cars"].create_index("status")
+                db["cars"].create_index("last_update")
             
             # Collection history
             if "history" not in db.list_collection_names():

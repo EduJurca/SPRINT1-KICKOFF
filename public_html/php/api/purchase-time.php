@@ -29,7 +29,7 @@ if (!isset($_SESSION['user_id'])) {
 require_once __DIR__ . '/../core/DatabaseMariaDB.php';
 
 function get_user_by_id(mysqli $db, int $id): ?array {
-    $stmt = $db->prepare("SELECT balance, minute_balance FROM users WHERE id = ?");
+    $stmt = $db->prepare("SELECT minute_balance FROM users WHERE id = ?");
     
     if (!$stmt) return null;
     $stmt->bind_param('i', $id);
@@ -40,10 +40,10 @@ function get_user_by_id(mysqli $db, int $id): ?array {
     return $res ? $res->fetch_assoc() : null;
 }
 
-function update_user(mysqli $db, int $id, float $newBalance, int $newMinutes): bool {
-    $stmt = $db->prepare("UPDATE users SET balance = ?, minute_balance = ? WHERE id = ?");
+function update_user(mysqli $db, int $id, int $newMinutes): bool {
+    $stmt = $db->prepare("UPDATE users SET minute_balance = ? WHERE id = ?");
     if (!$stmt) return false;
-    $stmt->bind_param('dii', $newBalance, $newMinutes, $id);
+    $stmt->bind_param('ii', $newMinutes, $id);
     return $stmt->execute();
 }
 
@@ -80,7 +80,6 @@ function process_purchase(mysqli $db, int $userId, array $input): array {
     }
 
     $minutes = intval($input['minutes']);
-    $price   = floatval($input['price']);
 
     $user = get_user_by_id($db, $userId);
     if (!$user) {
@@ -88,25 +87,18 @@ function process_purchase(mysqli $db, int $userId, array $input): array {
         return ['success' => false, 'message' => 'Usuari no trobat'];
     }
 
-    if ((float)$user['balance'] < $price) {
-        http_response_code(400);
-        return ['success' => false, 'message' => 'Saldo insuficient'];
-    }
-
-    $newBalance = (float)$user['balance'] - $price;
     $newMinutes = (int)$user['minute_balance'] + $minutes;
 
-    $success = update_user($db, $userId, $newBalance, $newMinutes);
+    $success = update_user($db, $userId, $newMinutes);
     if (!$success) {
         http_response_code(500);
-        return ['success' => false, 'message' => 'Error en actualitzar l’usuari'];
+        return ['success' => false, 'message' => 'Error en actualitzar el usuari'];
     }
 
     return [
         'success' => true,
         'message' => 'Compra realitzada correctament',
         'data' => [
-            'new_balance' => $newBalance,
             'new_minutes' => $newMinutes
         ]
     ];

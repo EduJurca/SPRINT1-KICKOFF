@@ -17,7 +17,7 @@ const Maps = {
      */
     async initMap(containerId = 'map', options = {}) {
         const defaultOptions = {
-            center: [41.3851, 2.1734], // Barcelona coordinates
+            center: [40.7117, 0.5783], // Amposta, Tarragona coordinates
             zoom: 14,
             minZoom: 10,
             maxZoom: 18
@@ -83,7 +83,7 @@ const Maps = {
                                 errorMessage = 'Temps d\'espera esgotat. Utilitzant ubicació per defecte (Barcelona).';
                                 break;
                             default:
-                                errorMessage = 'Error de geolocalització. Utilitzant ubicació per defecte (Barcelona).';
+                                errorMessage = 'Error de geolocalització. Utilitzant ubicació per defecte (Amposta).';
                         }
                         
                         // Show notification if Utils is available
@@ -93,8 +93,8 @@ const Maps = {
                             console.warn(errorMessage);
                         }
                         
-                        // Use default location (Barcelona)
-                        this.userLocation = { lat: 41.3851, lng: 2.1734 };
+                        // Use default location (Amposta, Tarragona)
+                        this.userLocation = { lat: 40.7117, lng: 0.5783 };
                         resolve(this.userLocation);
                     },
                     {
@@ -109,7 +109,7 @@ const Maps = {
                 if (typeof Utils !== 'undefined' && Utils.showToast) {
                     Utils.showToast('Geolocalització no suportada. Utilitzant ubicació per defecte.', 'info');
                 }
-                this.userLocation = { lat: 41.3851, lng: 2.1734 };
+                this.userLocation = { lat: 40.7117, lng: 0.5783 };
                 resolve(this.userLocation);
             }
         });

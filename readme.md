@@ -42,21 +42,50 @@ final_editar_usar/
 ### Passos bàsics
 
 1. **Configura les variables i credencials** a `.env` (a la arrel) o a `config/.env` i, si ho prefereixes, revisa `config/docker-compose.yml`.
-2. **Inicia els serveis** amb Docker:
-  ```sh
-  # Forma recomanada: utilitza el docker-compose situat a la arrel del projecte
-  docker compose up --build
 
-  # Alternativa: usar el docker-compose situat a config/
-  # docker compose -f config/docker-compose.yml up --build
+2. **Primera vegada o després de canviar de branca**:
+  ```sh
+  # Elimina contenidors i volums antics per assegurar esquema actualitzat
+  docker-compose down -v
+  docker-compose up -d --build
   ```
-3. **Accedeix a l’aplicació** via navegador a `http://localhost:8080` (o el port configurat).
-4. **Administra la flota** amb la GUI Python:
+
+3. **Si ja tens els contenidors executant-se**:
+  ```sh
+  # Simplement arrenca o reinicia
+  docker-compose up -d
+  ```
+
+4. **Accedeix a l'aplicació** via navegador a `http://localhost:8080` (o el port configurat).
+
+5. **Script d'inicialització ràpida** (recomanat):
+  ```sh
+  # Executa el script que ho fa tot automàticament
+  ./reset-db.sh
+  ```
+
+6. **Administra la flota** amb la GUI Python:
   ```sh
   cd python_gui
   pip install -r requirements.txt
   python admin_tool.py
   ```
+
+### ⚠️ IMPORTANT: Quan canviïs de branca Git
+
+Quan facis `git checkout` a una altra branca amb canvis en `mariadb-init.sql`, **sempre** has d'executar:
+
+```sh
+docker-compose down -v  # El -v elimina els volums antics
+docker-compose up -d --build
+```
+
+O simplement:
+```sh
+./reset-db.sh
+```
+
+**Per què?** Docker guarda la base de dades en un volum persistent. Si no l'elimines, seguirà usant l'esquema antic encara que hagis canviat de branca.
 
 ---
 

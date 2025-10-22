@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ca">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,87 +10,105 @@
         .scrollbar-none::-webkit-scrollbar {
             display: none;
         }
+
         .scrollbar-none {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
         }
     </style>
 </head>
+
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
-    <div class="bg-white p-6 rounded-2xl shadow-inner w-full max-w-sm flex flex-col justify-start overflow-y-auto box-border scrollbar-none">
+    <div
+        class="bg-white p-6 rounded-2xl shadow-inner w-full max-w-sm flex flex-col justify-start overflow-y-auto box-border scrollbar-none">
         <h1 class="text-2xl font-bold text-center text-gray-900 mb-6">Registrar-se</h1>
         <form id="registerForm">
             <div class="mb-4">
-                <label for="username" class="block text-gray-900 font-semibold mb-2">Nom d'usuari</label>
-                <input
-type="text"
-id="username"
-name="username"
-class="w-full px-4 py-2 bg-[#F5F5F5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1565C0]"
-placeholder="Nom d'usuari"
-required
->
+                <label for="username" class="block text-gray-900 font-semibold mb-2">Nom d'usuari *</label>
+                <input type="text" id="username" name="username"
+                    class="w-full px-4 py-2 bg-[#F5F5F5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1565C0]"
+                    placeholder="Nom d'usuari" >
             </div>
             <div class="mb-4">
-                <label for="email" class="block text-gray-900 font-semibold mb-2">Correu</label>
-                <input
-type="email"
-id="email"
-name="email"
-class="w-full px-4 py-2 bg-[#F5F5F5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1565C0]"
-placeholder="El teu correu electrònic"
-required
->
+                <label for="email" class="block text-gray-900 font-semibold mb-2">Correu *</label>
+                <input type="email" id="email" name="email"
+                    class="w-full px-4 py-2 bg-[#F5F5F5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1565C0]"
+                    placeholder="El teu correu electrònic" >
             </div>
             <div class="mb-4">
-                <label for="password" class="block text-gray-900 font-semibold mb-2">Contrasenya</label>
-                <input
-type="password"
-id="password"
-name="password"
-class="w-full px-4 py-2 bg-[#F5F5F5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1565C0]"
-placeholder="••••••••"
-required
->
+                <label for="password" class="block text-gray-900 font-semibold mb-2">Contrasenya *</label>
+                <input type="password" id="password" name="password"
+                    class="w-full px-4 py-2 bg-[#F5F5F5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1565C0]"
+                    placeholder="••••••••" >
             </div>
-            <button type="submit" class="w-full bg-[#1565C0] text-white font-semibold py-3 px-6 rounded-lg hover:opacity-90 transition-opacity duration-300">
+            <button type="submit"
+                class="w-full bg-[#1565C0] text-white font-semibold py-3 px-6 rounded-lg hover:opacity-90 transition-opacity duration-300">
                 Registrar
             </button>
         </form>
         <div id="registerMsg" class="mt-4 text-center"></div>
-        <a href="../../index.html" class="mt-4 text-[#1565C0] text-center font-semibold hover:underline">Tornar a l'inici</a>
+
+        <p class="text-center mt-4">
+            Ja tens compte? <a href="login.html" class="text-[#1565C0] hover:underline">Inicia sessió</a>
+        </p>
     </div>
     <script>
-    document.getElementById('registerForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const data = {
-            username: document.getElementById('username').value,
-            email: document.getElementById('email').value,
-            password: document.getElementById('password').value
-        };
-        fetch('/../../php/api/register.php', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data)
-        })
-        .then(r => r.json())
-        .then(res => {
+        document.getElementById('registerForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
             const msg = document.getElementById('registerMsg');
-            if(res.success) {
-                msg.textContent = "Registre completat! Redirigint...";
-                msg.className = "mt-4 text-green-600 text-center";
-                setTimeout(() => window.location.href = "login.html", 1200);
-            } else {
-                msg.textContent = res.msg || "Error en el registre";
-                msg.className = "mt-4 text-red-600 text-center";
+
+            msg.textContent = "";
+            msg.className = "mt-4 text-center";
+
+            if (!username || !email || !password) {
+                msg.textContent = "Revisa els camps del formulari.";
+                msg.classList.add("text-red-600");
+                return;
             }
-        })
-        .catch(() => {
-            const msg = document.getElementById('registerMsg');
-            msg.textContent = "Error de connexió amb el servidor.";
-            msg.className = "mt-4 text-red-600 text-center";
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                msg.textContent = "Introdueix un correu electrònic vàlid.";
+                msg.classList.add("text-red-600");
+                return;
+            }
+
+            if (password.length < 8) {
+                msg.textContent = "La contrasenya ha de tenir almenys 8 caràcters.";
+                msg.classList.add("text-red-600");
+                return;
+            }
+
+            const data = { username, email, password };
+            fetch('/php/api/register.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify(data)
+            })
+                .then(r => r.json())
+                .then(res => {
+                    if (res.success) {
+                        msg.textContent = "Registre completat! Redirigint...";
+                        msg.className = "mt-4 text-green-600 text-center";
+                        // Redirigir a gestió.html directamente
+                        setTimeout(() => window.location.href = "../dashboard/gestio.html", 1200);
+                    } else {
+                        msg.textContent = res.msg || "Error en el registre";
+                        msg.className = "mt-4 text-red-600 text-center";
+                    }
+                })
+                .catch(() => {
+                    msg.textContent = "Error de connexió amb el servidor.";
+                    msg.className = "mt-4 text-red-600 text-center";
+                });
         });
-    });
     </script>
 </body>
+
 </html>

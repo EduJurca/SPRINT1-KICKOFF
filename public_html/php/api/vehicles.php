@@ -1,24 +1,24 @@
 <?php
+
 /**
  * Vehicles API Endpoint
- * Handles vehicle-related operations: fetch available vehicles, search, etc.
+ * Combina datos de MariaDB y MongoDB
+ * (usado para la página de "localizar vehículo")
  */
 
+session_start();
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Origin: http://localhost:8080');
+header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
-header('Access-Control-Allow-Credentials: true');
 
-// Handle preflight requests
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit();
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { 
+    http_response_code(200); 
+    exit(); 
 }
 
-session_start();
-
-// Check if user is authenticated
+// Verificar autenticación
 if (!isset($_SESSION['user_id'])) {
     http_response_code(401);
     echo json_encode([
@@ -28,187 +28,27 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+// 🔹 Conexiones
 require_once __DIR__ . '/../core/DatabaseMariaDB.php';
 
 $action = $_GET['action'] ?? $_POST['action'] ?? 'list';
 
 try {
+    // Conexión a MariaDB
     $db = DatabaseMariaDB::getConnection();
-    
+
     switch ($action) {
         case 'available':
-            // Get all available vehicles
+        default:
+            // 🔹 Obtener vehículos desde MariaDB con todos los campos necesarios
             $stmt = $db->prepare("
                 SELECT 
                     v.id,
+                    v.plate as license_plate,
+                    v.brand,
                     v.model,
-                    v.license_plate,
-                    v.battery_level as battery,
-                    v.latitude,
-                    v.longitude,
-                    v.status,
-                    v.vehicle_type,
-                    v.is_accessible,
-                    v.accessibility_features
-                FROM vehicles v
-                WHERE v.status = 'available'
-                ORDER BY v.battery_level DESC
-            ");
-            $stmt->execute();
-            $result = $stmt->get_result();
-            
-            $vehicles = [];
-            while ($row = $result->fetch_assoc()) {
-                $vehicles[] = [
-                    'id' => (int)$row['id'],
-                    'model' => $row['model'],
-                    'license_plate' => $row['license_plate'],
-                    'battery' => (int)$row['battery'],
-                    'location' => [
-                        'lat' => (float)$row['latitude'],
-                        'lng' => (float)$row['longitude']
-                    ],
-                    'status' => $row['status'],
-                    'type' => $row['vehicle_type'],
-                    'is_accessible' => (bool)$row['is_accessible'],
-                    'accessibility_features' => $row['accessibility_features'] ? json_decode($row['accessibility_features'], true) : []
-                ];
-            }
-            
-            echo json_encode([
-                'success' => true,
-                'vehicles' => $vehicles
-            ]);
-            break;
-            
-        case 'nearby':
-            // Get nearby vehicles based on user location
-            $lat = floatval($_GET['lat'] ?? 0);
-            $lng = floatval($_GET['lng'] ?? 0);
-            $radius = floatval($_GET['radius'] ?? 5); // Default 5km radius
-            $vehicle_type = $_GET['type'] ?? null;
-            $min_battery = intval($_GET['min_battery'] ?? 0);
-            $accessible_only = isset($_GET['accessible']) && $_GET['accessible'] === 'true';
-            
-            if ($lat == 0 || $lng == 0) {
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'Location coordinates required'
-                ]);
-                exit();
-            }
-            
-            // Build query with filters
-            $query = "
-                SELECT 
-                    v.id,
-                    v.model,
-                    v.license_plate,
-                    v.battery_level as battery,
-                    v.latitude,
-                    v.longitude,
-                    v.status,
-                    v.vehicle_type,
-                    v.is_accessible,
-                    v.accessibility_features,
-                    v.price_per_minute,
-                    v.image_url,
-                    (6371 * acos(cos(radians(?)) * cos(radians(v.latitude)) * 
-                    cos(radians(v.longitude) - radians(?)) + sin(radians(?)) * 
-                    sin(radians(v.latitude)))) AS distance
-                FROM vehicles v
-                WHERE v.status = 'available'
-            ";
-            
-            $params = [$lat, $lng, $lat];
-            $types = 'ddd';
-            
-            // Add vehicle type filter
-            if ($vehicle_type) {
-                $query .= " AND v.vehicle_type = ?";
-                $params[] = $vehicle_type;
-                $types .= 's';
-            }
-            
-            // Add battery filter
-            if ($min_battery > 0) {
-                $query .= " AND v.battery_level >= ?";
-                $params[] = $min_battery;
-                $types .= 'i';
-            }
-            
-            // Add accessibility filter
-            if ($accessible_only) {
-                $query .= " AND v.is_accessible = 1";
-            }
-            
-            $query .= " HAVING distance <= ?";
-            $params[] = $radius;
-            $types .= 'd';
-            
-            $query .= " ORDER BY distance ASC, v.battery_level DESC";
-            
-            $stmt = $db->prepare($query);
-            $stmt->bind_param($types, ...$params);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            
-            $vehicles = [];
-            while ($row = $result->fetch_assoc()) {
-                $vehicles[] = [
-                    'id' => (int)$row['id'],
-                    'model' => $row['model'],
-                    'license_plate' => $row['license_plate'],
-                    'battery' => (int)$row['battery'],
-                    'location' => [
-                        'lat' => (float)$row['latitude'],
-                        'lng' => (float)$row['longitude']
-                    ],
-                    'distance' => round((float)$row['distance'], 2),
-                    'status' => $row['status'],
-                    'type' => $row['vehicle_type'],
-                    'is_accessible' => (bool)$row['is_accessible'],
-                    'accessibility_features' => $row['accessibility_features'] ? json_decode($row['accessibility_features'], true) : [],
-                    'price_per_minute' => (float)$row['price_per_minute'],
-                    'image_url' => $row['image_url']
-                ];
-            }
-            
-            echo json_encode([
-                'success' => true,
-                'vehicles' => $vehicles,
-                'count' => count($vehicles),
-                'user_location' => [
-                    'lat' => $lat,
-                    'lng' => $lng
-                ],
-                'filters' => [
-                    'radius' => $radius,
-                    'type' => $vehicle_type,
-                    'min_battery' => $min_battery,
-                    'accessible_only' => $accessible_only
-                ]
-            ]);
-            break;
-            
-        case 'details':
-            // Get details of a specific vehicle
-            $vehicle_id = intval($_GET['id'] ?? 0);
-            
-            if ($vehicle_id == 0) {
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'Vehicle ID required'
-                ]);
-                exit();
-            }
-            
-            $stmt = $db->prepare("
-                SELECT 
-                    v.id,
-                    v.model,
-                    v.license_plate,
-                    v.battery_level as battery,
+                    v.year,
+                    v.battery_level,
                     v.latitude,
                     v.longitude,
                     v.status,
@@ -218,53 +58,118 @@ try {
                     v.price_per_minute,
                     v.image_url
                 FROM vehicles v
-                WHERE v.id = ?
+                WHERE v.status != 'maintenance'
             ");
-            $stmt->bind_param('i', $vehicle_id);
             $stmt->execute();
             $result = $stmt->get_result();
-            $vehicle = $result->fetch_assoc();
+            $vehicles = $result->fetch_all(MYSQLI_ASSOC);
+
+            // 🔹 Intentar conexión a MongoDB para datos en tiempo real
+            $mongoAvailable = false;
+            $mongoIndex = [];
             
-            if ($vehicle) {
-                echo json_encode([
-                    'success' => true,
-                    'vehicle' => [
-                        'id' => (int)$vehicle['id'],
-                        'model' => $vehicle['model'],
-                        'license_plate' => $vehicle['license_plate'],
-                        'battery' => (int)$vehicle['battery'],
-                        'location' => [
+            try {
+                // Verificar si el archivo de MongoDB existe y tiene las funciones necesarias
+                $mongoConfigFile = __DIR__ . '/../../config/database.php';
+                if (file_exists($mongoConfigFile)) {
+                    // Verificar si el archivo vendor/autoload.php existe
+                    $vendorAutoload = __DIR__ . '/../../vendor/autoload.php';
+                    if (file_exists($vendorAutoload)) {
+                        require_once $mongoConfigFile;
+                        if (function_exists('getMongoDB')) {
+                            $mongo = getMongoDB();
+                            $carsCollection = $mongo->cars;
+                            $mongoCars = iterator_to_array($carsCollection->find());
+                            
+                            // Crear índice rápido por matrícula
+                            foreach ($mongoCars as $car) {
+                                $mongoIndex[$car['license_plate']] = $car;
+                            }
+                            $mongoAvailable = true;
+                        }
+                    }
+                }
+            } catch (Exception $mongoError) {
+                // Si MongoDB no está disponible, continuamos sin él
+                error_log("MongoDB not available: " . $mongoError->getMessage());
+            }
+
+            // 🔹 Combinar datos o usar valores por defecto
+            foreach ($vehicles as &$vehicle) {
+                $plate = $vehicle['license_plate'];
+                
+                // Debug: verificar si tiene coordenadas de MariaDB
+                $hasCoords = isset($vehicle['latitude']) && isset($vehicle['longitude']);
+                
+                if ($mongoAvailable && isset($mongoIndex[$plate])) {
+                    $carData = $mongoIndex[$plate];
+                    $vehicle['status'] = $carData['status'] ?? $vehicle['status'] ?? 'available';
+                    $vehicle['battery'] = $carData['battery_level'] ?? $vehicle['battery_level'] ?? 85;
+                    
+                    // Convertir location de MongoDB a formato esperado
+                    if (isset($carData['location']['coordinates'])) {
+                        $vehicle['location'] = [
+                            'lng' => $carData['location']['coordinates'][0],
+                            'lat' => $carData['location']['coordinates'][1]
+                        ];
+                    } else {
+                        // Usar ubicación de MariaDB si está disponible
+                        $vehicle['location'] = [
+                            'lat' => $hasCoords ? (float)$vehicle['latitude'] : 40.7117 + (rand(-100, 100) / 10000),
+                            'lng' => $hasCoords ? (float)$vehicle['longitude'] : 0.5783 + (rand(-100, 100) / 10000)
+                        ];
+                    }
+                    $vehicle['last_updated'] = $carData['last_updated'] ?? null;
+                    $vehicle['is_accessible'] = (bool)($carData['is_accessible'] ?? $vehicle['is_accessible'] ?? false);
+                } else {
+                    // Valores por defecto si MongoDB no está disponible - USAR SIEMPRE MariaDB
+                    $vehicle['status'] = $vehicle['status'] ?? 'available';
+                    $vehicle['battery'] = $vehicle['battery_level'] ?? rand(60, 100);
+                    
+                    // SIEMPRE usar ubicación de MariaDB si existe
+                    if ($hasCoords) {
+                        $vehicle['location'] = [
                             'lat' => (float)$vehicle['latitude'],
                             'lng' => (float)$vehicle['longitude']
-                        ],
-                        'status' => $vehicle['status'],
-                        'type' => $vehicle['vehicle_type'],
-                        'is_accessible' => (bool)$vehicle['is_accessible'],
-                        'accessibility_features' => $vehicle['accessibility_features'] ? json_decode($vehicle['accessibility_features'], true) : [],
-                        'price_per_minute' => (float)$vehicle['price_per_minute'],
-                        'image_url' => $vehicle['image_url']
-                    ]
-                ]);
-            } else {
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'Vehicle not found'
-                ]);
+                        ];
+                    } else {
+                        // Fallback a Amposta centro si no hay coordenadas
+                        $vehicle['location'] = [
+                            'lat' => 40.7117 + (rand(-100, 100) / 10000),
+                            'lng' => 0.5783 + (rand(-100, 100) / 10000)
+                        ];
+                    }
+                    
+                    $vehicle['last_updated'] = date('Y-m-d H:i:s');
+                    $vehicle['is_accessible'] = (bool)($vehicle['is_accessible'] ?? (rand(0, 10) > 8));
+                }
+                
+                // Asegurar que todos los campos necesarios existen
+                $vehicle['type'] = $vehicle['vehicle_type'] ?? 'car';
+                $vehicle['price_per_minute'] = (float)($vehicle['price_per_minute'] ?? 0.35);
+                $vehicle['image_url'] = $vehicle['image_url'] ?? '/images/default-car.jpg';
+                
+                // Limpiar campos duplicados de la base de datos
+                unset($vehicle['latitude']);
+                unset($vehicle['longitude']);
+                unset($vehicle['battery_level']);
+                unset($vehicle['vehicle_type']);
             }
-            break;
-            
-        default:
+
             echo json_encode([
-                'success' => false,
-                'message' => 'Invalid action'
+                'success' => true,
+                'data' => $vehicles,
+                'count' => count($vehicles),
+                'mongodb_available' => $mongoAvailable
             ]);
             break;
     }
-    
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode([
         'success' => false,
-        'message' => 'Server error: ' . $e->getMessage()
+        'message' => 'Server error: ' . $e->getMessage(),
+        'trace' => $e->getTraceAsString()
     ]);
 }
+?>
