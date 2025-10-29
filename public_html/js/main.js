@@ -373,7 +373,7 @@ const SessionManager = {
         Utils.showToast('La teva sessió ha expirat', 'warning', 5000);
         
         setTimeout(() => {
-            window.location.href = '/pages/auth/login.html';
+            window.location.href = '/login';
         }, 2000);
     },
     
@@ -403,9 +403,12 @@ const SessionManager = {
  */
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize session manager for authenticated pages
-    const isAuthPage = window.location.pathname.includes('/pages/dashboard/') ||
-                       window.location.pathname.includes('/pages/profile/') ||
-                       window.location.pathname.includes('/pages/vehicle/');
+    const isAuthPage = window.location.pathname.includes('/dashboard') ||
+                       window.location.pathname.includes('/perfil') ||
+                       window.location.pathname.includes('/profile') ||
+                       window.location.pathname.includes('/vehicle') ||
+                       window.location.pathname.includes('/historial') ||
+                       window.location.pathname.includes('/pagaments');
     
     if (isAuthPage) {
         SessionManager.init();

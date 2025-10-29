@@ -60,7 +60,7 @@ const VehicleControl = {
             // PRIMERO: Intentar obtener desde el servidor (fuente de verdad)
             try {
                 console.log('📡 Consultando servidor...');
-                const response = await fetch('/php/api/vehicles.php?action=current', {
+                const response = await fetch('/api/vehicles?action=current', {
                     method: 'GET',
                     credentials: 'include'
                 });
@@ -133,7 +133,7 @@ const VehicleControl = {
                 
                 showToast('No tens cap vehicle reclamat. Redirigint...', 'warning', 2000);
                 setTimeout(() => {
-                    window.location.href = './localitzar-vehicle.html';
+                    window.location.href = '/localitzar-vehicle';
                 }, 2000);
                 return;
             }
@@ -147,7 +147,7 @@ const VehicleControl = {
             console.error('❌ Error al cargar vehículo:', error);
             showToast('Error al carregar el vehicle. Si us plau, torna-ho a intentar.', 'error', 2000);
             setTimeout(() => {
-                window.location.href = './localitzar-vehicle.html';
+                window.location.href = '/localitzar-vehicle';
             }, 2000);
         }
     },
@@ -761,7 +761,7 @@ const VehicleControl = {
                     
                     // Redirigir a localitzar vehículos
                     setTimeout(() => {
-                        window.location.href = './localitzar-vehicle.html';
+                        window.location.href = '/localitzar-vehicle';
                     }, 2000);
                 } else {
                     console.error('❌ Error al liberar vehículo:', result.message);

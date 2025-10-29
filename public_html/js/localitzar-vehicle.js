@@ -15,8 +15,6 @@ const VehicleLocator = {
      * Inicializar la página
      */
     async init() {
-        console.log('🗺️ Inicializando localizador de vehículos...');
-        
         // Obtener ubicación del usuario
         await this.getUserLocation();
         
@@ -28,8 +26,6 @@ const VehicleLocator = {
         
         // Configurar UI
         this.setupUI();
-        
-        console.log('✅ Localizador inicializado');
     },
     
     /**
@@ -44,11 +40,9 @@ const VehicleLocator = {
                             lat: position.coords.latitude,
                             lng: position.coords.longitude
                         };
-                        console.log('📍 Ubicación obtenida:', this.userLocation);
                         resolve(this.userLocation);
                     },
                     (error) => {
-                        console.warn('⚠️ Error de geolocalización:', error);
                         // Usar ubicación por defecto (Amposta)
                         this.userLocation = { lat: 40.7117, lng: 0.5783 };
                         resolve(this.userLocation);
@@ -60,7 +54,6 @@ const VehicleLocator = {
                     }
                 );
             } else {
-                console.warn('⚠️ Geolocalización no soportada');
                 this.userLocation = { lat: 40.7117, lng: 0.5783 };
                 resolve(this.userLocation);
             }
@@ -93,13 +86,10 @@ const VehicleLocator = {
                 this.vehicles.sort((a, b) => (a.distance || Infinity) - (b.distance || Infinity));
             }
             
-            console.log('🚗 Vehículos cargados:', this.vehicles.length);
-            
             // Actualizar listas
             this.updateVehicleLists();
             
         } catch (error) {
-            console.error('❌ Error al cargar vehículos:', error);
             this.vehicles = [];
         }
     },
@@ -366,7 +356,6 @@ const VehicleLocator = {
         const vehicle = this.vehicles.find(v => v.id === vehicleId);
         
         if (!vehicle) {
-            console.error('Vehículo no encontrado:', vehicleId);
             return;
         }
         
@@ -375,7 +364,6 @@ const VehicleLocator = {
             window.showClaimModal(vehicle);
         } else {
             // Fallback si el modal no está disponible
-            console.warn('Modal de confirmación no disponible, reclamando directamente...');
             Vehicles.claimVehicle(vehicleId);
         }
     },
@@ -426,7 +414,6 @@ const VehicleLocator = {
 document.addEventListener('DOMContentLoaded', async () => {
     // Esperar a que Leaflet esté cargado
     if (typeof L === 'undefined') {
-        console.error('❌ Leaflet no está cargado');
         return;
     }
     

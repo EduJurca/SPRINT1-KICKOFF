@@ -1,24 +1,12 @@
-/**
- * Modal de confirmación para reclamar vehículos
- * Gestiona la visualización y confirmación del cobro de desbloqueo
- */
-
 const VehicleClaimModal = {
     modal: null,
     currentVehicle: null,
-    unlockFee: 0.50, // 50 céntimos
-    
-    /**
-     * Inicializar el modal
-     */
+    unlockFee: 0.50,
     init() {
         this.createModal();
         this.setupEventListeners();
     },
-    
-    /**
-     * Crear el HTML del modal
-     */
+
     createModal() {
         const modalHTML = `
             <div id="claim-modal" class="claim-modal-overlay">
@@ -71,59 +59,62 @@ const VehicleClaimModal = {
             </div>
         `;
         
-        // Insertar el modal en el body
         document.body.insertAdjacentHTML('beforeend', modalHTML);
         this.modal = document.getElementById('claim-modal');
     },
-    
-    /**
-     * Configurar event listeners
-     */
+
     setupEventListeners() {
-        // Cerrar modal al hacer clic en el overlay
+        if (!this.modal) {
+            return;
+        }
+        
         this.modal.addEventListener('click', (e) => {
             if (e.target === this.modal) {
                 this.close();
             }
         });
         
-        // Botón cerrar
         const closeBtn = document.getElementById('claim-modal-close');
-        closeBtn.addEventListener('click', () => this.close());
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => this.close());
+        }
         
-        // Botón cancelar
         const cancelBtn = document.getElementById('claim-modal-cancel');
-        cancelBtn.addEventListener('click', () => this.close());
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', () => this.close());
+        }
         
-        // Botón confirmar
         const confirmBtn = document.getElementById('claim-modal-confirm');
-        confirmBtn.addEventListener('click', () => this.confirm());
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', () => this.confirm());
+        }
         
-        // Cerrar con tecla ESC
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && this.modal.classList.contains('active')) {
                 this.close();
             }
         });
     },
-    
-    /**
-     * Mostrar el modal con la información del vehículo
-     */
+
     show(vehicle) {
+        if (!this.modal) {
+            return;
+        }
+        
         this.currentVehicle = vehicle;
         this.updateVehicleInfo(vehicle);
+        
+        this.modal.style.display = 'flex';
+        this.modal.style.opacity = '1';
+        this.modal.style.visibility = 'visible';
         this.modal.classList.add('active');
-        document.body.style.overflow = 'hidden'; // Prevenir scroll
+        
+        document.body.style.overflow = 'hidden';
     },
-    
-    /**
-     * Actualizar la información del vehículo en el modal
-     */
+
     updateVehicleInfo(vehicle) {
         const vehicleInfoContainer = document.getElementById('vehicle-info');
         
-        // Determinar el color de la batería
         const batteryColor = vehicle.battery >= 80 ? '#10B981' : 
                             vehicle.battery >= 50 ? '#F59E0B' : 
                             vehicle.battery >= 20 ? '#F97316' : '#EF4444';
@@ -159,22 +150,21 @@ const VehicleClaimModal = {
         
         vehicleInfoContainer.innerHTML = infoHTML;
     },
-    
-    /**
-     * Cerrar el modal
-     */
+
     close() {
+        if (!this.modal) return;
+        
+        this.modal.style.display = 'none';
+        this.modal.style.opacity = '0';
+        this.modal.style.visibility = 'hidden';
         this.modal.classList.remove('active');
-        document.body.style.overflow = ''; // Restaurar scroll
+        
+        document.body.style.overflow = ''; 
         this.currentVehicle = null;
     },
     
-    /**
-     * Confirmar reclamación del vehículo
-     */
     async confirm() {
         if (!this.currentVehicle) {
-            console.error('❌ No hay vehículo seleccionado');
             showToast('Error: No hay vehículo seleccionado', 'error');
             return;
         }
@@ -182,69 +172,52 @@ const VehicleClaimModal = {
         const confirmBtn = document.getElementById('claim-modal-confirm');
         const cancelBtn = document.getElementById('claim-modal-cancel');
         
-        // Deshabilitar botones y mostrar loading
         confirmBtn.disabled = true;
         confirmBtn.classList.add('claim-modal-button-loading');
         cancelBtn.disabled = true;
         
-        console.log('🚗 Reclamando vehículo:', this.currentVehicle);
-        
         try {
-            // Llamar a la función de reclamar vehículo
             const result = await Vehicles.claimVehicle(this.currentVehicle.id);
             
-            console.log('📊 Resultado de reclamación:', result);
-            
             if (result.success) {
-                // Cerrar el modal antes de la redirección
                 this.close();
                 
-                console.log('✅ Vehículo reclamado exitosamente, redirigiendo...');
-                
-                // Mostrar mensaje de éxito
                 showToast('✅ Vehicle reclamat amb èxit! Redirigint...', 'success', 2000);
             } else {
-                // Si falla, restaurar los botones
                 confirmBtn.disabled = false;
                 confirmBtn.classList.remove('claim-modal-button-loading');
                 cancelBtn.disabled = false;
                 
-                // Mostrar mensaje de error específico
                 const errorMsg = result.message || result.error || 'Error desconegut al reclamar el vehicle';
-                console.error('❌ Error al reclamar:', errorMsg);
                 
-                // Mostrar toast con el error
                 showToast(`❌ Error: ${errorMsg}`, 'error');
             }
         } catch (error) {
-            console.error('❌ Excepción al confirmar reclamación:', error);
-            
-            // Restaurar botones en caso de error
             confirmBtn.disabled = false;
             confirmBtn.classList.remove('claim-modal-button-loading');
             cancelBtn.disabled = false;
             
-            // Mostrar mensaje de error
             const errorMsg = error.message || 'Error al procesar la reclamació';
             showToast(`❌ Error: ${errorMsg}`, 'error');
         }
     }
 };
 
-/**
- * Función global para abrir el modal de confirmación
- * Esta función será llamada desde los botones de reclamar
- */
 window.showClaimModal = function(vehicle) {
+    if (!VehicleClaimModal.modal) {
+        VehicleClaimModal.init();
+    }
+    
     VehicleClaimModal.show(vehicle);
 };
 
-/**
- * Inicializar el modal cuando el DOM esté listo
- */
-document.addEventListener('DOMContentLoaded', () => {
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        VehicleClaimModal.init();
+    });
+} else {
     VehicleClaimModal.init();
-});
+}
 
-// Exportar para uso global
 window.VehicleClaimModal = VehicleClaimModal;
+

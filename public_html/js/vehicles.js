@@ -10,11 +10,8 @@ const Vehicles = {
      * Get API base path based on current location
      */
     getApiBasePath() {
-        // Determine the correct path based on current location
-        if (window.location.pathname.includes('/pages/')) {
-            return '../../php/api/vehicles.php';
-        }
-        return './php/api/vehicles.php';
+        // Use MVC API routes
+        return '/api/vehicles';
     },
     
     /**
@@ -22,13 +19,8 @@ const Vehicles = {
      */
     async getAvailableVehicles(userLocation = null) {
         try {
-            const basePath = this.getApiBasePath();
-            let url = `${basePath}?action=available`;
-            
-            // If user location provided, use nearby endpoint
-            if (userLocation && userLocation.lat && userLocation.lng) {
-                url = `${basePath}?action=nearby&lat=${userLocation.lat}&lng=${userLocation.lng}&radius=10`;
-            }
+            // Use MVC route
+            let url = '/api/vehicles';
             
             const response = await fetch(url, {
                 method: 'GET',
@@ -39,7 +31,6 @@ const Vehicles = {
                 const contentType = response.headers.get('content-type');
                 if (contentType && contentType.includes('application/json')) {
                     const data = await response.json();
-                    console.log('🚗 Vehicles API response:', data);
                     if (data.success && data.vehicles) {
                         return data.vehicles;
                     }
@@ -60,21 +51,8 @@ const Vehicles = {
      */
     async getNearbyVehicles(lat, lng, filters = {}) {
         try {
-            const basePath = this.getApiBasePath();
-            let url = `${basePath}?action=nearby&lat=${lat}&lng=${lng}`;
-            
-            if (filters.radius) {
-                url += `&radius=${filters.radius}`;
-            }
-            if (filters.type) {
-                url += `&type=${filters.type}`;
-            }
-            if (filters.min_battery) {
-                url += `&min_battery=${filters.min_battery}`;
-            }
-            if (filters.accessible) {
-                url += `&accessible=true`;
-            }
+            // Use the same endpoint - filtering can be done client-side or add query params
+            let url = '/api/vehicles';
             
             const response = await fetch(url, {
                 method: 'GET',
@@ -157,7 +135,7 @@ const Vehicles = {
      */
     async getVehicleDetails(vehicleId) {
         try {
-            const response = await fetch(`/php/api/vehicles.php?action=details&id=${vehicleId}`, {
+            const response = await fetch(`/api/vehicles?action=details&id=${vehicleId}`, {
                 method: 'GET',
                 credentials: 'include'
             });
@@ -183,14 +161,13 @@ const Vehicles = {
         try {
             console.log('🚗 Reclamando vehículo ID:', vehicleId);
             
-            const response = await fetch('/php/api/vehicles.php', {
+            const response = await fetch('/api/vehicles/claim', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 credentials: 'include',
                 body: JSON.stringify({
-                    action: 'claim',
                     vehicle_id: vehicleId
                 })
             });
@@ -281,8 +258,8 @@ const Vehicles = {
                 
                 // Redirigir a la página de administrar vehículo
                 setTimeout(() => {
-                    console.log('🔄 Redirigiendo a administrar-vehicle.html...');
-                    window.location.href = './administrar-vehicle.html';
+                    console.log('🔄 Redirigiendo a administrar-vehicle...');
+                    window.location.href = '/administrar-vehicle';
                 }, 1000);
                 
                 return { success: true, vehicle: data.vehicle };
@@ -308,17 +285,13 @@ const Vehicles = {
         try {
             console.log("🔓 Liberando vehículo...");
             
-            const basePath = this.getApiBasePath();
-            
-            const response = await fetch(basePath, {
+            const response = await fetch('/api/vehicles/release', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 credentials: 'include',
-                body: JSON.stringify({
-                    action: 'release'
-                })
+                body: JSON.stringify({})
             });
             
             if (!response.ok) {
@@ -366,15 +339,13 @@ const Vehicles = {
      */
     async activateHorn() {
         try {
-            const response = await fetch('/php/api/vehicle-control.php', {
+            const response = await fetch('/api/vehicles/horn', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 credentials: 'include',
-                body: JSON.stringify({
-                    action: 'horn'
-                })
+                body: JSON.stringify({})
             });
             
             const data = await response.json();
@@ -398,15 +369,13 @@ const Vehicles = {
      */
     async activateLights() {
         try {
-            const response = await fetch('/php/api/vehicle-control.php', {
+            const response = await fetch('/api/vehicles/lights', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 credentials: 'include',
-                body: JSON.stringify({
-                    action: 'lights'
-                })
+                body: JSON.stringify({})
             });
             
             const data = await response.json();
@@ -432,15 +401,13 @@ const Vehicles = {
         try {
             console.log("⏳ Loading...");
             
-            const response = await fetch('/php/api/vehicle-control.php', {
+            const response = await fetch('/api/vehicles/start', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 credentials: 'include',
-                body: JSON.stringify({
-                    action: 'start'
-                })
+                body: JSON.stringify({})
             });
             
             const data = await response.json();
@@ -468,15 +435,13 @@ const Vehicles = {
         try {
             console.log("⏳ Loading...");
             
-            const response = await fetch('/php/api/vehicle-control.php', {
+            const response = await fetch('/api/vehicles/stop', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 credentials: 'include',
-                body: JSON.stringify({
-                    action: 'stop'
-                })
+                body: JSON.stringify({})
             });
             
             const data = await response.json();
@@ -502,15 +467,14 @@ const Vehicles = {
      */
     async toggleDoors(lock = true) {
         try {
-            const response = await fetch('/php/api/vehicle-control.php', {
+            const endpoint = lock ? '/api/vehicles/lock' : '/api/vehicles/unlock';
+            const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 credentials: 'include',
-                body: JSON.stringify({
-                    action: lock ? 'lock' : 'unlock'
-                })
+                body: JSON.stringify({})
             });
             
             const data = await response.json();
