@@ -5,7 +5,7 @@
  */
 
 require_once MODELS_PATH . '/User.php';
-require_once CONTROLLERS_PATH . '/AuthController.php';
+require_once CONTROLLERS_PATH . '/auth/AuthController.php';
 
 class ProfileController {
     private $userModel;

@@ -7,7 +7,7 @@
 require_once MODELS_PATH . '/User.php';
 require_once MODELS_PATH . '/Booking.php';
 require_once MODELS_PATH . '/Vehicle.php';
-require_once CONTROLLERS_PATH . '/AuthController.php';
+require_once CONTROLLERS_PATH . '/auth/AuthController.php';
 
 class DashboardController {
     private $userModel;

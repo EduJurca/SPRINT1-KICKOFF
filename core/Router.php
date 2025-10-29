@@ -115,9 +115,18 @@ class Router {
             // Si el controlador és una string, instanciar-lo
             if (is_string($controller)) {
                 // Carregar el fitxer del controlador si és necessari
-                $controllerFile = CONTROLLERS_PATH . '/' . $controller . '.php';
-                if (file_exists($controllerFile)) {
-                    require_once $controllerFile;
+                // Buscar en múltiples subdirectoris
+                $controllerPaths = [
+                    CONTROLLERS_PATH . '/auth/' . $controller . '.php',
+                    CONTROLLERS_PATH . '/public/' . $controller . '.php',
+                    CONTROLLERS_PATH . '/' . $controller . '.php'
+                ];
+                
+                foreach ($controllerPaths as $controllerFile) {
+                    if (file_exists($controllerFile)) {
+                        require_once $controllerFile;
+                        break;
+                    }
                 }
                 
                 // Instanciar controlador
