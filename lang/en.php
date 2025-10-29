@@ -21,7 +21,7 @@ return [
     ],
     'header' => [
         'default_title' => 'SIMS - Intelligent Sustainable Mobility System',
-        'welcome' => 'Hello, {username}',
+        'welcome' => 'Hello, :username',
         'logout' => 'Log out',
     ],
     'home' => [
@@ -67,7 +67,7 @@ return [
         'preferences_reset' => 'Preferences reset to default.',
     ],
     'footer' => [
-        'copyright' => '© {year} VoltiaCar. All rights reserved.',
+        'copyright' => '© :year VoltiaCar. All rights reserved.',
     ],
     'vehicle' => [
         'page_title' => 'VoltiaCar - Locate Vehicles',
@@ -206,6 +206,7 @@ return [
         'vehicle_controls' => 'Vehicle Controls',
         'start' => 'Start',
         'stop' => 'Stop',
+        'start_stop' => 'Start/Stop',
         'start_stop_alt' => 'Start/Stop',
         'activate_horn' => 'Activate Horn',
         'activate_lights' => 'Activate Lights',

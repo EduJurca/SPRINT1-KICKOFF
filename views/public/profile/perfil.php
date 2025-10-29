@@ -76,11 +76,11 @@
       <div class="flex-shrink-0 w-full md:w-1/3 p-4">
         <h2 class="text-2xl font-bold mb-4 text-gray-900"><?php echo __('profile.personal_data'); ?></h2>
         <div class="space-y-3">
-          <p><strong><?php echo __('profile.name'); ?></strong> <span id="fullname_span"><?php echo htmlspecialchars($fullname ?? $username ?? 'No definit'); ?></span></p>
-          <p><strong><?php echo __('profile.dni'); ?></strong> <span id="dni_span"><?php echo htmlspecialchars($dni ?? 'No definit'); ?></span></p>
-          <p><strong><?php echo __('profile.phone'); ?></strong> <span id="phone_span"><?php echo htmlspecialchars($phone ?? 'No definit'); ?></span></p>
-          <p><strong><?php echo __('profile.birth_date'); ?></strong> <span id="birthdate_span"><?php echo htmlspecialchars($birthdate ?? 'No definit'); ?></span></p>
-          <p><strong><?php echo __('profile.address'); ?></strong> <span id="address_span"><?php echo htmlspecialchars($address ?? 'No definit'); ?></span></p>
+          <p><strong><?php echo __('profile.name'); ?></strong> <span id="fullname_span"><?php echo htmlspecialchars($fullname ?? $username ?? __('profile.not_defined')); ?></span></p>
+          <p><strong><?php echo __('profile.dni'); ?></strong> <span id="dni_span"><?php echo htmlspecialchars($dni ?? __('profile.not_defined')); ?></span></p>
+          <p><strong><?php echo __('profile.phone'); ?></strong> <span id="phone_span"><?php echo htmlspecialchars($phone ?? __('profile.not_defined')); ?></span></p>
+          <p><strong><?php echo __('profile.birth_date'); ?></strong> <span id="birthdate_span"><?php echo htmlspecialchars($birthdate ?? __('profile.not_defined')); ?></span></p>
+          <p><strong><?php echo __('profile.address'); ?></strong> <span id="address_span"><?php echo htmlspecialchars($address ?? __('profile.not_defined')); ?></span></p>
           <p><strong><?php echo __('profile.gender'); ?></strong> <span id="sex_span"><?php 
             if (isset($sex)) {
               echo $sex === 'M' ? __('profile.male') : ($sex === 'F' ? __('profile.female') : ($sex === 'O' ? __('profile.other') : __('profile.not_defined')));

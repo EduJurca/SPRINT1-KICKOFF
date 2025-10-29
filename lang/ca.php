@@ -21,7 +21,7 @@ return [
     ],
     'header' => [
         'default_title' => 'SIMS - Sistema Intelligent de Mobilitat Sostenible',
-        'welcome' => 'Hola, {username}',
+        'welcome' => 'Hola, :username',
         'logout' => 'Tancar sessió',
     ],
     'home' => [
@@ -67,7 +67,7 @@ return [
         'preferences_reset' => 'Preferències restablertes per defecte.',
     ],
     'footer' => [
-        'copyright' => '© {year} VoltiaCar. Tots els drets reservats.',
+        'copyright' => '© :year VoltiaCar. Tots els drets reservats.',
     ],
     'vehicle' => [
         'page_title' => 'VoltiaCar - Localitzar Vehicles',
@@ -206,6 +206,7 @@ return [
         'vehicle_controls' => 'Controls del Vehicle',
         'start' => 'Engegar',
         'stop' => 'Apagar',
+        'start_stop' => 'Engegar/Apagar',
         'start_stop_alt' => 'Engegar/Apagar',
         'activate_horn' => 'Activar Clàxon',
         'activate_lights' => 'Activar Llums',

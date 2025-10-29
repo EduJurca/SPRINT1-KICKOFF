@@ -71,8 +71,7 @@
                             <span class="edge"></span>
                             <span class="front flex-1 flex flex-col items-center justify-center text-base p-2">
                                 <img src="/assets/images/engegar.png" alt="<?php echo __('admin.start_stop_alt'); ?>" class="h-12 w-12 mb-2">
-                                <span><?php echo __('admin.start'); ?></span>
-                                <span><?php echo __('admin.stop'); ?></span>
+                                <span><?php echo __('admin.start_stop'); ?></span>
                             </span>
                         </button>
                         <button class="pushable h-32" data-control="horn">
@@ -176,7 +175,7 @@
                 <span class="edge"
                     style="background: linear-gradient(to left, hsl(140, 80%, 35%) 0%, hsl(140, 80%, 45%) 8%, hsl(140, 80%, 45%) 92%, hsl(140, 80%, 35%) 100%);"></span>
                 <span class="front p-3 flex flex-col items-center text-base" style="background: hsl(140, 80%, 45%);">
-                    <span class="font-semibold">Estat:</span>
+                    <span class="font-semibold"><?php echo __('admin.status'); ?></span>
                     <span class="text-white font-semibold h-8 mt-2" data-vehicle-status><?php echo __('admin.operational'); ?></span>
                 </span>
             </div>
@@ -185,7 +184,7 @@
                 <span class="edge"
                     style="background: linear-gradient(to left, hsl(200, 70%, 40%) 0%, hsl(200, 70%, 50%) 8%, hsl(200, 70%, 50%) 92%, hsl(200, 70%, 40%) 100%);"></span>
                 <span class="front p-3 flex flex-col items-center text-base" style="background: hsl(200, 70%, 50%);">
-                    <span class="font-semibold"><?php echo __('admin.battery'); ?>:</span>
+                    <span class="font-semibold"><?php echo __('admin.battery'); ?></span>
                     <div class="w-full bg-gray-300 rounded-lg h-8 overflow-hidden mt-2">
                         <div class="h-full" data-battery-bar style="width: 80%; background-color: #00C853;">
                             <div class="h-full flex items-center justify-center text-white font-bold text-base" data-battery-text>80%</div>
@@ -204,8 +203,7 @@
                         <span class="edge"></span>
                         <span class="front flex flex-col items-center justify-center text-lg p-4">
                             <img src="/assets/images/engegar.png" alt="<?php echo __('admin.start_stop_alt'); ?>" class="h-16 w-16 mb-3">
-                            <span><?php echo __('admin.start'); ?></span>
-                            <span>/<?php echo __('admin.stop'); ?></span>
+                            <span><?php echo __('admin.start_stop'); ?></span>
                         </span>
                     </button>
                     <button class="pushable h-40" data-control="horn">
@@ -239,8 +237,8 @@
             <section class="flex-1 flex flex-col">
                 <h2 class="text-2xl font-bold text-gray-900 mb-6"><?php echo __('admin.info_location'); ?></h2>
                 <div class="bg-[#F5F5F5] p-6 rounded-lg mb-6">
-                    <p class="text-gray-900 font-semibold text-xl mb-2"><?php echo __('admin.license_plate'); ?>: <span class="font-normal" data-vehicle-license><?php echo __('admin.loading'); ?>...</span></p>
-                    <p class="text-gray-700 text-lg"><?php echo __('admin.model'); ?>: <span class="font-normal" data-vehicle-model><?php echo __('admin.loading'); ?>...</span></p>
+                    <p class="text-gray-900 font-semibold text-xl mb-2"><?php echo __('admin.license_plate'); ?> <span class="font-normal" data-vehicle-license><?php echo __('admin.loading'); ?>...</span></p>
+                    <p class="text-gray-700 text-lg"><?php echo __('admin.model'); ?> <span class="font-normal" data-vehicle-model><?php echo __('admin.loading'); ?>...</span></p>
                 </div>
                 <div class="flex-1 w-full rounded-lg relative" style="min-height: 320px;">
                     <div id="vehicle-map-desktop" style="height: 100%; width: 100%; border-radius: 0.5rem;"></div>
