@@ -46,7 +46,7 @@ class DashboardController {
             ]
         );
         
-        return Router::view('dashboard.gestio', $data);
+        return Router::view('public.dashboard.gestio', $data);
     }
     
     /**
