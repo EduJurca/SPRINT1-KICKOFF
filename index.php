@@ -14,6 +14,9 @@ require_once __DIR__ . '/config/constants.php';
 error_reporting(E_ALL);
 ini_set('display_errors', APP_DEBUG ? 1 : 0);
 
+// Carregar constants del projecte
+require_once __DIR__ . '/config/constants.php';
+
 // Carregar configuració de base de dades
 require_once DATABASE_PATH . '/Database.php';
 
