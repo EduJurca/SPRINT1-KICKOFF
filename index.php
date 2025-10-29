@@ -11,15 +11,8 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Definir constants del projecte
-define('ROOT_PATH', __DIR__);
-define('CONFIG_PATH', ROOT_PATH . '/config');
-define('DATABASE_PATH', ROOT_PATH . '/database');
-define('CORE_PATH', ROOT_PATH . '/core');
-define('MODELS_PATH', ROOT_PATH . '/models');
-define('CONTROLLERS_PATH', ROOT_PATH . '/controllers');
-define('VIEWS_PATH', ROOT_PATH . '/views');
-define('PUBLIC_PATH', ROOT_PATH . '/public_html');
+// Carregar constants del projecte
+require_once __DIR__ . '/config/constants.php';
 
 // Carregar configuració de base de dades
 require_once DATABASE_PATH . '/Database.php';
