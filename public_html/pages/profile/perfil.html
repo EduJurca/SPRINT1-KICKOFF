@@ -215,7 +215,7 @@ document.addEventListener('DOMContentLoaded', function () {
           editBtn.classList.remove('hidden');
           saveBtn.classList.add('hidden');
         } else {
-          alert(data.message || 'Error al actualizar');
+          showToast(data.message || 'Error al actualitzar', 'error');
         }
       })
       .catch(console.error);

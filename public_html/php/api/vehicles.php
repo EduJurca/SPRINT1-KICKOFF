@@ -2,8 +2,7 @@
 
 /**
  * Vehicles API Endpoint
- * Combina datos de MariaDB y MongoDB
- * (usado para la página de "localizar vehículo")
+ * Routes requests to VehicleController
  */
 
 session_start();
@@ -28,140 +27,111 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// 🔹 Conexiones
+// Cargar dependencias
 require_once __DIR__ . '/../core/DatabaseMariaDB.php';
+require_once __DIR__ . '/../controllers/VehicleController.php';
 
-$action = $_GET['action'] ?? $_POST['action'] ?? 'list';
+// Leer el body JSON si es una petición POST con JSON
+$jsonInput = null;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && 
+    strpos($_SERVER['CONTENT_TYPE'] ?? '', 'application/json') !== false) {
+    $jsonInput = json_decode(file_get_contents('php://input'), true);
+}
+
+// Determinar la acción (prioridad: GET, JSON body, POST form, default)
+$action = $_GET['action'] ?? 
+          ($jsonInput['action'] ?? null) ?? 
+          $_POST['action'] ?? 
+          'list';
+
+error_log("=== VEHICLES API REQUEST ===");
+error_log("Method: " . $_SERVER['REQUEST_METHOD']);
+error_log("Content-Type: " . ($_SERVER['CONTENT_TYPE'] ?? 'not set'));
+error_log("Action detected: $action");
+error_log("JSON Input: " . json_encode($jsonInput));
 
 try {
-    // Conexión a MariaDB
+    // Conexión a la base de datos
     $db = DatabaseMariaDB::getConnection();
-
+    
+    // Instanciar controlador
+    $vehicleController = new VehicleController($db);
+    
+    // Obtener user ID de la sesión
+    $userId = $_SESSION['user_id'];
+    
     switch ($action) {
-        case 'available':
-        default:
-            // 🔹 Obtener vehículos desde MariaDB con todos los campos necesarios
-            $stmt = $db->prepare("
-                SELECT 
-                    v.id,
-                    v.plate as license_plate,
-                    v.brand,
-                    v.model,
-                    v.year,
-                    v.battery_level,
-                    v.latitude,
-                    v.longitude,
-                    v.status,
-                    v.vehicle_type,
-                    v.is_accessible,
-                    v.accessibility_features,
-                    v.price_per_minute,
-                    v.image_url
-                FROM vehicles v
-                WHERE v.status != 'maintenance'
-            ");
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $vehicles = $result->fetch_all(MYSQLI_ASSOC);
-
-            // 🔹 Intentar conexión a MongoDB para datos en tiempo real
-            $mongoAvailable = false;
-            $mongoIndex = [];
+        case 'claim':
+            // Reclamar un vehículo
+            $vehicleId = $jsonInput['vehicle_id'] ?? $_POST['vehicle_id'] ?? null;
             
-            try {
-                // Verificar si el archivo de MongoDB existe y tiene las funciones necesarias
-                $mongoConfigFile = __DIR__ . '/../../config/database.php';
-                if (file_exists($mongoConfigFile)) {
-                    // Verificar si el archivo vendor/autoload.php existe
-                    $vendorAutoload = __DIR__ . '/../../vendor/autoload.php';
-                    if (file_exists($vendorAutoload)) {
-                        require_once $mongoConfigFile;
-                        if (function_exists('getMongoDB')) {
-                            $mongo = getMongoDB();
-                            $carsCollection = $mongo->cars;
-                            $mongoCars = iterator_to_array($carsCollection->find());
-                            
-                            // Crear índice rápido por matrícula
-                            foreach ($mongoCars as $car) {
-                                $mongoIndex[$car['license_plate']] = $car;
-                            }
-                            $mongoAvailable = true;
-                        }
-                    }
-                }
-            } catch (Exception $mongoError) {
-                // Si MongoDB no está disponible, continuamos sin él
-                error_log("MongoDB not available: " . $mongoError->getMessage());
+            error_log("=== CLAIM REQUEST ===");
+            error_log("User ID: $userId");
+            error_log("Vehicle ID: $vehicleId");
+            error_log("JSON Input: " . json_encode($jsonInput));
+            
+            if (!$vehicleId) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Vehicle ID is required'
+                ]);
+                exit();
             }
-
-            // 🔹 Combinar datos o usar valores por defecto
-            foreach ($vehicles as &$vehicle) {
-                $plate = $vehicle['license_plate'];
-                
-                // Debug: verificar si tiene coordenadas de MariaDB
-                $hasCoords = isset($vehicle['latitude']) && isset($vehicle['longitude']);
-                
-                if ($mongoAvailable && isset($mongoIndex[$plate])) {
-                    $carData = $mongoIndex[$plate];
-                    $vehicle['status'] = $carData['status'] ?? $vehicle['status'] ?? 'available';
-                    $vehicle['battery'] = $carData['battery_level'] ?? $vehicle['battery_level'] ?? 85;
-                    
-                    // Convertir location de MongoDB a formato esperado
-                    if (isset($carData['location']['coordinates'])) {
-                        $vehicle['location'] = [
-                            'lng' => $carData['location']['coordinates'][0],
-                            'lat' => $carData['location']['coordinates'][1]
-                        ];
-                    } else {
-                        // Usar ubicación de MariaDB si está disponible
-                        $vehicle['location'] = [
-                            'lat' => $hasCoords ? (float)$vehicle['latitude'] : 40.7117 + (rand(-100, 100) / 10000),
-                            'lng' => $hasCoords ? (float)$vehicle['longitude'] : 0.5783 + (rand(-100, 100) / 10000)
-                        ];
-                    }
-                    $vehicle['last_updated'] = $carData['last_updated'] ?? null;
-                    $vehicle['is_accessible'] = (bool)($carData['is_accessible'] ?? $vehicle['is_accessible'] ?? false);
-                } else {
-                    // Valores por defecto si MongoDB no está disponible - USAR SIEMPRE MariaDB
-                    $vehicle['status'] = $vehicle['status'] ?? 'available';
-                    $vehicle['battery'] = $vehicle['battery_level'] ?? rand(60, 100);
-                    
-                    // SIEMPRE usar ubicación de MariaDB si existe
-                    if ($hasCoords) {
-                        $vehicle['location'] = [
-                            'lat' => (float)$vehicle['latitude'],
-                            'lng' => (float)$vehicle['longitude']
-                        ];
-                    } else {
-                        // Fallback a Amposta centro si no hay coordenadas
-                        $vehicle['location'] = [
-                            'lat' => 40.7117 + (rand(-100, 100) / 10000),
-                            'lng' => 0.5783 + (rand(-100, 100) / 10000)
-                        ];
-                    }
-                    
-                    $vehicle['last_updated'] = date('Y-m-d H:i:s');
-                    $vehicle['is_accessible'] = (bool)($vehicle['is_accessible'] ?? (rand(0, 10) > 8));
-                }
-                
-                // Asegurar que todos los campos necesarios existen
-                $vehicle['type'] = $vehicle['vehicle_type'] ?? 'car';
-                $vehicle['price_per_minute'] = (float)($vehicle['price_per_minute'] ?? 0.35);
-                $vehicle['image_url'] = $vehicle['image_url'] ?? '/images/default-car.jpg';
-                
-                // Limpiar campos duplicados de la base de datos
-                unset($vehicle['latitude']);
-                unset($vehicle['longitude']);
-                unset($vehicle['battery_level']);
-                unset($vehicle['vehicle_type']);
+            
+            $result = $vehicleController->claimVehicle($vehicleId, $userId);
+            error_log("Claim result: " . json_encode($result));
+            
+            // Guardar en sesión si fue exitoso
+            if ($result['success']) {
+                $_SESSION['current_vehicle_id'] = $vehicleId;
+                error_log("Vehicle ID saved to session: $vehicleId");
+            } else {
+                error_log("Claim failed: " . ($result['message'] ?? 'Unknown error'));
             }
-
-            echo json_encode([
-                'success' => true,
-                'data' => $vehicles,
-                'count' => count($vehicles),
-                'mongodb_available' => $mongoAvailable
-            ]);
+            
+            http_response_code($result['code'] ?? 200);
+            unset($result['code']);
+            echo json_encode($result);
+            break;
+            
+        case 'current':
+            // Obtener vehículo actual del usuario
+            $result = $vehicleController->getCurrentVehicle($userId);
+            
+            // Actualizar sesión si hay vehículo activo
+            if ($result['success'] && isset($result['vehicle']['id'])) {
+                $_SESSION['current_vehicle_id'] = $result['vehicle']['id'];
+            }
+            
+            http_response_code($result['code'] ?? 200);
+            unset($result['code']);
+            echo json_encode($result);
+            break;
+            
+        case 'release':
+            // Liberar vehículo actual
+            $result = $vehicleController->releaseVehicle($userId);
+            
+            // Limpiar sesión si fue exitoso
+            if ($result['success']) {
+                unset($_SESSION['current_vehicle_id']);
+            }
+            
+            http_response_code($result['code'] ?? 200);
+            unset($result['code']);
+            echo json_encode($result);
+            break;
+        
+        case 'available':
+        case 'list':
+        default:
+            // Obtener vehículos disponibles
+            $result = $vehicleController->getAvailableVehicles();
+            
+            http_response_code($result['code'] ?? 200);
+            unset($result['code']);
+            echo json_encode($result);
             break;
     }
 } catch (Exception $e) {
@@ -172,4 +142,3 @@ try {
         'trace' => $e->getTraceAsString()
     ]);
 }
-?>

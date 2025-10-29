@@ -17,7 +17,7 @@ const Maps = {
      */
     async initMap(containerId = 'map', options = {}) {
         const defaultOptions = {
-            center: [40.7117, 0.5783], // Amposta, Tarragona coordinates
+            center: [41.3851, 2.1734], // Barcelona coordinates
             zoom: 14,
             minZoom: 10,
             maxZoom: 18
@@ -83,7 +83,7 @@ const Maps = {
                                 errorMessage = 'Temps d\'espera esgotat. Utilitzant ubicació per defecte (Barcelona).';
                                 break;
                             default:
-                                errorMessage = 'Error de geolocalització. Utilitzant ubicació per defecte (Amposta).';
+                                errorMessage = 'Error de geolocalització. Utilitzant ubicació per defecte (Barcelona).';
                         }
                         
                         // Show notification if Utils is available
@@ -93,8 +93,8 @@ const Maps = {
                             console.warn(errorMessage);
                         }
                         
-                        // Use default location (Amposta, Tarragona)
-                        this.userLocation = { lat: 40.7117, lng: 0.5783 };
+                        // Use default location (Barcelona)
+                        this.userLocation = { lat: 41.3851, lng: 2.1734 };
                         resolve(this.userLocation);
                     },
                     {
@@ -109,7 +109,7 @@ const Maps = {
                 if (typeof Utils !== 'undefined' && Utils.showToast) {
                     Utils.showToast('Geolocalització no suportada. Utilitzant ubicació per defecte.', 'info');
                 }
-                this.userLocation = { lat: 40.7117, lng: 0.5783 };
+                this.userLocation = { lat: 41.3851, lng: 2.1734 };
                 resolve(this.userLocation);
             }
         });
@@ -403,9 +403,18 @@ const Maps = {
      * Claim vehicle from map popup
      */
     async claimVehicleFromMap(vehicleId) {
-        const result = await Vehicles.claimVehicle(vehicleId);
-        if (result.success) {
-            // Redirect handled by Vehicles.claimVehicle
+        const item = this.markers.find(m => m.id === vehicleId);
+        if (item && item.vehicle) {
+            // Mostrar modal de confirmación
+            if (typeof window.showClaimModal === 'function') {
+                window.showClaimModal(item.vehicle);
+            } else {
+                // Fallback si el modal no está disponible
+                const result = await Vehicles.claimVehicle(vehicleId);
+                if (result.success) {
+                    // Redirect handled by Vehicles.claimVehicle
+                }
+            }
         }
     },
     
@@ -484,6 +493,8 @@ const Maps = {
                 ? `<p class="text-gray-700 text-sm font-semibold">Adaptat per: ${vehicle.accessibility_features.join(', ')}</p>`
                 : '';
             
+            const vehicleDataJson = JSON.stringify(vehicle).replace(/"/g, '&quot;');
+            
             return `
                 <li class="bg-gray-100 p-4 rounded-lg shadow-sm flex items-center justify-between hover:bg-gray-200 transition-colors cursor-pointer"
                     onclick="Maps.focusVehicle(${vehicle.id})">
@@ -494,13 +505,37 @@ const Maps = {
                         ${distanceText}
                     </div>
                     <button 
-                        onclick="event.stopPropagation(); Vehicles.claimVehicle(${vehicle.id})"
+                        onclick="event.stopPropagation(); Maps.handleClaimFromList(${vehicle.id})"
                         class="bg-[#1565C0] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#1151a3] transition-colors duration-300">
                         Reclamar
                     </button>
                 </li>
             `;
         }).join('');
+    },
+    
+    /**
+     * Handle claim vehicle from list
+     */
+    async handleClaimFromList(vehicleId) {
+        const item = this.markers.find(m => m.id === vehicleId);
+        if (item && item.vehicle) {
+            // Mostrar modal de confirmación
+            if (typeof window.showClaimModal === 'function') {
+                window.showClaimModal(item.vehicle);
+            } else {
+                // Fallback si el modal no está disponible
+                await Vehicles.claimVehicle(vehicleId);
+            }
+        } else {
+            // Si no está en los markers, obtener la info del vehículo
+            const vehicle = await Vehicles.getVehicleDetails(vehicleId);
+            if (vehicle && typeof window.showClaimModal === 'function') {
+                window.showClaimModal(vehicle);
+            } else {
+                await Vehicles.claimVehicle(vehicleId);
+            }
+        }
     },
     
     /**

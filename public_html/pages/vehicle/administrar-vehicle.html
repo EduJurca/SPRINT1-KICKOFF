@@ -4,132 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIMS - Administrar Vehicle</title>
+    <title>VoltiaCar - Administrar Vehicle</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Amagar la barra de desplaçament per a una aparença més neta */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            /* IE and Edge */
-            scrollbar-width: none;
-            /* Firefox */
-        }
-
-        /* Estils per al botó "pushable" */
-        /* Efectos de relieve y transición mejorados */
-        .pushable {
-            position: relative;
-            background: transparent;
-            border: none;
-            padding: 0;
-            cursor: pointer;
-            outline-offset: 4px;
-            transition: transform 200ms ease, filter 200ms ease;
-            -webkit-tap-highlight-color: transparent;
-            width: 100%;
-        }
-
-        .shadow {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 12px;
-            background: rgba(0, 0, 0, 0.35);
-            will-change: transform, opacity;
-            transform: translateY(4px);
-            transition: transform 250ms cubic-bezier(.3, .7, .4, 1), opacity 250ms ease;
-        }
-
-        .edge {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 12px;
-            background: linear-gradient(to left, hsl(215, 60%, 40%) 0%, hsl(215, 60%, 50%) 8%, hsl(215, 60%, 50%) 92%, hsl(215, 60%, 40%) 100%);
-            transition: filter 200ms ease, transform 200ms ease;
-        }
-
-        .front {
-            display: block;
-            position: relative;
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-size: 1rem;
-            color: white;
-            background: hsl(215, 60%, 50%);
-            will-change: transform, box-shadow;
-            transform: translateY(-4px);
-            transition: transform 250ms cubic-bezier(.3, .7, .4, 1), box-shadow 250ms ease;
-            text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3);
-            text-align: center;
-        }
-
-        .pushable:hover .front {
-            transform: translateY(-6px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .pushable:active .front {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
-        }
-
-        .pushable:active .shadow {
-            transform: translateY(2px);
-            opacity: 0.8;
-        }
-
-        .pushable.red .edge {
-            background: linear-gradient(to left,
-                    hsl(0, 70%, 40%) 0%,
-                    hsl(0, 70%, 50%) 8%,
-                    hsl(0, 70%, 50%) 92%,
-                    hsl(0, 70%, 40%) 100%);
-        }
-
-        .pushable.red .front {
-            background: hsl(0, 70%, 50%);
-        }
-
-        .pushable.green .edge {
-            background: linear-gradient(to left,
-                    hsl(140, 70%, 40%) 0%,
-                    hsl(140, 70%, 50%) 8%,
-                    hsl(140, 70%, 50%) 92%,
-                    hsl(140, 70%, 40%) 100%);
-        }
-
-        .pushable.green .front {
-            background: hsl(140, 70%, 50%);
-        }
-
-        .pushable:hover {
-            filter: brightness(110%);
-        }
-
-        .pushable:focus:not(:focus-visible) {
-            outline: none;
-        }
-
-        /* Botón amarillo pushable para Engegar/Apagar */
-        .pushable.yellow .edge {
-            background: linear-gradient(to left, hsl(45, 80%, 50%) 0%, hsl(45, 80%, 60%) 8%, hsl(45, 80%, 60%) 92%, hsl(45, 80%, 50%) 100%);
-        }
-
-        .pushable.yellow .front {
-            background: hsl(45, 80%, 60%);
-            color: black;
-            text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.3);
-        }
-    </style>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin="">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../css/custom.css">
+    <link rel="stylesheet" href="../../css/administrar-vehicle.css">
 </head>
 
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
@@ -141,20 +28,22 @@
                   <a href="../dashboard/gestio.html" class="text-[#1565C0] font-semibold hover:underline">← Tornar</a>
                 </div>
                 <h1 class="text-2xl font-bold text-gray-900 text-center">Controlar Vehicle</h1>
-                <div class="flex justify-end">
+                <div class="flex justify-end items-center gap-2">
+                    <button id="release-vehicle-btn-mobile" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-3 rounded-lg text-xs transition-colors" title="Finalitzar Reserva">
+                        Finalitzar
+                    </button>
                     <img src="../../images/logo.png" alt="Logo" class="h-10 w-10">
                 </div>
             </header>
 
             <!-- Parte superior fixa: Estat del Servei y Bateria en fila -->
-            <div
-                class="mb-4 sticky top-0 z-10 bg-white p-2 rounded-lg shadow-sm flex flex-row justify-between items-center gap-2">
+            <div class="mb-4 sticky top-0 z-10 bg-white p-2 rounded-lg shadow-sm flex flex-row justify-between items-center gap-2">
                 <div class="pushable green flex-1">
                     <span class="shadow"></span>
                     <span class="edge"></span>
                     <span class="front p-2 flex flex-col items-center text-sm">
                         <span class="text-base font-semibold">Estat:</span>
-                        <span class="text-white text-sm font-semibold">Operatiu</span>
+                        <span class="text-white text-sm font-semibold" data-vehicle-status>Operatiu</span>
                     </span>
                 </div>
                 <div class="pushable flex-1">
@@ -164,9 +53,8 @@
                     <span class="front p-2 flex flex-col items-center text-sm" style="background: hsl(200, 70%, 50%);">
                         <span class="text-base font-semibold">Bateria:</span>
                         <div class="w-full bg-gray-300 rounded-lg h-6 overflow-hidden mt-1">
-                            <div class="h-full" style="width: 80%; background-color: #00C853;">
-                                <div class="h-full flex items-center justify-center text-white font-bold text-sm">80%
-                                </div>
+                            <div class="h-full" data-battery-bar style="width: 80%; background-color: #00C853;">
+                                <div class="h-full flex items-center justify-center text-white font-bold text-sm" data-battery-text>80%</div>
                             </div>
                         </div>
                     </span>
@@ -178,36 +66,36 @@
                 <section class="flex-none w-full px-2 sm:px-4 flex flex-col justify-center snap-start">
                     <h2 class="text-xl font-bold text-gray-900 mb-4">Controls del Vehicle</h2>
                     <div class="grid grid-cols-2 gap-4 sm:gap-6 p-2">
-                        <button class="pushable h-32">
+                        <button class="pushable yellow h-32" data-control="engine">
                             <span class="shadow"></span>
                             <span class="edge"></span>
                             <span class="front flex-1 flex flex-col items-center justify-center text-base p-2">
-                                <img src="../../../../images/engegar.png" alt="Engegar/Apagar" class="h-12 w-12 mb-2">
+                                <img src="../../images/engegar.png" alt="Engegar/Apagar" class="h-12 w-12 mb-2">
                                 <span>Engegar</span>
                                 <span>/Apagar</span>
                             </span>
                         </button>
-                        <button class="pushable h-32">
+                        <button class="pushable h-32" data-control="horn">
                             <span class="shadow"></span>
                             <span class="edge"></span>
                             <span class="front flex-1 flex flex-col items-center justify-center text-base p-2">
-                                <img src="../../../../images/claxon.png" alt="Activar Clàxon" class="h-12 w-12 mb-2">
+                                <img src="../../images/claxon.png" alt="Activar Clàxon" class="h-12 w-12 mb-2">
                                 Activar Clàxon
                             </span>
                         </button>
-                        <button class="pushable h-32">
+                        <button class="pushable h-32" data-control="lights">
                             <span class="shadow"></span>
                             <span class="edge"></span>
                             <span class="front flex-1 flex flex-col items-center justify-center text-base p-2">
-                                <img src="../../../../images/llums.png" alt="Activar Llums" class="h-12 w-12 mb-2">
+                                <img src="../../images/llums.png" alt="Activar Llums" class="h-12 w-12 mb-2">
                                 Activar Llums
                             </span>
                         </button>
-                        <button class="pushable h-32">
+                        <button class="pushable h-32" data-control="doors">
                             <span class="shadow"></span>
                             <span class="edge"></span>
                             <span class="front flex-1 flex flex-col items-center justify-center text-base p-2">
-                                <img src="../../../../images/portes.png" alt="Bloquejar Portes" class="h-12 w-12 mb-2">
+                                <img src="../../images/portes.png" alt="Bloquejar Portes" class="h-12 w-12 mb-2">
                                 Bloquejar Portes
                             </span>
                         </button>
@@ -217,13 +105,11 @@
                 <section class="flex-none w-full px-2 sm:px-4 flex flex-col justify-center snap-start">
                     <h2 class="text-xl font-bold text-gray-900 mb-4">Informació i Ubicació</h2>
                     <div class="bg-[#F5F5F5] p-4 rounded-lg mb-4">
-                        <p class="text-gray-900 font-semibold text-lg">Matrícula: <span
-                                class="font-normal">[Matrícula]</span></p>
-                        <p class="text-gray-700">Model: <span class="font-normal">[Model]</span></p>
+                        <p class="text-gray-900 font-semibold text-lg">Matrícula: <span class="font-normal" data-vehicle-license>Carregant...</span></p>
+                        <p class="text-gray-700">Model: <span class="font-normal" data-vehicle-model>Carregant...</span></p>
                     </div>
-                    <div
-                        class="bg-gray-300 h-48 w-full rounded-lg flex items-center justify-center text-gray-600 font-medium text-lg">
-                        [Mapa de la ubicació]
+                    <div class="w-full rounded-lg relative" style="height: 250px;">
+                        <div id="vehicle-map-mobile" style="height: 100%; width: 100%; border-radius: 0.5rem;"></div>
                     </div>
                 </section>
 
@@ -251,20 +137,22 @@
                 <a href="../dashboard/gestio.html" class="text-[#1565C0] text-sm font-semibold">← Tornar</a>
             </div>
             <h2 class="text-3xl font-bold text-gray-900 text-center">Controlar Vehicle</h2>
-            <div class="flex justify-end">
+            <div class="flex justify-end items-center gap-3">
+                <button id="release-vehicle-btn-desktop" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition-colors" title="Finalitzar Reserva">
+                    Finalitzar Reserva
+                </button>
                 <img src="../../images/logo.png" alt="Logo" class="h-10 w-10">
             </div>
         </header>
 
-        <div
-            class="mb-6 sticky top-0 z-10 bg-white p-4 rounded-lg shadow-sm flex flex-row justify-center items-center gap-8">
+        <div class="mb-6 sticky top-0 z-10 bg-white p-4 rounded-lg shadow-sm flex flex-row justify-center items-center gap-8">
             <div class="pushable flex-1 max-w-xs">
                 <span class="shadow"></span>
                 <span class="edge"
                     style="background: linear-gradient(to left, hsl(140, 80%, 35%) 0%, hsl(140, 80%, 45%) 8%, hsl(140, 80%, 45%) 92%, hsl(140, 80%, 35%) 100%);"></span>
                 <span class="front p-3 flex flex-col items-center text-base" style="background: hsl(140, 80%, 45%);">
                     <span class="font-semibold">Estat:</span>
-                    <span class="text-white font-semibold h-8 mt-2">Operatiu</span>
+                    <span class="text-white font-semibold h-8 mt-2" data-vehicle-status>Operatiu</span>
                 </span>
             </div>
             <div class="pushable flex-1 max-w-xs">
@@ -274,9 +162,8 @@
                 <span class="front p-3 flex flex-col items-center text-base" style="background: hsl(200, 70%, 50%);">
                     <span class="font-semibold">Bateria:</span>
                     <div class="w-full bg-gray-300 rounded-lg h-8 overflow-hidden mt-2">
-                        <div class="h-full" style="width: 80%; background-color: #00C853;">
-                            <div class="h-full flex items-center justify-center text-white font-bold text-base">80%
-                            </div>
+                        <div class="h-full" data-battery-bar style="width: 80%; background-color: #00C853;">
+                            <div class="h-full flex items-center justify-center text-white font-bold text-base" data-battery-text>80%</div>
                         </div>
                     </div>
                 </span>
@@ -287,36 +174,36 @@
             <section class="flex-1 flex flex-col">
                 <h2 class="text-2xl font-bold text-gray-900 mb-6">Controls del Vehicle</h2>
                 <div class="grid grid-cols-2 gap-8">
-                    <button class="pushable h-40">
+                    <button class="pushable yellow h-40" data-control="engine">
                         <span class="shadow"></span>
-                        <span class="edge yellow"></span>
+                        <span class="edge"></span>
                         <span class="front flex flex-col items-center justify-center text-lg p-4">
-                            <img src="../../../../images/engegar.png" alt="Engegar/Apagar" class="h-16 w-16 mb-3">
+                            <img src="../../images/engegar.png" alt="Engegar/Apagar" class="h-16 w-16 mb-3">
                             <span>Engegar</span>
                             <span>/Apagar</span>
                         </span>
                     </button>
-                    <button class="pushable h-40">
+                    <button class="pushable h-40" data-control="horn">
                         <span class="shadow"></span>
                         <span class="edge"></span>
                         <span class="front flex flex-col items-center justify-center text-lg p-4">
-                            <img src="../../../../images/claxon.png" alt="Activar Clàxon" class="h-16 w-16 mb-3">
+                            <img src="../../images/claxon.png" alt="Activar Clàxon" class="h-16 w-16 mb-3">
                             Activar Clàxon
                         </span>
                     </button>
-                    <button class="pushable h-40">
+                    <button class="pushable h-40" data-control="lights">
                         <span class="shadow"></span>
                         <span class="edge"></span>
                         <span class="front flex flex-col items-center justify-center text-lg p-4">
-                            <img src="../../../../images/llums.png" alt="Activar Llums" class="h-16 w-16 mb-3">
+                            <img src="../../images/llums.png" alt="Activar Llums" class="h-16 w-16 mb-3">
                             Activar Llums
                         </span>
                     </button>
-                    <button class="pushable h-40">
+                    <button class="pushable h-40" data-control="doors">
                         <span class="shadow"></span>
                         <span class="edge"></span>
                         <span class="front flex flex-col items-center justify-center text-lg p-4">
-                            <img src="../../../../images/portes.png" alt="Bloquejar Portes" class="h-16 w-16 mb-3">
+                            <img src="../../images/portes.png" alt="Bloquejar Portes" class="h-16 w-16 mb-3">
                             Bloquejar Portes
                         </span>
                     </button>
@@ -327,13 +214,11 @@
             <section class="flex-1 flex flex-col">
                 <h2 class="text-2xl font-bold text-gray-900 mb-6">Informació i Ubicació</h2>
                 <div class="bg-[#F5F5F5] p-6 rounded-lg mb-6">
-                    <p class="text-gray-900 font-semibold text-xl mb-2">Matrícula: <span
-                            class="font-normal">[Matrícula]</span></p>
-                    <p class="text-gray-700 text-lg">Model: <span class="font-normal">[Model]</span></p>
+                    <p class="text-gray-900 font-semibold text-xl mb-2">Matrícula: <span class="font-normal" data-vehicle-license>Carregant...</span></p>
+                    <p class="text-gray-700 text-lg">Model: <span class="font-normal" data-vehicle-model>Carregant...</span></p>
                 </div>
-                <div
-                    class="bg-gray-300 h-64 w-full rounded-lg flex items-center justify-center text-gray-600 font-semibold text-xl">
-                    [Mapa de la ubicació]
+                <div class="flex-1 w-full rounded-lg relative" style="min-height: 320px;">
+                    <div id="vehicle-map-desktop" style="height: 100%; width: 100%; border-radius: 0.5rem;"></div>
                 </div>
             </section>
 
@@ -349,31 +234,70 @@
         </main>
     </div>
 
+    <!-- Modal de Confirmación para Finalizar Reserva -->
+    <div id="release-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4" style="z-index: 9999;">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative">
+            <!-- Icono -->
+            <div class="flex justify-center mb-4">
+                <div class="bg-red-100 rounded-full p-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+            </div>
+            
+            <!-- Título -->
+            <h3 class="text-2xl font-bold text-gray-900 text-center mb-3">
+                Finalitzar Reserva
+            </h3>
+            
+            <!-- Información del Vehículo -->
+            <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-gray-600 font-medium">Vehicle:</span>
+                    <span class="text-gray-900 font-bold" id="release-vehicle-info">-</span>
+                </div>
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-gray-600 font-medium">Temps d'ús:</span>
+                    <span class="text-gray-900 font-bold" id="release-time-info">-</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-gray-600 font-medium">Cost estimat:</span>
+                    <span class="text-green-600 font-bold text-lg" id="release-cost-info">-</span>
+                </div>
+            </div>
+            
+            <!-- Mensaje -->
+            <p class="text-gray-600 text-center mb-6">
+                Estàs segur que vols finalitzar la reserva d'aquest vehicle?
+                <br>
+                <span class="text-sm text-gray-500">El vehicle quedarà disponible per a altres usuaris.</span>
+            </p>
+            
+            <!-- Botones -->
+            <div class="flex gap-3">
+                <button id="release-cancel-btn" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-lg transition-colors">
+                    Cancel·lar
+                </button>
+                <button id="release-confirm-btn" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                    Finalitzar
+                </button>
+            </div>
+        </div>
+    </div>
 
-    <style>
-        .dots .dot.active {
-            background-color: #1565C0;
-        }
-    </style>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const mainScroll = document.querySelector('main');
-            const dots = document.querySelectorAll('.dot');
-            function updateDots() {
-                const scrollLeft = mainScroll.scrollLeft;
-                const width = mainScroll.clientWidth;
-                const index = Math.round(scrollLeft / width);
-                dots.forEach((dot, i) => {
-                    dot.classList.toggle('active', i === index);
-                });
-            }
-            if (mainScroll) {
-                mainScroll.addEventListener('scroll', updateDots);
-            }
-            dots[0].classList.add('active');
-        });
-    </script>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+    
+    <!-- Application Scripts -->
+    <script src="../../js/toast.js?v=12"></script>
+    <script src="../../js/confirm-modal.js?v=12"></script>
+    <script src="../../js/main.js?v=12"></script>
+    <script src="../../js/auth.js?v=12"></script>
+    <script src="../../js/vehicles.js?v=12"></script>
+    <script src="../../js/administrar-vehicle.js?v=12"></script>
 
     <a href="../dashboard/resum-projecte.html"
         class="fixed bottom-10 right-10 block bg-[#1565C0] text-white p-4 rounded-full shadow-lg hover:bg-[#1151a3] transition-colors duration-300 z-50">

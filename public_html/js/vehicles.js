@@ -3,8 +3,6 @@
  * Handles vehicle operations, control, and status
  */
 
-/* global Utils */
-
 const Vehicles = {
     currentVehicle: null,
     
@@ -111,7 +109,7 @@ const Vehicles = {
                 license_plate: 'AB 123 CD',
                 model: 'Tesla Model 3',
                 battery: 85,
-                location: { lat: 40.7117, lng: 0.5783 },
+                location: { lat: 41.3851, lng: 2.1734 },
                 status: 'available',
                 features: ['Mobilitat reduïda', 'Discapacitat auditiva']
             },
@@ -120,7 +118,7 @@ const Vehicles = {
                 license_plate: 'EF 456 GH',
                 model: 'Nissan Leaf',
                 battery: 70,
-                location: { lat: 40.7135, lng: 0.5765 },
+                location: { lat: 41.3879, lng: 2.1699 },
                 status: 'available',
                 features: []
             },
@@ -129,7 +127,7 @@ const Vehicles = {
                 license_plate: 'IJ 789 KL',
                 model: 'BMW i3',
                 battery: 60,
-                location: { lat: 40.7100, lng: 0.5810 },
+                location: { lat: 41.3901, lng: 2.1740 },
                 status: 'available',
                 features: ['Mobilitat reduïda']
             },
@@ -138,7 +136,7 @@ const Vehicles = {
                 license_plate: 'MN 012 OP',
                 model: 'Renault Zoe',
                 battery: 90,
-                location: { lat: 40.7145, lng: 0.5750 },
+                location: { lat: 41.3825, lng: 2.1765 },
                 status: 'available',
                 features: []
             },
@@ -147,7 +145,7 @@ const Vehicles = {
                 license_plate: 'QR 345 ST',
                 model: 'Volkswagen ID.3',
                 battery: 75,
-                location: { lat: 40.7095, lng: 0.5830 },
+                location: { lat: 41.3890, lng: 2.1710 },
                 status: 'available',
                 features: ['Discapacitat auditiva']
             }
@@ -183,7 +181,7 @@ const Vehicles = {
      */
     async claimVehicle(vehicleId) {
         try {
-            Utils.showLoading();
+            console.log('🚗 Reclamando vehículo ID:', vehicleId);
             
             const response = await fetch('/php/api/vehicles.php', {
                 method: 'POST',
@@ -197,28 +195,109 @@ const Vehicles = {
                 })
             });
             
-            const data = await response.json();
-            Utils.hideLoading();
+            console.log('📡 Response status:', response.status, response.statusText);
             
-            if (data.success) {
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            console.log('✅ Respuesta completa de claim:', data);
+            console.log('📦 data.success:', data.success);
+            console.log('📦 data.vehicle:', data.vehicle);
+            console.log('📦 data.booking:', data.booking);
+            console.log('📦 data.booking_id:', data.booking_id);
+            console.log('📦 Todas las keys:', Object.keys(data));
+            
+            // Si la API devuelve success pero no vehicle, intentar construirlo desde booking
+            if (data.success && !data.vehicle && data.booking) {
+                console.log('⚠️ API no devolvió vehicle, usando datos de booking...');
+                data.vehicle = {
+                    id: data.booking.vehicle_id,
+                    license_plate: data.booking.license_plate,
+                    brand: data.booking.brand,
+                    model: data.booking.model,
+                    battery: data.booking.battery || 85,
+                    latitude: data.booking.latitude,
+                    longitude: data.booking.longitude,
+                    status: 'in_use',
+                    booking_id: data.booking.id || data.booking_id,
+                    booking_start: data.booking.start_datetime,
+                    price_per_minute: data.booking.price_per_minute || '0.38'
+                };
+                console.log('✅ Vehicle reconstruido:', data.vehicle);
+            }
+            
+            if (data.success && data.vehicle) {
                 this.currentVehicle = data.vehicle;
-                Utils.setLocalStorage('currentVehicle', data.vehicle, 60);
-                Utils.showToast('Vehicle reclamat amb èxit', 'success');
                 
+                // Asegurar que tiene todos los campos necesarios
+                if (!data.vehicle.id || !data.vehicle.license_plate) {
+                    console.error('❌ Vehicle data incompleto:', data.vehicle);
+                    return {
+                        success: false,
+                        message: 'Vehicle data incomplete'
+                    };
+                }
+                
+                console.log('💾 Vehicle data válido, guardando en localStorage...');
+                
+                // Guardar en localStorage
+                try {
+                    const vehicleJson = JSON.stringify(data.vehicle);
+                    console.log('💾 JSON a guardar:', vehicleJson);
+                    console.log('💾 Longitud del JSON:', vehicleJson.length);
+                    
+                    localStorage.setItem('currentVehicle', vehicleJson);
+                    console.log('✅ localStorage.setItem ejecutado');
+                    
+                    // Verificar que se guardó correctamente
+                    const saved = localStorage.getItem('currentVehicle');
+                    console.log('🔍 Verificación - localStorage contenido:', saved);
+                    console.log('🔍 Tipo de dato:', typeof saved);
+                    console.log('🔍 Es null?', saved === null);
+                    console.log('🔍 Es undefined string?', saved === 'undefined');
+                    
+                    if (!saved || saved === 'undefined' || saved === 'null') {
+                        console.error('❌ FALLO: localStorage no guardó correctamente');
+                        console.error('❌ Valor guardado:', saved);
+                        return {
+                            success: false,
+                            message: 'Failed to save vehicle to localStorage'
+                        };
+                    }
+                    
+                    console.log('✅ Vehicle guardado correctamente en localStorage');
+                    
+                } catch (e) {
+                    console.error('❌ Excepción al guardar en localStorage:', e);
+                    return {
+                        success: false,
+                        message: 'localStorage error: ' + e.message
+                    };
+                }
+                
+                console.log('✅ Vehículo reclamado exitosamente, redirigiendo en 1 segundo...');
+                
+                // Redirigir a la página de administrar vehículo
                 setTimeout(() => {
+                    console.log('🔄 Redirigiendo a administrar-vehicle.html...');
                     window.location.href = './administrar-vehicle.html';
                 }, 1000);
                 
-                return { success: true };
+                return { success: true, vehicle: data.vehicle };
             } else {
-                Utils.showToast(data.message || 'Error en reclamar el vehicle', 'error');
-                return { success: false };
+                const errorMsg = data.message || 'Error en reclamar el vehicle';
+                console.error('❌ Error en claim:', errorMsg);
+                console.error('❌ data.success:', data.success);
+                console.error('❌ data.vehicle:', data.vehicle);
+                
+                return { success: false, message: errorMsg };
             }
         } catch (error) {
-            Utils.hideLoading();
-            console.error('Error claiming vehicle:', error);
-            Utils.showToast('Error de connexió amb el servidor', 'error');
-            return { success: false };
+            console.error('❌ Error claiming vehicle:', error);
+            
+            return { success: false, error: error.message };
         }
     },
     
@@ -227,9 +306,11 @@ const Vehicles = {
      */
     async releaseVehicle() {
         try {
-            Utils.showLoading();
+            console.log("🔓 Liberando vehículo...");
             
-            const response = await fetch('/php/api/vehicles.php', {
+            const basePath = this.getApiBasePath();
+            
+            const response = await fetch(basePath, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -240,23 +321,25 @@ const Vehicles = {
                 })
             });
             
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
             const data = await response.json();
-            Utils.hideLoading();
+            console.log("✅ Respuesta de release:", data);
             
             if (data.success) {
                 this.currentVehicle = null;
                 localStorage.removeItem('currentVehicle');
-                Utils.showToast('Vehicle alliberat amb èxit', 'success');
-                return { success: true };
+                console.log('✅ Vehículo liberado correctamente');
+                return { success: true, message: data.message };
             } else {
-                Utils.showToast(data.message || 'Error en alliberar el vehicle', 'error');
-                return { success: false };
+                console.error('❌ Error al liberar:', data.message);
+                return { success: false, message: data.message };
             }
         } catch (error) {
-            Utils.hideLoading();
-            console.error('Error releasing vehicle:', error);
-            Utils.showToast('Error de connexió amb el servidor', 'error');
-            return { success: false };
+            console.error('❌ Excepción al liberar vehículo:', error);
+            return { success: false, message: error.message };
         }
     },
     
@@ -265,7 +348,15 @@ const Vehicles = {
      */
     getCurrentVehicle() {
         if (!this.currentVehicle) {
-            this.currentVehicle = Utils.getLocalStorage('currentVehicle');
+            // Try to load from localStorage
+            try {
+                const stored = localStorage.getItem('currentVehicle');
+                if (stored) {
+                    this.currentVehicle = JSON.parse(stored);
+                }
+            } catch (e) {
+                console.warn('Could not load from localStorage:', e);
+            }
         }
         return this.currentVehicle;
     },
@@ -289,15 +380,15 @@ const Vehicles = {
             const data = await response.json();
             
             if (data.success) {
-                Utils.showToast('Clàxon activat', 'success');
+                // Removed Utils.showToast
                 return { success: true };
             } else {
-                Utils.showToast('Error en activar el clàxon', 'error');
+                // Removed Utils.showToast
                 return { success: false };
             }
         } catch (error) {
             console.error('Error activating horn:', error);
-            Utils.showToast('Error de connexió', 'error');
+            // Removed Utils.showToast
             return { success: false };
         }
     },
@@ -321,15 +412,15 @@ const Vehicles = {
             const data = await response.json();
             
             if (data.success) {
-                Utils.showToast('Llums activats', 'success');
+                // Removed Utils.showToast
                 return { success: true };
             } else {
-                Utils.showToast('Error en activar els llums', 'error');
+                // Removed Utils.showToast
                 return { success: false };
             }
         } catch (error) {
             console.error('Error activating lights:', error);
-            Utils.showToast('Error de connexió', 'error');
+            // Removed Utils.showToast
             return { success: false };
         }
     },
@@ -339,7 +430,7 @@ const Vehicles = {
      */
     async startEngine() {
         try {
-            Utils.showLoading();
+            console.log("⏳ Loading...");
             
             const response = await fetch('/php/api/vehicle-control.php', {
                 method: 'POST',
@@ -353,19 +444,19 @@ const Vehicles = {
             });
             
             const data = await response.json();
-            Utils.hideLoading();
+            console.log("✅ Loaded");
             
             if (data.success) {
-                Utils.showToast('Motor engegat', 'success');
+                // Removed Utils.showToast
                 return { success: true };
             } else {
-                Utils.showToast('Error en engegar el motor', 'error');
+                // Removed Utils.showToast
                 return { success: false };
             }
         } catch (error) {
-            Utils.hideLoading();
+            console.log("✅ Loaded");
             console.error('Error starting engine:', error);
-            Utils.showToast('Error de connexió', 'error');
+            // Removed Utils.showToast
             return { success: false };
         }
     },
@@ -375,7 +466,7 @@ const Vehicles = {
      */
     async stopEngine() {
         try {
-            Utils.showLoading();
+            console.log("⏳ Loading...");
             
             const response = await fetch('/php/api/vehicle-control.php', {
                 method: 'POST',
@@ -389,19 +480,19 @@ const Vehicles = {
             });
             
             const data = await response.json();
-            Utils.hideLoading();
+            console.log("✅ Loaded");
             
             if (data.success) {
-                Utils.showToast('Motor apagat', 'success');
+                // Removed Utils.showToast
                 return { success: true };
             } else {
-                Utils.showToast('Error en apagar el motor', 'error');
+                // Removed Utils.showToast
                 return { success: false };
             }
         } catch (error) {
-            Utils.hideLoading();
+            console.log("✅ Loaded");
             console.error('Error stopping engine:', error);
-            Utils.showToast('Error de connexió', 'error');
+            // Removed Utils.showToast
             return { success: false };
         }
     },
@@ -425,15 +516,15 @@ const Vehicles = {
             const data = await response.json();
             
             if (data.success) {
-                Utils.showToast(lock ? 'Portes bloquejades' : 'Portes desbloquejades', 'success');
+                // Removed Utils.showToast
                 return { success: true };
             } else {
-                Utils.showToast('Error en controlar les portes', 'error');
+                // Removed Utils.showToast
                 return { success: false };
             }
         } catch (error) {
             console.error('Error toggling doors:', error);
-            Utils.showToast('Error de connexió', 'error');
+            // Removed Utils.showToast
             return { success: false };
         }
     },
