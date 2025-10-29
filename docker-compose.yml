@@ -47,7 +47,7 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - mariadb_data:/var/lib/mysql
-      - ./mariadb-init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./database/mariadb-init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "3306:3306"
     restart: unless-stopped
@@ -70,7 +70,7 @@ services:
       MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
     volumes:
       - mongodb_data:/data/db
-      - ./mongodb-init.js:/docker-entrypoint-initdb.d/init.js
+      - ./database/mongodb-init.js:/docker-entrypoint-initdb.d/init.js
     ports:
       - "27017:27017"
     restart: unless-stopped
