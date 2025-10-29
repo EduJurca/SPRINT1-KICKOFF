@@ -16,14 +16,14 @@ integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
 crossorigin=""
 >
     
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="../../css/custom.css">
-    <link rel="stylesheet" href="../../css/accessibility.css">
-    <link rel="stylesheet" href="../../css/localitzar-vehicle.css">
-    <link rel="stylesheet" href="../../css/vehicle-claim-modal.css">
+    <!-- Custom CSS (use /public_html paths so server serves correctly) -->
+    <link rel="stylesheet" href="/public_html/css/custom.css">
+    <link rel="stylesheet" href="/public_html/css/accessibility.css">
+    <link rel="stylesheet" href="/public_html/css/localitzar-vehicle.css">
+    <link rel="stylesheet" href="/public_html/css/vehicle-claim-modal.css">
     
     <!-- Tailwind Config -->
-    <script src="../../css/tailwind.config.js"></script>
+    <script src="/public_html/css/tailwind.config.js"></script>
     
     <style>
         /* Map container styling */
@@ -143,6 +143,37 @@ class="h-6 w-6"
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
             crossorigin=""></script>
+    
+    <!-- Vehicle Claim Modal (hidden by default, shown by JS when claiming) -->
+    <div id="claim-modal" class="claim-modal-overlay" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:9999;opacity:0;visibility:hidden;transition:opacity 0.3s ease,visibility 0.3s ease;">
+        <div class="claim-modal-container" style="background:white;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.2);max-width:500px;width:90%;max-height:90vh;overflow-y:auto;transform:scale(0.9) translateY(20px);transition:transform 0.3s ease;">
+            <div class="claim-modal-header" style="padding:24px;border-bottom:1px solid #E5E7EB;display:flex;align-items:center;justify-content:space-between;">
+                <h2 class="claim-modal-title" style="font-size:20px;font-weight:700;color:#1F2937;display:flex;align-items:center;gap:12px;">
+                    <span>🚗</span>
+                    <span>Confirmar reclamació</span>
+                </h2>
+                <button class="claim-modal-close" id="claim-modal-close" style="background:none;border:none;color:#6B7280;cursor:pointer;padding:8px;border-radius:8px;font-size:24px;line-height:1;">✕</button>
+            </div>
+            <div class="claim-modal-content" style="padding:24px;">
+                <div class="vehicle-info-card" id="vehicle-info" style="background:#F9FAFB;border-radius:12px;padding:16px;margin-bottom:20px;">
+                    Carregant...
+                </div>
+                <div class="charge-warning" style="background:#FEF3C7;border:2px solid #F59E0B;border-radius:12px;padding:16px;margin-bottom:20px;display:flex;align-items:start;gap:12px;">
+                    <div class="charge-warning-icon" style="font-size:24px;flex-shrink:0;">⚠️</div>
+                    <div class="charge-warning-content" style="flex:1;">
+                        <div class="charge-warning-title" style="font-weight:700;color:#92400E;margin-bottom:4px;font-size:16px;">Cost de desbloqueig</div>
+                        <div class="charge-warning-text" style="color:#78350F;font-size:14px;line-height:1.5;">Es cobrarà una tarifa de desbloqueig al reclamar aquest vehicle. Aquest càrrec es farà immediatament.</div>
+                    </div>
+                </div>
+                <div class="charge-amount" style="font-size:28px;font-weight:800;color:#1565C0;text-align:center;margin:20px 0;">0.50€</div>
+                <p style="text-align:center;color:#6B7280;font-size:14px;margin-top:16px;">En confirmar, acceptes els termes i condicions del servei</p>
+            </div>
+            <div class="claim-modal-footer" style="padding:20px 24px;border-top:1px solid #E5E7EB;display:flex;gap:12px;">
+                <button class="claim-modal-button claim-modal-button-cancel" id="claim-modal-cancel" style="flex:1;padding:12px 24px;border-radius:12px;font-weight:700;font-size:16px;border:none;cursor:pointer;background-color:#F3F4F6;color:#4B5563;">Cancel·lar</button>
+                <button class="claim-modal-button claim-modal-button-confirm" id="claim-modal-confirm" style="flex:1;padding:12px 24px;border-radius:12px;font-weight:700;font-size:16px;border:none;cursor:pointer;background-color:#1565C0;color:white;">Acceptar i reclamar</button>
+            </div>
+        </div>
+    </div>
     
     <!-- Application Scripts -->
     <script src="/public_html/js/toast.js?v=11"></script>

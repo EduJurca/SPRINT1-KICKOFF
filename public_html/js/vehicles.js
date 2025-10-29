@@ -31,7 +31,6 @@ const Vehicles = {
                 const contentType = response.headers.get('content-type');
                 if (contentType && contentType.includes('application/json')) {
                     const data = await response.json();
-                    console.log('🚗 Vehicles API response:', data);
                     if (data.success && data.vehicles) {
                         return data.vehicles;
                     }
