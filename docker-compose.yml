@@ -13,7 +13,7 @@ services:
     volumes:
       # Estructura MVC
       - ./:/var/www/html
-      - ./public_html:/var/www/html/public_html
+      - ./assets:/var/www/html/assets
       - ./config:/var/www/html/config
       - ./core:/var/www/html/core
       - ./models:/var/www/html/models

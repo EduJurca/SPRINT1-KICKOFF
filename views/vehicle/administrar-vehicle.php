@@ -32,7 +32,7 @@
                     <button id="release-vehicle-btn-mobile" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-3 rounded-lg text-xs transition-colors" title="Finalitzar Reserva">
                         Finalitzar
                     </button>
-                    <img src="/public_html/images/logo.png" alt="Logo" class="h-10 w-10">
+                    <img src="/assets/images/logo.png" alt="Logo" class="h-10 w-10">
                 </div>
             </header>
 
@@ -70,7 +70,7 @@
                             <span class="shadow"></span>
                             <span class="edge"></span>
                             <span class="front flex-1 flex flex-col items-center justify-center text-base p-2">
-                                <img src="/public_html/images/engegar.png" alt="Engegar/Apagar" class="h-12 w-12 mb-2">
+                                <img src="/assets/images/engegar.png" alt="Engegar/Apagar" class="h-12 w-12 mb-2">
                                 <span>Engegar</span>
                                 <span>/Apagar</span>
                             </span>
@@ -79,7 +79,7 @@
                             <span class="shadow"></span>
                             <span class="edge"></span>
                             <span class="front flex-1 flex flex-col items-center justify-center text-base p-2">
-                                <img src="/public_html/images/claxon.png" alt="Activar Clàxon" class="h-12 w-12 mb-2">
+                                <img src="/assets/images/claxon.png" alt="Activar Clàxon" class="h-12 w-12 mb-2">
                                 Activar Clàxon
                             </span>
                         </button>
@@ -87,7 +87,7 @@
                             <span class="shadow"></span>
                             <span class="edge"></span>
                             <span class="front flex-1 flex flex-col items-center justify-center text-base p-2">
-                                <img src="/public_html/images/llums.png" alt="Activar Llums" class="h-12 w-12 mb-2">
+                                <img src="/assets/images/llums.png" alt="Activar Llums" class="h-12 w-12 mb-2">
                                 Activar Llums
                             </span>
                         </button>
@@ -95,7 +95,7 @@
                             <span class="shadow"></span>
                             <span class="edge"></span>
                             <span class="front flex-1 flex flex-col items-center justify-center text-base p-2">
-                                <img src="/public_html/images/portes.png" alt="Bloquejar Portes" class="h-12 w-12 mb-2">
+                                <img src="/assets/images/portes.png" alt="Bloquejar Portes" class="h-12 w-12 mb-2">
                                 Bloquejar Portes
                             </span>
                         </button>
@@ -141,7 +141,7 @@
                 <button id="release-vehicle-btn-desktop" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition-colors" title="Finalitzar Reserva">
                     Finalitzar Reserva
                 </button>
-                <img src="/public_html/images/logo.png" alt="Logo" class="h-10 w-10">
+                <img src="/assets/images/logo.png" alt="Logo" class="h-10 w-10">
             </div>
         </header>
 
@@ -178,7 +178,7 @@
                         <span class="shadow"></span>
                         <span class="edge"></span>
                         <span class="front flex flex-col items-center justify-center text-lg p-4">
-                            <img src="/public_html/images/engegar.png" alt="Engegar/Apagar" class="h-16 w-16 mb-3">
+                            <img src="/assets/images/engegar.png" alt="Engegar/Apagar" class="h-16 w-16 mb-3">
                             <span>Engegar</span>
                             <span>/Apagar</span>
                         </span>
@@ -187,7 +187,7 @@
                         <span class="shadow"></span>
                         <span class="edge"></span>
                         <span class="front flex flex-col items-center justify-center text-lg p-4">
-                            <img src="/public_html/images/claxon.png" alt="Activar Clàxon" class="h-16 w-16 mb-3">
+                            <img src="/assets/images/claxon.png" alt="Activar Clàxon" class="h-16 w-16 mb-3">
                             Activar Clàxon
                         </span>
                     </button>
@@ -195,7 +195,7 @@
                         <span class="shadow"></span>
                         <span class="edge"></span>
                         <span class="front flex flex-col items-center justify-center text-lg p-4">
-                            <img src="/public_html/images/llums.png" alt="Activar Llums" class="h-16 w-16 mb-3">
+                            <img src="/assets/images/llums.png" alt="Activar Llums" class="h-16 w-16 mb-3">
                             Activar Llums
                         </span>
                     </button>
@@ -203,7 +203,7 @@
                         <span class="shadow"></span>
                         <span class="edge"></span>
                         <span class="front flex flex-col items-center justify-center text-lg p-4">
-                            <img src="/public_html/images/portes.png" alt="Bloquejar Portes" class="h-16 w-16 mb-3">
+                            <img src="/assets/images/portes.png" alt="Bloquejar Portes" class="h-16 w-16 mb-3">
                             Bloquejar Portes
                         </span>
                     </button>
@@ -292,12 +292,12 @@
             crossorigin=""></script>
     
     <!-- Application Scripts -->
-    <script src="/public_html/js/toast.js?v=12"></script>
-    <script src="/public_html/js/confirm-modal.js?v=12"></script>
-    <script src="/public_html/js/main.js?v=12"></script>
-    <script src="/public_html/js/auth.js?v=12"></script>
-    <script src="/public_html/js/vehicles.js?v=12"></script>
-    <script src="/public_html/js/administrar-vehicle.js?v=12"></script>
+    <script src="/assets/js/toast.js?v=12"></script>
+    <script src="/assets/js/confirm-modal.js?v=12"></script>
+    <script src="/assets/js/main.js?v=12"></script>
+    <script src="/assets/js/auth.js?v=12"></script>
+    <script src="/assets/js/vehicles.js?v=12"></script>
+    <script src="/assets/js/administrar-vehicle.js?v=12"></script>
 
     <a href="/resum-projecte"
         class="fixed bottom-10 right-10 block bg-[#1565C0] text-white p-4 rounded-full shadow-lg hover:bg-[#1151a3] transition-colors duration-300 z-50">

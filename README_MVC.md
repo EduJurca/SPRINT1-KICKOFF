@@ -122,7 +122,7 @@ SIMS---GRUP-2/
 │   ├── 📁 layouts/                # ✅ Layouts
 │   └── 📄 home.php                # ✅ Página principal
 │
-├── 📁 public_html/                 # Recursos públicos
+├── 📁 assets/                 # Recursos públicos
 │   ├── css/
 │   ├── js/
 │   └── images/

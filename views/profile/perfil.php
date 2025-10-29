@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SIMS - Perfil</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="/public_html/js/toast.js"></script>
+  <script src="/assets/js/toast.js"></script>
   <style>
     .pushable {
       position: relative;
@@ -66,7 +66,7 @@
       </div>
       <h1 class="text-center text-2xl font-bold text-gray-900">Perfil</h1>
       <div class="flex justify-end">
-        <img src="/public_html/images/logo.png" alt="Logo" class="h-10 w-10">
+        <img src="/assets/images/logo.png" alt="Logo" class="h-10 w-10">
       </div>
     </header>
 

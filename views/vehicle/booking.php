@@ -180,7 +180,7 @@ include_once __DIR__ . '/../../php/components/header.php';
 </div>
 
 <!-- Include booking.js -->
-<script src="/public_html/js/booking.js"></script>
+<script src="/assets/js/booking.js"></script>
 
 <?php
 // Include footer

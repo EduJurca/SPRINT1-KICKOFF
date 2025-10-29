@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIMS - Recuperar Contrasenya</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="/public_html/js/toast.js"></script>
+    <script src="/assets/js/toast.js"></script>
     <style>
     </style>
 </head>

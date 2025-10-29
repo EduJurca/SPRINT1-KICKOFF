@@ -7,7 +7,7 @@
   <title>VoltiaCar - Gestió</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="/public_html/js/toast.js"></script>
+  <script src="/assets/js/toast.js"></script>
 
   <style>
     .no-scrollbar::-webkit-scrollbar {
@@ -52,7 +52,7 @@
 
   <div class="bg-white p-8 rounded-2xl shadow-inner w-full max-w-sm flex flex-col relative overflow-visible md:hidden">
 
-    <img src="/public_html/images/logo.png" alt="Logo App" class="absolute top-4 left-4 h-10 w-10 z-20">
+    <img src="/assets/images/logo.png" alt="Logo App" class="absolute top-4 left-4 h-10 w-10 z-20">
 
     <h1 class="text-2xl font-bold text-center text-gray-900 mb-8 mt-6">
       Finestra de Gestió
@@ -72,28 +72,28 @@
           <a href="/administrar-vehicle"
             class="bg-gray-100 p-4 rounded-lg shadow-sm flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105"
             ria-label="Control Vehicle">
-            <img src="/public_html/images/control-vehicle.png" alt="Control Vehicle" class="h-12 w-12 mb-2">
+            <img src="/assets/images/control-vehicle.png" alt="Control Vehicle" class="h-12 w-12 mb-2">
             <p class="font-bold text-base text-gray-900">Control Vehicle</p>
           </a>
 
           <a href="/localitzar-vehicle"
             class=" bg-gray-100 p-4 rounded-lg shadow-sm flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105"
             aria-label="Reclamar Vehicle">
-            <img src="/public_html/images/reclamar-vehicle.png" alt="Reclamar Vehicle" class="h-12 w-12 mb-2">
+            <img src="/assets/images/reclamar-vehicle.png" alt="Reclamar Vehicle" class="h-12 w-12 mb-2">
             <p class="font-bold text-base text-gray-900">Localitzar Vehicles</p>
           </a>
 
           <a href="/purchase-time"
             class=" bg-gray-100 p-4 rounded-lg shadow-sm flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105"
             aria-label="Comprar Temps">
-            <img src="/public_html/images/comprar-temps.png" alt="Comprar Temps" class="h-12 w-12 mb-2">
+            <img src="/assets/images/comprar-temps.png" alt="Comprar Temps" class="h-12 w-12 mb-2">
             <p class="font-bold text-base text-gray-900">Comprar Temps</p>
           </a>
 
           <a href="/perfil"
             class=" bg-gray-100 p-4 rounded-lg shadow-sm flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105"
             aria-label="Perfil">
-            <img src="/public_html/images/perfil.png" alt="Perfil" class="h-12 w-12 mb-2">
+            <img src="/assets/images/perfil.png" alt="Perfil" class="h-12 w-12 mb-2">
             <p class="font-bold text-base text-gray-900">Perfil</p>
           </a>
 
@@ -123,14 +123,14 @@
       <a href="/accessibilitat"
         class="block bg-gray-100 p-2 rounded-full shadow-lg hover:bg-gray-200 transition-colors duration-300"
         aria-label="Opcions d'accessibilitat">
-        <img src="/public_html/images/accessibilitat.png" alt="Accessibilitat" class="h-7 w-7">
+        <img src="/assets/images/accessibilitat.png" alt="Accessibilitat" class="h-7 w-7">
       </a>
     </div>
 
   </div>
 
   <div class="hidden md:flex bg-white p-8 rounded-2xl shadow-inner w-full max-w-6xl relative overflow-visible">
-    <img src="/public_html/images/logo.png" alt="Logo App" class="absolute top-4 left-4 h-10 w-10 z-20">
+    <img src="/assets/images/logo.png" alt="Logo App" class="absolute top-4 left-4 h-10 w-10 z-20">
 
     <div class="absolute top-4 right-4 z-10 flex gap-2">
       <button id="tutorialRestartBtnDesktop" data-tutorial-restart
@@ -145,7 +145,7 @@
       <a href="/accessibilitat"
         class="block bg-gray-100 p-2 rounded-full shadow-lg hover:bg-gray-200 transition-colors duration-300"
         aria-label="Opcions d'accessibilitat">
-        <img src="/public_html/images/accessibilitat.png" alt="Accessibilitat" class="h-7 w-7">
+        <img src="/assets/images/accessibilitat.png" alt="Accessibilitat" class="h-7 w-7">
       </a>
     </div>
 
@@ -174,28 +174,28 @@
       <a href="/administrar-vehicle"
         class=" bg-gray-100 p-6 rounded-lg shadow-sm flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105"
         aria-label="Control Vehicle">
-        <img src="/public_html/images/control-vehicle.png" alt="Control Vehicle" class="h-16 w-16 mb-4">
+        <img src="/assets/images/control-vehicle.png" alt="Control Vehicle" class="h-16 w-16 mb-4">
         <p class="font-bold text-lg text-gray-900">Control Vehicle</p>
       </a>
 
       <a href="/localitzar-vehicle"
         class=" bg-gray-100 p-6 rounded-lg shadow-sm flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105"
         aria-label="Reclamar Vehicle">
-        <img src="/public_html/images/reclamar-vehicle.png" alt="Reclamar Vehicle" class="h-16 w-16 mb-4">
+        <img src="/assets/images/reclamar-vehicle.png" alt="Reclamar Vehicle" class="h-16 w-16 mb-4">
         <p class="font-bold text-lg text-gray-900">Localitzar Vehicles</p>
       </a>
 
       <a href="/purchase-time"
         class=" bg-gray-100 p-6 rounded-lg shadow-sm flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105"
         aria-label="Comprar Temps">
-        <img src="/public_html/images/comprar-temps.png" alt="Comprar Temps" class="h-16 w-16 mb-4">
+        <img src="/assets/images/comprar-temps.png" alt="Comprar Temps" class="h-16 w-16 mb-4">
         <p class="font-bold text-lg text-gray-900">Comprar Temps</p>
       </a>
 
       <a href="/perfil"
         class=" bg-gray-100 p-6 rounded-lg shadow-sm flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105"
         aria-label="Perfil">
-        <img src="/public_html/images/perfil.png" alt="Perfil" class="h-16 w-16 mb-4">
+        <img src="/assets/images/perfil.png" alt="Perfil" class="h-16 w-16 mb-4">
         <p class="font-bold text-lg text-gray-900">Perfil</p>
       </a>
     </section>
@@ -225,7 +225,7 @@
   </script>
 
   <!-- Tutorial System -->
-  <script src="/public_html/js/tutorial.js"></script>
+  <script src="/assets/js/tutorial.js"></script>
 
 </body>
 </html>

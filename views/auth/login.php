@@ -6,14 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIMS - Inicia Sessió</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="/public_html/js/toast.js"></script>
+    <script src="/assets/js/toast.js"></script>
     <style>
     </style>
 </head>
 
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
     <div class="bg-white p-8 rounded-2xl shadow-inner w-full max-w-sm flex flex-col justify-center">
-        <img src="/public_html/images/logo.png" alt="Logotip de SIMS" class="h-40 w-40 rounded-full mx-auto">
+        <img src="/assets/images/logo.png" alt="Logotip de SIMS" class="h-40 w-40 rounded-full mx-auto">
         <h1 class="text-2xl font-bold text-center text-gray-900 mb-6">Inicia Sessió</h1>
         
         <?php if (isset($_SESSION['error'])): ?>

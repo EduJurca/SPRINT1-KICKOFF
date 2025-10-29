@@ -8,7 +8,7 @@ Aquest document recull les bones pràctiques aplicades al projecte de gestió de
 
 - **Separació per funcionalitat:** El projecte està organitzat en carpetes per domini (configuració, frontend, backend, scripts Python).
 - **MVC al backend:** El codi PHP segueix el patró Model-Vista-Controlador amb controladors, models i components separats.
-- **DocumentRoot separat:** Els arxius públics (`public_html/`) estan aïllats de la lògica backend.
+- **DocumentRoot separat:** Els arxius públics (`assets/`) estan aïllats de la lògica backend.
 
 ## 2. Bones pràctiques de codi
 

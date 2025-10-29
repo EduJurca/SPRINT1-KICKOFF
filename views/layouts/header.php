@@ -9,9 +9,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/public_html/css/main.css">
-    <link rel="stylesheet" href="/public_html/css/custom.css">
-    <link rel="stylesheet" href="/public_html/css/accessibility.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/custom.css">
+    <link rel="stylesheet" href="/assets/css/accessibility.css">
     
     <!-- CSS addicional per a cada pàgina -->
     <?php if (isset($additionalCSS)): ?>

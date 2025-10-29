@@ -235,7 +235,7 @@ include_once __DIR__ . '/../../php/components/header.php';
 </div>
 
 <!-- Include booking.js for search functionality -->
-<script src="/public_html/js/booking.js"></script>
+<script src="/assets/js/booking.js"></script>
 
 <!-- Additional Search Page Scripts -->
 <script>
