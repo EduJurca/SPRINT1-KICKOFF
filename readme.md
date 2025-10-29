@@ -9,7 +9,7 @@ Aquest projecte és una plataforma web per gestionar la mobilitat intel·ligent,
 ```
 final_editar_usar/
 ├── config/                # Configuració global, scripts d’inicialització, Docker
-├── public_html/           # Frontend i backend web (DocumentRoot Apache)
+├── assets/           # Frontend i backend web (DocumentRoot Apache)
 ├── python_gui/            # Eina administrativa en Python
 ├── database_schema.sql    # Esquema de la base de dades relacional
 ├── bones_practiques.md    # Bones pràctiques i normes de programació
@@ -21,7 +21,7 @@ final_editar_usar/
 ### Detall de carpetes principals
 
 - **config/**: Scripts SQL, configuració PHP, Dockerfile, docker-compose, inicialització de bases de dades.
-- **public_html/**: 
+- **assets/**: 
   - **index.html / index.php**: Entrada principal.
   - **css/**: Estils, inclou accessibilitat i personalització.
   - **images/**: Imatges, icones i avatars.
@@ -138,8 +138,8 @@ O simplement:
 
 ## 📚 Recursos Addicionals
 
-- **Resum tècnic**: `public_html/pages/dashboard/resum-projecte.html`
-- **Panel d'administració**: `public_html/php/admin/`
+- **Resum tècnic**: `assets/pages/dashboard/resum-projecte.html`
+- **Panel d'administració**: `assets/php/admin/`
 
 ---
 

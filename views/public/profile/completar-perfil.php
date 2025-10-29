@@ -25,7 +25,7 @@
         </div>
         <h1 class="text-2xl font-bold text-gray-900 text-center">Completar Perfil</h1>
         <div class="flex justify-end">
-          <img src="/public_html/images/logo.png" alt="Logo" class="h-10 w-10">
+          <img src="/assets/images/logo.png" alt="Logo" class="h-10 w-10">
         </div>
       </header>
 

@@ -3,8 +3,8 @@
     </div>
 
     <!-- Scripts -->
-    <script src="/public_html/js/main.js"></script>
-    <script src="/public_html/js/accessibility.js"></script>
+    <script src="/assets/js/main.js"></script>
+    <script src="/assets/js/accessibility.js"></script>
     
     <?php if (isset($additionalJS)): ?>
         <?php foreach ((array)$additionalJS as $js): ?>

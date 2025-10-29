@@ -6,7 +6,7 @@
 
 require_once MODELS_PATH . '/Vehicle.php';
 require_once MODELS_PATH . '/Booking.php';
-require_once CONTROLLERS_PATH . '/AuthController.php';
+require_once CONTROLLERS_PATH . '/auth/AuthController.php';
 
 class VehicleController {
     private $vehicleModel;
@@ -90,7 +90,7 @@ class VehicleController {
             return;
         }
         
-        Router::view('vehicle.detalls-vehicle', ['vehicle' => $vehicle]);
+        Router::view('public.vehicle.detalls-vehicle', ['vehicle' => $vehicle]);
     }
     
     /**
@@ -386,7 +386,7 @@ class VehicleController {
         AuthController::requireAuth();
         
         // Mostrar la vista
-        return Router::view('vehicle.localitzar-vehicle');
+        return Router::view('public.vehicle.localitzar-vehicle');
     }
     
     /**

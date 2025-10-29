@@ -16,14 +16,14 @@ integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
 crossorigin=""
 >
     
-    <!-- Custom CSS (use /public_html paths so server serves correctly) -->
-    <link rel="stylesheet" href="/public_html/css/custom.css">
-    <link rel="stylesheet" href="/public_html/css/accessibility.css">
-    <link rel="stylesheet" href="/public_html/css/localitzar-vehicle.css">
-    <link rel="stylesheet" href="/public_html/css/vehicle-claim-modal.css">
+    <!-- Custom CSS (use /assets paths so server serves correctly) -->
+    <link rel="stylesheet" href="/assets/css/custom.css">
+    <link rel="stylesheet" href="/assets/css/accessibility.css">
+    <link rel="stylesheet" href="/assets/css/localitzar-vehicle.css">
+    <link rel="stylesheet" href="/assets/css/vehicle-claim-modal.css">
     
     <!-- Tailwind Config -->
-    <script src="/public_html/css/tailwind.config.js"></script>
+    <script src="/assets/css/tailwind.config.js"></script>
     
     <style>
         /* Map container styling */
@@ -45,7 +45,7 @@ crossorigin=""
                 </div>
                 <h1 class="text-lg font-bold text-gray-900 text-center leading-tight">Localitzar<br>Vehicles</h1>
                 <div class="absolute right-4">
-                    <img src="/public_html/images/logo.png" alt="Logo" class="h-8 w-8">
+                    <img src="/assets/images/logo.png" alt="Logo" class="h-8 w-8">
                 </div>
             </header>
 
@@ -68,7 +68,7 @@ crossorigin=""
                         <h2 class="text-lg font-bold text-gray-900">Vehicles propers</h2>
                         <div class="flex items-center gap-2">
                             <button id="toggle-vehicles" class="flex items-center bg-gray-200 p-2 rounded-lg text-gray-700 hover:bg-gray-300 transition-colors duration-300">
-                                <img src="/public_html/images/discapacidad.png" alt="Vehicles discapacitats" class="h-5 w-5">
+                                <img src="/assets/images/discapacidad.png" alt="Vehicles discapacitats" class="h-5 w-5">
                             </button>
                             <button id="close-drawer" class="text-gray-600 hover:text-gray-900">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -102,7 +102,7 @@ crossorigin=""
         <div class="flex-shrink-0 w-1/2 flex flex-col">
             <div class="flex items-center space-x-6 mb-6">
                 <img
-src="/public_html/images/logo.png"
+src="/assets/images/logo.png"
 alt="Logo App"
 class="h-12 w-12"
 >
@@ -117,7 +117,7 @@ class="h-12 w-12"
                 <h2 class="text-xl font-bold text-gray-900">Vehicles propers</h2>
                 <button id="toggle-vehicles-2" class="flex items-center bg-gray-200 p-2 rounded-lg text-gray-700 hover:bg-gray-300 transition-colors duration-300">
                     <img
-src="/public_html/images/discapacidad.png"
+src="/assets/images/discapacidad.png"
 alt="Vehicles discapacitats"
 class="h-6 w-6"
 >
@@ -176,12 +176,12 @@ class="h-6 w-6"
     </div>
     
     <!-- Application Scripts -->
-    <script src="/public_html/js/toast.js?v=11"></script>
-    <script src="/public_html/js/confirm-modal.js?v=11"></script>
-    <script src="/public_html/js/main.js?v=11"></script>
-    <script src="/public_html/js/auth.js?v=11"></script>
-    <script src="/public_html/js/vehicles.js?v=11"></script>
-    <script src="/public_html/js/vehicle-claim-modal.js?v=11"></script>
-    <script src="/public_html/js/localitzar-vehicle.js?v=11"></script>
+    <script src="/assets/js/toast.js?v=11"></script>
+    <script src="/assets/js/confirm-modal.js?v=11"></script>
+    <script src="/assets/js/main.js?v=11"></script>
+    <script src="/assets/js/auth.js?v=11"></script>
+    <script src="/assets/js/vehicles.js?v=11"></script>
+    <script src="/assets/js/vehicle-claim-modal.js?v=11"></script>
+    <script src="/assets/js/localitzar-vehicle.js?v=11"></script>
 </body>
 </html>

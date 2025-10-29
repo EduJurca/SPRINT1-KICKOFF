@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIMS - Comprar Temps</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="/public_html/js/toast.js" defer></script>
+    <script src="/assets/js/toast.js" defer></script>
     <link rel="stylesheet" href="../../css/custom.css">
 
     <style>
@@ -31,7 +31,7 @@
             <h1 class="text-2xl font-bold text-gray-900 text-center">Comprar Temps</h1>
             <div class="flex justify-end">
                 <div class="rounded-full flex items-center justify-center">
-                    <img src="/public_html/images/logo.png" alt="Logo App" class="h-12 w-12" />
+                    <img src="/assets/images/logo.png" alt="Logo App" class="h-12 w-12" />
                 </div>
             </div>
         </header>

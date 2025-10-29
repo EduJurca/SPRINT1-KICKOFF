@@ -10,7 +10,7 @@
 
 // Pàgina principal
 Router::get('/', function() {
-    Router::view('home');
+    Router::view('auth.home');
 });
 
 // ==========================================
@@ -53,7 +53,7 @@ Router::get('/gestio', ['DashboardController', 'showGestio']);
 
 // Resum del projecte
 Router::get('/resum-projecte', function() {
-    Router::view('dashboard.resum-projecte');
+    Router::view('public.dashboard.resum-projecte');
 });
 
 // ==========================================
@@ -72,24 +72,24 @@ Router::post('/completar-perfil', ['ProfileController', 'completeProfile']);
 
 // Verificar carnet de conduir
 Router::get('/verificar-conduir', function() {
-    Router::view('profile.verificar-conduir');
+    Router::view('public.profile.verificar-conduir');
 });
 
 Router::post('/verificar-conduir', ['ProfileController', 'verifyLicense']);
 
 // Historial
 Router::get('/historial', function() {
-    Router::view('profile.historial');
+    Router::view('public.profile.historial');
 });
 
 // Pagaments
 Router::get('/pagaments', function() {
-    Router::view('profile.pagaments');
+    Router::view('public.profile.pagaments');
 });
 
 // Premium
 Router::get('/premium', function() {
-    Router::view('profile.premium');
+    Router::view('public.profile.premium');
 });
 
 // ==========================================
@@ -103,26 +103,26 @@ Router::get('/vehicles/search', ['VehicleController', 'search']);
 
 // Administrar vehicle
 Router::get('/administrar-vehicle', function() {
-    Router::view('vehicle.administrar-vehicle');
+    Router::view('public.vehicle.administrar-vehicle');
 });
 
 // Detalls del vehicle
 Router::get('/detalls-vehicle', function() {
-    Router::view('vehicle.detalls-vehicle');
+    Router::view('public.vehicle.detalls-vehicle');
 });
 
 Router::get('/vehicles/{id}', ['VehicleController', 'show']);
 
 // Booking
 Router::get('/booking', function() {
-    Router::view('vehicle.booking');
+    Router::view('public.vehicle.booking');
 });
 
 Router::post('/book-vehicle', ['VehicleController', 'bookVehicle']);
 
 // Comprar temps
 Router::get('/purchase-time', function() {
-    Router::view('vehicle.purchase-time');
+    Router::view('public.vehicle.purchase-time');
 });
 
 Router::post('/purchase-time', ['VehicleController', 'purchaseTime']);
@@ -169,7 +169,7 @@ Router::get('/api/gestio', ['DashboardController', 'getGestioData']);
 // ==========================================
 
 Router::get('/accessibilitat', function() {
-    Router::view('accessibility.accessibilitat');
+    Router::view('commons.accessibility.accessibilitat');
 });
 
 // ==========================================

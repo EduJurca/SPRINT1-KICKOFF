@@ -5,7 +5,7 @@
  */
 
 require_once MODELS_PATH . '/User.php';
-require_once CONTROLLERS_PATH . '/AuthController.php';
+require_once CONTROLLERS_PATH . '/auth/AuthController.php';
 
 class ProfileController {
     private $userModel;
@@ -118,7 +118,7 @@ class ProfileController {
         );
         
         // Passar dades a la vista
-        return Router::view('profile.perfil', $data);
+        return Router::view('public.profile.perfil', $data);
     }
     
     /**
@@ -132,7 +132,7 @@ class ProfileController {
         $profile = $this->userModel->getProfile($userId);
         
         // Passar dades a la vista
-        return Router::view('profile.completar-perfil', $profile ?? []);
+        return Router::view('public.profile.completar-perfil', $profile ?? []);
     }
     
     /**

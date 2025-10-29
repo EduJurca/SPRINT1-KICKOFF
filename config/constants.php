@@ -7,7 +7,7 @@ define('CORE_PATH', ROOT_PATH . '/core');
 define('MODELS_PATH', ROOT_PATH . '/models');
 define('CONTROLLERS_PATH', ROOT_PATH . '/controllers');
 define('VIEWS_PATH', ROOT_PATH . '/views');
-define('PUBLIC_PATH', ROOT_PATH . '/public_html');
+define('PUBLIC_PATH', ROOT_PATH . '/assets');
 
 if (!defined('APP_DEBUG')) {
     define('APP_DEBUG', true);

@@ -18,7 +18,7 @@
     <div class="bg-white p-8 rounded-2xl shadow-inner w-full max-w-sm flex flex-col justify-center text-center">
         <h1 class="text-3xl font-bold text-gray-900 mb-6">SIMS</h1>
         <div class="mb-8">
-            <img src="/public_html/images/logo.png" alt="Logotip de SIMS" class="h-32 w-32 rounded-full mx-auto">
+            <img src="/assets/images/logo.png" alt="Logotip de SIMS" class="h-32 w-32 rounded-full mx-auto">
         </div>
         <a href="/login" class="block w-full bg-[#1565C0] text-white font-semibold py-3 px-6 rounded-lg hover:opacity-90 transition-opacity duration-300 mb-4">
             Iniciar Sessió
