@@ -1,8 +1,4 @@
 <?php
-/**
- * 🎮 ProfileController
- * Gestiona el perfil d'usuari
- */
 
 require_once MODELS_PATH . '/User.php';
 require_once CONTROLLERS_PATH . '/auth/AuthController.php';
@@ -14,11 +10,7 @@ class ProfileController {
         $this->userModel = new User();
     }
     
-    /**
-     * Obtenir perfil de l'usuari
-     */
     public function getProfile() {
-        // Requerir autenticació
         $userId = AuthController::requireAuth();
         
         $profile = $this->userModel->getProfile($userId);
@@ -36,11 +28,7 @@ class ProfileController {
         ], 200);
     }
     
-    /**
-     * Obtenir dades del perfil per completar
-     */
     public function getProfileData() {
-        // Requerir autenticació
         $userId = AuthController::requireAuth();
         
         $profile = $this->userModel->getProfile($userId);
@@ -51,14 +39,9 @@ class ProfileController {
         ], 200);
     }
     
-    /**
-     * Actualitzar perfil
-     */
     public function updateProfile() {
-        // Requerir autenticació
         $userId = AuthController::requireAuth();
         
-        // Acceptar tanto JSON como form-data
         $data = [];
         $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
         
@@ -91,58 +74,36 @@ class ProfileController {
         }
     }
     
-    /**
-     * Completar perfil
-     */
     public function completeProfile() {
         return $this->updateProfile();
     }
     
-    /**
-     * Mostrar vista de perfil amb dades
-     */
     public function showProfile() {
-        // Requerir autenticació
         $userId = AuthController::requireAuth();
         
-        // Obtenir dades del perfil
         $profile = $this->userModel->getProfile($userId);
         
-        // Obtenir informació de l'usuari (username, email)
         $userInfo = $this->userModel->getUserInfo($userId);
         
-        // Combinar dades
         $data = array_merge(
             $profile ?? [],
             $userInfo ?? []
         );
         
-        // Passar dades a la vista
         return Router::view('public.profile.perfil', $data);
     }
     
-    /**
-     * Mostrar vista de completar perfil amb dades
-     */
     public function showCompleteProfile() {
-        // Requerir autenticació
         $userId = AuthController::requireAuth();
         
-        // Obtenir dades del perfil
         $profile = $this->userModel->getProfile($userId);
         
-        // Passar dades a la vista
         return Router::view('public.profile.completar-perfil', $profile ?? []);
     }
     
-    /**
-     * Verificar carnet de conduir
-     */
     public function verifyLicense() {
-        // Requerir autenticació
         $userId = AuthController::requireAuth();
         
-        // Processar fitxer pujat
         if (!isset($_FILES['driver_license_photo'])) {
             return Router::json([
                 'success' => false,
@@ -152,7 +113,6 @@ class ProfileController {
         
         $file = $_FILES['driver_license_photo'];
         
-        // Validar fitxer
         $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
         if (!in_array($file['type'], $allowedTypes)) {
             return Router::json([
@@ -161,7 +121,6 @@ class ProfileController {
             ], 400);
         }
         
-        // Guardar fitxer (implementa la lògica segons les teves necessitats)
         $uploadDir = PUBLIC_PATH . '/uploads/licenses/';
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
@@ -171,9 +130,6 @@ class ProfileController {
         $uploadPath = $uploadDir . $fileName;
         
         if (move_uploaded_file($file['tmp_name'], $uploadPath)) {
-            // Actualitzar base de dades amb la ruta del fitxer
-            // (implementa segons la teva estructura de BD)
-            
             return Router::json([
                 'success' => true,
                 'message' => 'License uploaded successfully',
@@ -185,5 +141,26 @@ class ProfileController {
             'success' => false,
             'message' => 'Error uploading license'
         ], 500);
+    }
+
+    public function updateLanguage() {
+        $userId = AuthController::requireAuth();
+        
+        $language = $_POST['language'] ?? null;
+        
+        if (!in_array($language, ['en', 'ca'])) {
+            $_SESSION['error'] = 'Invalid language';
+            return Router::redirect('/perfil');
+        }
+        
+        if ($this->userModel->updateProfile($userId, ['lang' => $language])) {
+            $_SESSION['user']['lang'] = $language;
+            $_SESSION['lang'] = $language;
+            
+            return Router::redirect('/perfil');
+        }
+        
+        $_SESSION['error'] = 'Error updating language';
+        return Router::redirect('/perfil');
     }
 }

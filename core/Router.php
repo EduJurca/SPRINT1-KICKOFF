@@ -59,6 +59,17 @@ class Router {
      * @param string $method Mètode HTTP
      */
     public static function dispatch($uri, $method = 'GET') {
+        // Eliminar prefijo de idioma de la URI (/en/... o /ca/...)
+        foreach (['en', 'ca'] as $lang) {
+            if (strpos($uri, '/' . $lang . '/') === 0) {
+                $uri = substr($uri, strlen('/' . $lang));
+                break;
+            } elseif ($uri === '/' . $lang) {
+                $uri = '/';
+                break;
+            }
+        }
+        
         // Normalitzar URI (eliminar barra final excepte per '/')
         if ($uri !== '/' && substr($uri, -1) === '/') {
             $uri = rtrim($uri, '/');

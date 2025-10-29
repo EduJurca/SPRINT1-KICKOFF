@@ -1,0 +1,35 @@
+<?php
+
+return [
+    'auth' => [
+        'login_title' => 'Sign In',
+        'register_title' => 'Register',
+        'username' => 'Username',
+        'email' => 'Email',
+        'password' => 'Password',
+        'forgot_password' => 'I forgot my password',
+        'no_account' => "Don't have an account?",
+        'have_account' => 'Already have an account?',
+        'sign_in' => 'Sign In',
+        'sign_up' => 'Sign Up',
+        'register' => 'Register',
+        'login' => 'Login',
+        'your_email' => 'Your email address',
+        'min_3_chars' => 'Minimum 3 characters',
+        'min_8_chars' => 'Minimum 8 characters',
+        'invalid_email' => 'Invalid email',
+    ],
+    'dashboard' => [
+        'management_window' => 'Management Window',
+        'available_time' => 'Available time:',
+        'minutes' => 'min',
+        'control_vehicle' => 'Control Vehicle',
+        'locate_vehicles' => 'Locate Vehicles',
+        'buy_time' => 'Buy Time',
+        'profile' => 'Profile',
+        'logout' => 'Log Out',
+        'help_tutorial' => 'Help and Tutorial',
+        'accessibility_options' => 'Accessibility Options',
+        'project_summary' => 'Project Summary',
+    ],
+];

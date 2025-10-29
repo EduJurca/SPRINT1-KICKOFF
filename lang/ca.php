@@ -1,0 +1,35 @@
+<?php
+
+return [
+    'auth' => [
+        'login_title' => 'Inicia Sessió',
+        'register_title' => 'Registrar-se',
+        'username' => 'Nom d\'usuari',
+        'email' => 'Correu',
+        'password' => 'Contrasenya',
+        'forgot_password' => 'He oblidat la contrasenya',
+        'no_account' => 'No tens compte?',
+        'have_account' => 'Ja tens compte?',
+        'sign_in' => 'Iniciar',
+        'sign_up' => 'Registrar',
+        'register' => 'Registra\'t',
+        'login' => 'Inicia sessió',
+        'your_email' => 'El teu correu electrònic',
+        'min_3_chars' => 'Mínim 3 caràcters',
+        'min_8_chars' => 'Mínim 8 caràcters',
+        'invalid_email' => 'Correu no vàlid',
+    ],
+    'dashboard' => [
+        'management_window' => 'Finestra de Gestió',
+        'available_time' => 'Temps disponible:',
+        'minutes' => 'min',
+        'control_vehicle' => 'Control Vehicle',
+        'locate_vehicles' => 'Localitzar Vehicles',
+        'buy_time' => 'Comprar Temps',
+        'profile' => 'Perfil',
+        'logout' => 'Tancar Sessió',
+        'help_tutorial' => 'Ajuda i Tutorial',
+        'accessibility_options' => 'Opcions d\'accessibilitat',
+        'project_summary' => 'Resum del projecte',
+    ],
+];
