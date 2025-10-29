@@ -93,7 +93,7 @@ class BookingManager {
 
     async loadVehicleDetails(vehicleId) {
         try {
-            const response = await fetch(`./php/api/vehicles.php?action=details&id=${vehicleId}`);
+            const response = await fetch(`./api/vehicles?action=details&id=${vehicleId}`);
             const data = await response.json();
             
             if (data.success && data.vehicle) {
@@ -243,7 +243,7 @@ class BookingManager {
                 end_datetime: this.formatDateTimeSQL(endInput.value)
             };
             
-            const response = await fetch('./php/api/book-vehicle.php', {
+            const response = await fetch('./book-vehicle', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -426,7 +426,7 @@ class BookingManager {
                             <span class="text-blue-800 text-sm font-semibold">♿ Accessible</span>
                         </div>
                     ` : ''}
-                    <a href="./pages/vehicle/booking.php?vehicle_id=${vehicle.id}" 
+                    <a href="/booking?vehicle_id=${vehicle.id}" 
                        class="block w-full bg-green-600 text-white text-center py-2 rounded-lg hover:bg-green-700 transition">
                         Book Now
                     </a>

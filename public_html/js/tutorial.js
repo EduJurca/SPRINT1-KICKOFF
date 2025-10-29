@@ -652,12 +652,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const path = window.location.pathname;
     
     // Dashboard
-    if (path.includes('gestio.html')) {
+    if (path.includes('gestio') || path.includes('dashboard')) {
         Tutorial.init('dashboard');
     }
     
     // Vehicle location
-    else if (path.includes('localitzar-vehicle.html')) {
+    else if (path.includes('localitzar-vehicle')) {
         // Wait for map to load
         setTimeout(() => {
             Tutorial.init('vehicleLocation');
@@ -665,12 +665,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // Vehicle control
-    else if (path.includes('administrar-vehicle.html')) {
+    else if (path.includes('administrar-vehicle')) {
         Tutorial.init('vehicleControl');
     }
     
     // Purchase time
-    else if (path.includes('purchase-time.html')) {
+    else if (path.includes('purchase-time')) {
         Tutorial.init('purchaseTime');
     }
     
@@ -685,17 +685,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // Profile
-    else if (path.includes('perfil.html') || path.includes('profile')) {
+    else if (path.includes('perfil') || path.includes('profile')) {
         Tutorial.init('profile');
     }
     
     // Registration
-    else if (path.includes('registre.html') || path.includes('register')) {
+    else if (path.includes('register')) {
         Tutorial.init('registration');
     }
     
     // Login
-    else if (path.includes('login.html') || path.includes('inici-sessio')) {
+    else if (path.includes('login') || path.includes('inici-sessio')) {
         Tutorial.init('login');
     }
     

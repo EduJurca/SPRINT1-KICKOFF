@@ -13,7 +13,7 @@ const Auth = {
         try {
             Utils.showLoading();
             
-            const response = await fetch('/php/api/login.php', {
+            const response = await fetch('/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -31,7 +31,7 @@ const Auth = {
                 Utils.setLocalStorage('isAuthenticated', true, 30);
                 
                 // Redirect to dashboard
-                window.location.href = '../dashboard/gestio.html';
+                window.location.href = '/dashboard';
                 return { success: true };
             } else {
                 Utils.showToast(data.message || 'Error d\'inici de sessió', 'error');
@@ -52,7 +52,7 @@ const Auth = {
         try {
             Utils.showLoading();
             
-            const response = await fetch('/php/api/register.php', {
+            const response = await fetch('/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -70,9 +70,9 @@ const Auth = {
                 // Redirect to login or verification page
                 setTimeout(() => {
                     if (userData.has_license) {
-                        window.location.href = './verificar-conduir.html';
+                        window.location.href = '/verificar-conduir';
                     } else {
-                        window.location.href = './login.html';
+                        window.location.href = '/login';
                     }
                 }, 1500);
                 
@@ -94,7 +94,7 @@ const Auth = {
      */
     async logout() {
         try {
-            const response = await fetch('/php/api/logout.php', {
+            const response = await fetch('/logout', {
                 method: 'POST',
                 credentials: 'include'
             });
@@ -106,7 +106,7 @@ const Auth = {
                 localStorage.removeItem('lastActivity');
                 
                 // Redirect to home
-                window.location.href = '../../index.html';
+                window.location.href = '/';
             } else {
                 Utils.showToast('Error en tancar la sessió', 'error');
             }
@@ -154,7 +154,7 @@ const Auth = {
             Utils.showToast('Contrasenya actualitzada amb èxit', 'success');
             
             setTimeout(() => {
-                window.location.href = './login.html';
+                window.location.href = '/login';
             }, 1500);
             
             return { success: true };
@@ -196,7 +196,7 @@ const Auth = {
         if (!this.isAuthenticated()) {
             Utils.showToast('Has d\'iniciar sessió', 'warning');
             setTimeout(() => {
-                window.location.href = '/pages/auth/login.html';
+                window.location.href = '/login';
             }, 1000);
             return false;
         }
@@ -214,7 +214,7 @@ const Auth = {
         if (!this.isAdmin()) {
             Utils.showToast('No tens permisos d\'administrador', 'error');
             setTimeout(() => {
-                window.location.href = '/pages/dashboard/gestio.html';
+                window.location.href = '/dashboard';
             }, 1000);
             return false;
         }

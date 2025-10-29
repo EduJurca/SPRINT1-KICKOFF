@@ -195,10 +195,8 @@ const Maps = {
      */
     async getNearbyVehicles(lat, lng, radius = 10) {
         try {
-            // Determine the correct path based on current location
-            const basePath = window.location.pathname.includes('/pages/') 
-                ? '../../php/api/vehicles.php' 
-                : '/php/api/vehicles.php';
+            // Use the API route
+            const basePath = '/api/vehicles';
             
             const response = await fetch(
                 `${basePath}?action=nearby&lat=${lat}&lng=${lng}&radius=${radius}`,
