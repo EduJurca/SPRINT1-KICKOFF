@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIMS - Inici</title>
+    <title><?php echo __('home.title'); ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         (function(d){
@@ -18,13 +18,13 @@
     <div class="bg-white p-8 rounded-2xl shadow-inner w-full max-w-sm flex flex-col justify-center text-center">
         <h1 class="text-3xl font-bold text-gray-900 mb-6">SIMS</h1>
         <div class="mb-8">
-            <img src="/assets/images/logo.png" alt="Logotip de SIMS" class="h-32 w-32 rounded-full mx-auto">
+            <img src="/assets/images/logo.png" alt="<?php echo __('home.logo_alt'); ?>" class="h-32 w-32 rounded-full mx-auto">
         </div>
         <a href="/login" class="block w-full bg-[#1565C0] text-white font-semibold py-3 px-6 rounded-lg hover:opacity-90 transition-opacity duration-300 mb-4">
-            Iniciar Sessió
+            <?php echo __('home.login'); ?>
         </a>
         <a href="/register" class="block w-full bg-gray-300 text-gray-900 font-semibold py-3 px-6 rounded-lg hover:bg-gray-400 transition-colors duration-300">
-            Registrar-se
+            <?php echo __('home.register'); ?>
         </a>
     </div>
 </body>

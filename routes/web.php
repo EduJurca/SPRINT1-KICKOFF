@@ -156,6 +156,7 @@ Router::delete('/api/bookings/{id}', ['BookingController', 'delete']);
 // Users API
 Router::get('/api/users/profile', ['ProfileController', 'getProfile']);
 Router::post('/api/users/profile', ['ProfileController', 'updateProfile']);
+Router::post('/api/users/language', ['ProfileController', 'updateLanguage']);
 
 // Sessió
 Router::get('/api/session-check', ['AuthController', 'checkSession']);

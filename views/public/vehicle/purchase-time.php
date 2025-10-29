@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIMS - Comprar Temps</title>
+    <title><?php echo __('purchase.page_title'); ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="/assets/js/toast.js" defer></script>
     <link rel="stylesheet" href="../../css/custom.css">
@@ -26,12 +26,12 @@
         class="p-5 rounded-2xl shadow-inner bg-white w-full max-w-sm md:max-w-3xl lg:max-w-4xl flex flex-col relative space-y-6">
         <header class="grid grid-cols-3 items-center mb-6 w-full">
             <div class="text-left">
-                <a href="/dashboard" class="text-[#1565C0] font-semibold hover:underline">← Tornar</a>
+                <a href="/dashboard" class="text-[#1565C0] font-semibold hover:underline"><?php echo __('purchase.back'); ?></a>
             </div>
-            <h1 class="text-2xl font-bold text-gray-900 text-center">Comprar Temps</h1>
+            <h1 class="text-2xl font-bold text-gray-900 text-center"><?php echo __('purchase.purchase_time'); ?></h1>
             <div class="flex justify-end">
                 <div class="rounded-full flex items-center justify-center">
-                    <img src="/assets/images/logo.png" alt="Logo App" class="h-12 w-12" />
+                    <img src="/assets/images/logo.png" alt="<?php echo __('purchase.logo_app_alt'); ?>" class="h-12 w-12" />
                 </div>
             </div>
         </header>
@@ -64,9 +64,9 @@
 
                         <span
                             class="relative block px-6 py-4 rounded-xl bg-yellow-500 text-yellow-900 font-bold transform -translate-y-1.5 transition-transform duration-[600ms] ease-[cubic-bezier(.3,.7,.4,1)] text-shadow-[1px_1px_2px_rgba(255,255,255,0.4)]">
-                            <span class="block text-sm">Passa a</span>
-                            <span class="block text-2xl">Premium</span>
-                            <span class="block text-sm">9,99€ / mes</span>
+                            <span class="block text-sm"><?php echo __('purchase.upgrade_to'); ?></span>
+                            <span class="block text-2xl"><?php echo __('purchase.premium'); ?></span>
+                            <span class="block text-sm"><?php echo __('purchase.premium_price'); ?></span>
                         </span>
 
                     </a>
@@ -74,7 +74,7 @@
 
 
                 <div class="w-full text-center">
-                    <p class="text-gray-600 text-center text-sm mb-1 md:mb-1">O selecciona una opció de temps:</p>
+                    <p class="text-gray-600 text-center text-sm mb-1 md:mb-1"><?php echo __('purchase.or_select_time_option'); ?></p>
                 </div>
             </div>
 
@@ -85,7 +85,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M12 9v2m0 4h.01m-6.938-7a9 9 0 1113.876 0l-1.416 2.45a7 7 0 10-10.884 0L5.062 7z" />
                     </svg>
-                    <p class="text-xs text-gray-700">Recorda: cada viatge té un cost de desbloqueig de **0,50€**.</p>
+                    <p class="text-xs text-gray-700"><?php echo __('purchase.unlock_fee_reminder'); ?></p>
                 </div>
 
                 <ul class="space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-4">
@@ -100,8 +100,8 @@
                                 <polyline points="12 6 12 12 16 14"></polyline>
                             </svg>
                             <div>
-                                <p class="font-bold text-lg text-gray-800 mb-1 md:mb-0">10 minuts</p>
-                                <p class="text-gray-600 text-sm mb-1 md:mb-0">Per a viatges curts i urgents.</p>
+                                <p class="font-bold text-lg text-gray-800 mb-1 md:mb-0"><?php echo __('purchase.minutes_10'); ?></p>
+                                <p class="text-gray-600 text-sm mb-1 md:mb-0"><?php echo __('purchase.desc_10'); ?></p>
                             </div>
                         </div>
                         <span class="font-bold text-2xl text-gray-900">1,50€</span>
@@ -117,8 +117,8 @@
                                 <polyline points="12 6 12 12 16 14"></polyline>
                             </svg>
                             <div>
-                                <p class="font-bold text-lg text-blue-900 mb-1 md:mb-0">30 minuts</p>
-                                <p class="text-blue-700 text-sm mb-1 md:mb-0">Per a desplaçaments mitjans.</p>
+                                <p class="font-bold text-lg text-blue-900 mb-1 md:mb-0"><?php echo __('purchase.minutes_30'); ?></p>
+                                <p class="text-blue-700 text-sm mb-1 md:mb-0"><?php echo __('purchase.desc_30'); ?></p>
                             </div>
                         </div>
                         <span class="font-bold text-2xl text-blue-900">4,00€</span>
@@ -134,8 +134,8 @@
                                 <polyline points="12 6 12 12 16 14"></polyline>
                             </svg>
                             <div>
-                                <p class="font-bold text-lg text-green-900 mb-1 md:mb-0">60 minuts</p>
-                                <p class="text-green-700 text-sm mb-1 md:mb-0">Ideal per a viatges més llargs.</p>
+                                <p class="font-bold text-lg text-green-900 mb-1 md:mb-0"><?php echo __('purchase.minutes_60'); ?></p>
+                                <p class="text-green-700 text-sm mb-1 md:mb-0"><?php echo __('purchase.desc_60'); ?></p>
                             </div>
                         </div>
                         <span class="font-bold text-2xl text-green-900">7,50€</span>
@@ -151,8 +151,8 @@
                                 <polyline points="12 6 12 12 16 14"></polyline>
                             </svg>
                             <div>
-                                <p class="font-bold text-lg text-yellow-900 mb-1 md:mb-0">120 minuts</p>
-                                <p class="text-yellow-700 text-sm mb-1 md:mb-0">Dos hores completes de viatge.</p>
+                                <p class="font-bold text-lg text-yellow-900 mb-1 md:mb-0"><?php echo __('purchase.minutes_120'); ?></p>
+                                <p class="text-yellow-700 text-sm mb-1 md:mb-0"><?php echo __('purchase.desc_120'); ?></p>
                             </div>
                         </div>
                         <span class="font-bold text-2xl text-yellow-900">14,00€</span>
@@ -168,8 +168,8 @@
                                 <polyline points="12 6 12 12 16 14"></polyline>
                             </svg>
                             <div>
-                                <p class="font-bold text-lg text-red-900 mb-1 md:mb-0">180 minuts</p>
-                                <p class="text-red-700 text-sm mb-1 md:mb-0">Per a grans rutes o turisme.</p>
+                                <p class="font-bold text-lg text-red-900 mb-1 md:mb-0"><?php echo __('purchase.minutes_180'); ?></p>
+                                <p class="text-red-700 text-sm mb-1 md:mb-0"><?php echo __('purchase.desc_180'); ?></p>
                             </div>
                         </div>
                         <span class="font-bold text-2xl text-red-900">20,00€</span>
@@ -186,8 +186,8 @@
                                 <polyline points="12 6 12 12 16 14"></polyline>
                             </svg>
                             <div>
-                                <p class="font-bold text-lg text-indigo-900 mb-1 md:mb-0">240 minuts</p>
-                                <p class="text-indigo-700 text-sm mb-1 md:mb-0">Un matí o tarda sencera.</p>
+                                <p class="font-bold text-lg text-indigo-900 mb-1 md:mb-0"><?php echo __('purchase.minutes_240'); ?></p>
+                                <p class="text-indigo-700 text-sm mb-1 md:mb-0"><?php echo __('purchase.desc_240'); ?></p>
                             </div>
                         </div>
                         <span class="font-bold text-2xl text-indigo-900">25,00€</span>
@@ -201,13 +201,13 @@
 
     <div id="purchaseModal" class="hidden w-full fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50">
         <div class="bg-white p-6 rounded-lg shadow-lg w-80 text-center">
-            <h2 class="text-xl font-semibold mb-4 text-blue-800">Confirmar compra</h2>
-            <p id="modalText" class="text-gray-700 mb-6">¿Deseas confirmar esta compra?</p>
+            <h2 class="text-xl font-semibold mb-4 text-blue-800"><?php echo __('purchase.confirm_purchase'); ?></h2>
+            <p id="modalText" class="text-gray-700 mb-6"><?php echo __('purchase.confirm_purchase_question'); ?></p>
             <div class="flex justify-around">
                 <button onclick="confirmPurchase()"
-                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Confirmar</button>
+                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"><?php echo __('purchase.confirm'); ?></button>
                 <button onclick="closeModal()"
-                    class="bg-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400">Cancelar</button>
+                    class="bg-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400"><?php echo __('purchase.cancel'); ?></button>
             </div>
         </div>
     </div>
@@ -225,7 +225,7 @@
         priceSelected = parseFloat(target.dataset.price);
 
         const modalText = document.querySelector('#purchaseModal #modalText');
-        modalText.textContent = `Vols comprar ${minutesSelected} minuts per ${priceSelected.toFixed(2)}€?`;
+        modalText.textContent = `<?php echo __('purchase.want_to_buy'); ?> ${minutesSelected} <?php echo __('purchase.minutes_for'); ?> ${priceSelected.toFixed(2)}€?`;
 
         const modal = document.getElementById('purchaseModal');
         modal.classList.remove('hidden');

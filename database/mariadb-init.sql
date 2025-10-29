@@ -35,6 +35,7 @@ CREATE TABLE users (
     address VARCHAR(255),                       
     dni VARCHAR(20),   
     is_admin BOOLEAN NOT NULL DEFAULT FALSE,
+    lang VARCHAR(5) DEFAULT 'ca',
     iban VARCHAR(34),
     driver_license_photo VARCHAR(255),
     nationality_id INT,
@@ -43,7 +44,8 @@ CREATE TABLE users (
     FOREIGN KEY (nationality_id) REFERENCES nationalities(id) ON DELETE SET NULL,
     INDEX idx_email (email),
     INDEX idx_username (username),
-    INDEX idx_is_admin (is_admin)
+    INDEX idx_is_admin (is_admin),
+    INDEX idx_lang (lang)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Table: subscriptions

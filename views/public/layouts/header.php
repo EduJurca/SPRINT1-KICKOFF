@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $title ?? 'SIMS - Sistema Intelligent de Mobilitat Sostenible'; ?></title>
+    <title><?php echo $title ?? __('header.default_title'); ?></title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -38,8 +38,8 @@
                 <h1 class="text-2xl font-bold text-[#1565C0]">SIMS</h1>
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <div class="flex items-center space-x-4">
-                        <span class="text-gray-700">Hola, <?php echo htmlspecialchars($_SESSION['username']); ?></span>
-                        <a href="/logout" class="text-red-500 hover:text-red-700">Tancar sessió</a>
+                        <span class="text-gray-700"><?php echo __('header.welcome', ['username' => htmlspecialchars($_SESSION['username'] ?? '')]); ?></span>
+                        <a href="/logout" class="text-red-500 hover:text-red-700"><?php echo __('header.logout'); ?></a>
                     </div>
                 <?php endif; ?>
             </div>

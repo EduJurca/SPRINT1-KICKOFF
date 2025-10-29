@@ -1,8 +1,4 @@
 <?php
-/**
- * 🚪 Front Controller - Punt d'entrada principal de l'aplicació
- * Totes les peticions passen per aquí i es dirigeixen al Router
- */
 
 // Iniciar sessió
 session_start();
@@ -19,19 +15,17 @@ require_once __DIR__ . '/config/constants.php';
 
 // Carregar configuració de base de dades
 require_once DATABASE_PATH . '/Database.php';
-
-// Carregar el Router
+require_once LOCALE_PATH . '/Lang.php';
+require_once LOCALE_PATH . '/LanguageDetector.php';
 require_once CORE_PATH . '/Router.php';
 
-// Carregar les rutes
+$uri = $_SERVER['REQUEST_URI'];
+$detectedLang = LanguageDetector::detect($uri);
+Lang::init($detectedLang);
+
 require_once ROOT_PATH . '/routes/web.php';
 
-// Obtenir la URI sol·licitada
-$uri = $_SERVER['REQUEST_URI'];
 $method = $_SERVER['REQUEST_METHOD'];
+$uriPath = parse_url($uri, PHP_URL_PATH);
 
-// Eliminar query string de la URI
-$uri = parse_url($uri, PHP_URL_PATH);
-
-// Executar el router
-Router::dispatch($uri, $method);
+Router::dispatch($uriPath, $method);

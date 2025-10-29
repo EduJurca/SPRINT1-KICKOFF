@@ -1,9 +1,11 @@
 <?php
 
-define('ROOT_PATH', dirname(__DIR__));
+define('ROOT_PATH', __DIR__ . '/../');
 define('CONFIG_PATH', ROOT_PATH . '/config');
 define('DATABASE_PATH', ROOT_PATH . '/database');
 define('CORE_PATH', ROOT_PATH . '/core');
+define('LOCALE_PATH', ROOT_PATH . '/locale');
+define('LANG_PATH', ROOT_PATH . '/lang');
 define('MODELS_PATH', ROOT_PATH . '/models');
 define('CONTROLLERS_PATH', ROOT_PATH . '/controllers');
 define('VIEWS_PATH', ROOT_PATH . '/views');
