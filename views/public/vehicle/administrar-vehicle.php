@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VoltiaCar - Administrar Vehicle</title>
+    <title><?php echo __('admin.page_title'); ?></title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -25,14 +25,14 @@
         <div class="bg-white p-5 rounded-2xl shadow-inner w-full max-w-sm flex flex-col relative">
             <header class="grid grid-cols-3 items-center mb-6 w-full">
                 <div class="text-left">
-                  <a href="/dashboard" class="text-[#1565C0] font-semibold hover:underline">← Tornar</a>
+                  <a href="/dashboard" class="text-[#1565C0] font-semibold hover:underline"><?php echo __('admin.back'); ?></a>
                 </div>
-                <h1 class="text-2xl font-bold text-gray-900 text-center">Controlar Vehicle</h1>
+                <h1 class="text-2xl font-bold text-gray-900 text-center"><?php echo __('admin.control_vehicle'); ?></h1>
                 <div class="flex justify-end items-center gap-2">
                     <button id="release-vehicle-btn-mobile" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-3 rounded-lg text-xs transition-colors" title="Finalitzar Reserva">
-                        Finalitzar
+                        <?php echo __('admin.finish'); ?>
                     </button>
-                    <img src="/assets/images/logo.png" alt="Logo" class="h-10 w-10">
+                    <img src="/assets/images/logo.png" alt="<?php echo __('admin.logo_alt'); ?>" class="h-10 w-10">
                 </div>
             </header>
 
@@ -42,8 +42,8 @@
                     <span class="shadow"></span>
                     <span class="edge"></span>
                     <span class="front p-2 flex flex-col items-center text-sm">
-                        <span class="text-base font-semibold">Estat:</span>
-                        <span class="text-white text-sm font-semibold" data-vehicle-status>Operatiu</span>
+                        <span class="text-base font-semibold"><?php echo __('admin.status'); ?></span>
+                        <span class="text-white text-sm font-semibold" data-vehicle-status><?php echo __('admin.operational'); ?></span>
                     </span>
                 </div>
                 <div class="pushable flex-1">
@@ -51,7 +51,7 @@
                     <span class="edge"
                         style="background: linear-gradient(to left, hsl(200, 70%, 40%) 0%, hsl(200, 70%, 50%) 8%, hsl(200, 70%, 50%) 92%, hsl(200, 70%, 40%) 100%);"></span>
                     <span class="front p-2 flex flex-col items-center text-sm" style="background: hsl(200, 70%, 50%);">
-                        <span class="text-base font-semibold">Bateria:</span>
+                        <span class="text-base font-semibold"><?php echo __('admin.battery'); ?></span>
                         <div class="w-full bg-gray-300 rounded-lg h-6 overflow-hidden mt-1">
                             <div class="h-full" data-battery-bar style="width: 80%; background-color: #00C853;">
                                 <div class="h-full flex items-center justify-center text-white font-bold text-sm" data-battery-text>80%</div>
@@ -64,52 +64,77 @@
             <!-- Contenido desplazable horizontal -->
             <main class="flex-1 overflow-x-auto no-scrollbar flex snap-x snap-mandatory">
                 <section class="flex-none w-full px-2 sm:px-4 flex flex-col justify-center snap-start">
-                    <h2 class="text-xl font-bold text-gray-900 mb-4">Controls del Vehicle</h2>
+                    <h2 class="text-xl font-bold text-gray-900 mb-4"><?php echo __('admin.vehicle_controls'); ?></h2>
                     <div class="grid grid-cols-2 gap-4 sm:gap-6 p-2">
                         <button class="pushable yellow h-32" data-control="engine">
                             <span class="shadow"></span>
                             <span class="edge"></span>
                             <span class="front flex-1 flex flex-col items-center justify-center text-base p-2">
-                                <img src="/assets/images/engegar.png" alt="Engegar/Apagar" class="h-12 w-12 mb-2">
-                                <span>Engegar</span>
-                                <span>/Apagar</span>
+                                <img src="/assets/images/engegar.png" alt="<?php echo __('admin.start_stop_alt'); ?>" class="h-12 w-12 mb-2">
+                                <span><?php echo __('admin.start'); ?></span>
+                                <span><?php echo __('admin.stop'); ?></span>
                             </span>
                         </button>
                         <button class="pushable h-32" data-control="horn">
                             <span class="shadow"></span>
                             <span class="edge"></span>
                             <span class="front flex-1 flex flex-col items-center justify-center text-base p-2">
-                                <img src="/assets/images/claxon.png" alt="Activar Clàxon" class="h-12 w-12 mb-2">
-                                Activar Clàxon
+                                <img src="/assets/images/claxon.png" alt="<?php echo __('admin.activate_horn'); ?>" class="h-12 w-12 mb-2">
+                                <?php echo __('admin.activate_horn'); ?>
                             </span>
                         </button>
                         <button class="pushable h-32" data-control="lights">
                             <span class="shadow"></span>
                             <span class="edge"></span>
                             <span class="front flex-1 flex flex-col items-center justify-center text-base p-2">
-                                <img src="/assets/images/llums.png" alt="Activar Llums" class="h-12 w-12 mb-2">
-                                Activar Llums
+                                <img src="/assets/images/llums.png" alt="<?php echo __('admin.activate_lights'); ?>" class="h-12 w-12 mb-2">
+                                <?php echo __('admin.activate_lights'); ?>
                             </span>
                         </button>
                         <button class="pushable h-32" data-control="doors">
                             <span class="shadow"></span>
                             <span class="edge"></span>
                             <span class="front flex-1 flex flex-col items-center justify-center text-base p-2">
-                                <img src="/assets/images/portes.png" alt="Bloquejar Portes" class="h-12 w-12 mb-2">
-                                Bloquejar Portes
+                                <img src="/assets/images/portes.png" alt="<?php echo __('admin.lock_doors'); ?>" class="h-12 w-12 mb-2">
+                                <?php echo __('admin.lock_doors'); ?>
                             </span>
                         </button>
                     </div>
                 </section>
 
                 <section class="flex-none w-full px-2 sm:px-4 flex flex-col justify-center snap-start">
-                    <h2 class="text-xl font-bold text-gray-900 mb-4">Informació i Ubicació</h2>
-                    <div class="bg-[#F5F5F5] p-4 rounded-lg mb-4">
-                        <p class="text-gray-900 font-semibold text-lg">Matrícula: <span class="font-normal" data-vehicle-license>Carregant...</span></p>
-                        <p class="text-gray-700">Model: <span class="font-normal" data-vehicle-model>Carregant...</span></p>
-                    </div>
-                    <div class="w-full rounded-lg relative" style="height: 250px;">
-                        <div id="vehicle-map-mobile" style="height: 100%; width: 100%; border-radius: 0.5rem;"></div>
+                    <h2 class="text-xl font-bold text-gray-900 mb-4"><?php echo __('admin.vehicle_info'); ?></h2>
+                    <div class="bg-white rounded-lg shadow-md p-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="flex items-center space-x-3">
+                                <img src="/assets/images/bateria.png" alt="<?php echo __('admin.battery_alt'); ?>" class="h-8 w-8">
+                                <div>
+                                    <p class="text-sm text-gray-600"><?php echo __('admin.battery_level'); ?></p>
+                                    <p class="text-lg font-semibold text-gray-900" id="battery-level">85%</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <img src="/assets/images/velocitat.png" alt="<?php echo __('admin.speed_alt'); ?>" class="h-8 w-8">
+                                <div>
+                                    <p class="text-sm text-gray-600"><?php echo __('admin.current_speed'); ?></p>
+                                    <p class="text-lg font-semibold text-gray-900" id="current-speed">0 km/h</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <img src="/assets/images/distancia.png" alt="<?php echo __('admin.distance_alt'); ?>" class="h-8 w-8">
+                                <div>
+                                    <p class="text-sm text-gray-600"><?php echo __('admin.distance_traveled'); ?></p>
+                                    <p class="text-lg font-semibold text-gray-900" id="distance-traveled">0 km</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <img src="/assets/images/temps.png" alt="<?php echo __('admin.time_alt'); ?>" class="h-8 w-8">
+                                <div>
+                                    <p class="text-sm text-gray-600"><?php echo __('admin.time_used'); ?></p>
+                                    <p class="text-lg font-semibold text-gray-900" id="time-used">0 min</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
@@ -152,7 +177,7 @@
                     style="background: linear-gradient(to left, hsl(140, 80%, 35%) 0%, hsl(140, 80%, 45%) 8%, hsl(140, 80%, 45%) 92%, hsl(140, 80%, 35%) 100%);"></span>
                 <span class="front p-3 flex flex-col items-center text-base" style="background: hsl(140, 80%, 45%);">
                     <span class="font-semibold">Estat:</span>
-                    <span class="text-white font-semibold h-8 mt-2" data-vehicle-status>Operatiu</span>
+                    <span class="text-white font-semibold h-8 mt-2" data-vehicle-status><?php echo __('admin.operational'); ?></span>
                 </span>
             </div>
             <div class="pushable flex-1 max-w-xs">
@@ -160,7 +185,7 @@
                 <span class="edge"
                     style="background: linear-gradient(to left, hsl(200, 70%, 40%) 0%, hsl(200, 70%, 50%) 8%, hsl(200, 70%, 50%) 92%, hsl(200, 70%, 40%) 100%);"></span>
                 <span class="front p-3 flex flex-col items-center text-base" style="background: hsl(200, 70%, 50%);">
-                    <span class="font-semibold">Bateria:</span>
+                    <span class="font-semibold"><?php echo __('admin.battery'); ?>:</span>
                     <div class="w-full bg-gray-300 rounded-lg h-8 overflow-hidden mt-2">
                         <div class="h-full" data-battery-bar style="width: 80%; background-color: #00C853;">
                             <div class="h-full flex items-center justify-center text-white font-bold text-base" data-battery-text>80%</div>
@@ -172,39 +197,39 @@
 
         <main class="flex flex-row gap-8">
             <section class="flex-1 flex flex-col">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">Controls del Vehicle</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-6"><?php echo __('admin.vehicle_controls'); ?></h2>
                 <div class="grid grid-cols-2 gap-8">
                     <button class="pushable yellow h-40" data-control="engine">
                         <span class="shadow"></span>
                         <span class="edge"></span>
                         <span class="front flex flex-col items-center justify-center text-lg p-4">
-                            <img src="/assets/images/engegar.png" alt="Engegar/Apagar" class="h-16 w-16 mb-3">
-                            <span>Engegar</span>
-                            <span>/Apagar</span>
+                            <img src="/assets/images/engegar.png" alt="<?php echo __('admin.start_stop_alt'); ?>" class="h-16 w-16 mb-3">
+                            <span><?php echo __('admin.start'); ?></span>
+                            <span>/<?php echo __('admin.stop'); ?></span>
                         </span>
                     </button>
                     <button class="pushable h-40" data-control="horn">
                         <span class="shadow"></span>
                         <span class="edge"></span>
                         <span class="front flex flex-col items-center justify-center text-lg p-4">
-                            <img src="/assets/images/claxon.png" alt="Activar Clàxon" class="h-16 w-16 mb-3">
-                            Activar Clàxon
+                            <img src="/assets/images/claxon.png" alt="<?php echo __('admin.activate_horn'); ?>" class="h-16 w-16 mb-3">
+                            <?php echo __('admin.activate_horn'); ?>
                         </span>
                     </button>
                     <button class="pushable h-40" data-control="lights">
                         <span class="shadow"></span>
                         <span class="edge"></span>
                         <span class="front flex flex-col items-center justify-center text-lg p-4">
-                            <img src="/assets/images/llums.png" alt="Activar Llums" class="h-16 w-16 mb-3">
-                            Activar Llums
+                            <img src="/assets/images/llums.png" alt="<?php echo __('admin.activate_lights'); ?>" class="h-16 w-16 mb-3">
+                            <?php echo __('admin.activate_lights'); ?>
                         </span>
                     </button>
                     <button class="pushable h-40" data-control="doors">
                         <span class="shadow"></span>
                         <span class="edge"></span>
                         <span class="front flex flex-col items-center justify-center text-lg p-4">
-                            <img src="/assets/images/portes.png" alt="Bloquejar Portes" class="h-16 w-16 mb-3">
-                            Bloquejar Portes
+                            <img src="/assets/images/portes.png" alt="<?php echo __('admin.lock_doors'); ?>" class="h-16 w-16 mb-3">
+                            <?php echo __('admin.lock_doors'); ?>
                         </span>
                     </button>
                 </div>
@@ -212,10 +237,10 @@
 
             <!-- Information and Location section -->
             <section class="flex-1 flex flex-col">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">Informació i Ubicació</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-6"><?php echo __('admin.info_location'); ?></h2>
                 <div class="bg-[#F5F5F5] p-6 rounded-lg mb-6">
-                    <p class="text-gray-900 font-semibold text-xl mb-2">Matrícula: <span class="font-normal" data-vehicle-license>Carregant...</span></p>
-                    <p class="text-gray-700 text-lg">Model: <span class="font-normal" data-vehicle-model>Carregant...</span></p>
+                    <p class="text-gray-900 font-semibold text-xl mb-2"><?php echo __('admin.license_plate'); ?>: <span class="font-normal" data-vehicle-license><?php echo __('admin.loading'); ?>...</span></p>
+                    <p class="text-gray-700 text-lg"><?php echo __('admin.model'); ?>: <span class="font-normal" data-vehicle-model><?php echo __('admin.loading'); ?>...</span></p>
                 </div>
                 <div class="flex-1 w-full rounded-lg relative" style="min-height: 320px;">
                     <div id="vehicle-map-desktop" style="height: 100%; width: 100%; border-radius: 0.5rem;"></div>
@@ -224,63 +249,27 @@
 
             <!-- Charging History section -->
             <section class="flex-1 flex flex-col">
-                <h3 class="text-xl font-bold text-gray-900 mb-4">Històric de Càrrega</h3>
+                <h3 class="text-xl font-bold text-gray-900 mb-4"><?php echo __('admin.charging_history'); ?></h3>
                 <ul class="space-y-4 text-base">
-                    <li class="bg-[#F5F5F5] p-4 rounded-lg">Càrrega completada: 12/09/2025</li>
-                    <li class="bg-[#F5F5F5] p-4 rounded-lg">Càrrega completada: 08/09/2025</li>
-                    <li class="bg-[#F5F5F5] p-4 rounded-lg">Càrrega completada: 05/09/2025</li>
+                    <li class="bg-[#F5F5F5] p-4 rounded-lg"><?php echo __('admin.charge_completed'); ?>: 12/09/2025</li>
+                    <li class="bg-[#F5F5F5] p-4 rounded-lg"><?php echo __('admin.charge_completed'); ?>: 08/09/2025</li>
+                    <li class="bg-[#F5F5F5] p-4 rounded-lg"><?php echo __('admin.charge_completed'); ?>: 05/09/2025</li>
                 </ul>
             </section>
         </main>
     </div>
 
     <!-- Modal de Confirmación para Finalizar Reserva -->
-    <div id="release-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4" style="z-index: 9999;">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative">
-            <!-- Icono -->
-            <div class="flex justify-center mb-4">
-                <div class="bg-red-100 rounded-full p-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                </div>
-            </div>
-            
-            <!-- Título -->
-            <h3 class="text-2xl font-bold text-gray-900 text-center mb-3">
-                Finalitzar Reserva
-            </h3>
-            
-            <!-- Información del Vehículo -->
-            <div class="bg-gray-50 rounded-lg p-4 mb-4">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-gray-600 font-medium">Vehicle:</span>
-                    <span class="text-gray-900 font-bold" id="release-vehicle-info">-</span>
-                </div>
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-gray-600 font-medium">Temps d'ús:</span>
-                    <span class="text-gray-900 font-bold" id="release-time-info">-</span>
-                </div>
-                <div class="flex items-center justify-between">
-                    <span class="text-gray-600 font-medium">Cost estimat:</span>
-                    <span class="text-green-600 font-bold text-lg" id="release-cost-info">-</span>
-                </div>
-            </div>
-            
-            <!-- Mensaje -->
-            <p class="text-gray-600 text-center mb-6">
-                Estàs segur que vols finalitzar la reserva d'aquest vehicle?
-                <br>
-                <span class="text-sm text-gray-500">El vehicle quedarà disponible per a altres usuaris.</span>
-            </p>
-            
-            <!-- Botones -->
-            <div class="flex gap-3">
-                <button id="release-cancel-btn" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-lg transition-colors">
-                    Cancel·lar
+        <div id="release-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4" style="z-index: 9999;">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4"><?php echo __('admin.confirm_release'); ?></h3>
+            <p class="text-gray-700 mb-6"><?php echo __('admin.release_warning'); ?></p>
+            <div class="flex space-x-3">
+                <button id="confirm-release" class="flex-1 bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition-colors">
+                    <?php echo __('admin.confirm'); ?>
                 </button>
-                <button id="release-confirm-btn" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-lg transition-colors">
-                    Finalitzar
+                <button id="cancel-release" class="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400 transition-colors">
+                    <?php echo __('admin.cancel'); ?>
                 </button>
             </div>
         </div>

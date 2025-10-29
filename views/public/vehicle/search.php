@@ -4,7 +4,7 @@
  * Advanced search with filters for vehicle type, price, location, battery, and accessibility
  */
 
-$pageTitle = 'VoltiaCar - Cercar Vehicles';
+$pageTitle = __('vehicle.search_page_title');
 $additionalCSS = [];
 
 // Include header
@@ -16,10 +16,10 @@ include_once __DIR__ . '/../../php/components/header.php';
         <!-- Page Header -->
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-800">
-                Cercar Vehicles
+                <?php echo __('vehicle.search_title'); ?>
             </h1>
             <p class="text-gray-600 mt-2">
-                Utilitza els filtres per trobar el vehicle perfecte
+                <?php echo __('vehicle.search_description'); ?>
             </p>
         </div>
 
@@ -28,32 +28,32 @@ include_once __DIR__ . '/../../php/components/header.php';
             <div class="lg:col-span-1">
                 <div class="bg-white rounded-lg shadow-md p-6 sticky top-20">
                     <h2 class="text-xl font-bold text-gray-800 mb-6">
-                        Filtres
+                        <?php echo __('vehicle.filters'); ?>
                     </h2>
                     
                     <form id="search-form" class="space-y-6">
                         <!-- Vehicle Type Filter -->
                         <div>
                             <label for="vehicle_type" class="block text-sm font-semibold text-gray-700 mb-2">
-                                Tipus de Vehicle
+                                <?php echo __('vehicle.vehicle_type'); ?>
                             </label>
                             <select 
                                 id="vehicle_type" 
                                 name="vehicle_type"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-green"
                             >
-                                <option value="">Tots</option>
-                                <option value="electric">Elèctric</option>
-                                <option value="hybrid">Híbrid</option>
-                                <option value="compact">Compacte</option>
-                                <option value="suv">SUV</option>
+                                <option value=""><?php echo __('vehicle.all'); ?></option>
+                                <option value="electric"><?php echo __('vehicle.electric'); ?></option>
+                                <option value="hybrid"><?php echo __('vehicle.hybrid'); ?></option>
+                                <option value="compact"><?php echo __('vehicle.compact'); ?></option>
+                                <option value="suv"><?php echo __('vehicle.suv'); ?></option>
                             </select>
                         </div>
 
                         <!-- Price Range Filter -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Rang de Preu (€/min)
+                                <?php echo __('vehicle.price_range'); ?>
                             </label>
                             <div class="grid grid-cols-2 gap-2">
                                 <div>
@@ -61,7 +61,7 @@ include_once __DIR__ . '/../../php/components/header.php';
                                         type="number" 
                                         id="min_price" 
                                         name="min_price"
-                                        placeholder="Min"
+                                        placeholder="<?php echo __('vehicle.min'); ?>"
                                         step="0.01"
                                         min="0"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-green"
@@ -72,7 +72,7 @@ include_once __DIR__ . '/../../php/components/header.php';
                                         type="number" 
                                         id="max_price" 
                                         name="max_price"
-                                        placeholder="Max"
+                                        placeholder="<?php echo __('vehicle.max'); ?>"
                                         step="0.01"
                                         min="0"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-green"
@@ -84,14 +84,14 @@ include_once __DIR__ . '/../../php/components/header.php';
                         <!-- Location Filter -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Ubicació
+                                <?php echo __('vehicle.location'); ?>
                             </label>
                             <button 
                                 type="button" 
                                 id="use-my-location"
                                 class="w-full px-3 py-2 bg-blue-50 border border-blue-300 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium"
                             >
-                                📍 Usar la meva ubicació
+                                <?php echo __('vehicle.use_my_location'); ?>
                             </button>
                             <input type="hidden" id="lat" name="lat">
                             <input type="hidden" id="lng" name="lng">
@@ -101,7 +101,7 @@ include_once __DIR__ . '/../../php/components/header.php';
                         <!-- Max Distance Filter -->
                         <div>
                             <label for="max_distance" class="block text-sm font-semibold text-gray-700 mb-2">
-                                Distància Màxima (km)
+                                <?php echo __('vehicle.max_distance'); ?>
                             </label>
                             <input 
                                 type="number" 
@@ -117,7 +117,7 @@ include_once __DIR__ . '/../../php/components/header.php';
                         <!-- Date/Time Range Filter -->
                         <div>
                             <label for="start_datetime" class="block text-sm font-semibold text-gray-700 mb-2">
-                                Inici
+                                <?php echo __('vehicle.start'); ?>
                             </label>
                             <input 
                                 type="datetime-local" 
@@ -129,7 +129,7 @@ include_once __DIR__ . '/../../php/components/header.php';
 
                         <div>
                             <label for="end_datetime" class="block text-sm font-semibold text-gray-700 mb-2">
-                                Data de Fi
+                                <?php echo __('vehicle.end_date'); ?>
                             </label>
                             <input 
                                 type="datetime-local" 
@@ -142,7 +142,7 @@ include_once __DIR__ . '/../../php/components/header.php';
                         <!-- Battery Level Filter -->
                         <div>
                             <label for="min_battery" class="block text-sm font-semibold text-gray-700 mb-2">
-                                Bateria Mínima (%)
+                                <?php echo __('vehicle.min_battery'); ?>
                             </label>
                             <input 
                                 type="number" 
@@ -166,7 +166,7 @@ include_once __DIR__ . '/../../php/components/header.php';
                                     class="mr-3 h-5 w-5 text-primary-green focus:ring-primary-green border-gray-300 rounded"
                                 >
                                 <span class="text-sm font-semibold text-gray-700">
-                                    ♿ Només vehicles accessibles
+                                    <?php echo __('vehicle.accessible_only'); ?>
                                 </span>
                             </label>
                         </div>
@@ -174,16 +174,16 @@ include_once __DIR__ . '/../../php/components/header.php';
                         <!-- Sort By Filter -->
                         <div>
                             <label for="sort_by" class="block text-sm font-semibold text-gray-700 mb-2">
-                                Ordenar per
+                                <?php echo __('vehicle.sort_by'); ?>
                             </label>
                             <select 
                                 id="sort_by" 
                                 name="sort_by"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-green"
                             >
-                                <option value="battery">Bateria</option>
-                                <option value="price">Preu</option>
-                                <option value="distance">Distància</option>
+                                <option value="battery"><?php echo __('vehicle.battery'); ?></option>
+                                <option value="price"><?php echo __('vehicle.price'); ?></option>
+                                <option value="distance"><?php echo __('vehicle.distance'); ?></option>
                             </select>
                         </div>
 
@@ -192,7 +192,7 @@ include_once __DIR__ . '/../../php/components/header.php';
                             type="submit" 
                             class="w-full bg-primary-green hover:bg-primary-green-dark text-white font-bold py-3 rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg"
                         >
-                            🔍 Cercar
+                            <?php echo __('vehicle.search'); ?>
                         </button>
 
                         <!-- Reset Button -->
@@ -200,7 +200,7 @@ include_once __DIR__ . '/../../php/components/header.php';
                             type="reset" 
                             class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 rounded-lg transition-colors duration-300"
                         >
-                            Netejar Filtres
+                            <?php echo __('vehicle.clear_filters'); ?>
                         </button>
                     </form>
                 </div>
@@ -210,7 +210,7 @@ include_once __DIR__ . '/../../php/components/header.php';
             <div class="lg:col-span-3">
                 <div class="mb-6 flex justify-between items-center">
                     <h2 class="text-2xl font-bold text-gray-800">
-                        Resultats
+                        <?php echo __('vehicle.results'); ?>
                     </h2>
                     <div id="results-count" class="text-gray-600 font-medium"></div>
                 </div>
@@ -222,10 +222,10 @@ include_once __DIR__ . '/../../php/components/header.php';
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                         <h3 class="text-xl font-semibold text-gray-700 mb-2">
-                            Utilitza els filtres per cercar vehicles
+                            <?php echo __('vehicle.use_filters_message'); ?>
                         </h3>
                         <p class="text-gray-500">
-                            Selecciona els teus criteris de cerca i fes clic a "Cercar"
+                            <?php echo __('vehicle.select_criteria_message'); ?>
                         </p>
                     </div>
                 </div>
@@ -245,7 +245,7 @@ document.getElementById('use-my-location')?.addEventListener('click', function()
     const button = this;
     
     button.disabled = true;
-    button.innerHTML = '⏳ Obtenint ubicació...';
+    button.innerHTML = '<?php echo __('vehicle.getting_location'); ?>';
     
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -253,27 +253,27 @@ document.getElementById('use-my-location')?.addEventListener('click', function()
                 document.getElementById('lat').value = position.coords.latitude;
                 document.getElementById('lng').value = position.coords.longitude;
                 
-                statusDiv.innerHTML = '✓ Ubicació obtinguda correctament';
+                statusDiv.innerHTML = '<?php echo __('vehicle.location_obtained'); ?>';
                 statusDiv.className = 'mt-2 text-xs text-green-600';
                 
                 button.disabled = false;
-                button.innerHTML = '✓ Ubicació configurada';
+                button.innerHTML = '<?php echo __('vehicle.location_configured'); ?>';
                 button.className = 'w-full px-3 py-2 bg-green-50 border border-green-300 text-green-700 rounded-lg text-sm font-medium';
             },
             function(error) {
-                statusDiv.innerHTML = '✗ Error obtenint la ubicació';
+                statusDiv.innerHTML = '<?php echo __('vehicle.location_error'); ?>';
                 statusDiv.className = 'mt-2 text-xs text-red-600';
                 
                 button.disabled = false;
-                button.innerHTML = '📍 Usar la meva ubicació';
+                button.innerHTML = '<?php echo __('vehicle.use_my_location'); ?>';
             }
         );
     } else {
-        statusDiv.innerHTML = '✗ Geolocalització no suportada';
+        statusDiv.innerHTML = '<?php echo __('vehicle.geolocation_not_supported'); ?>';
         statusDiv.className = 'mt-2 text-xs text-red-600';
         
         button.disabled = false;
-        button.innerHTML = '📍 Usar la meva ubicació';
+        button.innerHTML = '<?php echo __('vehicle.use_my_location'); ?>';
     }
 });
 </script>
