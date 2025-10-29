@@ -15,8 +15,8 @@ require_once __DIR__ . '/config/constants.php';
 
 // Carregar configuració de base de dades
 require_once DATABASE_PATH . '/Database.php';
-require_once CORE_PATH . '/Lang.php';
-require_once CORE_PATH . '/LanguageDetector.php';
+require_once LOCALE_PATH . '/Lang.php';
+require_once LOCALE_PATH . '/LanguageDetector.php';
 require_once CORE_PATH . '/Router.php';
 
 $uri = $_SERVER['REQUEST_URI'];
