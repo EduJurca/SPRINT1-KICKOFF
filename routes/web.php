@@ -190,9 +190,38 @@ Router::get('/admin/users', function() {
     require_once PUBLIC_PATH . '/php/admin/users.php';
 });
 
-Router::get('/admin/vehicles', function() {
-    require_once PUBLIC_PATH . '/php/admin/vehicles.php';
-});
+// ==========================================
+// 🚗 ADMIN - CRUD DE VEHICLES (MVC)
+// ==========================================
+
+// INDEX - Listar todos los vehículos
+Router::get('/admin/vehicles', ['AdminVehicleController', 'index']);
+
+// CREATE - Mostrar formulario de crear
+Router::get('/admin/vehicles/create', ['AdminVehicleController', 'create']);
+
+// STORE - Guardar nuevo vehículo
+Router::post('/admin/vehicles', ['AdminVehicleController', 'store']);
+
+// SHOW - Ver detalle de un vehículo
+Router::get('/admin/vehicles/{id}', ['AdminVehicleController', 'show']);
+
+// EDIT - Mostrar formulario de editar
+Router::get('/admin/vehicles/{id}/edit', ['AdminVehicleController', 'edit']);
+
+// UPDATE - Actualizar vehículo (soporta PUT y POST)
+Router::put('/admin/vehicles/{id}', ['AdminVehicleController', 'update']);
+Router::post('/admin/vehicles/{id}', ['AdminVehicleController', 'update']);
+
+// DESTROY - Eliminar vehículo (simulando DELETE con POST + _method)
+Router::delete('/admin/vehicles/{id}', ['AdminVehicleController', 'destroy']);
+
+// API - Obtener vehículos en JSON
+Router::get('/admin/api/vehicles', ['AdminVehicleController', 'api']);
+
+// ==========================================
+// 🔧 ADMIN - OTRAS SECCIONES
+// ==========================================
 
 Router::get('/admin/bookings', function() {
     require_once PUBLIC_PATH . '/php/admin/bookings.php';
