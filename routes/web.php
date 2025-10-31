@@ -203,6 +203,25 @@ Router::get('/admin/settings', function() {
 });
 
 // ==========================================
+// ⚡ CHARGING STATIONS (PUNTS DE CÀRREGA)
+// ==========================================
+
+// ADMIN ROUTES (gestió CRUD)
+Router::get('/admin/charging-stations', ['ChargingStationController', 'index']);
+Router::get('/admin/charging-stations/create', ['ChargingStationController', 'create']);
+Router::post('/admin/charging-stations/store', ['ChargingStationController', 'store']);
+Router::get('/admin/charging-stations/{id}/edit', ['ChargingStationController', 'edit']);
+Router::post('/admin/charging-stations/{id}/update', ['ChargingStationController', 'update']);
+Router::post('/admin/charging-stations/{id}/delete', ['ChargingStationController', 'delete']);
+
+// PUBLIC ROUTES (mapa i detalls)
+Router::get('/charging-stations', ['ChargingStationController', 'showMap']);
+Router::get('/charging-stations/{id}', ['ChargingStationController', 'getStationDetails']);
+
+// API ROUTES (JSON endpoints)
+Router::get('/api/charging-stations', ['ChargingStationController', 'getStationsJSON']);
+
+// ==========================================
 // 🧪 DEBUG / TESTING (només en desenvolupament)
 // ==========================================
 

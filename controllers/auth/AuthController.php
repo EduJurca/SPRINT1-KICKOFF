@@ -48,7 +48,12 @@ class AuthController {
                 if (strpos($contentType, 'application/json') !== false) {
                     return Router::json($result, 200);
                 } else {
-                    return Router::redirect('/dashboard');
+                    // Redirigir segons el rol de l'usuari
+                    if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1) {
+                        return Router::redirect('/admin/charging-stations');
+                    } else {
+                        return Router::redirect('/dashboard');
+                    }
                 }
             } else {
                 if (strpos($contentType, 'application/json') !== false) {
