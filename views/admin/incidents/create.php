@@ -1,9 +1,5 @@
 <?php
-/**
- * 📝 Crear Incidencia - Vista Admin
- */
 
-// Obtener lista de usuarios para asignar
 require_once MODELS_PATH . '/User.php';
 $userModel = new User();
 $users = $userModel->findAll() ?? [];

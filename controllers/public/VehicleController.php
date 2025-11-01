@@ -328,7 +328,7 @@ class VehicleController {
             // Si es form-data, redirigir con error
             if (strpos($contentType, 'application/json') === false) {
                 $_SESSION['error'] = 'Els minuts són obligatoris';
-                return Router::redirect('/purchase-time');
+                return Router::redirect('/report-incident');
             }
             
             return Router::json([
@@ -351,7 +351,7 @@ class VehicleController {
             // Si es form-data, redirigir con error
             if (strpos($contentType, 'application/json') === false) {
                 $_SESSION['error'] = 'Error al processar la compra. Intenta-ho de nou.';
-                return Router::redirect('/purchase-time');
+                return Router::redirect('/report-incident');
             }
             
             return Router::json([

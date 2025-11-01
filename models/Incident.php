@@ -71,18 +71,15 @@ class Incident {
     }
 
     public function createIncident($data) {
-        // Validar datos requeridos
         if (!isset($data['type']) || !isset($data['description']) || !isset($data['incident_creator'])) {
             return false;
         }
 
-        // Validar que el creador existe
         $userModel = new User();
         if (!$userModel->exists($data['incident_creator'])) {
             return false;
         }
 
-        // Validar que el asignado existe (si se proporciona)
         if (isset($data['incident_assignee']) && $data['incident_assignee'] !== null) {
             if (!$userModel->exists($data['incident_assignee'])) {
                 return false;

@@ -5,7 +5,6 @@
 CREATE DATABASE IF NOT EXISTS simsdb;
 USE simsdb;
 
--- Drop existing tables (in order of dependencies)
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS payments;
 DROP TABLE IF EXISTS vehicle_usage;

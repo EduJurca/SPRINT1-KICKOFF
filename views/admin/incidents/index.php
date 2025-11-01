@@ -64,7 +64,7 @@ require_once __DIR__ . '/../admin-header.php';
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <a href="#" class="text-indigo-600 hover:text-indigo-900 mr-3">Veure</a>
+                                <a href="#" class="text-gray-600 hover:text-indigo-900 mr-3">Veure</a>
                                 <a href="#" class="text-blue-600 hover:text-blue-900 mr-3">Editar</a>
                                 <a href="#" class="text-red-600 hover:text-red-900">Eliminar</a>
                             </td>
