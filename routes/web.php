@@ -186,8 +186,39 @@ Router::get('/admin/dashboard', function() {
     require_once PUBLIC_PATH . '/php/admin/dashboard.php';
 });
 
+// ==========================================
+// 👥 CRUD USUARIS
+// ==========================================
+require_once CONTROLLERS_PATH . '/admin/UserController.php';
+
 Router::get('/admin/users', function() {
-    require_once PUBLIC_PATH . '/php/admin/users.php';
+    $controller = new UserController();
+    $controller->index();
+});
+
+Router::get('/admin/users/create', function() {
+    $controller = new UserController();
+    $controller->create();
+});
+
+Router::post('/admin/users/store', function() {
+    $controller = new UserController();
+    $controller->store();
+});
+
+Router::get('/admin/users/edit', function() {
+    $controller = new UserController();
+    $controller->edit();
+});
+
+Router::post('/admin/users/update', function() {
+    $controller = new UserController();
+    $controller->update();
+});
+
+Router::post('/admin/users/delete', function() {
+    $controller = new UserController();
+    $controller->delete();
 });
 
 Router::get('/admin/vehicles', function() {

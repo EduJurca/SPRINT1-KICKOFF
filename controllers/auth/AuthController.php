@@ -48,7 +48,15 @@ class AuthController {
                 if (strpos($contentType, 'application/json') !== false) {
                     return Router::json($result, 200);
                 } else {
-                    return Router::redirect('/dashboard');
+                    // Redirigir segons el rol
+                    $roleId = $_SESSION['role_id'] ?? 3;
+                    if ($roleId == 1 || $roleId == 2) {
+                        // SuperAdmin i Treballadors van al panel admin
+                        return Router::redirect('/admin/users');
+                    } else {
+                        // Clients van al dashboard normal
+                        return Router::redirect('/dashboard');
+                    }
                 }
             } else {
                 if (strpos($contentType, 'application/json') !== false) {
@@ -88,10 +96,12 @@ class AuthController {
             return ['success' => false, 'message' => 'Incorrect password'];
         }
 
-        // Guardar dades a la sessió
+        // Guardar dades a la sessió amb informació del rol
         $_SESSION['user_id']  = $user['id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION['is_admin'] = $user['is_admin'] ?? 0;
+        $_SESSION['role_id'] = $user['role_id'] ?? 3;
+        $_SESSION['role_name'] = $user['role_name'] ?? 'Client';
 
         return [
             'success' => true, 
@@ -99,7 +109,9 @@ class AuthController {
             'user' => [
                 'id' => $user['id'],
                 'username' => $user['username'],
-                'is_admin' => $user['is_admin'] ?? 0
+                'is_admin' => $user['is_admin'] ?? 0,
+                'role_id' => $user['role_id'] ?? 3,
+                'role_name' => $user['role_name'] ?? 'Client'
             ],
             'session_id' => session_id()
         ];

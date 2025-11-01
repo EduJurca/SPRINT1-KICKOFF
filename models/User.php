@@ -18,7 +18,12 @@ class User {
      * @return array|null Dades de l'usuari
      */
     public function findByUsername($username) {
-        $stmt = $this->db->prepare("SELECT id, username, password, is_admin FROM users WHERE username = ?");
+        $stmt = $this->db->prepare("
+            SELECT u.id, u.username, u.password, u.is_admin, u.role_id, r.name as role_name 
+            FROM users u 
+            LEFT JOIN roles r ON u.role_id = r.id 
+            WHERE u.username = ?
+        ");
         $stmt->bind_param("s", $username);
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
@@ -46,8 +51,8 @@ class User {
      */
     public function create($data) {
         $stmt = $this->db->prepare("INSERT INTO users 
-            (username, nationality_id, phone, birth_date, sex, dni, address, email, password, iban, driver_license_photo, minute_balance, is_admin, created_at) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            (username, nationality_id, phone, birth_date, sex, dni, address, email, password, iban, driver_license_photo, minute_balance, is_admin, role_id, created_at) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         $username = $data['username'] ?? null;
         $nationality_id = $data['nationality_id'] ?? null;
@@ -60,12 +65,13 @@ class User {
         $email = $data['email'] ?? null;
         $driver_license_photo = $data['driver_license_photo'] ?? null;
         $minute_balance = 0;
-        $is_admin = 0;
+        $is_admin = isset($data['is_admin']) ? (int)$data['is_admin'] : 0;
+        $role_id = isset($data['role_id']) ? (int)$data['role_id'] : 3;
         $created_at = date('Y-m-d H:i:s');
         $password_hash = password_hash($data['password'], PASSWORD_DEFAULT);
 
         $stmt->bind_param(
-            "sisssssssssiis",
+            "sisssssssssiiis",
             $username,
             $nationality_id,
             $phone,
@@ -79,6 +85,7 @@ class User {
             $driver_license_photo,
             $minute_balance,
             $is_admin,
+            $role_id,
             $created_at
         );
 
@@ -182,5 +189,138 @@ class User {
         $stmt->execute();
         $result = $stmt->get_result()->fetch_assoc();
         return $result ? (int)$result['minute_balance'] : null;
+    }
+    
+    // ==========================================
+    // CRUD ADMIN METHODS
+    // ==========================================
+    
+    /**
+     * Obtenir tots els usuaris amb paginació
+     */
+    public function getAll($limit = 20, $offset = 0, $search = '') {
+        if (!empty($search)) {
+            $stmt = $this->db->prepare("
+                SELECT u.id, u.username, u.email, u.fullname, u.is_admin, u.role_id, r.name as role_name, u.created_at 
+                FROM users u
+                LEFT JOIN roles r ON u.role_id = r.id
+                WHERE u.username LIKE ? OR u.email LIKE ? OR u.fullname LIKE ?
+                ORDER BY u.id DESC 
+                LIMIT ? OFFSET ?
+            ");
+            $searchParam = "%$search%";
+            $stmt->bind_param("sssii", $searchParam, $searchParam, $searchParam, $limit, $offset);
+        } else {
+            $stmt = $this->db->prepare("
+                SELECT u.id, u.username, u.email, u.fullname, u.is_admin, u.role_id, r.name as role_name, u.created_at 
+                FROM users u
+                LEFT JOIN roles r ON u.role_id = r.id
+                ORDER BY u.id DESC 
+                LIMIT ? OFFSET ?
+            ");
+            $stmt->bind_param("ii", $limit, $offset);
+        }
+        
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+    
+    /**
+     * Comptar usuaris totals
+     */
+    public function count($search = '') {
+        if (!empty($search)) {
+            $stmt = $this->db->prepare("
+                SELECT COUNT(*) as total 
+                FROM users 
+                WHERE username LIKE ? OR email LIKE ? OR fullname LIKE ?
+            ");
+            $searchParam = "%$search%";
+            $stmt->bind_param("sss", $searchParam, $searchParam, $searchParam);
+        } else {
+            $stmt = $this->db->prepare("SELECT COUNT(*) as total FROM users");
+        }
+        
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+        return $result['total'];
+    }
+    
+    /**
+     * Actualitzar usuari (Admin)
+     */
+    public function update($id, $data) {
+        $stmt = $this->db->prepare("
+            UPDATE users SET 
+                username = ?, 
+                email = ?, 
+                fullname = ?, 
+                phone = ?, 
+                role_id = ?,
+                is_admin = ?
+            WHERE id = ?
+        ");
+        
+        $username = $data['username'] ?? '';
+        $email = $data['email'] ?? '';
+        $fullname = $data['fullname'] ?? '';
+        $phone = $data['phone'] ?? '';
+        $role_id = isset($data['role_id']) ? (int)$data['role_id'] : 3;
+        $is_admin = isset($data['is_admin']) ? (int)$data['is_admin'] : 0;
+        
+        $stmt->bind_param("sssiii", $username, $email, $fullname, $phone, $role_id, $is_admin, $id);
+        return $stmt->execute();
+    }
+    
+    /**
+     * Eliminar usuari
+     */
+    public function delete($id) {
+        // No permetre eliminar l'usuari amb ID 1 (admin principal)
+        if ($id == 1) {
+            return false;
+        }
+        
+        $stmt = $this->db->prepare("DELETE FROM users WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        return $stmt->execute();
+    }
+    
+    // ==========================================
+    // GESTIÓ DE ROLS
+    // ==========================================
+    
+    /**
+     * Obtenir tots els rols
+     */
+    public function getAllRoles() {
+        $stmt = $this->db->prepare("SELECT id, name, description FROM roles ORDER BY id");
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+    
+    /**
+     * Obtenir rol per ID
+     */
+    public function getRoleById($roleId) {
+        $stmt = $this->db->prepare("SELECT id, name, description FROM roles WHERE id = ?");
+        $stmt->bind_param("i", $roleId);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_assoc();
+    }
+    
+    /**
+     * Obtenir usuaris per rol
+     */
+    public function getUsersByRole($roleId) {
+        $stmt = $this->db->prepare("
+            SELECT u.id, u.username, u.email, u.fullname, u.created_at 
+            FROM users u 
+            WHERE u.role_id = ?
+            ORDER BY u.id DESC
+        ");
+        $stmt->bind_param("i", $roleId);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 }
