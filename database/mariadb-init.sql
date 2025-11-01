@@ -116,6 +116,28 @@ CREATE TABLE vehicle_usage (
     INDEX idx_start_time (start_time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE incidents (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    type ENUM('mechanical', 'electrical', 'other') NOT NULL,
+    status ENUM('in_progress', 'pending', 'resolved') DEFAULT 'pending',
+    description TEXT NOT NULL,
+    notes TEXT,
+    incident_creator INT NOT NULL,
+    incident_assignee INT,
+    resolved_by INT,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    resolved_at DATETIME,
+    FOREIGN KEY (incident_creator) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (incident_assignee) REFERENCES users(id) ON DELETE SET NULL,
+    FOREIGN KEY (resolved_by) REFERENCES users(id) ON DELETE SET NULL,
+    INDEX idx_type (type),
+    INDEX idx_status (status),
+    INDEX idx_incident_creator (incident_creator),
+    INDEX idx_incident_assignee (incident_assignee),
+    INDEX idx_created_at (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Table: payments
 CREATE TABLE payments (
     id INT AUTO_INCREMENT PRIMARY KEY,

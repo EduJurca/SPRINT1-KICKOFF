@@ -198,6 +198,14 @@ Router::get('/admin/bookings', function() {
     require_once PUBLIC_PATH . '/php/admin/bookings.php';
 });
 
+Router::get('/admin/incidents', ['IncidentController', 'getAllIncidents']);
+Router::get('/admin/incidents/create', ['IncidentController', 'createIncident']);
+Router::post('/admin/incidents/create', ['IncidentController', 'createIncident']);
+
+// Public incident reporting (clients)
+Router::get('/report-incident', ['IncidentController', 'createPublicIncident']);
+Router::post('/report-incident', ['IncidentController', 'createPublicIncident']);
+
 Router::get('/admin/settings', function() {
     require_once PUBLIC_PATH . '/php/admin/settings.php';
 });

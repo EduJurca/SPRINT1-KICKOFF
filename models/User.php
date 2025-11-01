@@ -158,6 +158,26 @@ class User {
     }
     
     /**
+     * Obtenir tots els usuaris
+     * 
+     * @return array Llista de tots els usuaris
+     */
+    public function findAll() {
+        $stmt = $this->db->prepare("SELECT id, username, fullname FROM users ORDER BY username");
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+    
+
+    public function exists($id) {
+        $stmt = $this->db->prepare("SELECT 1 FROM users WHERE id = ? LIMIT 1");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->num_rows > 0;
+    }
+    
+    /**
      * Afegir minuts al balanç de l'usuari
      * 
      * @param int $user_id ID de l'usuari
