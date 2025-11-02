@@ -78,9 +78,10 @@ Router::get('/verificar-conduir', function() {
 Router::post('/verificar-conduir', ['ProfileController', 'verifyLicense']);
 
 // Historial
-Router::get('/historial', function() {
-    Router::view('public.profile.historial');
-});
+Router::get('/historial', ['ProfileController', 'showHistory']);
+
+// API: Obtenir historial en JSON
+Router::get('/api/historial', ['ProfileController', 'getHistory']);
 
 // Pagaments
 Router::get('/pagaments', function() {
@@ -174,17 +175,24 @@ Router::get('/accessibilitat', function() {
 });
 
 // ==========================================
-// 🔧 ADMIN (si tens zona d'administració)
+// 🔧 ADMIN (Panel d'Administració)
 // ==========================================
 
-Router::get('/admin', function() {
-    // Comprovar si és admin
-    require_once PUBLIC_PATH . '/php/admin/index.php';
-});
+// Dashboard principal d'admin
+Router::get('/admin', ['AdminController', 'dashboard']);
+Router::get('/admin/dashboard', ['AdminController', 'dashboard']);
 
-Router::get('/admin/dashboard', function() {
-    require_once PUBLIC_PATH . '/php/admin/dashboard.php';
-});
+// Gestió de vehicles
+Router::get('/admin/vehicles', ['AdminController', 'vehicles']);
+
+// Gestió de reserves
+Router::get('/admin/bookings', ['AdminController', 'bookings']);
+
+// Incidències
+Router::get('/admin/incidencies', ['AdminController', 'incidencies']);
+
+// Configuració
+Router::get('/admin/settings', ['AdminController', 'settings']);
 
 // ==========================================
 // 👥 CRUD USUARIS
@@ -221,17 +229,7 @@ Router::post('/admin/users/delete', function() {
     $controller->delete();
 });
 
-Router::get('/admin/vehicles', function() {
-    require_once PUBLIC_PATH . '/php/admin/vehicles.php';
-});
 
-Router::get('/admin/bookings', function() {
-    require_once PUBLIC_PATH . '/php/admin/bookings.php';
-});
-
-Router::get('/admin/settings', function() {
-    require_once PUBLIC_PATH . '/php/admin/settings.php';
-});
 
 // ==========================================
 // 🧪 DEBUG / TESTING (només en desenvolupament)
@@ -250,3 +248,13 @@ if (getenv('APP_ENV') === 'development' || !getenv('APP_ENV')) {
         require_once PUBLIC_PATH . '/php/api/test-claim.php';
     });
 }
+
+// ==========================================
+// 🧪 TEST D'AUTORITZACIÓ
+// ==========================================
+
+Router::get('/test/auth', function() {
+    // Requereix autenticació per veure el test
+    AuthController::requireAuth();
+    Router::view('test.auth-test');
+});

@@ -323,4 +323,47 @@ class User {
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
+    
+    /**
+     * Obtenir historial de viatges de l'usuari
+     * 
+     * @param int $userId ID de l'usuari
+     * @return array Historial de viatges amb informació del vehicle
+     */
+    public function getUserHistory($userId) {
+        $stmt = $this->db->prepare("
+            SELECT 
+                vu.id,
+                vu.start_time,
+                vu.end_time,
+                vu.total_distance_km,
+                TIMESTAMPDIFF(MINUTE, vu.start_time, vu.end_time) as duration_minutes,
+                v.id as vehicle_id,
+                v.plate as vehicle_plate,
+                v.brand as vehicle_brand,
+                v.model as vehicle_model,
+                v.image_url as vehicle_image,
+                l1.name as start_location_name,
+                l1.address as start_location_address,
+                l1.latitude as start_latitude,
+                l1.longitude as start_longitude,
+                l2.name as end_location_name,
+                l2.address as end_location_address,
+                l2.latitude as end_latitude,
+                l2.longitude as end_longitude
+            FROM vehicle_usage vu
+            INNER JOIN vehicles v ON vu.vehicle_id = v.id
+            LEFT JOIN locations l1 ON vu.start_location_id = l1.id
+            LEFT JOIN locations l2 ON vu.end_location_id = l2.id
+            WHERE vu.user_id = ?
+            ORDER BY vu.start_time DESC
+            LIMIT 50
+        ");
+        
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        
+        return $result;
+    }
 }

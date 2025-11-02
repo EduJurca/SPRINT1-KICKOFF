@@ -208,16 +208,38 @@ INSERT INTO vehicles (plate, brand, model, year, status, battery_level, latitude
 -- ==========================================
 INSERT INTO users (username, email, password, fullname, is_admin, role_id, minute_balance, created_at) VALUES
 -- SuperAdmin (password: admin123)
-('admin', 'admin@sims.cat', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Administrator', 1, 1, 1000, NOW()),
+('admin', 'admin@sims.cat', '$2y$10$ZTvfmUpwCWEvDYJ4q6BiquTzToOdo3RXtXkJm1tMRTgcOwld7m5.S', 'Administrator', 1, 1, 1000, NOW()),
 
 -- Treballadors (password: treballador123)
-('treballador1', 'treballador1@sims.cat', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Joan Pérez', 1, 2, 500, NOW()),
-('treballador2', 'treballador2@sims.cat', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Maria García', 1, 2, 500, NOW()),
+('treballador1', 'treballador1@sims.cat', '$2y$10$jvFMP84UqdGIr52hW8ZkFema/gRSzU989rH.4mRpSYauEn/Yas5Jm', 'Joan Pérez', 1, 2, 500, NOW()),
+('treballador2', 'treballador2@sims.cat', '$2y$10$jvFMP84UqdGIr52hW8ZkFema/gRSzU989rH.4mRpSYauEn/Yas5Jm', 'Maria García', 1, 2, 500, NOW()),
 
 -- Clients (password: client123)
-('client1', 'client1@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Pau Martínez', 0, 3, 100, NOW()),
-('client2', 'client2@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Anna López', 0, 3, 150, NOW()),
-('client3', 'client3@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Marc Vila', 0, 3, 75, NOW());
+('client1', 'client1@example.com', '$2y$10$NS10bDHPpuxW4aUa3soWXOkY6.E1UhdqEVuCK9pLjJKQXO/Jxn/mK', 'Pau Martínez', 0, 3, 100, NOW()),
+('client2', 'client2@example.com', '$2y$10$NS10bDHPpuxW4aUa3soWXOkY6.E1UhdqEVuCK9pLjJKQXO/Jxn/mK', 'Anna López', 0, 3, 150, NOW()),
+('client3', 'client3@example.com', '$2y$10$NS10bDHPpuxW4aUa3soWXOkY6.E1UhdqEVuCK9pLjJKQXO/Jxn/mK', 'Marc Vila', 0, 3, 75, NOW());
+
+-- ==========================================
+-- DADES DE PROVA: HISTORIAL DE VIATGES
+-- ==========================================
+
+-- Viatges del client1 (user_id = 4)
+INSERT INTO vehicle_usage (user_id, vehicle_id, start_time, end_time, start_location_id, end_location_id, total_distance_km) VALUES
+(4, 1, '2025-10-25 10:30:00', '2025-10-25 11:00:00', 1, 2, 5.2),
+(4, 2, '2025-10-28 15:15:00', '2025-10-28 15:45:00', 2, 3, 8.7),
+(4, 3, '2025-10-30 09:00:00', '2025-10-30 09:35:00', 1, 4, 6.3),
+(4, 1, '2025-11-01 14:20:00', '2025-11-01 15:10:00', 3, 5, 12.5);
+
+-- Viatges del client2 (user_id = 5)
+INSERT INTO vehicle_usage (user_id, vehicle_id, start_time, end_time, start_location_id, end_location_id, total_distance_km) VALUES
+(5, 4, '2025-10-26 08:45:00', '2025-10-26 09:20:00', 1, 3, 7.1),
+(5, 5, '2025-10-29 12:30:00', '2025-10-29 13:05:00', 4, 1, 9.8),
+(5, 2, '2025-10-31 16:00:00', NULL, 2, NULL, NULL);  -- Viatge en curs
+
+-- Viatges del client3 (user_id = 6)
+INSERT INTO vehicle_usage (user_id, vehicle_id, start_time, end_time, start_location_id, end_location_id, total_distance_km) VALUES
+(6, 3, '2025-10-27 11:15:00', '2025-10-27 11:55:00', 5, 2, 11.2),
+(6, 1, '2025-11-01 10:00:00', '2025-11-01 10:40:00', 1, 5, 8.9);
 
 -- Success message
 SELECT 'MariaDB database initialized successfully!' AS message;

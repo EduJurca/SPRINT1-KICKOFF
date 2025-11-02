@@ -4,16 +4,13 @@
  * Panel principal con estadísticas y resumen del sistema
  */
 
-// Verificar que el usuario sea administrador
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    header('Location: /login');
-    exit;
-}
+// La autenticación ya se verifica en AdminController::requireAdmin()
+// No es necesario verificar aquí de nuevo
 
 // Configuración de la vista
-$title = 'Dashboard - Panel d\'Administració';
-$pageTitle = 'Dashboard';
-$currentPage = 'dashboard';
+$title = $title ?? 'Dashboard - Panel d\'Administració';
+$pageTitle = $pageTitle ?? 'Dashboard';
+$currentPage = $currentPage ?? 'dashboard';
 
 // Incluir el header de admin
 require_once __DIR__ . '/admin-header.php';
@@ -26,14 +23,14 @@ require_once __DIR__ . '/admin-header.php';
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-gray-500 text-sm font-medium">Total Usuaris</p>
-                <p class="text-3xl font-bold text-gray-900 mt-2">1,234</p>
+                <p class="text-3xl font-bold text-gray-900 mt-2"><?php echo number_format($stats['total_users'] ?? 0); ?></p>
             </div>
             <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                 <i class="fas fa-users text-blue-600 text-xl"></i>
             </div>
         </div>
         <div class="mt-4 flex items-center text-sm">
-            <span class="text-green-600 font-medium">+12%</span>
+            <span class="text-green-600 font-medium"><?php echo $stats['users_growth'] ?? '+0%'; ?></span>
             <span class="text-gray-500 ml-2">vs mes anterior</span>
         </div>
     </div>
@@ -43,14 +40,14 @@ require_once __DIR__ . '/admin-header.php';
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-gray-500 text-sm font-medium">Total Vehicles</p>
-                <p class="text-3xl font-bold text-gray-900 mt-2">89</p>
+                <p class="text-3xl font-bold text-gray-900 mt-2"><?php echo number_format($stats['total_vehicles'] ?? 0); ?></p>
             </div>
             <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
                 <i class="fas fa-car text-green-600 text-xl"></i>
             </div>
         </div>
         <div class="mt-4 flex items-center text-sm">
-            <span class="text-green-600 font-medium">+5%</span>
+            <span class="text-green-600 font-medium"><?php echo $stats['vehicles_growth'] ?? '+0%'; ?></span>
             <span class="text-gray-500 ml-2">vs mes anterior</span>
         </div>
     </div>
@@ -60,14 +57,14 @@ require_once __DIR__ . '/admin-header.php';
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-gray-500 text-sm font-medium">Reserves Actives</p>
-                <p class="text-3xl font-bold text-gray-900 mt-2">45</p>
+                <p class="text-3xl font-bold text-gray-900 mt-2"><?php echo number_format($stats['active_bookings'] ?? 0); ?></p>
             </div>
             <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
                 <i class="fas fa-calendar-check text-yellow-600 text-xl"></i>
             </div>
         </div>
         <div class="mt-4 flex items-center text-sm">
-            <span class="text-red-600 font-medium">-3%</span>
+            <span class="text-red-600 font-medium"><?php echo $stats['bookings_growth'] ?? '-0%'; ?></span>
             <span class="text-gray-500 ml-2">vs setmana anterior</span>
         </div>
     </div>
@@ -77,14 +74,14 @@ require_once __DIR__ . '/admin-header.php';
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-gray-500 text-sm font-medium">Ingressos Mensuals</p>
-                <p class="text-3xl font-bold text-gray-900 mt-2">12.5K€</p>
+                <p class="text-3xl font-bold text-gray-900 mt-2"><?php echo number_format($stats['monthly_revenue'] ?? 0, 2); ?>€</p>
             </div>
             <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
                 <i class="fas fa-euro-sign text-purple-600 text-xl"></i>
             </div>
         </div>
         <div class="mt-4 flex items-center text-sm">
-            <span class="text-green-600 font-medium">+18%</span>
+            <span class="text-green-600 font-medium"><?php echo $stats['revenue_growth'] ?? '+0%'; ?></span>
             <span class="text-gray-500 ml-2">vs mes anterior</span>
         </div>
     </div>
@@ -205,9 +202,9 @@ require_once __DIR__ . '/admin-header.php';
             <i class="fas fa-calendar-alt text-yellow-600 text-2xl"></i>
             <span class="font-medium text-gray-900">Veure Reserves</span>
         </a>
-        <a href="/admin/reports" class="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-all">
-            <i class="fas fa-file-download text-purple-600 text-2xl"></i>
-            <span class="font-medium text-gray-900">Exportar Dades</span>
+        <a href="/admin/incidencies" class="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-all">
+            <i class="fas fa-exclamation-triangle text-purple-600 text-2xl"></i>
+            <span class="font-medium text-gray-900">Gestionar Incidències</span>
         </a>
     </div>
 </div>

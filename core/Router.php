@@ -238,6 +238,12 @@ class Router {
      * @param array $data Dades a passar a la vista
      */
     public static function view($view, $data = []) {
+        // Afegir informació d'autorització automàticament
+        if (!isset($data['auth'])) {
+            require_once __DIR__ . '/Authorization.php';
+            $data['auth'] = Authorization::getAuthInfo();
+        }
+        
         // Extreure dades perquè siguin accessibles com a variables
         extract($data);
         

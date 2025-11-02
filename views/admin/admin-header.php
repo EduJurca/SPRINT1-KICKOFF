@@ -78,9 +78,9 @@ $currentPage = $currentPage ?? '';
                         </a>
                     </li>
                     <li>
-                        <a href="/admin/reports" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors <?php echo $currentPage === 'reports' ? 'bg-blue-700' : ''; ?>">
-                            <i class="fas fa-chart-bar"></i>
-                            <span>Informes</span>
+                        <a href="/admin/incidencies" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors <?php echo $currentPage === 'incidencies' ? 'bg-blue-700' : ''; ?>">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span>Incidències</span>
                         </a>
                     </li>
                     <li>
