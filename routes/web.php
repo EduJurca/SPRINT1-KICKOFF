@@ -37,7 +37,7 @@ Router::get('/logout', ['AuthController', 'logout']);
 
 // Recuperar contrasenya
 Router::get('/recover-password', function() {
-    Router::view('auth.recover-password');
+    Router::view('auth.recuperar-contrasenya');
 });
 
 Router::post('/recover-password', ['AuthController', 'recoverPassword']);
