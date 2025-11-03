@@ -40,7 +40,7 @@ class ProfileController {
      * Obtenir dades del perfil per completar
      */
     public function getProfileData() {
-        // Requerir autenticació
+        
         $userId = AuthController::requireAuth();
         
         $profile = $this->userModel->getProfile($userId);
@@ -51,11 +51,9 @@ class ProfileController {
         ], 200);
     }
     
-    /**
-     * Actualitzar perfil
-     */
+  
     public function updateProfile() {
-        // Requerir autenticació
+   
         $userId = AuthController::requireAuth();
         
         // Acceptar tanto JSON como form-data
@@ -91,24 +89,20 @@ class ProfileController {
         }
     }
     
-    /**
-     * Completar perfil
-     */
+ 
     public function completeProfile() {
         return $this->updateProfile();
     }
     
-    /**
-     * Mostrar vista de perfil amb dades
-     */
+
     public function showProfile() {
-        // Requerir autenticació
+      
         $userId = AuthController::requireAuth();
         
-        // Obtenir dades del perfil
+        
         $profile = $this->userModel->getProfile($userId);
         
-        // Obtenir informació de l'usuari (username, email)
+        
         $userInfo = $this->userModel->getUserInfo($userId);
         
         // Combinar dades
@@ -117,27 +111,23 @@ class ProfileController {
             $userInfo ?? []
         );
         
-        // Passar dades a la vista
+        
         return Router::view('profile.perfil', $data);
     }
     
-    /**
-     * Mostrar vista de completar perfil amb dades
-     */
+   
     public function showCompleteProfile() {
-        // Requerir autenticació
+    
         $userId = AuthController::requireAuth();
         
-        // Obtenir dades del perfil
+        
         $profile = $this->userModel->getProfile($userId);
         
         // Passar dades a la vista
         return Router::view('profile.completar-perfil', $profile ?? []);
     }
     
-    /**
-     * Verificar carnet de conduir
-     */
+    
     public function verifyLicense() {
         // Requerir autenticació
         $userId = AuthController::requireAuth();
@@ -187,13 +177,10 @@ class ProfileController {
         ], 500);
     }
     
-    /**
-     * Mostrar pàgina d'historial amb dades reals
-     */
+
     public function showHistory() {
         $userId = AuthController::requireAuth();
-        
-        // Obtenir historial de vehicle_usage
+      
         $history = $this->userModel->getUserHistory($userId);
         
         Router::view('public.profile.historial', [
@@ -202,9 +189,7 @@ class ProfileController {
         ]);
     }
     
-    /**
-     * Obtenir historial en format JSON (API)
-     */
+   
     public function getHistory() {
         $userId = AuthController::requireAuth();
         

@@ -1,59 +1,41 @@
 <?php
-/**
- * 🔐 Permissions
- * Gestiona els permisos específics de cada rol
- */
 
 class Permissions {
     
-    /**
-     * Permisos per rol
-     * Format: 'permís' => [role_ids que tenen aquest permís]
-     */
     private static $permissions = [
-        // 👥 Gestió d'usuaris
-        'users.view' => [1, 2],        // SuperAdmin, Treballador
-        'users.create' => [1],          // Només SuperAdmin
-        'users.edit' => [1],            // Només SuperAdmin
-        'users.delete' => [1],          // Només SuperAdmin
+        'users.view' => [1, 2],
+        'users.create' => [1],
+        'users.edit' => [1],
+        'users.delete' => [1],
         
-        // 🚗 Gestió de vehicles
-        'vehicles.view' => [1, 2, 3],   // Tots
-        'vehicles.create' => [1, 2],    // SuperAdmin, Treballador
-        'vehicles.edit' => [1, 2],      // SuperAdmin, Treballador
-        'vehicles.delete' => [1],       // Només SuperAdmin
+        'vehicles.view' => [1, 2, 3],
+        'vehicles.create' => [1, 2],
+        'vehicles.edit' => [1, 2],
+        'vehicles.delete' => [1],
         
-        // 📅 Gestió de reserves
-        'bookings.view_all' => [1, 2],  // SuperAdmin, Treballador
-        'bookings.view_own' => [1, 2, 3], // Tots (els seus propis)
-        'bookings.create' => [1, 2, 3], // Tots
-        'bookings.edit' => [1, 2],      // SuperAdmin, Treballador
-        'bookings.delete' => [1],       // Només SuperAdmin
-        'bookings.cancel_own' => [1, 2, 3], // Tots (cancel·lar els seus)
+        'bookings.view_all' => [1, 2],
+        'bookings.view_own' => [1, 2, 3],
+        'bookings.create' => [1, 2, 3],
+        'bookings.edit' => [1, 2],
+        'bookings.delete' => [1],
+        'bookings.cancel_own' => [1, 2, 3],
         
-        // ⚙️ Administració
-        'admin.dashboard' => [1, 2],    // SuperAdmin, Treballador
-        'admin.settings' => [1],        // Només SuperAdmin
-        'admin.reports' => [1, 2],      // SuperAdmin, Treballador
-        'admin.activity' => [1, 2],     // SuperAdmin, Treballador
+        'admin.dashboard' => [1, 2],
+        'admin.settings' => [1],
+        'admin.reports' => [1, 2],
+        'admin.activity' => [1, 2],
     ];
     
-    /**
-     * Verificar si l'usuari actual té un permís
-     */
     public static function can($permission) {
         $roleId = $_SESSION['role_id'] ?? 3;
         
         if (!isset(self::$permissions[$permission])) {
-            return false; // Permís no definit = denegat
+            return false;
         }
         
         return in_array($roleId, self::$permissions[$permission]);
     }
     
-    /**
-     * Verificar múltiples permisos (ha de tenir TOTS)
-     */
     public static function canAll($permissions) {
         foreach ($permissions as $permission) {
             if (!self::can($permission)) {
@@ -63,9 +45,6 @@ class Permissions {
         return true;
     }
     
-    /**
-     * Verificar múltiples permisos (ha de tenir almenys UN)
-     */
     public static function canAny($permissions) {
         foreach ($permissions as $permission) {
             if (self::can($permission)) {
@@ -75,9 +54,6 @@ class Permissions {
         return false;
     }
     
-    /**
-     * Llançar excepció si no té permís
-     */
     public static function authorize($permission) {
         if (!self::can($permission)) {
             $_SESSION['error'] = 'No tens permisos per realitzar aquesta acció.';
@@ -86,9 +62,6 @@ class Permissions {
         }
     }
     
-    /**
-     * Obtenir tots els permisos de l'usuari actual
-     */
     public static function getUserPermissions() {
         $roleId = $_SESSION['role_id'] ?? 3;
         $userPermissions = [];
@@ -102,9 +75,6 @@ class Permissions {
         return $userPermissions;
     }
     
-    /**
-     * Helpers per permisos comuns
-     */
     public static function canManageUsers() {
         return self::can('users.edit');
     }
@@ -118,6 +88,6 @@ class Permissions {
     }
     
     public static function canDeleteAnything() {
-        return ($_SESSION['role_id'] ?? 3) == 1; // Només SuperAdmin
+        return ($_SESSION['role_id'] ?? 3) == 1;
     }
 }

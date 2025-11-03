@@ -4,14 +4,10 @@
  * Panel de administración de reservas del sistema
  */
 
-// La autenticación ya se verifica en AdminController::requireAdmin()
+$title = 'Gestió de Reserves';
+$pageTitle = 'Gestió de Reserves';
+$currentPage = 'bookings';
 
-// Configuración de la vista
-$title = $title ?? 'Reserves - Panel d\'Administració';
-$pageTitle = $pageTitle ?? 'Gestió de Reserves';
-$currentPage = $currentPage ?? 'bookings';
-
-// Incluir el header de admin
 require_once __DIR__ . '/admin-header.php';
 ?>
 

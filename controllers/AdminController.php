@@ -29,7 +29,7 @@ class AdminController {
             exit;
         }
         
-        // Obtenir estadístiques
+    
         $stats = $this->getStats();
         
         Router::view('admin.dashboard', [
@@ -40,9 +40,7 @@ class AdminController {
         ]);
     }
     
-    /**
-     * Gestió d'usuaris
-     */
+   
     public function users() {
         AuthController::requireAdmin();
         
@@ -119,7 +117,7 @@ class AdminController {
     public function bookings() {
         AuthController::requireAdmin();
         
-        // Obtenir reserves de la base de dades
+    
         $db = Database::getMariaDBConnection();
         $query = "SELECT vu.*, u.username, v.plate as vehicle_plate 
                   FROM vehicle_usage vu 
@@ -187,30 +185,24 @@ class AdminController {
     }
     
     /**
-     * Obtenir estadístiques del sistema
+
      * 
      * @return array Estadístiques
      */
     private function getStats() {
-        // Obtenir total d'usuaris
+        
         $totalUsers = $this->userModel->count();
         
-        // Obtenir total de vehicles (placeholder)
-        // TODO: Implementar quan tinguem el model Vehicle
         $totalVehicles = 0;
         
-        // Obtenir reserves actives (placeholder)
-        // TODO: Implementar quan tinguem el model Booking
+       
         $activeBookings = 0;
         
-        // Ingressos mensuals (placeholder)
-        // TODO: Implementar quan tinguem el model Payment
         $monthlyRevenue = 0;
         
-        // Reserves recents (placeholder)
+        
         $recentBookings = [];
         
-        // Vehicles més populars (placeholder)
         $popularVehicles = [];
         
         return [

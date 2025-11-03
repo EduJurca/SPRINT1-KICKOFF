@@ -18,15 +18,13 @@ class AuthController {
      */
     public function login() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Acceptar tanto JSON como form-data
+            // Acceptar JSON i form-data
             $data = [];
             $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
             
             if (strpos($contentType, 'application/json') !== false) {
-                // JSON
                 $data = json_decode(file_get_contents('php://input'), true);
             } else {
-                // Form-data
                 $data = $_POST;
             }
             
@@ -73,13 +71,13 @@ class AuthController {
      * Intentar login
      */
     private function attemptLogin($username, $password) {
-        // Iniciar sessió si no està iniciada
+        
         if (session_status() === PHP_SESSION_NONE) {
             session_set_cookie_params([
-                'lifetime' => 3600, // 1 hora
+                'lifetime' => 3600,
                 'path' => '/',
                 'domain' => '',
-                'secure' => false, // false per HTTP, true per HTTPS
+                'secure' => false,
                 'httponly' => true,
                 'samesite' => 'Lax'
             ]);
@@ -96,7 +94,7 @@ class AuthController {
             return ['success' => false, 'message' => 'Incorrect password'];
         }
 
-        // Guardar dades a la sessió amb informació del rol
+        // 
         $_SESSION['user_id']  = $user['id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION['role_id'] = $user['role_id'] ?? 3;
@@ -158,7 +156,7 @@ class AuthController {
             
             // Crear usuari
             if ($this->userModel->create($data)) {
-                // Després de registrar exitosament, iniciar sessió automàticament
+                // 
                 $user = $this->userModel->findByUsername($data['username']);
                 
                 if ($user) {

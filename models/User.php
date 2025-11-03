@@ -1,8 +1,4 @@
 <?php
-/**
- * 📊 User Model
- * Gestiona les operacions relacionades amb usuaris
- */
 
 class User {
     private $db;
@@ -11,12 +7,6 @@ class User {
         $this->db = $dbConnection ?? Database::getMariaDBConnection();
     }
     
-    /**
-     * Buscar usuari per nom d'usuari (Login)
-     * 
-     * @param string $username Nom d'usuari
-     * @return array|null Dades de l'usuari
-     */
     public function findByUsername($username) {
         $stmt = $this->db->prepare("
             SELECT u.id, u.username, u.password, u.role_id, r.name as role_name 
@@ -29,13 +19,6 @@ class User {
         return $stmt->get_result()->fetch_assoc();
     }
 
-    /**
-     * Buscar usuari per nom d'usuari o email (Registre)
-     * 
-     * @param string $username Nom d'usuari
-     * @param string $email Email
-     * @return array|null Dades de l'usuari
-     */
     public function findByUsernameOrEmail($username, $email) {
         $stmt = $this->db->prepare("SELECT id FROM users WHERE username = ? OR email = ?");
         $stmt->bind_param("ss", $username, $email);
@@ -43,12 +26,6 @@ class User {
         return $stmt->get_result()->fetch_assoc();
     }
 
-    /**
-     * Crear nou usuari
-     * 
-     * @param array $data Dades de l'usuari
-     * @return bool Èxit de l'operació
-     */
     public function create($data) {
         $stmt = $this->db->prepare("INSERT INTO users 
             (username, nationality_id, phone, birth_date, sex, dni, address, email, password, iban, driver_license_photo, minute_balance, role_id, created_at) 
@@ -136,12 +113,6 @@ class User {
         return $stmt->execute();
     }
 
-    /**
-     * Obtenir informació de l'usuari (gestió)
-     * 
-     * @param int $user_id ID de l'usuari
-     * @return array|null Informació de l'usuari
-     */
     public function getUserInfo($user_id) {
         $stmt = $this->db->prepare("SELECT username, email, minute_balance, role_id FROM users WHERE id = ?");
         $stmt->bind_param('i', $user_id);
@@ -149,12 +120,6 @@ class User {
         return $stmt->get_result()->fetch_assoc();
     }
     
-    /**
-     * Buscar usuari per ID
-     * 
-     * @param int $id ID de l'usuari
-     * @return array|null Dades de l'usuari
-     */
     public function findById($id) {
         $stmt = $this->db->prepare("SELECT * FROM users WHERE id = ?");
         $stmt->bind_param("i", $id);
@@ -162,25 +127,12 @@ class User {
         return $stmt->get_result()->fetch_assoc();
     }
     
-    /**
-     * Afegir minuts al balanç de l'usuari
-     * 
-     * @param int $user_id ID de l'usuari
-     * @param int $minutes Minuts a afegir
-     * @return bool Èxit de l'operació
-     */
     public function addMinutes($user_id, $minutes) {
         $stmt = $this->db->prepare("UPDATE users SET minute_balance = minute_balance + ? WHERE id = ?");
         $stmt->bind_param("ii", $minutes, $user_id);
         return $stmt->execute();
     }
     
-    /**
-     * Obtenir balanç de minuts de l'usuari
-     * 
-     * @param int $user_id ID de l'usuari
-     * @return int|null Balanç de minuts
-     */
     public function getMinuteBalance($user_id) {
         $stmt = $this->db->prepare("SELECT minute_balance FROM users WHERE id = ?");
         $stmt->bind_param("i", $user_id);
@@ -189,13 +141,6 @@ class User {
         return $result ? (int)$result['minute_balance'] : null;
     }
     
-    // ==========================================
-    // CRUD ADMIN METHODS
-    // ==========================================
-    
-    /**
-     * Obtenir tots els usuaris amb paginació
-     */
     public function getAll($limit = 20, $offset = 0, $search = '') {
         if (!empty($search)) {
             $stmt = $this->db->prepare("
@@ -268,11 +213,8 @@ class User {
         return $stmt->execute();
     }
     
-    /**
-     * Eliminar usuari
-     */
     public function delete($id) {
-        // No permetre eliminar l'usuari amb ID 1 (admin principal)
+        // No permetre eliminar l'usuari amb ID 1
         if ($id == 1) {
             return false;
         }
@@ -282,22 +224,12 @@ class User {
         return $stmt->execute();
     }
     
-    // ==========================================
-    // GESTIÓ DE ROLS
-    // ==========================================
-    
-    /**
-     * Obtenir tots els rols
-     */
     public function getAllRoles() {
         $stmt = $this->db->prepare("SELECT id, name, description FROM roles ORDER BY id");
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
     
-    /**
-     * Obtenir rol per ID
-     */
     public function getRoleById($roleId) {
         $stmt = $this->db->prepare("SELECT id, name, description FROM roles WHERE id = ?");
         $stmt->bind_param("i", $roleId);
@@ -305,9 +237,6 @@ class User {
         return $stmt->get_result()->fetch_assoc();
     }
     
-    /**
-     * Obtenir usuaris per rol
-     */
     public function getUsersByRole($roleId) {
         $stmt = $this->db->prepare("
             SELECT u.id, u.username, u.email, u.fullname, u.created_at 

@@ -14,8 +14,6 @@ class UserController {
     public function __construct() {
         $this->userModel = new User();
         
-        // 🔐 Verificar que l'usuari és Staff (SuperAdmin o Treballador)
-        // Solo usuarios con role_id 1 o 2 pueden acceder
         $userId = AuthController::requireAuth();
         $roleId = $_SESSION['role_id'] ?? 3;
         
@@ -84,7 +82,7 @@ class UserController {
         // Determinar role_id segons el rol seleccionat
         $role_id = !empty($_POST['role_id']) ? (int)$_POST['role_id'] : 3;
         
-        // Crear usuari
+        
         $data = [
             'username' => $_POST['username'],
             'email' => $_POST['email'],
@@ -130,7 +128,7 @@ class UserController {
     }
     
     /**
-     * Actualitzar usuari
+     * 
      */
     public function update() {
         // 🔐 Només SuperAdmin pot editar usuaris
@@ -176,7 +174,7 @@ class UserController {
     }
     
     /**
-     * Eliminar usuari
+     * 
      */
     public function delete() {
         // 🔐 Només SuperAdmin pot eliminar usuaris

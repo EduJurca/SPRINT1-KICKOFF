@@ -24,7 +24,7 @@ class FleetController {
      * Només MANAGERS i ADMINS
      */
     public function index() {
-        // Requerir rol de manager (o superior)
+      
         AuthController::requireRole('manager');
         
         // Obtenir tots els vehicles amb estadístiques
@@ -69,7 +69,6 @@ class FleetController {
             return;
         }
         
-        // Crear vehicle
         $vehicleId = $this->vehicleModel->create($data);
         
         if ($vehicleId) {
@@ -96,7 +95,7 @@ class FleetController {
             return;
         }
         
-        // Si és GET, mostrar formulari
+       
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             Router::view('fleet.edit', [
                 'vehicle' => $vehicle,
@@ -105,7 +104,7 @@ class FleetController {
             return;
         }
         
-        // Si és POST, actualitzar
+    
         $data = [
             'brand' => $_POST['brand'] ?? $vehicle['brand'],
             'model' => $_POST['model'] ?? $vehicle['model'],
@@ -152,10 +151,7 @@ class FleetController {
         ]);
     }
     
-    /**
-     * Eliminar vehicle (soft delete)
-     * Només ADMINS
-     */
+
     public function delete($id) {
         AuthController::requirePermission('delete_vehicle');
         
@@ -188,10 +184,7 @@ class FleetController {
         ]);
     }
     
-    /**
-     * Estadístiques de la flota
-     * Requereix permís 'view_fleet_stats' (Managers i Admins)
-     */
+   
     public function stats() {
         AuthController::requirePermission('view_fleet_stats');
         

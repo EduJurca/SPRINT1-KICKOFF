@@ -4,15 +4,10 @@
  * Panel principal con estadísticas y resumen del sistema
  */
 
-// La autenticación ya se verifica en AdminController::requireAdmin()
-// No es necesario verificar aquí de nuevo
+$title = 'Admin Dashboard';
+$pageTitle = 'Dashboard d\'Administració';
+$currentPage = 'dashboard';
 
-// Configuración de la vista
-$title = $title ?? 'Dashboard - Panel d\'Administració';
-$pageTitle = $pageTitle ?? 'Dashboard';
-$currentPage = $currentPage ?? 'dashboard';
-
-// Incluir el header de admin
 require_once __DIR__ . '/admin-header.php';
 ?>
 

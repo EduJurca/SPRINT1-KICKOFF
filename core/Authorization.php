@@ -1,20 +1,16 @@
 <?php
-/**
- * 🔒 Authorization - Sistema de control d'accés basat en rols i permisos
- * Gestiona qui pot fer què a l'aplicació segons el seu rol
- */
 
 class Authorization {
     
     /**
      * Definició de rols del sistema
      */
-    const ROLE_GUEST = 'guest';           // Usuari no autenticat
-    const ROLE_USER = 'user';             // Usuari estàndard
-    const ROLE_PREMIUM = 'premium';       // Usuari premium
-    const ROLE_MANAGER = 'manager';       // Gestor de flota
-    const ROLE_ADMIN = 'admin';           // Administrador
-    const ROLE_SUPERADMIN = 'superadmin'; // Superadministrador
+    const ROLE_GUEST = 'guest';           
+    const ROLE_USER = 'user';             
+    const ROLE_PREMIUM = 'premium';       
+    const ROLE_MANAGER = 'manager';       
+    const ROLE_ADMIN = 'admin';           
+    const ROLE_SUPERADMIN = 'superadmin'; 
     
     /**
      * Jerarquia de rols (cada rol hereta els permisos dels anteriors)
@@ -55,7 +51,7 @@ class Authorization {
             'view_payment_history',
         ],
         
-        // PREMIUM - Usuari premium (subscripció mensual)
+    
         self::ROLE_PREMIUM => [
             'unlimited_minutes',
             'priority_booking',
@@ -64,7 +60,7 @@ class Authorization {
             'advanced_stats',
         ],
         
-        // MANAGER - Gestor de flota
+       
         self::ROLE_MANAGER => [
             'view_all_vehicles',
             'add_vehicle',
@@ -75,7 +71,7 @@ class Authorization {
             'view_fleet_stats',
         ],
         
-        // ADMIN - Administrador
+   
         self::ROLE_ADMIN => [
             'view_admin_panel',
             'view_all_users',
@@ -89,7 +85,7 @@ class Authorization {
             'delete_booking',
         ],
         
-        // SUPERADMIN - Superadministrador
+      
         self::ROLE_SUPERADMIN => [
             'manage_admins',
             'system_configuration',
@@ -99,7 +95,7 @@ class Authorization {
     ];
     
     /**
-     * Obtenir el rol actual de l'usuari
+     * 
      * 
      * @return string Nom del rol
      */
@@ -128,7 +124,7 @@ class Authorization {
     }
     
     /**
-     * Comprovar si l'usuari té un permís específic
+     * 
      * 
      * @param string $permission Nom del permís
      * @return bool True si té el permís
@@ -148,8 +144,7 @@ class Authorization {
     }
     
     /**
-     * Comprovar si l'usuari té algun dels permisos especificats
-     * 
+     *      * 
      * @param array $permissions Array de permisos
      * @return bool True si té almenys un permís
      */
@@ -163,7 +158,7 @@ class Authorization {
     }
     
     /**
-     * Comprovar si l'usuari té tots els permisos especificats
+     * 
      * 
      * @param array $permissions Array de permisos
      * @return bool True si té tots els permisos
@@ -178,7 +173,7 @@ class Authorization {
     }
     
     /**
-     * Comprovar si l'usuari té un rol específic
+     * 
      * 
      * @param string $role Nom del rol
      * @return bool True si té el rol
@@ -188,7 +183,7 @@ class Authorization {
     }
     
     /**
-     * Comprovar si l'usuari té algun dels rols especificats
+     * 
      * 
      * @param array $roles Array de rols
      * @return bool True si té almenys un rol
@@ -218,7 +213,7 @@ class Authorization {
     }
     
     /**
-     * Middleware: Requerir un rol específic
+     * 
      * 
      * @param string $role Nom del rol
      * @param string $redirectUrl URL de redirecció si no té el rol
@@ -232,7 +227,7 @@ class Authorization {
     }
     
     /**
-     * Middleware: Requerir qualsevol dels rols especificats
+     * 
      * 
      * @param array $roles Array de rols
      * @param string $redirectUrl URL de redirecció
@@ -246,7 +241,7 @@ class Authorization {
     }
     
     /**
-     * Comprovar si el rol actual és superior al rol especificat
+     *
      * 
      * @param string $role Rol a comparar
      * @return bool True si és superior
@@ -262,7 +257,7 @@ class Authorization {
     }
     
     /**
-     * Obtenir tots els permisos per un rol (incloent heretats)
+     * 
      * 
      * @param string $role Nom del rol
      * @return array Array de permisos
@@ -281,7 +276,7 @@ class Authorization {
     }
     
     /**
-     * Obtenir tots els permisos de l'usuari actual
+     * 
      * 
      * @return array Array de permisos
      */
@@ -291,7 +286,7 @@ class Authorization {
     }
     
     /**
-     * Generar informació d'autorització per la vista
+     * 
      * 
      * @return array Informació del rol i permisos
      */

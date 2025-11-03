@@ -17,9 +17,7 @@ class Lang
         if (file_exists($langFile)) {
             self::$translations = require $langFile;
         } else {
-            // Log error for missing language file
             error_log("Language file not found: " . $langFile . " for language: " . self::$currentLang);
-            // Fallback to empty array to prevent errors
             self::$translations = [];
         }
     }

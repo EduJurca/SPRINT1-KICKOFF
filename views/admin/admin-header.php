@@ -4,8 +4,9 @@
  * Header específico para el panel de administración
  */
 
-// Si no se ha definido el título, usar uno por defecto
-$title = $title ?? 'Panel d\'Administració - SIMS';
+if (!isset($title)) {
+    $title = 'Admin Panel - VoltaCar';
+}
 $bodyClass = $bodyClass ?? 'bg-gray-50';
 $currentPage = $currentPage ?? '';
 ?>

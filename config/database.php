@@ -9,9 +9,9 @@ class Database {
     private static $mongodb_connection = null;
 
     /**
-     * Obtenir connexió a MariaDB (MySQL)
+
      * 
-     * @return mysqli Connexió a MariaDB
+     * @return mysqli 
      */
     public static function getMariaDBConnection() {
         if (self::$mariadb_connection === null) {
@@ -42,9 +42,9 @@ class Database {
     
 
     /**
-     * Obtenir connexió a MongoDB
      * 
-     * @return MongoDB\Client Client de MongoDB
+     * 
+     * @return MongoDB\Client 
      */
     public static function getMongoDBConnection() {
         if (self::$mongodb_connection === null) {
@@ -79,7 +79,7 @@ class Database {
     }
 
     /**
-     * Obtenir la base de dades MongoDB
+     * 
      * 
      * @return MongoDB\Database Base de dades MongoDB
      */
@@ -149,7 +149,7 @@ function getDB() {
 }
 
 /**
- * Obtenir base de dades MongoDB
+ *
  * 
  * @return MongoDB\Database
  */
