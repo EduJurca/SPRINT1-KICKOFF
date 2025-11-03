@@ -50,7 +50,6 @@ CREATE TABLE users (
     sex ENUM('M', 'F', 'O') DEFAULT NULL, 
     address VARCHAR(255),                       
     dni VARCHAR(20),   
-    is_admin BOOLEAN NOT NULL DEFAULT FALSE,
     role_id INT DEFAULT 3,
     lang VARCHAR(5) DEFAULT 'ca',
     iban VARCHAR(34),
@@ -62,7 +61,6 @@ CREATE TABLE users (
     FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE SET NULL,
     INDEX idx_email (email),
     INDEX idx_username (username),
-    INDEX idx_is_admin (is_admin),
     INDEX idx_role_id (role_id),
     INDEX idx_lang (lang)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -206,18 +204,18 @@ INSERT INTO vehicles (plate, brand, model, year, status, battery_level, latitude
 -- ==========================================
 -- USUARIS DE PROVA AMB ROLS
 -- ==========================================
-INSERT INTO users (username, email, password, fullname, is_admin, role_id, minute_balance, created_at) VALUES
+INSERT INTO users (username, email, password, fullname, role_id, minute_balance, created_at) VALUES
 -- SuperAdmin (password: admin123)
-('admin', 'admin@sims.cat', '$2y$10$FDHmfPCgzisG0KHG2Q9K8eoAodytkui9A0nMmtDY4W6sIbbN2FfA.', 'Administrator', 1, 1, 1000, NOW()),
+('admin', 'admin@sims.cat', '$2y$10$FDHmfPCgzisG0KHG2Q9K8eoAodytkui9A0nMmtDY4W6sIbbN2FfA.', 'Administrator', 1, 1000, NOW()),
 
 -- Treballadors (password: treballador123)
-('treballador1', 'treballador1@sims.cat', '$2y$10$uvFEE/dr3fKA.Do/CC7f3uv9IWw71o2zlSX40vCNu05rcx8wgqFU6', 'Joan Pérez', 1, 2, 500, NOW()),
-('treballador2', 'treballador2@sims.cat', '$2y$10$uvFEE/dr3fKA.Do/CC7f3uv9IWw71o2zlSX40vCNu05rcx8wgqFU6', 'Maria García', 1, 2, 500, NOW()),
+('treballador1', 'treballador1@sims.cat', '$2y$10$uvFEE/dr3fKA.Do/CC7f3uv9IWw71o2zlSX40vCNu05rcx8wgqFU6', 'Joan Pérez', 2, 500, NOW()),
+('treballador2', 'treballador2@sims.cat', '$2y$10$uvFEE/dr3fKA.Do/CC7f3uv9IWw71o2zlSX40vCNu05rcx8wgqFU6', 'Maria García', 2, 500, NOW()),
 
 -- Clients (password: client123)
-('client1', 'client1@example.com', '$2y$10$LMsChqzpt0EcZu.VQWdPLu6ZEu8DaEJfHK3/h8zzAWrNbJIfKgPtW', 'Pau Martínez', 0, 3, 100, NOW()),
-('client2', 'client2@example.com', '$2y$10$LMsChqzpt0EcZu.VQWdPLu6ZEu8DaEJfHK3/h8zzAWrNbJIfKgPtW', 'Anna López', 0, 3, 150, NOW()),
-('client3', 'client3@example.com', '$2y$10$LMsChqzpt0EcZu.VQWdPLu6ZEu8DaEJfHK3/h8zzAWrNbJIfKgPtW', 'Marc Vila', 0, 3, 75, NOW());
+('client1', 'client1@example.com', '$2y$10$LMsChqzpt0EcZu.VQWdPLu6ZEu8DaEJfHK3/h8zzAWrNbJIfKgPtW', 'Pau Martínez', 3, 100, NOW()),
+('client2', 'client2@example.com', '$2y$10$LMsChqzpt0EcZu.VQWdPLu6ZEu8DaEJfHK3/h8zzAWrNbJIfKgPtW', 'Anna López', 3, 150, NOW()),
+('client3', 'client3@example.com', '$2y$10$LMsChqzpt0EcZu.VQWdPLu6ZEu8DaEJfHK3/h8zzAWrNbJIfKgPtW', 'Marc Vila', 3, 75, NOW());
 
 -- ==========================================
 -- DADES DE PROVA: HISTORIAL DE VIATGES

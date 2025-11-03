@@ -99,7 +99,6 @@ class AuthController {
         // Guardar dades a la sessió amb informació del rol
         $_SESSION['user_id']  = $user['id'];
         $_SESSION['username'] = $user['username'];
-        $_SESSION['is_admin'] = $user['is_admin'] ?? 0;
         $_SESSION['role_id'] = $user['role_id'] ?? 3;
         $_SESSION['role_name'] = $user['role_name'] ?? 'Client';
 
@@ -109,7 +108,6 @@ class AuthController {
             'user' => [
                 'id' => $user['id'],
                 'username' => $user['username'],
-                'is_admin' => $user['is_admin'] ?? 0,
                 'role_id' => $user['role_id'] ?? 3,
                 'role_name' => $user['role_name'] ?? 'Client'
             ],
@@ -179,7 +177,8 @@ class AuthController {
                     
                     $_SESSION['user_id']  = $user['id'];
                     $_SESSION['username'] = $user['username'];
-                    $_SESSION['is_admin'] = $user['is_admin'] ?? 0;
+                    $_SESSION['role_id'] = $user['role_id'] ?? 3;
+                    $_SESSION['role_name'] = $user['role_name'] ?? 'Client';
                     
                     $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
                     if (strpos($contentType, 'application/json') !== false) {
@@ -190,7 +189,8 @@ class AuthController {
                             'user' => [
                                 'id' => $user['id'],
                                 'username' => $user['username'],
-                                'is_admin' => $user['is_admin'] ?? 0
+                                'role_id' => $user['role_id'] ?? 3,
+                                'role_name' => $user['role_name'] ?? 'Client'
                             ]
                         ], 201);
                     } else {
@@ -265,7 +265,8 @@ class AuthController {
             'user' => $authenticated ? [
                 'id' => $_SESSION['user_id'],
                 'username' => $_SESSION['username'],
-                'is_admin' => $_SESSION['is_admin'] ?? 0
+                'role_id' => $_SESSION['role_id'] ?? 3,
+                'role_name' => $_SESSION['role_name'] ?? 'Client'
             ] : null
         ], 200);
     }
@@ -321,7 +322,9 @@ class AuthController {
     public static function requireAdmin() {
         $userId = self::requireAuth();
         
-        if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
+        // Comprovar si és Staff (SuperAdmin o Treballador)
+        $roleId = $_SESSION['role_id'] ?? 3;
+        if (!in_array($roleId, [1, 2])) {
             // Detectar si és una petició API o navegador
             $isApiRequest = (
                 isset($_SERVER['HTTP_ACCEPT']) && 

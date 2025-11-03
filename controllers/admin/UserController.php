@@ -81,9 +81,8 @@ class UserController {
             return;
         }
         
-        // Determinar role_id i is_admin segons el rol seleccionat
+        // Determinar role_id segons el rol seleccionat
         $role_id = !empty($_POST['role_id']) ? (int)$_POST['role_id'] : 3;
-        $is_admin = in_array($role_id, [1, 2]) ? 1 : 0;
         
         // Crear usuari
         $data = [
@@ -92,8 +91,7 @@ class UserController {
             'password' => $_POST['password'],
             'fullname' => $_POST['fullname'] ?? '',
             'phone' => $_POST['phone'] ?? '',
-            'role_id' => $role_id,
-            'is_admin' => $is_admin
+            'role_id' => $role_id
         ];
         
         if ($this->userModel->create($data)) {
@@ -157,17 +155,15 @@ class UserController {
             return;
         }
         
-        // Determinar role_id i is_admin segons el rol seleccionat
+        // Determinar role_id segons el rol seleccionat
         $role_id = !empty($_POST['role_id']) ? (int)$_POST['role_id'] : 3;
-        $is_admin = in_array($role_id, [1, 2]) ? 1 : 0;
         
         $data = [
             'username' => $_POST['username'],
             'email' => $_POST['email'],
             'fullname' => $_POST['fullname'] ?? '',
             'phone' => $_POST['phone'] ?? '',
-            'role_id' => $role_id,
-            'is_admin' => $is_admin
+            'role_id' => $role_id
         ];
         
         if ($this->userModel->update($id, $data)) {

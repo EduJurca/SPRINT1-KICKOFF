@@ -19,7 +19,7 @@ class User {
      */
     public function findByUsername($username) {
         $stmt = $this->db->prepare("
-            SELECT u.id, u.username, u.password, u.is_admin, u.role_id, r.name as role_name 
+            SELECT u.id, u.username, u.password, u.role_id, r.name as role_name 
             FROM users u 
             LEFT JOIN roles r ON u.role_id = r.id 
             WHERE u.username = ?
@@ -51,8 +51,8 @@ class User {
      */
     public function create($data) {
         $stmt = $this->db->prepare("INSERT INTO users 
-            (username, nationality_id, phone, birth_date, sex, dni, address, email, password, iban, driver_license_photo, minute_balance, is_admin, role_id, created_at) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            (username, nationality_id, phone, birth_date, sex, dni, address, email, password, iban, driver_license_photo, minute_balance, role_id, created_at) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         $username = $data['username'] ?? null;
         $nationality_id = $data['nationality_id'] ?? null;
@@ -65,13 +65,12 @@ class User {
         $email = $data['email'] ?? null;
         $driver_license_photo = $data['driver_license_photo'] ?? null;
         $minute_balance = 0;
-        $is_admin = isset($data['is_admin']) ? (int)$data['is_admin'] : 0;
         $role_id = isset($data['role_id']) ? (int)$data['role_id'] : 3;
         $created_at = date('Y-m-d H:i:s');
         $password_hash = password_hash($data['password'], PASSWORD_DEFAULT);
 
         $stmt->bind_param(
-            "sisssssssssiiis",
+            "siss sssssssiis",
             $username,
             $nationality_id,
             $phone,
@@ -84,7 +83,6 @@ class User {
             $iban,
             $driver_license_photo,
             $minute_balance,
-            $is_admin,
             $role_id,
             $created_at
         );
@@ -145,7 +143,7 @@ class User {
      * @return array|null Informació de l'usuari
      */
     public function getUserInfo($user_id) {
-        $stmt = $this->db->prepare("SELECT username, email, minute_balance, is_admin FROM users WHERE id = ?");
+        $stmt = $this->db->prepare("SELECT username, email, minute_balance, role_id FROM users WHERE id = ?");
         $stmt->bind_param('i', $user_id);
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
@@ -201,7 +199,7 @@ class User {
     public function getAll($limit = 20, $offset = 0, $search = '') {
         if (!empty($search)) {
             $stmt = $this->db->prepare("
-                SELECT u.id, u.username, u.email, u.fullname, u.is_admin, u.role_id, r.name as role_name, u.created_at 
+                SELECT u.id, u.username, u.email, u.fullname, u.role_id, r.name as role_name, u.created_at 
                 FROM users u
                 LEFT JOIN roles r ON u.role_id = r.id
                 WHERE u.username LIKE ? OR u.email LIKE ? OR u.fullname LIKE ?
@@ -212,7 +210,7 @@ class User {
             $stmt->bind_param("sssii", $searchParam, $searchParam, $searchParam, $limit, $offset);
         } else {
             $stmt = $this->db->prepare("
-                SELECT u.id, u.username, u.email, u.fullname, u.is_admin, u.role_id, r.name as role_name, u.created_at 
+                SELECT u.id, u.username, u.email, u.fullname, u.role_id, r.name as role_name, u.created_at 
                 FROM users u
                 LEFT JOIN roles r ON u.role_id = r.id
                 ORDER BY u.id DESC 
@@ -256,8 +254,7 @@ class User {
                 email = ?, 
                 fullname = ?, 
                 phone = ?, 
-                role_id = ?,
-                is_admin = ?
+                role_id = ?
             WHERE id = ?
         ");
         
@@ -266,9 +263,8 @@ class User {
         $fullname = $data['fullname'] ?? '';
         $phone = $data['phone'] ?? '';
         $role_id = isset($data['role_id']) ? (int)$data['role_id'] : 3;
-        $is_admin = isset($data['is_admin']) ? (int)$data['is_admin'] : 0;
         
-        $stmt->bind_param("sssiii", $username, $email, $fullname, $phone, $role_id, $is_admin, $id);
+        $stmt->bind_param("sssiii", $username, $email, $fullname, $phone, $role_id, $id);
         return $stmt->execute();
     }
     

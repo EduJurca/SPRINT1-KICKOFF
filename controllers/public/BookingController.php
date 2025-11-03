@@ -49,8 +49,9 @@ class BookingController {
             ], 404);
         }
         
-        // Verificar que la reserva pertany a l'usuari
-        if ($booking['user_id'] != $userId && !isset($_SESSION['is_admin'])) {
+        // Verificar que la reserva pertany a l'usuari o és Staff
+        $roleId = $_SESSION['role_id'] ?? 3;
+        if ($booking['user_id'] != $userId && !in_array($roleId, [1, 2])) {
             return Router::json([
                 'success' => false,
                 'message' => 'Unauthorized'
@@ -128,8 +129,9 @@ class BookingController {
             ], 404);
         }
         
-        // Verificar que la reserva pertany a l'usuari
-        if ($booking['user_id'] != $userId && !isset($_SESSION['is_admin'])) {
+        // Verificar que la reserva pertany a l'usuari o és Staff
+        $roleId = $_SESSION['role_id'] ?? 3;
+        if ($booking['user_id'] != $userId && !in_array($roleId, [1, 2])) {
             return Router::json([
                 'success' => false,
                 'message' => 'Unauthorized'
@@ -160,8 +162,9 @@ class BookingController {
             ], 404);
         }
         
-        // Verificar que la reserva pertany a l'usuari
-        if ($booking['user_id'] != $userId && !isset($_SESSION['is_admin'])) {
+        // Verificar que la reserva pertany a l'usuari o és Staff
+        $roleId = $_SESSION['role_id'] ?? 3;
+        if ($booking['user_id'] != $userId && !in_array($roleId, [1, 2])) {
             return Router::json([
                 'success' => false,
                 'message' => 'Unauthorized'
