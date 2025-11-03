@@ -5,7 +5,7 @@
  */
 
 require_once MODELS_PATH . '/User.php';
-require_once CORE_PATH . '/AuthMiddleware.php';
+require_once CONTROLLERS_PATH . '/auth/AuthController.php';
 require_once CORE_PATH . '/Permissions.php';
 
 class UserController {
@@ -15,7 +15,15 @@ class UserController {
         $this->userModel = new User();
         
         // 🔐 Verificar que l'usuari és Staff (SuperAdmin o Treballador)
-        AuthMiddleware::requireStaff();
+        // Solo usuarios con role_id 1 o 2 pueden acceder
+        $userId = AuthController::requireAuth();
+        $roleId = $_SESSION['role_id'] ?? 3;
+        
+        if (!in_array($roleId, [1, 2])) {
+            $_SESSION['error'] = 'Accés denegat. Només per personal autoritzat.';
+            Router::redirect('/dashboard');
+            exit;
+        }
     }
     
     /**

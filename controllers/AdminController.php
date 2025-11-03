@@ -4,7 +4,7 @@
  * Gestiona el panell d'administració
  */
 
-require_once CONTROLLERS_PATH . '/AuthController.php';
+require_once CONTROLLERS_PATH . '/auth/AuthController.php';
 require_once MODELS_PATH . '/User.php';
 
 class AdminController {
@@ -19,8 +19,15 @@ class AdminController {
      * Dashboard principal d'admin
      */
     public function dashboard() {
-        // Requerir que sigui admin
-        AuthController::requireAdmin();
+        // 🔐 Verificar autenticació i que sigui Staff (SuperAdmin o Treballador)
+        $userId = AuthController::requireAuth();
+        $roleId = $_SESSION['role_id'] ?? 3;
+        
+        if (!in_array($roleId, [1, 2])) {
+            $_SESSION['error'] = 'Accés denegat. Només per personal autoritzat.';
+            Router::redirect('/dashboard');
+            exit;
+        }
         
         // Obtenir estadístiques
         $stats = $this->getStats();

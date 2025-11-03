@@ -48,12 +48,13 @@ class AuthController {
                 if (strpos($contentType, 'application/json') !== false) {
                     return Router::json($result, 200);
                 } else {
-                    // Redirigir segons el rol
-                    if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1) {
-                        // Administradors van al panell d'admin
-                        return Router::redirect('/admin');
+                    // 🎯 Redirigir segons el rol
+                    $roleId = $_SESSION['role_id'] ?? 3;
+                    if ($roleId == 1 || $roleId == 2) {
+                        // SuperAdmin i Treballadors → Dashboard Admin
+                        return Router::redirect('/admin/dashboard');
                     } else {
-                        // Usuaris normals van al dashboard
+                        // Clients → Dashboard Públic
                         return Router::redirect('/dashboard');
                     }
                 }
@@ -95,12 +96,12 @@ class AuthController {
             return ['success' => false, 'message' => 'Incorrect password'];
         }
 
-        // Guardar dades a la sessió
+        // Guardar dades a la sessió amb informació del rol
         $_SESSION['user_id']  = $user['id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION['is_admin'] = $user['is_admin'] ?? 0;
-        $_SESSION['role_id']  = $user['role_id'] ?? null;
-        $_SESSION['role_name'] = $user['role_name'] ?? 'user';
+        $_SESSION['role_id'] = $user['role_id'] ?? 3;
+        $_SESSION['role_name'] = $user['role_name'] ?? 'Client';
 
         return [
             'success' => true, 
@@ -108,7 +109,9 @@ class AuthController {
             'user' => [
                 'id' => $user['id'],
                 'username' => $user['username'],
-                'is_admin' => $user['is_admin'] ?? 0
+                'is_admin' => $user['is_admin'] ?? 0,
+                'role_id' => $user['role_id'] ?? 3,
+                'role_name' => $user['role_name'] ?? 'Client'
             ],
             'session_id' => session_id()
         ];
@@ -283,20 +286,27 @@ class AuthController {
         }
         
         if (!isset($_SESSION['user_id'])) {
-            // Verificar si es una petición AJAX/JSON
-            $acceptHeader = $_SERVER['HTTP_ACCEPT'] ?? '';
-            $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+            // Detectar si és una petició API o navegador
+            $isApiRequest = (
+                isset($_SERVER['HTTP_ACCEPT']) && 
+                strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false
+            ) || (
+                isset($_SERVER['CONTENT_TYPE']) && 
+                strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false
+            ) || (
+                strpos($_SERVER['REQUEST_URI'], '/api/') !== false
+            );
             
-            if (strpos($acceptHeader, 'application/json') !== false || 
-                strpos($contentType, 'application/json') !== false) {
-                // Para APIs, devolver JSON
+            if ($isApiRequest) {
+                // Petició API: retornar JSON
                 Router::json([
                     'success' => false,
                     'message' => 'Authentication required'
                 ], 401);
                 exit;
             } else {
-                // Para páginas web, redirigir al login
+                // Petició navegador: redirigir a login
+                $_SESSION['error'] = 'Has d\'iniciar sessió per accedir';
                 Router::redirect('/login');
                 exit;
             }
@@ -312,91 +322,30 @@ class AuthController {
         $userId = self::requireAuth();
         
         if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
-            // Verificar si es una petición AJAX/JSON
-            $acceptHeader = $_SERVER['HTTP_ACCEPT'] ?? '';
-            $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+            // Detectar si és una petició API o navegador
+            $isApiRequest = (
+                isset($_SERVER['HTTP_ACCEPT']) && 
+                strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false
+            ) || (
+                isset($_SERVER['CONTENT_TYPE']) && 
+                strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false
+            ) || (
+                strpos($_SERVER['REQUEST_URI'], '/api/') !== false
+            );
             
-            if (strpos($acceptHeader, 'application/json') !== false || 
-                strpos($contentType, 'application/json') !== false) {
-                // Para APIs, devolver JSON
+            if ($isApiRequest) {
                 Router::json([
                     'success' => false,
                     'message' => 'Admin access required'
                 ], 403);
                 exit;
             } else {
-                // Para páginas web, redirigir al dashboard
+                $_SESSION['error'] = 'Accés denegat. Només per administradors.';
                 Router::redirect('/dashboard');
                 exit;
             }
         }
         
         return $userId;
-    }
-    
-    /**
-     * Middleware per comprovar un rol específic
-     * 
-     * @param string $role Nom del rol requerit
-     * @return int User ID
-     */
-    public static function requireRole($role) {
-        require_once __DIR__ . '/../core/Authorization.php';
-        
-        $userId = self::requireAuth();
-        
-        if (!Authorization::hasRole($role) && !Authorization::isHigherRole($role)) {
-            Router::json([
-                'success' => false,
-                'message' => "Role '$role' required"
-            ], 403);
-            exit;
-        }
-        
-        return $userId;
-    }
-    
-    /**
-     * Middleware per comprovar un permís específic
-     * 
-     * @param string $permission Nom del permís
-     * @return int User ID
-     */
-    public static function requirePermission($permission) {
-        require_once __DIR__ . '/../core/Authorization.php';
-        
-        $userId = self::requireAuth();
-        
-        if (!Authorization::can($permission)) {
-            Router::json([
-                'success' => false,
-                'message' => "Permission '$permission' required"
-            ], 403);
-            exit;
-        }
-        
-        return $userId;
-    }
-    
-    /**
-     * Comprovar si l'usuari té un permís (sense aturar l'execució)
-     * 
-     * @param string $permission Nom del permís
-     * @return bool
-     */
-    public static function can($permission) {
-        require_once __DIR__ . '/../core/Authorization.php';
-        return Authorization::can($permission);
-    }
-    
-    /**
-     * Comprovar si l'usuari té un rol (sense aturar l'execució)
-     * 
-     * @param string $role Nom del rol
-     * @return bool
-     */
-    public static function hasRole($role) {
-        require_once __DIR__ . '/../core/Authorization.php';
-        return Authorization::hasRole($role);
     }
 }
