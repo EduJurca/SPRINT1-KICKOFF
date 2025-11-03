@@ -11,26 +11,32 @@ $errors = $_SESSION['errors'] ?? [];
 $oldData = $_SESSION['old_data'] ?? [];
 unset($_SESSION['errors'], $_SESSION['old_data']);
 ?>
+<style> .leaflet-control-zoom { 
+            display: none !important;
+        } </style>
+<!-- Leaflet CSS para mapas -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
+      crossorigin=""/>
 
 <div class="min-h-screen bg-gray-50 py-8">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Header -->
         <div class="mb-8">
-            <a href="/admin/vehicles" class="inline-flex items-center text-blue-600 hover:text-blue-700 mb-4">
+            <a href="/admin/vehicles" class="inline-flex items-center px-4 py-2 mb-4 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors shadow-sm">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
                 Volver al listado
             </a>
-            <h1 class="text-3xl font-bold text-gray-900">➕ Nuevo Vehículo</h1>
-            <p class="mt-2 text-sm text-gray-600">Añade un nuevo vehículo a la flota</p>
+            <h1 class="text-3xl font-bold text-gray-900">Nuevo Vehículo</h1>
         </div>
 
         <!-- Mostrar errores -->
         <?php if (!empty($errors)): ?>
             <div class="mb-6 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded">
-                <p class="font-semibold mb-2">❌ Errores de validación:</p>
+                <p class="font-semibold mb-2">Errores de validación:</p>
                 <ul class="list-disc list-inside">
                     <?php foreach ($errors as $error): ?>
                         <li><?= htmlspecialchars($error) ?></li>
@@ -45,7 +51,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                 
                 <!-- Información Básica -->
                 <div class="border-b border-gray-200 pb-6">
-                    <h2 class="text-xl font-semibold text-gray-900 mb-4">📝 Información Básica</h2>
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Información Básica</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         
                         <div>
@@ -89,29 +95,16 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                         </div>
                         
                         <div>
-                            <label for="vehicle_type" class="block text-sm font-medium text-gray-700 mb-2">
-                                Tipo de Vehículo <span class="text-red-500">*</span>
-                            </label>
-                            <select id="vehicle_type" name="vehicle_type" required
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                <option value="car" <?= ($oldData['vehicle_type'] ?? '') === 'car' ? 'selected' : '' ?>>🚗 Coche</option>
-                                <option value="bike" <?= ($oldData['vehicle_type'] ?? '') === 'bike' ? 'selected' : '' ?>>🚲 Bicicleta</option>
-                                <option value="scooter" <?= ($oldData['vehicle_type'] ?? '') === 'scooter' ? 'selected' : '' ?>>🛴 Patinete</option>
-                                <option value="motorcycle" <?= ($oldData['vehicle_type'] ?? '') === 'motorcycle' ? 'selected' : '' ?>>🏍️ Motocicleta</option>
-                            </select>
-                        </div>
-                        
-                        <div>
                             <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
                                 Estado <span class="text-red-500">*</span>
                             </label>
                             <select id="status" name="status" required
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                <option value="available" <?= ($oldData['status'] ?? 'available') === 'available' ? 'selected' : '' ?>>✅ Disponible</option>
-                                <option value="in_use" <?= ($oldData['status'] ?? '') === 'in_use' ? 'selected' : '' ?>>🔵 En uso</option>
-                                <option value="charging" <?= ($oldData['status'] ?? '') === 'charging' ? 'selected' : '' ?>>🔋 Cargando</option>
-                                <option value="maintenance" <?= ($oldData['status'] ?? '') === 'maintenance' ? 'selected' : '' ?>>🔧 Mantenimiento</option>
-                                <option value="reserved" <?= ($oldData['status'] ?? '') === 'reserved' ? 'selected' : '' ?>>📌 Reservado</option>
+                                <option value="available" <?= ($oldData['status'] ?? 'available') === 'available' ? 'selected' : '' ?>>Disponible</option>
+                                <option value="in_use" <?= ($oldData['status'] ?? '') === 'in_use' ? 'selected' : '' ?>>En uso</option>
+                                <option value="charging" <?= ($oldData['status'] ?? '') === 'charging' ? 'selected' : '' ?>>Cargando</option>
+                                <option value="maintenance" <?= ($oldData['status'] ?? '') === 'maintenance' ? 'selected' : '' ?>>Mantenimiento</option>
+                                <option value="reserved" <?= ($oldData['status'] ?? '') === 'reserved' ? 'selected' : '' ?>>Reservado</option>
                             </select>
                         </div>
                     </div>
@@ -119,7 +112,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
 
                 <!-- Características Técnicas -->
                 <div class="border-b border-gray-200 pb-6">
-                    <h2 class="text-xl font-semibold text-gray-900 mb-4">⚡ Características Técnicas</h2>
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Características Técnicas</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         
                         <div>
@@ -148,7 +141,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                                        <?= !empty($oldData['is_accessible']) ? 'checked' : '' ?>
                                        class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
                                 <span class="ml-3 text-sm font-medium text-gray-700">
-                                    ♿ Vehículo accesible (adaptado para personas con movilidad reducida)
+                                    Vehículo accesible (adaptado para personas con movilidad reducida)
                                 </span>
                             </label>
                         </div>
@@ -157,7 +150,21 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
 
                 <!-- Ubicación -->
                 <div class="border-b border-gray-200 pb-6">
-                    <h2 class="text-xl font-semibold text-gray-900 mb-4">📍 Ubicación</h2>
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Ubicación</h2>
+                    
+                    <!-- Mapa interactivo -->
+                    <div class="mb-4">
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4">
+                            <p class="text-sm text-blue-700">
+                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Haz clic en el mapa para seleccionar la ubicación del vehículo
+                            </p>
+                        </div>
+                        <div id="location-map" style="height: 400px; border-radius: 8px; border: 2px solid #e5e7eb;"></div>
+                    </div>
+                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         
                         <div>
@@ -168,7 +175,8 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                                    value="<?= htmlspecialchars($oldData['latitude'] ?? '40.7117') ?>"
                                    step="0.000001"
                                    placeholder="40.7117"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                   readonly
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         </div>
                         
                         <div>
@@ -179,21 +187,15 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                                    value="<?= htmlspecialchars($oldData['longitude'] ?? '0.5783') ?>"
                                    step="0.000001"
                                    placeholder="0.5783"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        </div>
-                        
-                        <div class="md:col-span-2">
-                            <p class="text-sm text-gray-500">
-                                💡 Tip: Por defecto se usa la ubicación de Amposta. Puedes obtener coordenadas desde 
-                                <a href="https://www.google.com/maps" target="_blank" class="text-blue-600 hover:text-blue-700">Google Maps</a>
-                            </p>
+                                   readonly
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         </div>
                     </div>
                 </div>
 
                 <!-- Imagen -->
                 <div class="pb-6">
-                    <h2 class="text-xl font-semibold text-gray-900 mb-4">🖼️ Imagen (opcional)</h2>
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Imagen (opcional)</h2>
                     <div>
                         <label for="image_url" class="block text-sm font-medium text-gray-700 mb-2">
                             URL de la Imagen
@@ -224,5 +226,74 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
         </div>
     </div>
 </div>
+
+<!-- Leaflet JS para mapas -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" 
+        crossorigin=""></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Obtener coordenadas iniciales
+    const latInput = document.getElementById('latitude');
+    const lngInput = document.getElementById('longitude');
+    const initialLat = parseFloat(latInput.value) || 40.7117;
+    const initialLng = parseFloat(lngInput.value) || 0.5783;
+    
+    // Crear el mapa centrado en Amposta
+    const map = L.map('location-map').setView([initialLat, initialLng], 15);
+    
+    // Agregar tiles de OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        minZoom: 10,
+        maxZoom: 18
+    }).addTo(map);
+    
+    // Crear un marcador inicial
+    let marker = L.marker([initialLat, initialLng], {
+        draggable: true
+    }).addTo(map);
+    
+    // Actualizar coordenadas cuando se arrastra el marcador
+    marker.on('dragend', function(e) {
+        const position = marker.getLatLng();
+        updateCoordinates(position.lat, position.lng);
+    });
+    
+    // Agregar marcador al hacer clic en el mapa
+    map.on('click', function(e) {
+        const lat = e.latlng.lat;
+        const lng = e.latlng.lng;
+        
+        // Mover el marcador a la nueva posición
+        marker.setLatLng([lat, lng]);
+        updateCoordinates(lat, lng);
+        
+        // Centrar el mapa en la nueva posición
+        map.panTo([lat, lng]);
+    });
+    
+    // Función para actualizar las coordenadas en los inputs
+    function updateCoordinates(lat, lng) {
+        latInput.value = lat.toFixed(6);
+        lngInput.value = lng.toFixed(6);
+        
+        // Actualizar el popup del marcador
+        marker.bindPopup(`
+            <div style="text-align: center; padding: 5px;">
+                <strong style="font-size: 1.1em;">Nueva Ubicación</strong><br>
+                <span style="font-size: 0.85em; color: #666;">
+                    Lat: ${lat.toFixed(6)}<br>
+                    Lng: ${lng.toFixed(6)}
+                </span>
+            </div>
+        `).openPopup();
+    }
+    
+    // Mostrar popup inicial
+    updateCoordinates(initialLat, initialLng);
+});
+</script>
 
 <?php require_once __DIR__ . '/../admin-footer.php'; ?>

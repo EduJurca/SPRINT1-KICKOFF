@@ -9,18 +9,20 @@ require_once __DIR__ . '/../admin-header.php';
 $success = $_SESSION['success'] ?? null;
 unset($_SESSION['success']);
 ?>
-
+<style> .leaflet-control-zoom { 
+            display: none !important;
+        } </style>
 <!-- Leaflet CSS para mapas -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
       crossorigin=""/>
 
 <div class="min-h-screen bg-gray-50 py-8">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Header -->
         <div class="mb-8">
-            <a href="/admin/vehicles" class="inline-flex items-center text-blue-600 hover:text-blue-700 mb-4">
+            <a href="/admin/vehicles" class="inline-flex items-center px-4 py-2 mb-4 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors shadow-sm">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
@@ -31,13 +33,10 @@ unset($_SESSION['success']);
                     <h1 class="text-3xl font-bold text-gray-900">
                         <?= htmlspecialchars($vehicle['brand']) ?> <?= htmlspecialchars($vehicle['model']) ?>
                     </h1>
-                    <p class="mt-2 text-lg text-gray-600">
-                        Matrícula: <span class="font-semibold"><?= htmlspecialchars($vehicle['license_plate'] ?? $vehicle['plate'] ?? '') ?></span>
-                    </p>
                 </div>
                 <div class="flex gap-3">
-                    <a href="/admin/vehicles/<?= $vehicle['id'] ?>/edit" 
-                       class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition">
+                          <a href="/admin/vehicles/<?= $vehicle['id'] ?>/edit" 
+                              class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                         </svg>
@@ -57,7 +56,7 @@ unset($_SESSION['success']);
         <!-- Mensaje de éxito -->
         <?php if ($success): ?>
             <div class="mb-6 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded">
-                <p class="font-semibold">✅ <?= htmlspecialchars($success) ?></p>
+                <p class="font-semibold"><?= htmlspecialchars($success) ?></p>
             </div>
         <?php endif; ?>
 
@@ -68,16 +67,9 @@ unset($_SESSION['success']);
             <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex items-center justify-between mb-2">
                     <h3 class="text-sm font-medium text-gray-500">Estado</h3>
-                    <?php
-                    $statusIcons = [
-                        'available' => '✅',
-                        'in_use' => '🔵',
-                        'charging' => '🔋',
-                        'maintenance' => '🔧',
-                        'reserved' => '📌'
-                    ];
-                    echo $statusIcons[$vehicle['status']] ?? '❓';
-                    ?>
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
                 </div>
                 <?php
                 $statusColors = [
@@ -104,7 +96,9 @@ unset($_SESSION['success']);
             <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex items-center justify-between mb-2">
                     <h3 class="text-sm font-medium text-gray-500">Batería</h3>
-                    <span>🔋</span>
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
                 </div>
                 <p class="text-2xl font-bold text-gray-900"><?= $vehicle['battery_level'] ?? $vehicle['battery'] ?? 'N/A' ?>%</p>
                 <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
@@ -116,7 +110,9 @@ unset($_SESSION['success']);
             <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex items-center justify-between mb-2">
                     <h3 class="text-sm font-medium text-gray-500">Precio/minuto</h3>
-                    <span>💰</span>
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
                 </div>
                 <p class="text-2xl font-bold text-gray-900"><?= number_format($vehicle['price_per_minute'], 2) ?>€</p>
             </div>
@@ -150,28 +146,14 @@ unset($_SESSION['success']);
                         <dt class="text-sm font-medium text-gray-500">Modelo</dt>
                         <dd class="text-sm text-gray-900"><?= htmlspecialchars($vehicle['model']) ?></dd>
                     </div>
-                    <div class="flex justify-between py-2 border-b border-gray-100">
+                                        <div class="flex justify-between py-2 border-b border-gray-100">
                         <dt class="text-sm font-medium text-gray-500">Año</dt>
                         <dd class="text-sm text-gray-900"><?= $vehicle['year'] ?></dd>
-                    </div>
-                    <div class="flex justify-between py-2 border-b border-gray-100">
-                        <dt class="text-sm font-medium text-gray-500">Tipo</dt>
-                        <dd class="text-sm text-gray-900">
-                            <?php
-                            $types = [
-                                'car' => '🚗 Coche',
-                                'bike' => '🚲 Bicicleta',
-                                'scooter' => '🛴 Patinete',
-                                'motorcycle' => '🏍️ Motocicleta'
-                            ];
-                            echo $types[$vehicle['vehicle_type']] ?? $vehicle['vehicle_type'];
-                            ?>
-                        </dd>
                     </div>
                     <div class="flex justify-between py-2">
                         <dt class="text-sm font-medium text-gray-500">Adaptado PMR</dt>
                         <dd class="text-sm text-gray-900">
-                            <?= $vehicle['is_accessible'] ? '♿ Sí' : '❌ No' ?>
+                            <?= $vehicle['is_accessible'] ? 'Sí' : 'No' ?>
                         </dd>
                     </div>
                 </dl>
@@ -198,7 +180,7 @@ unset($_SESSION['success']);
                     <!-- Mapa de OpenStreetMap -->
                     <div id="vehicle-map" style="height: 350px; border-radius: 8px;"></div>
                 <?php else: ?>
-                    <p class="text-sm text-gray-500 italic">⚠️ No hay coordenadas disponibles para mostrar el mapa</p>
+                    <p class="text-sm text-gray-500 italic">No hay coordenadas disponibles para mostrar el mapa</p>
                 <?php endif; ?>
             </div>
         </div>
@@ -206,7 +188,7 @@ unset($_SESSION['success']);
         <!-- Imagen (si existe) -->
         <?php if (!empty($vehicle['image_url'])): ?>
             <div class="mt-6 bg-white rounded-lg shadow-md p-6">
-                <h2 class="text-xl font-semibold text-gray-900 mb-4">🖼️ Imagen</h2>
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Imagen</h2>
                 <img src="<?= htmlspecialchars($vehicle['image_url']) ?>" 
                      alt="<?= htmlspecialchars($vehicle['brand'] . ' ' . $vehicle['model']) ?>"
                      class="max-w-full h-auto rounded-lg">

@@ -20,10 +20,9 @@ unset($_SESSION['success'], $_SESSION['error']);
         <div class="mb-8">
             <div class="flex justify-between items-center">
                 <div>
-                    <h1 class="text-3xl font-bold text-gray-900">🚗 Gestión de Vehículos</h1>
-                    <p class="mt-2 text-sm text-gray-600">Administra los vehículos de la flota</p>
+                    <h1 class="text-3xl font-bold text-gray-900">Gestión de Vehículos</h1>
                 </div>
-                <a href="/views/admin/vehicles/create.php" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition">
+                <a href="/admin/vehicles/create" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                     </svg>
@@ -35,19 +34,19 @@ unset($_SESSION['success'], $_SESSION['error']);
         <!-- Mensajes -->
         <?php if ($success): ?>
             <div class="mb-6 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded" role="alert">
-                <p class="font-semibold">✅ <?= htmlspecialchars($success) ?></p>
+                <p class="font-semibold"><?= htmlspecialchars($success) ?></p>
             </div>
         <?php endif; ?>
 
         <?php if ($error): ?>
             <div class="mb-6 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded" role="alert">
-                <p class="font-semibold">❌ <?= htmlspecialchars($error) ?></p>
+                <p class="font-semibold"><?= htmlspecialchars($error) ?></p>
             </div>
         <?php endif; ?>
 
         <!-- Filtros -->
         <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-            <form method="GET" action="/admin/vehicles" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <form method="GET" action="/admin/vehicles" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Marca</label>
                     <input type="text" name="brand" value="<?= htmlspecialchars($filters['brand'] ?? '') ?>" 
@@ -67,24 +66,18 @@ unset($_SESSION['success'], $_SESSION['error']);
                     </select>
                 </div>
                 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Tipo</label>
-                    <select name="vehicle_type" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        <option value="">Todos</option>
-                        <option value="car" <?= ($filters['vehicle_type'] ?? '') === 'car' ? 'selected' : '' ?>>Coche</option>
-                        <option value="bike" <?= ($filters['vehicle_type'] ?? '') === 'bike' ? 'selected' : '' ?>>Bicicleta</option>
-                        <option value="scooter" <?= ($filters['vehicle_type'] ?? '') === 'scooter' ? 'selected' : '' ?>>Patinete</option>
-                        <option value="motorcycle" <?= ($filters['vehicle_type'] ?? '') === 'motorcycle' ? 'selected' : '' ?>>Moto</option>
-                    </select>
-                </div>
-                
                 <div class="flex items-end gap-2">
-                    <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition">
-                        🔍 Filtrar
+                    <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        Filtrar
                     </button>
-                    <a href="/admin/vehicles" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-semibold transition">
-                        ↻
-                    </a>
+                    <button type="button" onclick="window.location.href='/admin/vehicles'" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-semibold transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                    </button>
                 </div>
             </form>
         </div>
@@ -98,7 +91,6 @@ unset($_SESSION['success'], $_SESSION['error']);
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Matrícula</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vehículo</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Batería</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Precio/min</th>
@@ -108,7 +100,7 @@ unset($_SESSION['success'], $_SESSION['error']);
                     <tbody class="bg-white divide-y divide-gray-200">
                         <?php if (empty($vehicles)): ?>
                             <tr>
-                                <td colspan="8" class="px-6 py-12 text-center text-gray-500">
+                                <td colspan="7" class="px-6 py-12 text-center text-gray-500">
                                     <div class="flex flex-col items-center gap-3">
                                         <svg class="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -130,17 +122,6 @@ unset($_SESSION['success'], $_SESSION['error']);
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm font-medium text-gray-900"><?= htmlspecialchars($vehicle['brand']) ?></div>
                                         <div class="text-sm text-gray-500"><?= htmlspecialchars($vehicle['model']) ?> (<?= $vehicle['year'] ?>)</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        <?php
-                                        $types = [
-                                            'car' => '🚗 Coche',
-                                            'bike' => '🚲 Bici',
-                                            'scooter' => '🛴 Patinete',
-                                            'motorcycle' => '🏍️ Moto'
-                                        ];
-                                        echo $types[$vehicle['vehicle_type']] ?? $vehicle['vehicle_type'];
-                                        ?>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <?php
@@ -177,15 +158,22 @@ unset($_SESSION['success'], $_SESSION['error']);
                                         <?= number_format($vehicle['price_per_minute'], 2) ?>€
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                                        <a href="/admin/vehicles/<?= $vehicle['id'] ?>" class="text-blue-600 hover:text-blue-900" title="Ver detalles">
-                                            👁️
+                                        <a href="/admin/vehicles/<?= $vehicle['id'] ?>" class="text-gray-600 hover:text-gray-900" title="Ver detalles">
+                                            <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                            </svg>
                                         </a>
-                                        <a href="/admin/vehicles/<?= $vehicle['id'] ?>/edit" class="text-yellow-600 hover:text-yellow-900" title="Editar">
-                                            ✏️
+                                        <a href="/admin/vehicles/<?= $vehicle['id'] ?>/edit" class="text-gray-600 hover:text-gray-900" title="Editar">
+                                            <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                            </svg>
                                         </a>
                                         <button onclick="confirmDelete(<?= $vehicle['id'] ?>, '<?= htmlspecialchars($vehicle['license_plate'] ?? $vehicle['plate']) ?>')" 
-                                                class="text-red-600 hover:text-red-900" title="Eliminar">
-                                            🗑️
+                                                class="text-gray-600 hover:text-red-600" title="Eliminar">
+                                            <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            </svg>
                                         </button>
                                     </td>
                                 </tr>
