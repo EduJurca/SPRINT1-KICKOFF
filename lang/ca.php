@@ -387,6 +387,8 @@ return [
         'payments_title' => 'Pagaments',
         'current_cards' => 'Targetes Actuals',
         'add_card' => 'Afegir Targeta',
+        'card_number' => 'Número de targeta',
+        'card_expiry' => 'Data d\'expiració',
         'verify_license_title' => 'Verificar Carnet',
         'upload_license_photos' => 'Puja dues fotografies del teu carnet de conduir:',
         'front_photo_instruction' => 'Frontal del carnet amb foto i nom visible.',
