@@ -58,18 +58,14 @@ $recentActivity = $recentUsers ?? [];
         <aside class="w-60 bg-sky-50 flex flex-col shadow-lg">
             <div class="px-4 py-5">
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 bg-white rounded flex items-center justify-center font-bold text-black">⚡</div>
-                    <div>
-                        <h3 class="text-sm font-semibold"><?php echo htmlspecialchars($currentUser['name']); ?></h3>
-                        <p class="text-xs text-gray-500"><?php echo htmlspecialchars($currentUser['role_name']); ?></p>
-                    </div>
+                    <img src="/assets/images/logo.png" alt="Voltacar Logo" class="w-8 h-8">
                 </div>
             </div>
             
             <nav class="flex-1">
                 <div class="mb-6">
                     <div class="px-4 py-2 text-xs uppercase text-gray-600 font-semibold">General</div>
-                    <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-900 hover:bg-blue-700 hover:text-gray-100">
+                    <a href="#" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-blue-700 hover:text-gray-100 bg-blue-900 text-white" data-active="true">
                         <img src="/assets/images/dashboard.png" alt="Dashboard" class="w-4 h-4 opacity-100"> 
                         Dashboard
                     </a>
@@ -77,32 +73,20 @@ $recentActivity = $recentUsers ?? [];
                 
                 <div class="mb-6">
                     <div class="px-4 py-2 text-xs uppercase text-gray-600 font-semibold">Pages</div>
-                    <a href="/admin/users" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-900 hover:bg-blue-700 hover:text-gray-100">
+                    <a href="/admin/users" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm text-gray-900 hover:bg-blue-700 hover:text-gray-100">
                         <i class="fa fa-users"></i> Usuaris
                     </a>
-                    <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-900 hover:bg-blue-700 hover:text-gray-100">
+                    <a href="#" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm text-gray-900 hover:bg-blue-700 hover:text-gray-100">
                         <i class="fa fa-charging-station"></i> Punts de carrega
                     </a>
-                    <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-900 hover:bg-blue-700 hover:text-gray-100">
+                    <a href="#" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm text-gray-900 hover:bg-blue-700 hover:text-gray-100">
                         <i class="fa fa-car"></i> Vehicles
                     </a>
-                    <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-900 hover:bg-blue-700 hover:text-gray-100">
+                    <a href="#" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm text-gray-900 hover:bg-blue-700 hover:text-gray-100">
                         <i class="fa fa-flag"></i> Incidencies
                     </a>
                 </div>
             </nav>
-            
-            <div class="mt-auto border-t border-gray-700 p-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center text-xs font-semibold text-white">
-                        <?php echo htmlspecialchars($currentUser['initials']); ?>
-                    </div>
-                    <div>
-                        <h4 class="text-sm font-medium"><?php echo htmlspecialchars($currentUser['name']); ?></h4>
-                        <p class="text-xs text-gray-500"><?php echo htmlspecialchars($currentUser['email']); ?></p>
-                    </div>
-                </div>
-            </div>
         </aside>
         
         <!-- Main Content -->
@@ -110,22 +94,28 @@ $recentActivity = $recentUsers ?? [];
             <div class="p-10">
                 <div class="flex justify-between items-center mb-8">
                     <h1 class="text-2xl font-semibold">Dashboard</h1>
-                    <button class="bg-white text-black px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100">
-                        Download
-                    </button>
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center text-xs font-semibold text-white">
+                            <?php echo htmlspecialchars($currentUser['initials']); ?>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-medium"><?php echo htmlspecialchars($currentUser['name']); ?></h4>
+                            <p class="text-xs text-gray-500"><?php echo htmlspecialchars($currentUser['email']); ?></p>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="flex gap-2 bg-gray-100 p-1 rounded-lg mb-6 shadow-md">
-                    <button class="px-4 py-2 rounded-md text-sm text-gray-600 hover:bg-gray-900 hover:text-white transition-colors">
+                    <button class="tab-button px-4 py-2 rounded-md text-sm bg-gray-900 text-white transition-colors" data-active="true">
                         Vista General
                     </button>
-                    <button class="px-4 py-2 rounded-md text-sm text-gray-600 hover:bg-gray-900 hover:text-white transition-colors">
+                    <button class="tab-button px-4 py-2 rounded-md text-sm text-gray-600 hover:bg-gray-900 hover:text-white transition-colors">
                         Estadístiques
                     </button>
-                    <button class="px-4 py-2 rounded-md text-sm text-gray-600 hover:bg-gray-900 hover:text-white transition-colors">
+                    <button class="tab-button px-4 py-2 rounded-md text-sm text-gray-600 hover:bg-gray-900 hover:text-white transition-colors">
                         Incidències
                     </button>
-                    <button class="px-4 py-2 rounded-md text-sm text-gray-600 hover:bg-gray-900 hover:text-white transition-colors">
+                    <button class="tab-button px-4 py-2 rounded-md text-sm text-gray-600 hover:bg-gray-900 hover:text-white transition-colors">
                         Notificacions
                     </button>
                 </div>
@@ -160,9 +150,51 @@ $recentActivity = $recentUsers ?? [];
                         </div>
                     </div>
                     
-                    
+
             </div>
         </main>
     </div>
+    
+    <script>
+        // Manejar estado activo para enlaces del sidebar
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const tabButtons = document.querySelectorAll('.tab-button');
+            
+            // Funcionalidad para enlaces del sidebar
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // Remover estado activo de todos los enlaces
+                    navLinks.forEach(nl => {
+                        nl.classList.remove('bg-blue-900', 'text-white');
+                        nl.classList.add('text-gray-900');
+                        nl.removeAttribute('data-active');
+                    });
+                    
+                    // Añadir estado activo al enlace clickeado
+                    this.classList.add('bg-blue-900', 'text-white');
+                    this.classList.remove('text-gray-900');
+                    this.setAttribute('data-active', 'true');
+                });
+            });
+            
+            // Funcionalidad para botones de tabs
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remover estado activo de todos los botones
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('bg-gray-900', 'text-white');
+                        btn.classList.add('text-gray-600');
+                        btn.removeAttribute('data-active');
+                    });
+                    
+                    // Añadir estado activo al botón clickeado
+                    this.classList.add('bg-gray-900', 'text-white');
+                    this.classList.remove('text-gray-600');
+                    this.setAttribute('data-active', 'true');
+                });
+            });
+        });
+    </script>
 </body>
 </html>
