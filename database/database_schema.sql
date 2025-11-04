@@ -193,6 +193,29 @@ CREATE TABLE payment_methods (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================================
+-- TABLE: payment_methods
+-- Stores tokenized payment methods for users (DO NOT store raw PAN/CVC)
+-- Use tokens returned by a PCI-compliant gateway (Stripe, Adyen, etc.)
+-- ============================================================================
+CREATE TABLE payment_methods (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    provider VARCHAR(100) NOT NULL, -- e.g. 'stripe', 'adyen'
+    provider_token VARBINARY(512) NOT NULL, -- encrypted token
+    last4 CHAR(4),
+    brand VARCHAR(50),
+    exp_month TINYINT UNSIGNED,
+    exp_year SMALLINT UNSIGNED,
+    is_default BOOLEAN DEFAULT FALSE,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE KEY uniq_provider_token (provider, provider_token),
+    INDEX idx_user_id (user_id),
+    INDEX idx_provider (provider)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================================================
 -- TABLE: payments
 -- Stores payment transactions for vehicle usage and subscriptions
 -- ============================================================================
@@ -201,20 +224,24 @@ CREATE TABLE payments (
     user_id INT NOT NULL,
     vehicle_usage_id INT,
     payment_method_id INT NULL,
+    payment_method_id INT NULL,
     amount DECIMAL(10,2) NOT NULL,
     payment_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     type ENUM('unlock', 'time', 'subscription') NOT NULL,
     -- non-sensitive metadata for display and tracing (safe to store)
-    --card_last4 VARCHAR(4) DEFAULT NULL,
-    --card_brand VARCHAR(50) DEFAULT NULL,
-    --provider VARCHAR(100) DEFAULT NULL,
-    --provider_transaction_id VARCHAR(255) DEFAULT NULL, --commented out to avoid storing sensitive info
+    card_last4 VARCHAR(4) DEFAULT NULL,
+    card_brand VARCHAR(50) DEFAULT NULL,
+    provider VARCHAR(100) DEFAULT NULL,
+    provider_transaction_id VARCHAR(255) DEFAULT NULL,
     status ENUM('pending','succeeded','failed','refunded') NOT NULL DEFAULT 'pending',
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (vehicle_usage_id) REFERENCES vehicle_usage(id) ON DELETE SET NULL,
     FOREIGN KEY (payment_method_id) REFERENCES payment_methods(id) ON DELETE SET NULL,
+    FOREIGN KEY (payment_method_id) REFERENCES payment_methods(id) ON DELETE SET NULL,
     INDEX idx_user_id (user_id),
     INDEX idx_payment_date (payment_date),
+    INDEX idx_type (type),
+    INDEX idx_status (status)
     INDEX idx_type (type),
     INDEX idx_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
