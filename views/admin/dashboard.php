@@ -145,14 +145,14 @@ $recentActivity = $recentUsers ?? [];
                 </div>
                 
                 <!-- Dashboard Grid -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                     <!-- Chart -->
-                    <div class="bg-gray-100 rounded-xl p-6 shadow-md col-span-2">
+                    <div class="bg-gray-100 rounded-xl p-6 shadow-md col-span-4">
                         <h2 class="text-lg font-semibold mb-6">Overview</h2>
-                        <div class="flex items-end justify-between h-[300px]">
+                        <div class="flex items-end justify-between h-[300px] w-full">
                             <?php foreach ($chartData as $month => $value): ?>
-                            <div class="flex flex-col items-center gap-2 h-full">
-                                <div class="w-3/5 bg-gray-200 rounded-t hover:bg-white transition-all cursor-pointer" 
+                            <div class="flex flex-col items-center gap-2 h-full flex-1">
+                                <div class="w-4/5 bg-gray-200 rounded-t hover:bg-white transition-all cursor-pointer" 
                                      style="height: <?php echo ($value / $maxValue) * 100; ?>%;"></div>
                                 <div class="text-xs text-gray-600 mt-auto"><?php echo $month; ?></div>
                             </div>
@@ -160,14 +160,7 @@ $recentActivity = $recentUsers ?? [];
                         </div>
                     </div>
                     
-                    <!-- Recent Activity -->
-                    <div class="bg-gray-100 rounded-xl p-6 shadow-md">
-                        <h2 class="text-lg font-semibold mb-6">Recent Activity</h2>
-                        <div class="space-y-4">
-                            <!-- Add your recent activity items here -->
-                        </div>
-                    </div>
-                </div>
+                    
             </div>
         </main>
     </div>
