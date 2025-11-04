@@ -177,6 +177,7 @@ Router::get('/accessibilitat', function() {
 // ==========================================
 // 🔧 ADMIN (Panel d'Administració)
 // ==========================================
+require_once CONTROLLERS_PATH . '/admin/AdminController.php';
 
 // Dashboard principal d'admin
 Router::get('/admin', ['AdminController', 'dashboard']);

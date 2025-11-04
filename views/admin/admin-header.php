@@ -44,11 +44,14 @@ $currentPage = $currentPage ?? '';
     <!-- Sidebar de navegación -->
     <div class="flex h-screen">
         <!-- Sidebar -->
-        <aside class="w-64 bg-[#1565C0] text-white flex flex-col">
+        <aside class="w-64 bg-[#0A2342] text-white flex flex-col shadow-lg">
             <!-- Logo -->
-            <div class="p-6 border-b border-blue-700">
-                <h1 class="text-2xl font-bold">SIMS Admin</h1>
-                <p class="text-sm text-blue-200 mt-1">Panel de Control</p>
+            <div class="p-6 border-b border-[#00C853] flex items-center gap-3">
+                <div class="bg-[#00C853] rounded-full w-10 h-10 flex items-center justify-center text-white text-xl font-bold">VC</div>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-wide">VoltiaCar</h1>
+                    <p class="text-sm text-[#00C853] mt-1">Panell d'administració</p>
+                </div>
             </div>
             
             <!-- Navegación -->
@@ -57,7 +60,7 @@ $currentPage = $currentPage ?? '';
                     <li>
                         <a href="/admin/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors <?php echo $currentPage === 'dashboard' ? 'bg-blue-700' : ''; ?>">
                             <i class="fas fa-home"></i>
-                            <span>Dashboard</span>
+                            <span>Inici</span>
                         </a>
                     </li>
                     <li>
@@ -106,7 +109,7 @@ $currentPage = $currentPage ?? '';
                 </div>
                 <a href="/logout" class="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition-colors text-sm justify-center">
                     <i class="fas fa-sign-out-alt"></i>
-                    <span>Tancar Sessió</span>
+                    <span>Tanca sessió</span>
                 </a>
             </div>
         </aside>
@@ -114,19 +117,19 @@ $currentPage = $currentPage ?? '';
         <!-- Contenido principal -->
         <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Top bar -->
-            <header class="bg-white border-b border-gray-200 px-6 py-4">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-2xl font-bold text-gray-800"><?php echo htmlspecialchars($pageTitle ?? 'Dashboard'); ?></h2>
-                    <div class="flex items-center gap-4">
-                        <!-- Notificaciones -->
-                        <button class="relative p-2 text-gray-600 hover:text-gray-900 transition-colors">
+            <header class="bg-[#0A2342] border-b border-[#00C853] px-8 py-5 w-full">
+                <div class="flex items-center justify-between w-full">
+                    <h2 class="text-2xl font-bold text-white tracking-wide"><?php echo htmlspecialchars($pageTitle ?? 'Inici'); ?></h2>
+                    <div class="flex items-center gap-6">
+                        <!-- Notificacions -->
+                        <button class="relative p-2 text-[#00C853] hover:text-white transition-colors">
                             <i class="fas fa-bell text-xl"></i>
                             <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
                         </button>
-                        <!-- Buscar -->
+                        <!-- Cercar -->
                         <div class="relative">
-                            <input type="text" placeholder="Buscar..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                            <input type="text" placeholder="Cercar..." class="pl-10 pr-4 py-2 border border-[#00C853] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00C853] bg-[#102A43] text-white placeholder:text-[#00C853]">
+                            <i class="fas fa-search absolute left-3 top-3 text-[#00C853]"></i>
                         </div>
                     </div>
                 </div>
