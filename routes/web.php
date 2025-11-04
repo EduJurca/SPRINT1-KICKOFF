@@ -87,6 +87,8 @@ Router::get('/pagaments', function() {
     Router::view('public.profile.pagaments');
 });
 
+Router::post('/perfil/pagaments/add', ['ProfileController', 'addPaymentMethod']);
+
 // Premium
 Router::get('/premium', function() {
     Router::view('public.profile.premium');

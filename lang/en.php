@@ -308,6 +308,8 @@ return [
         'payments_title' => 'Payments',
         'current_cards' => 'Current Cards',
         'add_card' => 'Add Card',
+        'card_number' => 'Card number',
+        'card_expiry' => 'Expiration date',
         'verify_license_title' => 'Verify License',
         'upload_license_photos' => 'Upload two photos of your driver\'s license:',
         'front_photo_instruction' => 'Front of the license with photo and name visible.',

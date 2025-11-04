@@ -2,6 +2,7 @@
 
 require_once MODELS_PATH . '/User.php';
 require_once CONTROLLERS_PATH . '/auth/AuthController.php';
+require_once __DIR__ . '/../../database/Database.php';
 
 class ProfileController {
     private $userModel;
@@ -163,4 +164,120 @@ class ProfileController {
         $_SESSION['error'] = 'Error updating language';
         return Router::redirect('/perfil');
     }
+    
+    /**
+     * Afegir un nou mètode de pagament
+     * IMPORTANT: Aquesta implementació és un exemple simplificat
+     * En producció, usa un gateway de pagament (Stripe, Adyen, etc.)
+     */
+    public function addPaymentMethod() {
+        // Verificar autenticació
+        $userId = AuthController::requireAuth();
+        
+        // Obtenir dades del formulari
+        $cardNumber = $_POST['card_number'] ?? '';
+        $expiry = $_POST['expiry'] ?? '';
+        $cvc = $_POST['cvc'] ?? '';
+        
+        // Validació bàsica
+        $cardNumber = preg_replace('/\s+/', '', $cardNumber);
+        
+        if (strlen($cardNumber) < 13 || strlen($cardNumber) > 19) {
+            $_SESSION['error'] = 'Número de targeta invàlid';
+            return Router::redirect('/pagaments');
+        }
+        
+        if (empty($expiry)) {
+            $_SESSION['error'] = 'Data d\'expiració requerida';
+            return Router::redirect('/pagaments');
+        }
+        
+        if (!preg_match('/^\d{3,4}$/', $cvc)) {
+            $_SESSION['error'] = 'CVC invàlid';
+            return Router::redirect('/pagaments');
+        }
+        
+        // Extreure dades per guardar (només metadades segures)
+        $last4 = substr($cardNumber, -4);
+        $brand = $this->detectCardBrand($cardNumber);
+        
+        // Parsejar data d'expiració (format YYYY-MM)
+        $expiryParts = explode('-', $expiry);
+        $expMonth = isset($expiryParts[1]) ? (int)$expiryParts[1] : 0;
+        $expYear = isset($expiryParts[0]) ? (int)$expiryParts[0] : 0;
+        
+        // ⚠️ IMPORTANT: En producció, aquí hauries de:
+        // 1. Enviar les dades a Stripe/Adyen/etc i obtenir un token
+        // 2. Xifrar el token abans de guardar-lo
+        // 3. MAI guardar el número complet de targeta ni el CVC
+        
+        // Per ara, creem un token simulat (NO FER EN PRODUCCIÓ)
+        $simulatedToken = 'tok_' . bin2hex(random_bytes(16));
+        
+        try {
+            $db = Database::getMariaDBConnection();
+            
+            // Comprovar si és el primer mètode de pagament
+            $stmt = $db->prepare("SELECT COUNT(*) as count FROM payment_methods WHERE user_id = ?");
+            $stmt->bind_param("i", $userId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            $isFirst = $row['count'] == 0;
+            $stmt->close();
+            
+            // Inserir el mètode de pagament
+            $stmt = $db->prepare("
+                INSERT INTO payment_methods 
+                (user_id, provider, provider_token, last4, brand, exp_month, exp_year, is_default)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            ");
+            
+            $provider = 'manual';
+            $isDefaultInt = $isFirst ? 1 : 0;
+            $stmt->bind_param(
+                "isssssii",
+                $userId,
+                $provider,
+                $simulatedToken,
+                $last4,
+                $brand,
+                $expMonth,
+                $expYear,
+                $isDefaultInt
+            );
+            
+            $stmt->execute();
+            $stmt->close();
+            
+            $_SESSION['success'] = 'Mètode de pagament afegit correctament';
+            return Router::redirect('/pagaments');
+            
+        } catch (Exception $e) {
+            error_log('Error adding payment method: ' . $e->getMessage());
+            $_SESSION['error'] = 'Error al guardar el mètode de pagament';
+            return Router::redirect('/pagaments');
+        }
+    }
+    
+    /**
+     * Detectar la marca de la targeta pel número
+     */
+    private function detectCardBrand($cardNumber) {
+        $patterns = [
+            '/^4/' => 'Visa',
+            '/^5[1-5]/' => 'Mastercard',
+            '/^3[47]/' => 'American Express',
+            '/^6(?:011|5)/' => 'Discover',
+        ];
+        
+        foreach ($patterns as $pattern => $brand) {
+            if (preg_match($pattern, $cardNumber)) {
+                return $brand;
+            }
+        }
+        
+        return 'Unknown';
+    }
 }
+
