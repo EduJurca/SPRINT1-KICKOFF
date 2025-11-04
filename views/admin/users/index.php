@@ -1,33 +1,38 @@
-<?php require_once VIEWS_PATH . '/admin/admin-header.php'; ?>
+<?php 
+$currentPage = 'users';
+require_once VIEWS_PATH . '/admin/admin-header.php'; 
+?>
 
-<div class="container mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">Gestió d'Usuaris</h1>
-        <?php if (can('users.create')): ?>
-        <a href="/admin/users/create" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
-            <i class="fas fa-plus mr-2"></i>Nou Usuari
-        </a>
-        <?php endif; ?>
+<div class="p-10">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-2xl font-semibold">Gestió d'Usuaris</h1>
+        <div class="flex gap-3">
+            <?php if (can('users.create')): ?>
+            <a href="/admin/users/create" class="bg-blue-700 hover:bg-blue-800 text-white px-6 py-2 rounded-lg text-sm font-medium">
+                <i class="fas fa-plus mr-2"></i>Nou Usuari
+            </a>
+            <?php endif; ?>
+        </div>
     </div>
 
     <!-- Missatges -->
     <?php showMessages(); ?>
 
     <!-- Cerca -->
-    <div class="mb-4">
-        <form method="GET" action="/admin/users" class="flex gap-2">
+    <div class="flex gap-2 bg-gray-100 p-1 rounded-lg mb-6 shadow-md">
+        <form method="GET" action="/admin/users" class="flex gap-2 w-full p-2">
             <input 
                 type="text" 
                 name="search" 
                 placeholder="Cercar per username, email o nom..." 
                 value="<?= htmlspecialchars($search ?? '') ?>"
-                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 bg-white"
             >
-            <button type="submit" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg">
+            <button type="submit" class="px-6 py-2 rounded-md text-sm bg-gray-900 text-white hover:bg-gray-700 transition-colors">
                 <i class="fas fa-search"></i> Cercar
             </button>
             <?php if (!empty($search)): ?>
-                <a href="/admin/users" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-2 rounded-lg">
+                <a href="/admin/users" class="px-6 py-2 rounded-md text-sm text-gray-600 hover:bg-gray-200 transition-colors">
                     Netejar
                 </a>
             <?php endif; ?>
@@ -35,19 +40,20 @@
     </div>
 
     <!-- Taula -->
-    <div class="bg-white rounded-lg shadow overflow-hidden">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Username</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nom Complet</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Rol</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data Creació</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Accions</th>
-                </tr>
-            </thead>
+    <div class="bg-gray-100 rounded-xl p-6 shadow-md">
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom Complet</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rol</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data Creació</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Accions</th>
+                    </tr>
+                </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 <?php if (empty($users)): ?>
                     <tr>

@@ -44,10 +44,11 @@ $currentPage = $currentPage ?? '';
     <!-- Sidebar de navegación -->
     <div class="flex h-screen">
         <!-- Sidebar -->
-        <aside class="w-64 bg-[#0A2342] text-white flex flex-col shadow-lg">
+        <aside class="w-60 bg-sky-50 flex flex-col shadow-lg">
             <!-- Logo -->
-            <div class="p-6 border-b border-[#00C853] flex items-center gap-3">
-                <div class="bg-[#00C853] rounded-full w-10 h-10 flex items-center justify-center text-white text-xl font-bold">VC</div>
+            <div class="px-4 py-5">
+                <div class="flex items-center gap-3">
+                    <img src="/assets/images/logo.png" alt="Voltacar Logo" class="w-8 h-8">
                 <div>
                     <h1 class="text-2xl font-bold tracking-wide">VoltiaCar</h1>
                     <p class="text-sm text-[#00C853] mt-1">Panell d'administració</p>
@@ -55,45 +56,30 @@ $currentPage = $currentPage ?? '';
             </div>
             
             <!-- Navegación -->
-            <nav class="flex-1 overflow-y-auto py-4">
-                <ul class="space-y-1 px-3">
-                    <li>
-                        <a href="/admin/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors <?php echo $currentPage === 'dashboard' ? 'bg-blue-700' : ''; ?>">
-                            <i class="fas fa-home"></i>
-                            <span>Inici</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/admin/users" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors <?php echo $currentPage === 'users' ? 'bg-blue-700' : ''; ?>">
-                            <i class="fas fa-users"></i>
-                            <span>Usuaris</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/admin/vehicles" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors <?php echo $currentPage === 'vehicles' ? 'bg-blue-700' : ''; ?>">
-                            <i class="fas fa-car"></i>
-                            <span>Vehicles</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/admin/bookings" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors <?php echo $currentPage === 'bookings' ? 'bg-blue-700' : ''; ?>">
-                            <i class="fas fa-calendar-check"></i>
-                            <span>Reserves</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/admin/incidencies" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors <?php echo $currentPage === 'incidencies' ? 'bg-blue-700' : ''; ?>">
-                            <i class="fas fa-exclamation-circle"></i>
-                            <span>Incidències</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/admin/settings" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors <?php echo $currentPage === 'settings' ? 'bg-blue-700' : ''; ?>">
-                            <i class="fas fa-cog"></i>
-                            <span>Configuració</span>
-                        </a>
-                    </li>
-                </ul>
+                        <nav class="flex-1">
+                <div class="mb-6">
+                    <div class="px-4 py-2 text-xs uppercase text-gray-600 font-semibold">General</div>
+                    <a href="/admin/dashboard" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm text-gray-900 hover:bg-blue-700 hover:text-gray-100 <?php echo $currentPage === 'dashboard' ? 'bg-blue-900 text-white' : ''; ?>">
+                        <img src="/assets/images/dashboard.png" alt="Dashboard" class="w-4 h-4 opacity-100"> 
+                        Dashboard
+                    </a>
+                </div>
+                
+                <div class="mb-6">
+                    <div class="px-4 py-2 text-xs uppercase text-gray-600 font-semibold">Pages</div>
+                    <a href="/admin/users" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm text-gray-900 hover:bg-blue-700 hover:text-gray-100 <?php echo $currentPage === 'users' ? 'bg-blue-900 text-white' : ''; ?>">
+                        <i class="fa fa-users"></i> Usuaris
+                    </a>
+                    <a href="#" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm text-gray-900 hover:bg-blue-700 hover:text-gray-100">
+                        <i class="fa fa-charging-station"></i> Punts de carrega
+                    </a>
+                    <a href="#" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm text-gray-900 hover:bg-blue-700 hover:text-gray-100">
+                        <i class="fa fa-car"></i> Vehicles
+                    </a>
+                    <a href="#" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm text-gray-900 hover:bg-blue-700 hover:text-gray-100">
+                        <i class="fa fa-flag"></i> Incidencies
+                    </a>
+                </div>
             </nav>
             
             <!-- Usuario admin y logout -->
