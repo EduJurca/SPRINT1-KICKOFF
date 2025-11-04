@@ -62,7 +62,7 @@ $currentPage = $currentPage ?? '';
                     <li>
                         <a href="/admin/users" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors <?php echo $currentPage === 'users' ? 'bg-blue-700' : ''; ?>">
                             <i class="fas fa-users"></i>
-                            <span>Usuaris</span>
+                            <span>Users</span>
                         </a>
                     </li>
                     <li>
@@ -72,21 +72,27 @@ $currentPage = $currentPage ?? '';
                         </a>
                     </li>
                     <li>
+                        <a href="/admin/charging-stations" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors <?php echo $currentPage === 'charging' ? 'bg-blue-700' : ''; ?>">
+                            <i class="fas fa-charging-station"></i>
+                            <span>Charging stations</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="/admin/bookings" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors <?php echo $currentPage === 'bookings' ? 'bg-blue-700' : ''; ?>">
                             <i class="fas fa-calendar-check"></i>
-                            <span>Reserves</span>
+                            <span>Bookings</span>
                         </a>
                     </li>
                     <li>
                         <a href="/admin/reports" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors <?php echo $currentPage === 'reports' ? 'bg-blue-700' : ''; ?>">
                             <i class="fas fa-chart-bar"></i>
-                            <span>Informes</span>
+                            <span>Reports</span>
                         </a>
                     </li>
                     <li>
                         <a href="/admin/settings" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors <?php echo $currentPage === 'settings' ? 'bg-blue-700' : ''; ?>">
                             <i class="fas fa-cog"></i>
-                            <span>Configuració</span>
+                            <span>S</span>
                         </a>
                     </li>
                 </ul>

@@ -6,8 +6,9 @@
 
 $title = ($station['name'] ?? 'Charging Station') . ' - VoltiaCar';
 $pageTitle = $station['name'] ?? 'Charging Station';
+$currentPage = 'charging';
 
-require_once __DIR__ . '/../public/layouts/header.php';
+require_once __DIR__ . '/../admin/admin-header.php';
 
 // Clear any session messages
 if (isset($_SESSION['error'])) {
@@ -134,7 +135,7 @@ if (isset($_SESSION['success'])) {
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
                 <h1 class="text-3xl font-bold text-gray-900 mb-2">
-                    <i class="fas fa-charging-station text-blue-600"></i>
+                    <i class="fas fa-charging-station "></i>
                     <?= htmlspecialchars($station['name']) ?>
                 </h1>
                 <p class="text-gray-600">
@@ -176,13 +177,13 @@ if (isset($_SESSION['success'])) {
             <!-- Map -->
             <div class="info-card">
                 <h2 class="text-xl font-bold text-gray-900 mb-4">
-                    <i class="fas fa-map text-blue-600"></i> Location
+                    <i class="fas fa-map"></i> Location
                 </h2>
                 <div id="station-map"></div>
                 <div class="mt-4 flex gap-2">
                     <a href="https://www.google.com/maps/dir/?api=1&destination=<?= $station['latitude'] ?>,<?= $station['longitude'] ?>" 
                        target="_blank"
-                       class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:text-white transition text-center">
+                       class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700  transition text-center">
                         <i class="fas fa-directions"></i> Get Directions
                     </a>
                     <a href="https://www.openstreetmap.org/?mlat=<?= $station['latitude'] ?>&mlon=<?= $station['longitude'] ?>&zoom=15" 
@@ -383,4 +384,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<?php require_once __DIR__ . '/../public/layouts/footer.php'; ?>
+<?php require_once __DIR__ . '/../admin/admin-footer.php'; ?>

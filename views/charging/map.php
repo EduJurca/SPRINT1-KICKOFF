@@ -6,8 +6,9 @@
 
 $title = 'Charging Stations Map - VoltiaCar';
 $pageTitle = 'Charging Stations';
+$currentPage = 'charging';
 
-require_once __DIR__ . '/../public/layouts/header.php';
+require_once __DIR__ . '/../admin/admin-header.php';
 
 // Clear any error messages that might be in session
 if (isset($_SESSION['error'])) {
@@ -137,7 +138,7 @@ if (isset($_SESSION['success'])) {
     <div class="mb-6 flex justify-between items-start">
         <div>
             <h1 class="text-3xl font-bold text-gray-900 mb-2">
-                <i class="fas fa-charging-station text-blue-600"></i>
+                <i class="fas fa-charging-station"></i>
                 Charging Stations Map
             </h1>
             <p class="text-gray-600">Find the nearest charging station for your electric vehicle</p>
@@ -145,9 +146,9 @@ if (isset($_SESSION['success'])) {
         
         <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1): ?>
         <a href="/admin/charging-stations" 
-           class="bg-blue-600 hover:bg-blue-700 text-white hover:text-white px-6 py-3 rounded-lg flex items-center gap-2 transition shadow-lg">
-            <i class="fas fa-cog"></i>
-            Manage Stations
+           class="bg-gray-600 hover:bg-gray-700 text-white hover:text-white px-6 py-3 rounded-lg flex items-center gap-2 transition shadow-lg">
+            <span class="text-xl">←</span>
+            Back to List
         </a>
         <?php endif; ?>
     </div>
@@ -460,4 +461,4 @@ document.getElementById('filter-status').addEventListener('change', filterStatio
 document.addEventListener('DOMContentLoaded', initMap);
 </script>
 
-<?php require_once __DIR__ . '/../public/layouts/footer.php'; ?>
+<?php require_once __DIR__ . '/../admin/admin-footer.php'; ?>

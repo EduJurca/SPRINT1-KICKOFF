@@ -33,7 +33,7 @@ require_once __DIR__ . '/../admin-header.php';
 <!-- Header Actions -->
 <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-bold text-gray-900">
-        <i class="fas fa-charging-station text-blue-600"></i>
+        <i class="fas fa-charging-station"></i>
         Charging Stations Management
     </h1>
     <div class="flex gap-3">
@@ -109,7 +109,6 @@ require_once __DIR__ . '/../admin-header.php';
         <table class="w-full">
             <thead class="bg-gray-50">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">City</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Address</th>
@@ -130,7 +129,7 @@ require_once __DIR__ . '/../admin-header.php';
                 <?php else: ?>
                     <?php foreach ($stations as $station): ?>
                     <tr class="hover:bg-gray-50 transition">
-                        <td class="px-6 py-4 text-sm text-gray-900"><?= $station['id'] ?></td>
+                        
                         <td class="px-6 py-4">
                             <div class="text-sm font-medium text-gray-900"><?= htmlspecialchars($station['name']) ?></div>
                             <div class="text-sm text-gray-500"><?= htmlspecialchars($station['operator'] ?? 'VoltiaCar') ?></div>
