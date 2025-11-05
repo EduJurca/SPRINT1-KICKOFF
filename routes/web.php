@@ -60,11 +60,11 @@ Router::get('/historial', function() {
 });
 
 // Pagaments
-Router::get('/pagaments', function() {
-    Router::view('public.profile.pagaments');
-});
+Router::get('/pagaments', ['ProfileController', 'showPayments']);
 
 Router::post('/perfil/pagaments/add', ['ProfileController', 'addPaymentMethod']);
+
+Router::post('/perfil/pagaments/delete/{id}', ['ProfileController', 'deletePaymentMethod']);
 
 // Premium
 Router::get('/premium', function() {
