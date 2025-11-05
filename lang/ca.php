@@ -243,6 +243,60 @@ return [
         'release_warning' => 'Estàs segur que vols alliberar aquest vehicle? Aquesta acció no es pot desfer.',
         'confirm' => 'Confirmar',
         'info_location' => 'Informació i Ubicació',
+        'vehicles' => [
+            'title' => 'Gestió de Vehicles',
+            'new' => 'Nou Vehicle',
+            'edit' => 'Editar Vehicle',
+            'back' => '← Tornar al llistat',
+            'new_button' => 'Nou Vehicle',
+            'filter' => 'Filtrar',
+            'clear' => 'Netejar',
+            'no_vehicles' => 'No hi ha vehicles registrats',
+            'create_first' => '+ Crear el primer',
+            'table' => [
+                'id' => 'ID',
+                'license_plate' => 'Matrícula',
+                'vehicle' => 'Vehicle',
+                'status' => 'Estat',
+                'battery' => 'Bateria',
+                'price_per_min' => 'Preu/min',
+                'actions' => 'Accions'
+            ],
+            'buttons' => [
+                'create' => 'Crear Vehicle',
+                'save' => 'Guardar Canvis',
+                'cancel' => 'Cancel·lar',
+                'edit' => 'Editar',
+                'view' => 'Veure',
+                'delete' => 'Eliminar'
+            ],
+            'cards' => [
+                'status' => 'Estat',
+                'battery' => 'Bateria',
+                'price' => 'Preu/min'
+            ],
+            'info' => [
+                'vehicle_information' => 'Informació del Vehicle',
+                'location' => 'Ubicació',
+                'image' => 'Imatge'
+            ],
+            'labels' => [
+                'id' => 'ID',
+                'plate' => 'Matrícula',
+                'brand' => 'Marca',
+                'model' => 'Model',
+                'year' => 'Any',
+                'is_accessible' => 'Vehicle accessible',
+                'battery_level' => 'Nivell de Bateria (%)',
+                'price_per_minute' => 'Preu per Minut (€)',
+                'latitude' => 'Latitud',
+                'longitude' => 'Longitud',
+                'image_url' => 'URL de la Imatge'
+            ]
+                ,
+                'confirm_delete' => 'Estàs segur que vols eliminar el vehicle :plate? Aquesta acció no es pot desfer.',
+                'showing' => 'Mostrant :count vehicle(s)'
+        ],
     ],
     'profile' => [
         'page_title' => 'SIMS - Perfil',

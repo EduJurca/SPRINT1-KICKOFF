@@ -28,9 +28,9 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
-                Volver al listado
+                <?= __('admin.vehicles.back') ?>
             </a>
-            <h1 class="text-3xl font-bold text-gray-900">Editar Vehículo</h1>
+            <h1 class="text-3xl font-bold text-gray-900"><?= __('admin.vehicles.edit') ?></h1>
         </div>
 
         <!-- Mostrar errores -->
@@ -58,7 +58,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                         
                         <div>
                             <label for="plate" class="block text-sm font-medium text-gray-700 mb-2">
-                                Matrícula <span class="text-red-500">*</span>
+                                <?= __('admin.vehicles.labels.plate') ?> <span class="text-red-500">*</span>
                             </label>
                             <input type="text" id="plate" name="plate" required
                                    value="<?= htmlspecialchars($oldData['plate'] ?? $oldData['license_plate'] ?? '') ?>"
@@ -68,7 +68,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                         
                         <div>
                             <label for="year" class="block text-sm font-medium text-gray-700 mb-2">
-                                Año <span class="text-red-500">*</span>
+                                <?= __('admin.vehicles.labels.year') ?> <span class="text-red-500">*</span>
                             </label>
                             <input type="number" id="year" name="year" required
                                    value="<?= htmlspecialchars($oldData['year'] ?? '') ?>"
@@ -78,7 +78,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                         
                         <div>
                             <label for="brand" class="block text-sm font-medium text-gray-700 mb-2">
-                                Marca <span class="text-red-500">*</span>
+                                <?= __('admin.vehicles.labels.brand') ?> <span class="text-red-500">*</span>
                             </label>
                             <input type="text" id="brand" name="brand" required
                                    value="<?= htmlspecialchars($oldData['brand'] ?? '') ?>"
@@ -88,7 +88,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                         
                         <div>
                             <label for="model" class="block text-sm font-medium text-gray-700 mb-2">
-                                Modelo <span class="text-red-500">*</span>
+                                <?= __('admin.vehicles.labels.model') ?> <span class="text-red-500">*</span>
                             </label>
                             <input type="text" id="model" name="model" required
                                    value="<?= htmlspecialchars($oldData['model'] ?? '') ?>"
@@ -98,7 +98,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                         
                         <div>
                             <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
-                                Estado <span class="text-red-500">*</span>
+                                <?= __('admin.vehicles.table.status') ?> <span class="text-red-500">*</span>
                             </label>
                             <select id="status" name="status" required
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
@@ -119,7 +119,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                         
                         <div>
                             <label for="battery_level" class="block text-sm font-medium text-gray-700 mb-2">
-                                Nivel de Batería (%)
+                                <?= __('admin.vehicles.labels.battery_level') ?>
                             </label>
                             <input type="number" id="battery_level" name="battery_level"
                                    value="<?= htmlspecialchars($oldData['battery_level'] ?? $oldData['battery'] ?? '100') ?>"
@@ -129,7 +129,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                         
                         <div>
                             <label for="price_per_minute" class="block text-sm font-medium text-gray-700 mb-2">
-                                Precio por Minuto (€)
+                                <?= __('admin.vehicles.labels.price_per_minute') ?>
                             </label>
                             <input type="number" id="price_per_minute" name="price_per_minute"
                                    value="<?= htmlspecialchars($oldData['price_per_minute'] ?? '0.35') ?>"
@@ -143,7 +143,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                                        <?= !empty($oldData['is_accessible']) ? 'checked' : '' ?>
                                        class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
                                 <span class="ml-3 text-sm font-medium text-gray-700">
-                                    Vehículo accesible (adaptado para personas con movilidad reducida)
+                                    <?= __('admin.vehicles.labels.is_accessible') ?>
                                 </span>
                             </label>
                         </div>
@@ -171,7 +171,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                         
                         <div>
                             <label for="latitude" class="block text-sm font-medium text-gray-700 mb-2">
-                                Latitud
+                                <?= __('admin.vehicles.labels.latitude') ?>
                             </label>
                             <input type="number" id="latitude" name="latitude"
                                    value="<?= htmlspecialchars($oldData['latitude'] ?? $oldData['location']['lat'] ?? '40.7117') ?>"
@@ -183,7 +183,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                         
                         <div>
                             <label for="longitude" class="block text-sm font-medium text-gray-700 mb-2">
-                                Longitud
+                                <?= __('admin.vehicles.labels.longitude') ?>
                             </label>
                             <input type="number" id="longitude" name="longitude"
                                    value="<?= htmlspecialchars($oldData['longitude'] ?? $oldData['location']['lng'] ?? '0.5783') ?>"
@@ -197,10 +197,10 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
 
                 <!-- Imagen -->
                 <div class="pb-6">
-                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Imagen (opcional)</h2>
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4"><?= __('admin.vehicles.info.image') ?> (opcional)</h2>
                     <div>
                         <label for="image_url" class="block text-sm font-medium text-gray-700 mb-2">
-                            URL de la Imagen
+                            <?= __('admin.vehicles.labels.image_url') ?>
                         </label>
                         <input type="url" id="image_url" name="image_url"
                                value="<?= htmlspecialchars($oldData['image_url'] ?? '') ?>"
@@ -212,13 +212,13 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                 <!-- Botones -->
                 <div class="flex items-center justify-end gap-4 pt-6 border-t border-gray-200">
                     <a href="/admin/vehicles" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition">
-                        Cancelar
+                        <?= __('admin.vehicles.buttons.cancel') ?>
                     </a>
                     <button type="submit" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition flex items-center gap-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                         </svg>
-                        Guardar Cambios
+                        <?= __('admin.vehicles.buttons.save') ?>
                     </button>
                 </div>
             </form>

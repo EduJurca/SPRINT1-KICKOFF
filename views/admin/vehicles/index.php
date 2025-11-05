@@ -20,13 +20,13 @@ unset($_SESSION['success'], $_SESSION['error']);
         <div class="mb-8">
             <div class="flex justify-between items-center">
                 <div>
-                    <h1 class="text-3xl font-bold text-gray-900">Gestión de Vehículos</h1>
+                    <h1 class="text-3xl font-bold text-gray-900"><?= __('admin.vehicles.title') ?></h1>
                 </div>
                 <a href="/admin/vehicles/create" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                     </svg>
-                    Nuevo Vehículo
+                    <?= __('admin.vehicles.new_button') ?>
                 </a>
             </div>
         </div>
@@ -71,7 +71,7 @@ unset($_SESSION['success'], $_SESSION['error']);
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
-                        Filtrar
+                        <?= __('admin.vehicles.filter') ?>
                     </button>
                     <button type="button" onclick="window.location.href='/admin/vehicles'" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-semibold transition">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -88,13 +88,13 @@ unset($_SESSION['success'], $_SESSION['error']);
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Matrícula</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vehículo</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Batería</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Precio/min</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?= __('admin.vehicles.table.id') ?></th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?= __('admin.vehicles.table.license_plate') ?></th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?= __('admin.vehicles.table.vehicle') ?></th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?= __('admin.vehicles.table.status') ?></th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?= __('admin.vehicles.table.battery') ?></th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?= __('admin.vehicles.table.price_per_min') ?></th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"><?= __('admin.vehicles.table.actions') ?></th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -105,8 +105,8 @@ unset($_SESSION['success'], $_SESSION['error']);
                                         <svg class="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                         </svg>
-                                        <p class="text-lg font-semibold">No hay vehículos registrados</p>
-                                        <a href="/admin/vehicles/create" class="text-blue-600 hover:text-blue-700 font-medium">+ Crear el primero</a>
+                                        <p class="text-lg font-semibold"><?= __('admin.vehicles.no_vehicles') ?></p>
+                                        <a href="/admin/vehicles/create" class="text-blue-600 hover:text-blue-700 font-medium"><?= __('admin.vehicles.create_first') ?></a>
                                     </div>
                                 </td>
                             </tr>
@@ -158,19 +158,19 @@ unset($_SESSION['success'], $_SESSION['error']);
                                         <?= number_format($vehicle['price_per_minute'], 2) ?>€
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                                        <a href="/admin/vehicles/<?= $vehicle['id'] ?>" class="text-gray-600 hover:text-gray-900" title="Ver detalles">
+                                        <a href="/admin/vehicles/<?= $vehicle['id'] ?>" class="text-gray-600 hover:text-gray-900" title="<?= __('admin.vehicles.buttons.view') ?>">
                                             <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                             </svg>
                                         </a>
-                                        <a href="/admin/vehicles/<?= $vehicle['id'] ?>/edit" class="text-gray-600 hover:text-gray-900" title="Editar">
+                                        <a href="/admin/vehicles/<?= $vehicle['id'] ?>/edit" class="text-gray-600 hover:text-gray-900" title="<?= __('admin.vehicles.buttons.edit') ?>">
                                             <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                             </svg>
                                         </a>
-                                        <button onclick="confirmDelete(<?= $vehicle['id'] ?>, '<?= htmlspecialchars($vehicle['license_plate'] ?? $vehicle['plate']) ?>')" 
-                                                class="text-gray-600 hover:text-red-600" title="Eliminar">
+                    <button onclick="confirmDelete(<?= $vehicle['id'] ?>, '<?= htmlspecialchars($vehicle['license_plate'] ?? $vehicle['plate']) ?>')" 
+                        class="text-gray-600 hover:text-red-600" title="<?= __('admin.vehicles.buttons.delete') ?>">
                                             <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                             </svg>
@@ -186,7 +186,7 @@ unset($_SESSION['success'], $_SESSION['error']);
             <?php if (!empty($vehicles)): ?>
                 <div class="bg-gray-50 px-6 py-3 border-t border-gray-200">
                     <p class="text-sm text-gray-600">
-                        Mostrando <span class="font-semibold"><?= count($vehicles) ?></span> vehículo(s)
+                        <?= __('admin.vehicles.showing', ['count' => count($vehicles)]) ?>
                     </p>
                 </div>
             <?php endif; ?>
@@ -200,8 +200,10 @@ unset($_SESSION['success'], $_SESSION['error']);
 </form>
 
 <script>
+const confirmTemplateList = <?= json_encode(__('admin.vehicles.confirm_delete')) ?>;
 function confirmDelete(id, plate) {
-    if (confirm(`¿Estás seguro de eliminar el vehículo ${plate}?`)) {
+    const msg = confirmTemplateList.replace(':plate', plate);
+    if (confirm(msg)) {
         const form = document.getElementById('deleteForm');
         form.action = `/admin/vehicles/${id}`;
         form.submit();

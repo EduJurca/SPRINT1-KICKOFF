@@ -26,7 +26,7 @@ unset($_SESSION['success']);
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
-                Volver al listado
+                <?= __('admin.vehicles.back') ?>
             </a>
             <div class="flex justify-between items-start">
                 <div>
@@ -35,19 +35,19 @@ unset($_SESSION['success']);
                     </h1>
                 </div>
                 <div class="flex gap-3">
-                          <a href="/admin/vehicles/<?= $vehicle['id'] ?>/edit" 
-                              class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition">
+                        <a href="/admin/vehicles/<?= $vehicle['id'] ?>/edit" 
+                                  class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                         </svg>
-                        Editar
+                        <?= __('admin.vehicles.buttons.edit') ?>
                     </a>
                     <button onclick="confirmDelete()" 
                             class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                         </svg>
-                        Eliminar
+                        <?= __('admin.vehicles.buttons.delete') ?>
                     </button>
                 </div>
             </div>
@@ -66,7 +66,7 @@ unset($_SESSION['success']);
             <!-- Estado -->
             <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-sm font-medium text-gray-500">Estado</h3>
+                    <h3 class="text-sm font-medium text-gray-500"><?= __('admin.vehicles.cards.status') ?></h3>
                     <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
@@ -95,7 +95,7 @@ unset($_SESSION['success']);
             <!-- Batería -->
             <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-sm font-medium text-gray-500">Batería</h3>
+                    <h3 class="text-sm font-medium text-gray-500"><?= __('admin.vehicles.cards.battery') ?></h3>
                     <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                     </svg>
@@ -109,7 +109,7 @@ unset($_SESSION['success']);
             <!-- Precio -->
             <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-sm font-medium text-gray-500">Precio/minuto</h3>
+                    <h3 class="text-sm font-medium text-gray-500"><?= __('admin.vehicles.cards.price') ?></h3>
                     <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
@@ -127,7 +127,7 @@ unset($_SESSION['success']);
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    Información del Vehículo
+                    <?= __('admin.vehicles.info.vehicle_information') ?>
                 </h2>
                 <dl class="space-y-3">
                     <div class="flex justify-between py-2 border-b border-gray-100">
@@ -135,23 +135,23 @@ unset($_SESSION['success']);
                         <dd class="text-sm text-gray-900 font-semibold">#<?= $vehicle['id'] ?></dd>
                     </div>
                     <div class="flex justify-between py-2 border-b border-gray-100">
-                        <dt class="text-sm font-medium text-gray-500">Matrícula</dt>
+                        <dt class="text-sm font-medium text-gray-500"><?= __('admin.vehicles.labels.plate') ?></dt>
                         <dd class="text-sm text-gray-900 font-semibold"><?= htmlspecialchars($vehicle['license_plate'] ?? $vehicle['plate'] ?? 'N/A') ?></dd>
                     </div>
                     <div class="flex justify-between py-2 border-b border-gray-100">
-                        <dt class="text-sm font-medium text-gray-500">Marca</dt>
+                        <dt class="text-sm font-medium text-gray-500"><?= __('admin.vehicles.labels.brand') ?></dt>
                         <dd class="text-sm text-gray-900"><?= htmlspecialchars($vehicle['brand']) ?></dd>
                     </div>
                     <div class="flex justify-between py-2 border-b border-gray-100">
-                        <dt class="text-sm font-medium text-gray-500">Modelo</dt>
+                        <dt class="text-sm font-medium text-gray-500"><?= __('admin.vehicles.labels.model') ?></dt>
                         <dd class="text-sm text-gray-900"><?= htmlspecialchars($vehicle['model']) ?></dd>
                     </div>
                                         <div class="flex justify-between py-2 border-b border-gray-100">
-                        <dt class="text-sm font-medium text-gray-500">Año</dt>
+                        <dt class="text-sm font-medium text-gray-500"><?= __('admin.vehicles.labels.year') ?></dt>
                         <dd class="text-sm text-gray-900"><?= $vehicle['year'] ?></dd>
                     </div>
                     <div class="flex justify-between py-2">
-                        <dt class="text-sm font-medium text-gray-500">Adaptado PMR</dt>
+                        <dt class="text-sm font-medium text-gray-500"><?= __('admin.vehicles.labels.is_accessible') ?></dt>
                         <dd class="text-sm text-gray-900">
                             <?= $vehicle['is_accessible'] ? 'Sí' : 'No' ?>
                         </dd>
@@ -208,8 +208,11 @@ unset($_SESSION['success']);
         crossorigin=""></script>
 
 <script>
+const confirmTemplate = <?= json_encode(__('admin.vehicles.confirm_delete')) ?>;
 function confirmDelete() {
-    if (confirm('¿Estás seguro de eliminar este vehículo?\nEsta acción no se puede deshacer.')) {
+    const plate = <?= json_encode(htmlspecialchars($vehicle['license_plate'] ?? $vehicle['plate'] ?? '')) ?>;
+    const msg = confirmTemplate.replace(':plate', plate);
+    if (confirm(msg)) {
         document.getElementById('deleteForm').submit();
     }
 }

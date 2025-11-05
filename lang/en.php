@@ -243,6 +243,60 @@ return [
         'release_warning' => 'Are you sure you want to release this vehicle? This action cannot be undone.',
         'confirm' => 'Confirm',
         'info_location' => 'Information and Location',
+        'vehicles' => [
+            'title' => 'Vehicle Management',
+            'new' => 'New Vehicle',
+            'edit' => 'Edit Vehicle',
+            'back' => '← Back to list',
+            'new_button' => 'New Vehicle',
+            'filter' => 'Filter',
+            'clear' => 'Clear',
+            'no_vehicles' => 'No vehicles registered',
+            'create_first' => '+ Create the first',
+            'table' => [
+                'id' => 'ID',
+                'license_plate' => 'License Plate',
+                'vehicle' => 'Vehicle',
+                'status' => 'Status',
+                'battery' => 'Battery',
+                'price_per_min' => 'Price/min',
+                'actions' => 'Actions'
+            ],
+            'buttons' => [
+                'create' => 'Create Vehicle',
+                'save' => 'Save Changes',
+                'cancel' => 'Cancel',
+                'edit' => 'Edit',
+                'view' => 'View',
+                'delete' => 'Delete'
+            ],
+            'cards' => [
+                'status' => 'Status',
+                'battery' => 'Battery',
+                'price' => 'Price/min'
+            ],
+            'info' => [
+                'vehicle_information' => 'Vehicle Information',
+                'location' => 'Location',
+                'image' => 'Image'
+            ],
+            'labels' => [
+                'id' => 'ID',
+                'plate' => 'License Plate',
+                'brand' => 'Brand',
+                'model' => 'Model',
+                'year' => 'Year',
+                'is_accessible' => 'Accessible vehicle',
+                'battery_level' => 'Battery Level (%)',
+                'price_per_minute' => 'Price per Minute (€)',
+                'latitude' => 'Latitude',
+                'longitude' => 'Longitude',
+                'image_url' => 'Image URL'
+            ]
+            ,
+            'confirm_delete' => 'Are you sure you want to delete the vehicle :plate? This action cannot be undone.',
+            'showing' => 'Showing :count vehicle(s)'
+        ],
     ],
     'profile' => [
         'page_title' => 'SIMS - Profile',
