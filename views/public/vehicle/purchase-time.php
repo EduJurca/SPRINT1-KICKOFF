@@ -4,261 +4,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo __('purchase.page_title'); ?></title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="/assets/js/toast.js" defer></script>
-    <link rel="stylesheet" href="../../css/custom.css">
+    <title><?php echo __('vehicle.page_title'); ?></title>
 
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+
+    <link rel="stylesheet" href="/assets/css/custom.css">
+    <link rel="stylesheet" href="/assets/css/accessibility.css">
+    <link rel="stylesheet" href="/assets/css/localitzar-vehicle.css">
+    <link rel="stylesheet" href="/assets/css/vehicle-claim-modal.css">
+
+    <script src="/assets/css/tailwind.config.js"></script>
+    <script>
+        (function (d) {
+            var s = d.createElement("script");
+            s.setAttribute("data-account", "RrwQjeYdrh");
+            s.src = "https://cdn.userway.org/widget.js";
+            (d.body || d.head).appendChild(s);
+        })(document);
+    </script>
     <style>
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
+        #map,
+        #map-desktop {
+            height: 100%;
+            width: 100%;
+            z-index: 1;
         }
 
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+        .leaflet-control-zoom {
+            display: none !important;
         }
     </style>
 </head>
 
-<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
-    <div
-        class="p-5 rounded-2xl shadow-inner bg-white w-full max-w-sm md:max-w-3xl lg:max-w-4xl flex flex-col relative space-y-6">
-        <header class="grid grid-cols-3 items-center mb-6 w-full">
-            <div class="text-left">
-                <a href="/dashboard" class="text-[#1565C0] font-semibold hover:underline"><?php echo __('purchase.back'); ?></a>
-            </div>
-            <h1 class="text-2xl font-bold text-gray-900 text-center"><?php echo __('purchase.purchase_time'); ?></h1>
-            <div class="flex justify-end">
-                <div class="rounded-full flex items-center justify-center">
-                    <img src="/assets/images/logo.png" alt="<?php echo __('purchase.logo_app_alt'); ?>" class="h-12 w-12" />
+
+<body class="flex items-center justify-center min-h-screen">
+
+    <div class="mobile-view md:hidden w-full h-screen flex items-start justify-center">
+        <div class="w-full h-full flex flex-col relative">
+            <main class="flex-1 relative overflow-hidden">
+                <div id="map" class="absolute inset-0 w-full h-full"></div>
+                <header class="relative flex items-center justify-center p-10 shadow-sm flex-shrink-0 z-20">
+                    <div class="absolute left-4">
+                        <img src="/assets/images/logo.png" class="h-14 w-14 bg-gray-50 rounded-full object-cover"
+                            alt="<?php echo __(key: 'vehicle.logo_alt'); ?>">
+                    </div>
+                </header>
+
+                <div id="vehicles-drawer"
+                    class="absolute top-0 right-0 h-full w-1/2 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out z-10 flex flex-col">
+                    <div class="flex justify-between items-center p-4 border-b border-gray-200 flex-shrink-0">
+                        <h2 class="text-lg font-bold text-gray-900"><?php echo __(key: 'vehicle.nearby_vehicles'); ?>
+                        </h2>
+                        <div class="flex items-center gap-2">
+                            <button id="toggle-vehicles"
+                                class="flex items-center bg-gray-200 p-2 rounded-lg text-gray-700 hover:bg-gray-300 transition-colors duration-300">
+                                <img src="/assets/images/discapacidad.png"
+                                    alt="<?php echo __('vehicle.accessible_vehicles_alt'); ?>" class="h-5 w-5">
+                            </button>
+                            <button id="close-drawer" class="text-gray-600 hover:text-gray-900">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Listas de vehículos con scroll -->
+                    <div class="flex-1 overflow-y-auto px-3 py-2"
+                        style="overflow-y: scroll; -webkit-overflow-scrolling: touch;">
+                        <ul id="normal-list" class="space-y-3">
+                            <li class="bg-gray-100 p-3 rounded-lg shadow-sm text-center text-gray-500 text-sm">
+                                <?php echo __('vehicle.loading_vehicles'); ?>
+                            </li>
+                        </ul>
+
+                        <ul id="special-list" class="space-y-3 hidden">
+                            <li class="bg-gray-100 p-3 rounded-lg shadow-sm text-center text-gray-500 text-sm">
+                                <?php echo __('vehicle.loading_accessible_vehicles'); ?>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </header>
-        
-        <?php if (isset($_SESSION['error'])): ?>
-            <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-                <?php echo htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?>
-            </div>
-        <?php endif; ?>
-        
-        <?php if (isset($_SESSION['success'])): ?>
-            <div class="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
-                <?php echo htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?>
-            </div>
-        <?php endif; ?>
-        
-        <main class="flex-1 overflow-y-auto no-scrollbar space-y-6 mt-3">
-            <div class="flex-1 md:flex md:flex-col md:justify-start space-y-6 md:space-y-0">
-
-                <div class="w-full text-center">
-                    <a href="/premium" role="button" aria-label="Passa a Premium" tabindex="0"
-                        class="relative w-full block mt-3 md:mt-6 mb-1 md:mb-0 cursor-pointer outline-none transition-[filter,transform] duration-250 hover:brightness-110">
-                        <span
-                            class="absolute top-0 left-0 w-full h-full rounded-xl bg-yellow-700 transform translate-y-0.5 transition-transform duration-[600ms] ease-[cubic-bezier(.3,.7,.4,1)]"
-                            aria-hidden="true"></span>
-
-                        <span
-                            class="absolute top-0 left-0 w-full h-full rounded-xl bg-gradient-to-l from-yellow-600 via-yellow-500 to-yellow-600"
-                            aria-hidden="true"></span>
-
-                        <span
-                            class="relative block px-6 py-4 rounded-xl bg-yellow-500 text-yellow-900 font-bold transform -translate-y-1.5 transition-transform duration-[600ms] ease-[cubic-bezier(.3,.7,.4,1)] text-shadow-[1px_1px_2px_rgba(255,255,255,0.4)]">
-                            <span class="block text-sm"><?php echo __('purchase.upgrade_to'); ?></span>
-                            <span class="block text-2xl"><?php echo __('purchase.premium'); ?></span>
-                            <span class="block text-sm"><?php echo __('purchase.premium_price'); ?></span>
-                        </span>
-
-                    </a>
-                </div>
-
-
-                <div class="w-full text-center">
-                    <p class="text-gray-600 text-center text-sm mb-1 md:mb-1"><?php echo __('purchase.or_select_time_option'); ?></p>
-                </div>
-            </div>
-
-            <div class="flex-1 md:flex md:flex-col md:justify-start space-y-6 md:space-y-0">
-                <div class="w-full bg-yellow-100 p-3 rounded-lg flex items-center shadow-sm mb-1 md:mb-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500 mr-3 flex-shrink-0"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 9v2m0 4h.01m-6.938-7a9 9 0 1113.876 0l-1.416 2.45a7 7 0 10-10.884 0L5.062 7z" />
-                    </svg>
-                    <p class="text-xs text-gray-700"><?php echo __('purchase.unlock_fee_reminder'); ?></p>
-                </div>
-
-                <ul class="space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-4">
-                    <div onclick="openModal(event)" data-minutes="10" data-price="1.50"
-                        class="block p-4 rounded-lg shadow-md flex-col md:flex-row justify-between items-center md:space-x-4 transition-all duration-300 transform hover:scale-105 mb-1 md:mb-0"
-                        style="background: linear-gradient(135deg, #f0f4f8, #e0e8f0);">
-                        <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-600 mr-4 flex-shrink-0"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            <div>
-                                <p class="font-bold text-lg text-gray-800 mb-1 md:mb-0"><?php echo __('purchase.minutes_10'); ?></p>
-                                <p class="text-gray-600 text-sm mb-1 md:mb-0"><?php echo __('purchase.desc_10'); ?></p>
-                            </div>
-                        </div>
-                        <span class="font-bold text-2xl text-gray-900">1,50€</span>
-                    </div>
-                    <div onclick="openModal(event)" data-minutes="30" data-price="4.00"
-                        class="block p-4 rounded-lg shadow-md flex-col md:flex-row justify-between items-center md:space-x-4 transition-all duration-300 transform hover:scale-105 mb-1 md:mb-0"
-                        style="background: linear-gradient(135deg, #e6f7ff, #b3e0ff);">
-                        <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600 mr-4 flex-shrink-0"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            <div>
-                                <p class="font-bold text-lg text-blue-900 mb-1 md:mb-0"><?php echo __('purchase.minutes_30'); ?></p>
-                                <p class="text-blue-700 text-sm mb-1 md:mb-0"><?php echo __('purchase.desc_30'); ?></p>
-                            </div>
-                        </div>
-                        <span class="font-bold text-2xl text-blue-900">4,00€</span>
-                    </div>
-                    <div onclick="openModal(event)" data-minutes="60" data-price="7.50"
-                        class="block p-4 rounded-lg shadow-md flex-col md:flex-row justify-between items-center md:space-x-4 transition-all duration-300 transform hover:scale-105 mb-1 md:mb-0"
-                        style="background: linear-gradient(135deg, #e6ffec, #b3ffc7);">
-                        <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600 mr-4 flex-shrink-0"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            <div>
-                                <p class="font-bold text-lg text-green-900 mb-1 md:mb-0"><?php echo __('purchase.minutes_60'); ?></p>
-                                <p class="text-green-700 text-sm mb-1 md:mb-0"><?php echo __('purchase.desc_60'); ?></p>
-                            </div>
-                        </div>
-                        <span class="font-bold text-2xl text-green-900">7,50€</span>
-                    </div>
-                    <div onclick="openModal(event)" data-minutes="120" data-price="14.00"
-                        class="block p-4 rounded-lg shadow-md flex-col md:flex-row justify-between items-center md:space-x-4 transition-all duration-300 transform hover:scale-105 mb-1 md:mb-0"
-                        style="background: linear-gradient(135deg, #fff3e6, #ffe0b3);">
-                        <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-600 mr-4 flex-shrink-0"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            <div>
-                                <p class="font-bold text-lg text-yellow-900 mb-1 md:mb-0"><?php echo __('purchase.minutes_120'); ?></p>
-                                <p class="text-yellow-700 text-sm mb-1 md:mb-0"><?php echo __('purchase.desc_120'); ?></p>
-                            </div>
-                        </div>
-                        <span class="font-bold text-2xl text-yellow-900">14,00€</span>
-                    </div>
-                    <div onclick="openModal(event)" data-minutes="180" data-price="20.00"
-                        class="block p-4 rounded-lg shadow-md flex-col md:flex-row justify-between items-center md:space-x-4 transition-all duration-300 transform hover:scale-105 mb-1 md:mb-0"
-                        style="background: linear-gradient(135deg, #ffe0e6, #ffb3bf);">
-                        <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-600 mr-4 flex-shrink-0"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            <div>
-                                <p class="font-bold text-lg text-red-900 mb-1 md:mb-0"><?php echo __('purchase.minutes_180'); ?></p>
-                                <p class="text-red-700 text-sm mb-1 md:mb-0"><?php echo __('purchase.desc_180'); ?></p>
-                            </div>
-                        </div>
-                        <span class="font-bold text-2xl text-red-900">20,00€</span>
-                    </div>
-                    <div onclick="openModal(event)" data-minutes="240" data-price="25.00"
-                        class="block p-4 rounded-lg shadow-md flex-col md:flex-row justify-between items-center md:space-x-4 transition-all duration-300 transform hover:scale-105 mb-1 md:mb-0"
-                        style="background: linear-gradient(135deg, #e6e6ff, #b3b3ff);">
-
-                        <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600 mr-4 flex-shrink-0"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            <div>
-                                <p class="font-bold text-lg text-indigo-900 mb-1 md:mb-0"><?php echo __('purchase.minutes_240'); ?></p>
-                                <p class="text-indigo-700 text-sm mb-1 md:mb-0"><?php echo __('purchase.desc_240'); ?></p>
-                            </div>
-                        </div>
-                        <span class="font-bold text-2xl text-indigo-900">25,00€</span>
-                    </div>
-                </ul>
-            </div>
-        </main>
-
-        </a>
+            </main>
+        </div>
     </div>
 
-    <div id="purchaseModal" class="hidden w-full fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-80 text-center">
-            <h2 class="text-xl font-semibold mb-4 text-blue-800"><?php echo __('purchase.confirm_purchase'); ?></h2>
-            <p id="modalText" class="text-gray-700 mb-6"><?php echo __('purchase.confirm_purchase_question'); ?></p>
-            <div class="flex justify-around">
-                <button onclick="confirmPurchase()"
-                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"><?php echo __('purchase.confirm'); ?></button>
-                <button onclick="closeModal()"
-                    class="bg-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400"><?php echo __('purchase.cancel'); ?></button>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <div id="claim-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 opacity-0 invisible transition-all duration-300 ease-in-out" style="display:none;">
+        <div class="bg-white rounded-xl shadow-2xl max-w-md w-11/12 max-h-[90vh] overflow-y-auto transform scale-90 translate-y-4 transition-all duration-300 ease-in-out">
+            <div class="p-6 border-b border-gray-200 flex items-center justify-between">
+                <h2 class="text-xl font-bold text-gray-900 flex items-center gap-3">
+                    <span class="text-2xl"><i class="fas fa-car text-sm"></i></span>
+                    <span><?php echo __('vehicle.confirm_claim'); ?></span>
+                </h2>
+                <button class="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100 transition-colors text-2xl leading-none" id="claim-modal-close">✕</button>
+            </div>
+            <div class="p-6">
+                <div class="bg-gray-50 rounded-lg p-4 mb-5" id="vehicle-info">
+                    <?php echo __('vehicle.loading'); ?>
+                </div>
+                <div class="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 mb-5 flex items-start gap-3">
+                    <div class="text-2xl flex-shrink-0">⚠️</div>
+                    <div class="flex-1">
+                        <div class="font-bold text-orange-800 mb-1 text-base">
+                            <?php echo __('vehicle.unlock_cost'); ?>
+                        </div>
+                        <div class="text-orange-700 text-sm leading-relaxed">
+                            <?php echo __('vehicle.unlock_fee_warning'); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-3xl font-black text-blue-600 text-center my-5">0.50€</div>
+                <p class="text-center text-gray-500 text-sm mt-4">
+                    <?php echo __('vehicle.terms_acceptance'); ?>
+                </p>
+            </div>
+            <div class="p-5 border-t border-gray-200 flex gap-3">
+                <button class="flex-1 py-3 px-6 rounded-lg font-bold text-base border-none cursor-pointer bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors" id="claim-modal-cancel"><?php echo __('vehicle.cancel'); ?></button>
+                <button class="flex-1 py-3 px-6 rounded-lg font-bold text-base border-none cursor-pointer bg-blue-600 text-white hover:bg-blue-700 transition-colors" id="claim-modal-confirm"><?php echo __('vehicle.accept_and_claim'); ?></button>
             </div>
         </div>
     </div>
 
+    <div id="vehicle-details-overlay"
+        class="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 opacity-0"
+        style="display:none;"></div>
+    <div id="vehicle-details-modal"
+        class="fixed left-0 right-0 bottom-0 z-50 transform translate-y-full transition-transform duration-300"
+        style="display:none; max-height: 80vh;">
+        <div class="max-w-3xl mx-auto px-4 pb-20">
+            <div class="bg-white rounded-t-2xl shadow-2xl overflow-hidden flex flex-col" style="max-height: 80vh;">
+                <div class="vehicle-details-content flex-shrink-0"></div>
+
+                <div class="px-4 pb-4 overflow-y-auto flex-1">
+                    <h4 class="text-sm font-semibold mt-3 mb-2 sticky top-0 bg-white py-2">Vehicles propers</h4>
+                    <ul id="nearby-vehicles-list" class="divide-y bg-gray-200 rounded-xl divide-gray-100 mb-4"></ul>
+                </div>
+
+                <div class="p-3 border-t text-center bg-white flex-shrink-0">
+                    <button id="close-vehicle-details"
+                        class="text-gray-500 hover:text-gray-700 font-medium">Tancar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/assets/js/toast.js"></script>
+    <script src="/assets/js/confirm-modal.js"></script>
+    <script src="/assets/js/main.js"></script>
+    <script src="/assets/js/auth.js"></script>
+    <script src="/assets/js/vehicles.js"></script>
+    <script src="/assets/js/vehicle-claim-modal.js"></script>
+    <script src="/assets/js/localitzar-vehicle.js"></script>
+
+    <?php require_once __DIR__ . '/../layouts/footer.php'; ?>
 </body>
-
-<script>
-    // Solo animaciones de modal
-    let minutesSelected = 0;
-    let priceSelected = 0;
-
-    function openModal(e) {
-        const target = e.currentTarget;
-        minutesSelected = parseInt(target.dataset.minutes);
-        priceSelected = parseFloat(target.dataset.price);
-
-        const modalText = document.querySelector('#purchaseModal #modalText');
-        modalText.textContent = `<?php echo __('purchase.want_to_buy'); ?> ${minutesSelected} <?php echo __('purchase.minutes_for'); ?> ${priceSelected.toFixed(2)}€?`;
-
-        const modal = document.getElementById('purchaseModal');
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-    }
-
-    function closeModal() {
-        const modal = document.getElementById('purchaseModal');
-        modal.classList.remove('flex');
-        modal.classList.add('hidden');
-    }
-
-    function confirmPurchase() {
-        // Crear formulario HTML y enviarlo
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '/purchase-time';
-        
-        const minutesInput = document.createElement('input');
-        minutesInput.type = 'hidden';
-        minutesInput.name = 'minutes';
-        minutesInput.value = minutesSelected;
-        
-        const priceInput = document.createElement('input');
-        priceInput.type = 'hidden';
-        priceInput.name = 'price';
-        priceInput.value = priceSelected;
-        
-        form.appendChild(minutesInput);
-        form.appendChild(priceInput);
-        document.body.appendChild(form);
-        form.submit();
-    }
-</script>
 
 </html>

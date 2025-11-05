@@ -32,19 +32,12 @@ const VehicleClaimModal = {
                             <div class="charge-warning-icon">⚠️</div>
                             <div class="charge-warning-content">
                                 <div class="charge-warning-title">Cost de desbloqueig</div>
-                                <div class="charge-warning-text">
-                                    Es cobrarà una tarifa de desbloqueig al reclamar aquest vehicle. Aquest càrrec es farà immediatament.
-                                </div>
                             </div>
                         </div>
                         
                         <div class="charge-amount">
                             ${this.unlockFee.toFixed(2)}€
                         </div>
-                        
-                        <p style="text-align: center; color: #6B7280; font-size: 14px; margin-top: 16px;">
-                            En confirmar, acceptes els termes i condicions del servei
-                        </p>
                     </div>
                     
                     <div class="claim-modal-footer">

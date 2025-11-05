@@ -182,7 +182,4 @@ include_once __DIR__ . '/../../php/components/header.php';
 <!-- Include booking.js -->
 <script src="/assets/js/booking.js"></script>
 
-<?php
-// Include footer
-include_once __DIR__ . '/../../php/components/footer.php';
-?>
+<?php require_once __DIR__ . '/../layouts/footer.php'; ?>

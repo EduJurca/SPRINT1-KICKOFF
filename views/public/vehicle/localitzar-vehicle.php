@@ -10,11 +10,11 @@
     
     <!-- Leaflet CSS for maps -->
     <link
-rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-crossorigin=""
->
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""
+    >
     
     <!-- Custom CSS (use /assets paths so server serves correctly) -->
     <link rel="stylesheet" href="/assets/css/custom.css">
