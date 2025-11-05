@@ -6,15 +6,16 @@ require_once MODELS_PATH . '/Vehicle.php';
 require_once CONTROLLERS_PATH . '/auth/AuthController.php';
 
 class AdminController {
+    private $db;
     private $userModel;
     private $bookingModel;
     private $vehicleModel;
     
     public function __construct() {
-        $db = Database::getMariaDBConnection();
+        $this->db = Database::getMariaDBConnection();
         $this->userModel = new User();
-        $this->bookingModel = new Booking($db);
-        $this->vehicleModel = new Vehicle($db);
+        $this->bookingModel = new Booking($this->db);
+        $this->vehicleModel = new Vehicle($this->db);
     }
     
     public function dashboard() {
@@ -39,29 +40,25 @@ class AdminController {
     }
     
     private function getTotalUsers() {
-        $db = Database::getMariaDBConnection();
-        $result = $db->query("SELECT COUNT(*) as total FROM users");
+        $result = $this->db->query("SELECT COUNT(*) as total FROM users");
         $row = $result->fetch_assoc();
         return $row['total'] ?? 0;
     }
     
     private function getTotalVehicles() {
-        $db = Database::getMariaDBConnection();
-        $result = $db->query("SELECT COUNT(*) as total FROM vehicles");
+        $result = $this->db->query("SELECT COUNT(*) as total FROM vehicles");
         $row = $result->fetch_assoc();
         return $row['total'] ?? 0;
     }
     
     private function getTotalBookings() {
-        $db = Database::getMariaDBConnection();
-        $result = $db->query("SELECT COUNT(*) as total FROM bookings WHERE status = 'active'");
+        $result = $this->db->query("SELECT COUNT(*) as total FROM bookings WHERE status = 'active'");
         $row = $result->fetch_assoc();
         return $row['total'] ?? 0;
     }
     
     private function getTotalRevenue() {
-        $db = Database::getMariaDBConnection();
-        $result = $db->query("
+        $result = $this->db->query("
             SELECT SUM(total_cost) as revenue 
             FROM bookings 
             WHERE MONTH(created_at) = MONTH(CURRENT_DATE())
@@ -73,12 +70,11 @@ class AdminController {
     }
     
     private function getMonthlyBookings() {
-        $db = Database::getMariaDBConnection();
         
         $months = ['Gen', 'Feb', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Oct', 'Nov', 'Des'];
         $data = array_fill_keys($months, 0);
         
-        $result = $db->query("
+        $result = $this->db->query("
             SELECT MONTH(created_at) as month, COUNT(*) as count 
             FROM bookings 
             WHERE YEAR(created_at) = YEAR(CURRENT_DATE())
@@ -98,8 +94,7 @@ class AdminController {
     }
     
     private function getRecentUsers($limit = 5) {
-        $db = Database::getMariaDBConnection();
-        $stmt = $db->prepare("
+        $stmt = $this->db->prepare("
             SELECT u.username, u.email, r.name as role_name 
             FROM users u
             LEFT JOIN roles r ON u.role_id = r.id
@@ -121,11 +116,10 @@ class AdminController {
     public function vehicles() {
         AuthController::requireAdmin();
         
-        $db = Database::getMariaDBConnection();
         $search = $_GET['search'] ?? '';
         
         if (!empty($search)) {
-            $stmt = $db->prepare("
+            $stmt = $this->db->prepare("
                 SELECT v.*, 
                        (SELECT COUNT(*) FROM bookings WHERE vehicle_id = v.id AND status = 'active') as active_bookings
                 FROM vehicles v
@@ -137,7 +131,7 @@ class AdminController {
             $stmt->execute();
             $result = $stmt->get_result();
         } else {
-            $result = $db->query("
+            $result = $this->db->query("
                 SELECT v.*, 
                        (SELECT COUNT(*) FROM bookings WHERE vehicle_id = v.id AND status = 'active') as active_bookings
                 FROM vehicles v
@@ -161,7 +155,6 @@ class AdminController {
     public function bookings() {
         AuthController::requireAdmin();
         
-        $db = Database::getMariaDBConnection();
         $status = $_GET['status'] ?? '';
         
         $query = "

@@ -48,7 +48,6 @@ Router::post('/recover-password', ['AuthController', 'recoverPassword']);
 
 // Dashboard principal (gestió)
 Router::get('/dashboard', ['DashboardController', 'showGestio']);
-
 Router::get('/gestio', ['DashboardController', 'showGestio']);
 
 // Resum del projecte
@@ -62,7 +61,6 @@ Router::get('/resum-projecte', function() {
 
 // Perfil
 Router::get('/perfil', ['ProfileController', 'showProfile']);
-
 Router::get('/profile', ['ProfileController', 'showProfile']);
 
 // Completar perfil
@@ -192,8 +190,7 @@ Router::get('/admin/bookings', ['AdminController', 'bookings']);
 // Incidències
 Router::get('/admin/incidencies', ['AdminController', 'incidencies']);
 
-// Configuració
-Router::get('/admin/settings', ['AdminController', 'settings']);
+// Configuració (settings page removed)
 
 // ==========================================
 // 👥 CRUD USUARIS

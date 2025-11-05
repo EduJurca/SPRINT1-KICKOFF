@@ -126,47 +126,8 @@ class Router {
         if (file_exists($notFoundView)) {
             require_once $notFoundView;
         } else {
-            echo '<!DOCTYPE html>
-<html lang="ca">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 - Pàgina no trobada</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        .container {
-            text-align: center;
-        }
-        h1 {
-            font-size: 120px;
-            margin: 0;
-        }
-        p {
-            font-size: 24px;
-        }
-        a {
-            color: white;
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>404</h1>
-        <p>Pàgina no trobada</p>
-        <a href="/">Tornar a l\'inici</a>
-    </div>
-</body>
-</html>';
+            // Fallback simple si no existeix la vista
+            echo '<h1>404 - Pàgina no trobada</h1><a href="/">Tornar a l\'inici</a>';
         }
         exit;
     }

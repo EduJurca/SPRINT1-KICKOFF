@@ -20,9 +20,8 @@ class Permissions {
         'bookings.delete' => [1],
         'bookings.cancel_own' => [1, 2, 3],
         
-        'admin.dashboard' => [1, 2],
-        'admin.settings' => [1],
-        'admin.reports' => [1, 2],
+    'admin.dashboard' => [1, 2],
+    'admin.reports' => [1, 2],
         'admin.activity' => [1, 2],
     ];
     
