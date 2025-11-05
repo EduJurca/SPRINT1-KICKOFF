@@ -43,12 +43,31 @@
             <div class="mb-6 border-b pb-4">
                 <h2 class="text-xl font-semibold mb-4 text-gray-900"><?php echo __('profile.current_cards'); ?></h2>
 
-                <!-- Existing cards list (example) -->
-                <ul class="space-y-2 mb-4">
-                    <li class="bg-[#F5F5F5] p-3 rounded-lg shadow-sm">
-                        <p class="text-gray-700">VISA **** **** **** 1234</p>
-                    </li>
-                </ul>
+                <!-- Existing cards list -->
+                <?php if (!empty($payment_methods)): ?>
+                    <ul class="space-y-2 mb-4">
+                        <?php foreach ($payment_methods as $method): ?>
+                            <li class="bg-[#F5F5F5] p-3 rounded-lg shadow-sm flex justify-between items-center">
+                                <div>
+                                    <p class="text-gray-700 font-medium">
+                                        <?php echo strtoupper($method['brand']); ?> **** **** **** <?php echo $method['last4']; ?>
+                                        <?php if ($method['is_default']): ?>
+                                            <span class="ml-2 text-xs bg-blue-500 text-white px-2 py-1 rounded"><?php echo __('profile.default_card'); ?></span>
+                                        <?php endif; ?>
+                                    </p>
+                                    <p class="text-gray-500 text-sm">
+                                        <?php echo __('profile.expires'); ?>: <?php echo str_pad($method['exp_month'], 2, '0', STR_PAD_LEFT); ?>/<?php echo $method['exp_year']; ?>
+                                    </p>
+                                </div>
+                                <button onclick="deleteCard(<?php echo $method['id']; ?>)" class="text-red-600 hover:text-red-800 text-sm">
+                                    <?php echo __('profile.delete'); ?>
+                                </button>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php else: ?>
+                    <p class="text-gray-500 mb-4"><?php echo __('profile.no_cards'); ?></p>
+                <?php endif; ?>
 
                 <!-- Add new card form -->
                 <form id="add-card-form" action="/perfil/pagaments/add" method="POST" class="space-y-4" novalidate>
@@ -170,6 +189,32 @@
                 return true;
             });
         })();
+        
+        // Function to delete a payment method
+        function deleteCard(cardId) {
+            if (!confirm('<?php echo __('profile.delete_card_confirm'); ?>')) {
+                return;
+            }
+            
+            fetch('/perfil/pagaments/delete/' + cardId, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    alert('Error al eliminar la targeta: ' + (data.message || 'Error desconegut'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al eliminar la targeta');
+            });
+        }
     </script>
 
 </body>

@@ -166,6 +166,53 @@ class ProfileController {
     }
     
     /**
+     * Mostrar la pàgina de pagaments amb les targetes de l'usuari
+     */
+    public function showPayments() {
+        $userId = AuthController::requireAuth();
+        
+        // Obtenir les targetes de l'usuari
+        $paymentMethods = $this->getUserPaymentMethods($userId);
+        
+        return Router::view('public.profile.pagaments', [
+            'payment_methods' => $paymentMethods
+        ]);
+    }
+    
+    /**
+     * Obtenir els mètodes de pagament d'un usuari
+     */
+    private function getUserPaymentMethods($userId) {
+        try {
+            $db = Database::getMariaDBConnection();
+            
+            $stmt = $db->prepare("
+                SELECT id, provider, last4, brand, exp_month, exp_year, is_default, created_at
+                FROM payment_methods
+                WHERE user_id = ?
+                ORDER BY is_default DESC, created_at DESC
+            ");
+            
+            $stmt->bind_param("i", $userId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            $methods = [];
+            while ($row = $result->fetch_assoc()) {
+                $methods[] = $row;
+            }
+            
+            $stmt->close();
+            
+            return $methods;
+            
+        } catch (Exception $e) {
+            error_log('Error fetching payment methods: ' . $e->getMessage());
+            return [];
+        }
+    }
+    
+    /**
      * Afegir un nou mètode de pagament
      * IMPORTANT: Aquesta implementació és un exemple simplificat
      * En producció, usa un gateway de pagament (Stripe, Adyen, etc.)
@@ -265,10 +312,10 @@ class ProfileController {
      */
     private function detectCardBrand($cardNumber) {
         $patterns = [
-            '/^4/' => 'Visa',
-            '/^5[1-5]/' => 'Mastercard',
-            '/^3[47]/' => 'American Express',
-            '/^6(?:011|5)/' => 'Discover',
+            '/^4/' => 'VISA',
+            '/^5[1-5]/' => 'MASTERCARD',
+            '/^3[47]/' => 'AMERICAN EXPRESS',
+            '/^6(?:011|5)/' => 'DISCOVER',
         ];
         
         foreach ($patterns as $pattern => $brand) {
@@ -277,7 +324,47 @@ class ProfileController {
             }
         }
         
-        return 'Unknown';
+        return 'UNKNOWN';
+    }
+    
+    /**
+     * Eliminar un mètode de pagament
+     */
+    public function deletePaymentMethod($cardId) {
+        $userId = AuthController::requireAuth();
+        
+        try {
+            $db = Database::getMariaDBConnection();
+            
+            // Verificar que la targeta pertany a l'usuari
+            $stmt = $db->prepare("
+                DELETE FROM payment_methods 
+                WHERE id = ? AND user_id = ?
+            ");
+            
+            $stmt->bind_param("ii", $cardId, $userId);
+            $stmt->execute();
+            
+            if ($stmt->affected_rows > 0) {
+                $stmt->close();
+                return Router::json([
+                    'success' => true,
+                    'message' => 'Targeta eliminada correctament'
+                ]);
+            } else {
+                $stmt->close();
+                return Router::json([
+                    'success' => false,
+                    'message' => 'No s\'ha pogut eliminar la targeta'
+                ], 404);
+            }
+            
+        } catch (Exception $e) {
+            error_log('Error deleting payment method: ' . $e->getMessage());
+            return Router::json([
+                'success' => false,
+                'message' => 'Error al eliminar la targeta'
+            ], 500);
+        }
     }
 }
-
