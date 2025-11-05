@@ -471,24 +471,18 @@ class ProfileController {
             
             if ($stmt->affected_rows > 0) {
                 $stmt->close();
-                return Router::json([
-                    'success' => true,
-                    'message' => 'Targeta eliminada correctament'
-                ]);
+                $_SESSION['success'] = 'Targeta eliminada correctament';
+                return Router::redirect('/pagaments');
             } else {
                 $stmt->close();
-                return Router::json([
-                    'success' => false,
-                    'message' => 'No s\'ha pogut eliminar la targeta'
-                ], 404);
+                $_SESSION['error'] = 'No s\'ha pogut eliminar la targeta';
+                return Router::redirect('/pagaments');
             }
             
         } catch (Exception $e) {
             error_log('Error deleting payment method: ' . $e->getMessage());
-            return Router::json([
-                'success' => false,
-                'message' => 'Error al eliminar la targeta'
-            ], 500);
+            $_SESSION['error'] = 'Error al eliminar la targeta';
+            return Router::redirect('/pagaments');
         }
     }
 }
