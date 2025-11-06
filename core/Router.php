@@ -1,8 +1,4 @@
 <?php
-/**
- * 🔀 Router - Sistema de rutes de l'aplicació
- * Gestiona el matching i dispatch de rutes cap als controladors
- */
 
 class Router {
     private static $routes = [
@@ -12,52 +8,22 @@ class Router {
         'DELETE' => []
     ];
     
-    /**
-     * Registrar una ruta GET
-     * 
-     * @param string $uri URI de la ruta
-     * @param callable|array $action Acció a executar (funció o [Controller, method])
-     */
     public static function get($uri, $action) {
         self::$routes['GET'][$uri] = $action;
     }
     
-    /**
-     * Registrar una ruta POST
-     * 
-     * @param string $uri URI de la ruta
-     * @param callable|array $action Acció a executar
-     */
     public static function post($uri, $action) {
         self::$routes['POST'][$uri] = $action;
     }
     
-    /**
-     * Registrar una ruta PUT
-     * 
-     * @param string $uri URI de la ruta
-     * @param callable|array $action Acció a executar
-     */
     public static function put($uri, $action) {
         self::$routes['PUT'][$uri] = $action;
     }
     
-    /**
-     * Registrar una ruta DELETE
-     * 
-     * @param string $uri URI de la ruta
-     * @param callable|array $action Acció a executar
-     */
     public static function delete($uri, $action) {
         self::$routes['DELETE'][$uri] = $action;
     }
     
-    /**
-     * Dispatch - Executar la ruta corresponent
-     * 
-     * @param string $uri URI sol·licitada
-     * @param string $method Mètode HTTP
-     */
     public static function dispatch($uri, $method = 'GET') {
         // Soporte para method spoofing (_method en POST)
         if ($method === 'POST' && isset($_POST['_method'])) {
@@ -108,30 +74,16 @@ class Router {
      * @return string Expressió regular
      */
     private static function convertRouteToRegex($route) {
-        // Escapar barres
         $pattern = str_replace('/', '\/', $route);
-        
-        // Convertir {param} a ([^\/]+)
         $pattern = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([^\/]+)', $pattern);
-        
         return '/^' . $pattern . '$/';
     }
     
-    /**
-     * Executar l'acció d'una ruta
-     * 
-     * @param callable|array $action Acció a executar
-     * @param array $params Paràmetres de la ruta
-     */
     private static function executeAction($action, $params = []) {
-        // Si és un array [Controller, method]
         if (is_array($action)) {
             list($controller, $method) = $action;
             
-            // Si el controlador és una string, instanciar-lo
             if (is_string($controller)) {
-                // Carregar el fitxer del controlador si és necessari
-                // Buscar en múltiples subdirectoris
                 $controllerPaths = [
                     CONTROLLERS_PATH . '/admin/' . $controller . '.php',
                     CONTROLLERS_PATH . '/auth/' . $controller . '.php',
@@ -176,81 +128,30 @@ class Router {
     private static function notFound() {
         http_response_code(404);
         
-        // Si existeix una vista personalitzada de 404
         $notFoundView = VIEWS_PATH . '/errors/404.php';
         if (file_exists($notFoundView)) {
             require_once $notFoundView;
         } else {
-            // Vista 404 per defecte
-            echo '<!DOCTYPE html>
-<html lang="ca">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 - Pàgina no trobada</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        .container {
-            text-align: center;
-        }
-        h1 {
-            font-size: 120px;
-            margin: 0;
-        }
-        p {
-            font-size: 24px;
-        }
-        a {
-            color: white;
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>404</h1>
-        <p>Pàgina no trobada</p>
-        <a href="/">Tornar a l\'inici</a>
-    </div>
-</body>
-</html>';
+            // Fallback simple si no existeix la vista
+            echo '<h1>404 - Pàgina no trobada</h1><a href="/">Tornar a l\'inici</a>';
         }
         exit;
     }
     
-    /**
-     * Redirigir a una URL
-     * 
-     * @param string $url URL de destí
-     */
     public static function redirect($url) {
         header("Location: $url");
         exit;
     }
     
-    /**
-     * Renderitzar una vista
-     * 
-     * @param string $view Nom de la vista (sense extensió)
-     * @param array $data Dades a passar a la vista
-     */
     public static function view($view, $data = []) {
-        // Extreure dades perquè siguin accessibles com a variables
+        // `Authorization` is expected to be loaded centrally at bootstrap (index.php)
+        if (!isset($data['auth'])) {
+            $data['auth'] = Authorization::getAuthInfo();
+        }
+        
         extract($data);
         
-        // Construir path de la vista
         $viewPath = VIEWS_PATH . '/' . str_replace('.', '/', $view);
-        
-        // Intentar trobar el fitxer amb diferents extensions (prioritat a .php)
         $extensions = ['.php', '.phtml', '.html'];
         $foundPath = null;
         
@@ -269,12 +170,6 @@ class Router {
         }
     }
     
-    /**
-     * Retornar resposta JSON
-     * 
-     * @param mixed $data Dades a retornar
-     * @param int $statusCode Codi d'estat HTTP
-     */
     public static function json($data, $statusCode = 200) {
         http_response_code($statusCode);
         header('Content-Type: application/json');

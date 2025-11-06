@@ -14,7 +14,23 @@ DROP TABLE IF EXISTS vehicles;
 DROP TABLE IF EXISTS locations;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS nationalities;
+DROP TABLE IF EXISTS roles;
 SET FOREIGN_KEY_CHECKS = 1;
+
+-- ==========================================
+-- SISTEMA DE ROLS (Hardcoded)
+-- ==========================================
+CREATE TABLE roles (
+    id INT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    description TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Inserir els 3 rols del sistema
+INSERT INTO roles (id, name, description) VALUES
+(1, 'SuperAdmin', 'Administrador amb accés total al sistema'),
+(2, 'Treballador', 'Personal que gestiona vehicles i reserves'),
+(3, 'Client', 'Usuari estàndard del sistema');
 
 -- Table: nationalities
 CREATE TABLE nationalities (
@@ -34,7 +50,7 @@ CREATE TABLE users (
     sex ENUM('M', 'F', 'O') DEFAULT NULL, 
     address VARCHAR(255),                       
     dni VARCHAR(20),   
-    is_admin BOOLEAN NOT NULL DEFAULT FALSE,
+    role_id INT DEFAULT 3,
     lang VARCHAR(5) DEFAULT 'ca',
     iban VARCHAR(34),
     driver_license_photo VARCHAR(255),
@@ -42,9 +58,10 @@ CREATE TABLE users (
     minute_balance INT DEFAULT 0,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (nationality_id) REFERENCES nationalities(id) ON DELETE SET NULL,
+    FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE SET NULL,
     INDEX idx_email (email),
     INDEX idx_username (username),
-    INDEX idx_is_admin (is_admin),
+    INDEX idx_role_id (role_id),
     INDEX idx_lang (lang)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -184,5 +201,45 @@ INSERT INTO vehicles (plate, brand, model, year, status, battery_level, latitude
 ('3456JKL', 'BMW', 'i3', 2022, 'available', 65, 40.71450000, 0.57500000, 'car', 1, 0.45, '/images/bmw-i3.jpg'),
 ('7890MNO', 'Volkswagen', 'ID.3', 2023, 'available', 88, 40.70950000, 0.58300000, 'car', 0, 0.38, '/images/vw-id3.jpg');
 
+-- ==========================================
+-- USUARIS DE PROVA AMB ROLS
+-- ==========================================
+INSERT INTO users (username, email, password, fullname, role_id, minute_balance, created_at) VALUES
+-- SuperAdmin (password: admin123)
+('admin', 'admin@sims.cat', '$2y$10$FDHmfPCgzisG0KHG2Q9K8eoAodytkui9A0nMmtDY4W6sIbbN2FfA.', 'Administrator', 1, 1000, NOW()),
+
+-- Treballadors (password: treballador123)
+('treballador1', 'treballador1@sims.cat', '$2y$10$uvFEE/dr3fKA.Do/CC7f3uv9IWw71o2zlSX40vCNu05rcx8wgqFU6', 'Joan Pérez', 2, 500, NOW()),
+('treballador2', 'treballador2@sims.cat', '$2y$10$uvFEE/dr3fKA.Do/CC7f3uv9IWw71o2zlSX40vCNu05rcx8wgqFU6', 'Maria García', 2, 500, NOW()),
+
+-- Clients (password: client123)
+('client1', 'client1@example.com', '$2y$10$LMsChqzpt0EcZu.VQWdPLu6ZEu8DaEJfHK3/h8zzAWrNbJIfKgPtW', 'Pau Martínez', 3, 100, NOW()),
+('client2', 'client2@example.com', '$2y$10$LMsChqzpt0EcZu.VQWdPLu6ZEu8DaEJfHK3/h8zzAWrNbJIfKgPtW', 'Anna López', 3, 150, NOW()),
+('client3', 'client3@example.com', '$2y$10$LMsChqzpt0EcZu.VQWdPLu6ZEu8DaEJfHK3/h8zzAWrNbJIfKgPtW', 'Marc Vila', 3, 75, NOW());
+
+-- ==========================================
+-- DADES DE PROVA: HISTORIAL DE VIATGES
+-- ==========================================
+
+-- Viatges del client1 (user_id = 4)
+INSERT INTO vehicle_usage (user_id, vehicle_id, start_time, end_time, start_location_id, end_location_id, total_distance_km) VALUES
+(4, 1, '2025-10-25 10:30:00', '2025-10-25 11:00:00', 1, 2, 5.2),
+(4, 2, '2025-10-28 15:15:00', '2025-10-28 15:45:00', 2, 3, 8.7),
+(4, 3, '2025-10-30 09:00:00', '2025-10-30 09:35:00', 1, 4, 6.3),
+(4, 1, '2025-11-01 14:20:00', '2025-11-01 15:10:00', 3, 5, 12.5);
+
+-- Viatges del client2 (user_id = 5)
+INSERT INTO vehicle_usage (user_id, vehicle_id, start_time, end_time, start_location_id, end_location_id, total_distance_km) VALUES
+(5, 4, '2025-10-26 08:45:00', '2025-10-26 09:20:00', 1, 3, 7.1),
+(5, 5, '2025-10-29 12:30:00', '2025-10-29 13:05:00', 4, 1, 9.8),
+(5, 2, '2025-10-31 16:00:00', NULL, 2, NULL, NULL);  -- Viatge en curs
+
+-- Viatges del client3 (user_id = 6)
+INSERT INTO vehicle_usage (user_id, vehicle_id, start_time, end_time, start_location_id, end_location_id, total_distance_km) VALUES
+(6, 3, '2025-10-27 11:15:00', '2025-10-27 11:55:00', 5, 2, 11.2),
+(6, 1, '2025-11-01 10:00:00', '2025-11-01 10:40:00', 1, 5, 8.9);
+
 -- Success message
 SELECT 'MariaDB database initialized successfully!' AS message;
+SELECT 'Rols i usuaris de prova creats!' AS info;
+SELECT name, COUNT(*) as total FROM users u JOIN roles r ON u.role_id = r.id GROUP BY r.name;

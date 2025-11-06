@@ -11,7 +11,7 @@
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
     <div class="bg-white p-8 rounded-2xl shadow-inner w-full max-w-sm flex flex-col justify-center">
-        <img src="../../../../images/logo.png" alt="<?php echo __('password_reset.logo_alt'); ?>" class="h-40 w-40 rounded-full mx-auto">
+        <img src="/assets/images/logo.png" alt="<?php echo __('password_reset.logo_alt'); ?>" class="h-40 w-40 rounded-full mx-auto">
         <h1 class="text-2xl font-bold text-center text-gray-900 mb-6"><?php echo __('password_reset.heading'); ?></h1>
         <form id="resetForm" autocomplete="off">
             <div class="mb-6">

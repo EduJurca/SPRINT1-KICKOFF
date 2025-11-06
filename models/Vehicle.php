@@ -1,9 +1,4 @@
 <?php
-/**
- * 📊 Vehicle Model
- * Gestiona les operacions relacionades amb vehicles
- * Treballa amb MariaDB i MongoDB
- */
 
 class Vehicle {
     private $db;

@@ -21,20 +21,18 @@ class DashboardController {
         $this->vehicleModel = new Vehicle($db);
     }
     
-    /**
-     * Mostrar pàgina de gestió amb dades renderitzades des del servidor
-     */
+ 
     public function showGestio() {
-        // Requerir autenticació
+   
         $userId = AuthController::requireAuth();
         
-        // Obtenir informació de l'usuari
+    
         $userInfo = $this->userModel->getUserInfo($userId);
         
-        // Obtenir reserva activa si n'hi ha
+        
         $activeBooking = $this->bookingModel->getActiveBooking($userId);
         
-        // Obtenir historial de reserves recent
+       
         $recentBookings = $this->bookingModel->getBookingHistory($userId, 5);
         
         // Passar totes les dades a la vista
@@ -53,16 +51,16 @@ class DashboardController {
      * Obtenir dades per a la pàgina de gestió (API - legacy)
      */
     public function getGestioData() {
-        // Requerir autenticació
+      
         $userId = AuthController::requireAuth();
         
-        // Obtenir informació de l'usuari
+        
         $userInfo = $this->userModel->getUserInfo($userId);
         
-        // Obtenir reserva activa si n'hi ha
+
         $activeBooking = $this->bookingModel->getActiveBooking($userId);
         
-        // Obtenir historial de reserves recent
+      
         $recentBookings = $this->bookingModel->getBookingHistory($userId, 5);
         
         return Router::json([
@@ -72,12 +70,9 @@ class DashboardController {
             'recent_bookings' => $recentBookings
         ], 200);
     }
-    
-    /**
-     * Obtenir estadístiques del dashboard (només admin)
-     */
+   
     public function getStats() {
-        // Requerir admin
+      
         AuthController::requireAdmin();
         
         $db = Database::getMariaDBConnection();
