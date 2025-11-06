@@ -326,4 +326,14 @@ return [
         'license_back_preview' => 'Vista prèvia del carnet de conduir (darrere)',
         'submit_for_verification' => 'Enviar per verificar',
     ],
+    'chat' => [
+        'title' => 'Assistència Virtual',
+        'subtitle' => 'Pregunta\'m el que necessitis sobre VoltiaCar',
+        'back' => 'Tornar',
+        'welcome_message' => 'Hola! 👋 Sóc el teu assistent virtual de VoltiaCar. Com et puc ajudar avui?',
+        'input_placeholder' => 'Escriu el teu missatge...',
+        'send' => 'Enviar',
+        'typing' => 'Escrivint...',
+        'info_message' => 'Pots preguntar sobre vehicles, reserves, pagaments o qualsevol aspecte de l\'aplicació.',
+    ],
 ];

@@ -174,7 +174,14 @@ Router::get('/accessibilitat', function() {
 });
 
 // ==========================================
-// 🔧 ADMIN (si tens zona d'administració)
+// � CHAT / ASISTENTE IA
+// ==========================================
+
+Router::get('/chat', ['ChatController', 'index']);
+Router::post('/chat/send', ['ChatController', 'send']);
+
+// ==========================================
+// �🔧 ADMIN (si tens zona d'administració)
 // ==========================================
 
 Router::get('/admin', function() {

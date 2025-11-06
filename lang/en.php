@@ -326,4 +326,14 @@ return [
         'license_back_preview' => 'Driver\'s license preview (back)',
         'submit_for_verification' => 'Submit for verification',
     ],
+    'chat' => [
+        'title' => 'Virtual Assistant',
+        'subtitle' => 'Ask me anything about VoltiaCar',
+        'back' => 'Back',
+        'welcome_message' => 'Hello! 👋 I\'m your VoltiaCar virtual assistant. How can I help you today?',
+        'input_placeholder' => 'Type your message...',
+        'send' => 'Send',
+        'typing' => 'Typing...',
+        'info_message' => 'You can ask about vehicles, bookings, payments or any aspect of the app.',
+    ],
 ];

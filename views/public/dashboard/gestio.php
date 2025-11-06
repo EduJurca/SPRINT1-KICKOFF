@@ -202,7 +202,7 @@
   </div>
 
   <a href="/resum-projecte"
-    class="fixed bottom-10 right-10 block bg-[#1565C0] text-white p-4 rounded-full shadow-lg hover:bg-[#1151a3] transition-colors duration-300 z-50"
+    class="fixed bottom-10 left-10 block bg-[#1565C0] text-white p-4 rounded-full shadow-lg hover:bg-[#1151a3] transition-colors duration-300 z-50"
     aria-label="<?php echo __('dashboard.project_summary'); ?>">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
       stroke-width="2">
@@ -226,6 +226,9 @@
 
   <!-- Tutorial System -->
   <script src="/assets/js/tutorial.js"></script>
+
+  <!-- Widget de Chatbot Flotante -->
+  <?php include __DIR__ . '/../../commons/chatbot-widget.php'; ?>
 
 </body>
 </html>
