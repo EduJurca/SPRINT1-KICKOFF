@@ -25,6 +25,11 @@ class Router {
     }
     
     public static function dispatch($uri, $method = 'GET') {
+        // Soporte para method spoofing (_method en POST)
+        if ($method === 'POST' && isset($_POST['_method'])) {
+            $method = strtoupper($_POST['_method']);
+        }
+        
         // Eliminar prefijo de idioma de la URI (/en/... o /ca/...)
         foreach (['en', 'ca'] as $lang) {
             if (strpos($uri, '/' . $lang . '/') === 0) {
@@ -80,6 +85,7 @@ class Router {
             
             if (is_string($controller)) {
                 $controllerPaths = [
+                    CONTROLLERS_PATH . '/admin/' . $controller . '.php',
                     CONTROLLERS_PATH . '/auth/' . $controller . '.php',
                     CONTROLLERS_PATH . '/public/' . $controller . '.php',
                     CONTROLLERS_PATH . '/' . $controller . '.php'
