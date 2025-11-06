@@ -51,10 +51,13 @@ class AuthController {
                 if (strpos($contentType, 'application/json') !== false) {
                     return Router::json($result, 200);
                 } else {
-                    // Redirigir segons el rol de l'usuari
-                    if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1) {
-                        return Router::redirect('/admin/charging-stations');
+                    // 🎯 Redirigir segons el rol
+                    $roleId = $_SESSION['role_id'] ?? self::ROLE_USER;
+                    if ($roleId === self::ROLE_SUPERADMIN || $roleId === self::ROLE_ADMIN) {
+                        // SuperAdmin i Admins → Dashboard Admin
+                        return Router::redirect('/admin/dashboard');
                     } else {
+                        // Clients → Dashboard Públic
                         return Router::redirect('/dashboard');
                     }
                 }
