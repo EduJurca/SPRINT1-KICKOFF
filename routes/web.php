@@ -56,43 +56,7 @@ Router::get('/resum-projecte', function() {
 });
 
 // ==========================================
-// 👤 PERFIL D'USUARI
-// ==========================================
-
-// Perfil
-Router::get('/perfil', ['ProfileController', 'showProfile']);
-Router::get('/profile', ['ProfileController', 'showProfile']);
-
-// Completar perfil
-Router::get('/completar-perfil', ['ProfileController', 'showCompleteProfile']);
-
-Router::post('/completar-perfil', ['ProfileController', 'completeProfile']);
-
-// Verificar carnet de conduir
-Router::get('/verificar-conduir', function() {
-    Router::view('public.profile.verificar-conduir');
-});
-
-Router::post('/verificar-conduir', ['ProfileController', 'verifyLicense']);
-
-// Historial
-Router::get('/historial', ['ProfileController', 'showHistory']);
-
-// API: Obtenir historial en JSON
-Router::get('/api/historial', ['ProfileController', 'getHistory']);
-
-// Pagaments
-Router::get('/pagaments', function() {
-    Router::view('public.profile.pagaments');
-});
-
-// Premium
-Router::get('/premium', function() {
-    Router::view('public.profile.premium');
-});
-
-// ==========================================
-// 🚗 VEHICLES
+//  VEHICLES
 // ==========================================
 
 // Localitzar vehicle
@@ -151,11 +115,6 @@ Router::get('/api/bookings/{id}', ['BookingController', 'show']);
 Router::post('/api/bookings', ['BookingController', 'create']);
 Router::put('/api/bookings/{id}', ['BookingController', 'update']);
 Router::delete('/api/bookings/{id}', ['BookingController', 'delete']);
-
-// Users API
-Router::get('/api/users/profile', ['ProfileController', 'getProfile']);
-Router::post('/api/users/profile', ['ProfileController', 'updateProfile']);
-Router::post('/api/users/language', ['ProfileController', 'updateLanguage']);
 
 // Sessió
 Router::get('/api/session-check', ['AuthController', 'checkSession']);
@@ -229,30 +188,8 @@ Router::post('/admin/users/delete', function() {
 
 
 
-// ==========================================
-// 🧪 DEBUG / TESTING (només en desenvolupament)
-// ==========================================
-
-if (getenv('APP_ENV') === 'development' || !getenv('APP_ENV')) {
-    Router::get('/debug/db', function() {
-        require_once PUBLIC_PATH . '/php/api/debug-db.php';
-    });
-    
-    Router::get('/debug/vehicle', function() {
-        require_once PUBLIC_PATH . '/php/api/debug-vehicle.php';
-    });
-    
-    Router::get('/test/claim', function() {
-        require_once PUBLIC_PATH . '/php/api/test-claim.php';
-    });
-}
-
-// ==========================================
+/==============
 // 🧪 TEST D'AUTORITZACIÓ
 // ==========================================
 
-Router::get('/test/auth', function() {
-    // Requereix autenticació per veure el test
-    AuthController::requireAuth();
-    Router::view('test.auth-test');
-});
+// Test d'autorització removed from routes - dev-only view deleted

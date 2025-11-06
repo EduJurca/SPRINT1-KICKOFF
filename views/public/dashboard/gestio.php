@@ -99,7 +99,7 @@
 
           <?php if ($auth['is_admin']): ?>
           <a href="/admin"
-            class=" bg-red-100 p-4 rounded-lg shadow-sm flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105 border-2 border-red-300"
+            class="bg-red-100 p-4 rounded-lg shadow-sm flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105 border-2 border-red-300"
             aria-label="Panell Admin">
             <img src="/public_html/images/admin.png" alt="Admin" class="h-12 w-12 mb-2">
             <p class="font-bold text-base text-red-900">Admin Panel</p>

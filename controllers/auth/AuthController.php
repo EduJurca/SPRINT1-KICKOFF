@@ -7,6 +7,11 @@
 require_once MODELS_PATH . '/User.php';
 
 class AuthController {
+    // Constantes de rols
+    const ROLE_SUPERADMIN = 1;
+    const ROLE_ADMIN = 2;
+    const ROLE_USER = 3;
+    
     private $userModel;
     
     public function __construct() {
@@ -47,9 +52,9 @@ class AuthController {
                     return Router::json($result, 200);
                 } else {
                     // 🎯 Redirigir segons el rol
-                    $roleId = $_SESSION['role_id'] ?? 3;
-                    if ($roleId == 1 || $roleId == 2) {
-                        // SuperAdmin i Treballadors → Dashboard Admin
+                    $roleId = $_SESSION['role_id'] ?? self::ROLE_USER;
+                    if ($roleId === self::ROLE_SUPERADMIN || $roleId === self::ROLE_ADMIN) {
+                        // SuperAdmin i Admins → Dashboard Admin
                         return Router::redirect('/admin/dashboard');
                     } else {
                         // Clients → Dashboard Públic
@@ -94,10 +99,10 @@ class AuthController {
             return ['success' => false, 'message' => 'Incorrect password'];
         }
 
-        // 
+        // Guardar dades de sessió
         $_SESSION['user_id']  = $user['id'];
         $_SESSION['username'] = $user['username'];
-        $_SESSION['role_id'] = $user['role_id'] ?? 3;
+        $_SESSION['role_id'] = $user['role_id'] ?? self::ROLE_USER;
         $_SESSION['role_name'] = $user['role_name'] ?? 'Client';
 
         return [
@@ -141,6 +146,32 @@ class AuthController {
                 }
             }
             
+            // Validar format de email
+            if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+                if (strpos($contentType, 'application/json') !== false) {
+                    return Router::json([
+                        'success' => false,
+                        'message' => 'Invalid email format'
+                    ], 400);
+                } else {
+                    $_SESSION['error'] = 'Format de correu electrònic invàlid';
+                    return Router::redirect('/register');
+                }
+            }
+            
+            // Validar contrasenya (mínim 8 caràcters)
+            if (strlen($data['password']) < 8) {
+                if (strpos($contentType, 'application/json') !== false) {
+                    return Router::json([
+                        'success' => false,
+                        'message' => 'Password must be at least 8 characters long'
+                    ], 400);
+                } else {
+                    $_SESSION['error'] = 'La contrasenya ha de tenir almenys 8 caràcters';
+                    return Router::redirect('/register');
+                }
+            }
+            
             // Comprovar si l'usuari ja existeix
             if ($this->userModel->findByUsernameOrEmail($data['username'], $data['email'])) {
                 if (strpos($contentType, 'application/json') !== false) {
@@ -156,7 +187,7 @@ class AuthController {
             
             // Crear usuari
             if ($this->userModel->create($data)) {
-                // 
+                // Obtenir usuari creat
                 $user = $this->userModel->findByUsername($data['username']);
                 
                 if ($user) {
@@ -175,7 +206,7 @@ class AuthController {
                     
                     $_SESSION['user_id']  = $user['id'];
                     $_SESSION['username'] = $user['username'];
-                    $_SESSION['role_id'] = $user['role_id'] ?? 3;
+                    $_SESSION['role_id'] = $user['role_id'] ?? self::ROLE_USER;
                     $_SESSION['role_name'] = $user['role_name'] ?? 'Client';
                     
                     $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
@@ -187,7 +218,7 @@ class AuthController {
                             'user' => [
                                 'id' => $user['id'],
                                 'username' => $user['username'],
-                                'role_id' => $user['role_id'] ?? 3,
+                                'role_id' => $user['role_id'] ?? self::ROLE_USER,
                                 'role_name' => $user['role_name'] ?? 'Client'
                             ]
                         ], 201);
@@ -231,19 +262,15 @@ class AuthController {
         session_unset();
         session_destroy();
         
-        // Verificar si es una petición JSON
-        $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
-        $acceptHeader = $_SERVER['HTTP_ACCEPT'] ?? '';
-        
-        if (strpos($contentType, 'application/json') !== false || 
-            strpos($acceptHeader, 'application/json') !== false) {
-            // Respuesta JSON para AJAX
+        // Detectar si és API o navegador
+        if (self::isApiRequest()) {
+            // Petició API: retornar JSON
             return Router::json([
                 'success' => true,
                 'message' => 'Session closed'
             ], 200);
         } else {
-            // Redirigir a la página principal para formularios HTML
+            // Petició navegador: redirigir a la pàgina principal
             return Router::redirect('/');
         }
     }
@@ -275,6 +302,23 @@ class AuthController {
     public function getSessionStatus() {
         return $this->checkSession();
     }
+
+    /**
+     * Detecta si la petició és API
+     * 
+     * @return bool True si és una petició API
+     */
+    private static function isApiRequest() {
+        return (
+            isset($_SERVER['HTTP_ACCEPT']) && 
+            strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false
+        ) || (
+            isset($_SERVER['CONTENT_TYPE']) && 
+            strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false
+        ) || (
+            strpos($_SERVER['REQUEST_URI'], '/api/') !== false
+        );
+    }
     
     /**
      * Middleware per comprovar autenticació
@@ -286,15 +330,7 @@ class AuthController {
         
         if (!isset($_SESSION['user_id'])) {
             // Detectar si és una petició API o navegador
-            $isApiRequest = (
-                isset($_SERVER['HTTP_ACCEPT']) && 
-                strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false
-            ) || (
-                isset($_SERVER['CONTENT_TYPE']) && 
-                strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false
-            ) || (
-                strpos($_SERVER['REQUEST_URI'], '/api/') !== false
-            );
+            $isApiRequest = self::isApiRequest();
             
             if ($isApiRequest) {
                 // Petició API: retornar JSON
@@ -320,19 +356,11 @@ class AuthController {
     public static function requireAdmin() {
         $userId = self::requireAuth();
         
-        // Comprovar si és Staff (SuperAdmin o Treballador)
-        $roleId = $_SESSION['role_id'] ?? 3;
-        if (!in_array($roleId, [1, 2])) {
+        // Comprovar si és Staff (SuperAdmin o Admin)
+        $roleId = $_SESSION['role_id'] ?? self::ROLE_USER;
+        if (!in_array($roleId, [self::ROLE_SUPERADMIN, self::ROLE_ADMIN])) {
             // Detectar si és una petició API o navegador
-            $isApiRequest = (
-                isset($_SERVER['HTTP_ACCEPT']) && 
-                strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false
-            ) || (
-                isset($_SERVER['CONTENT_TYPE']) && 
-                strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false
-            ) || (
-                strpos($_SERVER['REQUEST_URI'], '/api/') !== false
-            );
+            $isApiRequest = self::isApiRequest();
             
             if ($isApiRequest) {
                 Router::json([

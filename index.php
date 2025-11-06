@@ -19,6 +19,9 @@ require_once LOCALE_PATH . '/Lang.php';
 require_once LOCALE_PATH . '/LanguageDetector.php';
 require_once CORE_PATH . '/Router.php';
 require_once CORE_PATH . '/helpers.php';
+// Càrrega centralitzada de l'autorització i permisos per evitar múltiples includes
+require_once CORE_PATH . '/Authorization.php';
+require_once CORE_PATH . '/Permissions.php';
 
 $uri = $_SERVER['REQUEST_URI'];
 $detectedLang = LanguageDetector::detect($uri);

@@ -1,7 +1,6 @@
 <?php
 
 function can($permission) {
-    require_once CORE_PATH . '/Permissions.php';
     return Permissions::can($permission);
 }
 

@@ -138,8 +138,8 @@ class Router {
     }
     
     public static function view($view, $data = []) {
+        // `Authorization` is expected to be loaded centrally at bootstrap (index.php)
         if (!isset($data['auth'])) {
-            require_once __DIR__ . '/Authorization.php';
             $data['auth'] = Authorization::getAuthInfo();
         }
         
