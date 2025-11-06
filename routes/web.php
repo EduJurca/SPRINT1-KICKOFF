@@ -37,7 +37,7 @@ Router::get('/logout', ['AuthController', 'logout']);
 
 // Recuperar contrasenya
 Router::get('/recover-password', function() {
-    Router::view('auth.recover-password');
+    Router::view('auth.recuperar-contrasenya');
 });
 
 Router::post('/recover-password', ['AuthController', 'recoverPassword']);
@@ -48,7 +48,6 @@ Router::post('/recover-password', ['AuthController', 'recoverPassword']);
 
 // Dashboard principal (gestió)
 Router::get('/dashboard', ['DashboardController', 'showGestio']);
-
 Router::get('/gestio', ['DashboardController', 'showGestio']);
 
 // Resum del projecte
@@ -57,43 +56,7 @@ Router::get('/resum-projecte', function() {
 });
 
 // ==========================================
-// 👤 PERFIL D'USUARI
-// ==========================================
-
-// Perfil
-Router::get('/perfil', ['ProfileController', 'showProfile']);
-
-Router::get('/profile', ['ProfileController', 'showProfile']);
-
-// Completar perfil
-Router::get('/completar-perfil', ['ProfileController', 'showCompleteProfile']);
-
-Router::post('/completar-perfil', ['ProfileController', 'completeProfile']);
-
-// Verificar carnet de conduir
-Router::get('/verificar-conduir', function() {
-    Router::view('public.profile.verificar-conduir');
-});
-
-Router::post('/verificar-conduir', ['ProfileController', 'verifyLicense']);
-
-// Historial
-Router::get('/historial', function() {
-    Router::view('public.profile.historial');
-});
-
-// Pagaments
-Router::get('/pagaments', function() {
-    Router::view('public.profile.pagaments');
-});
-
-// Premium
-Router::get('/premium', function() {
-    Router::view('public.profile.premium');
-});
-
-// ==========================================
-// 🚗 VEHICLES
+//  VEHICLES
 // ==========================================
 
 // Localitzar vehicle
@@ -153,11 +116,6 @@ Router::post('/api/bookings', ['BookingController', 'create']);
 Router::put('/api/bookings/{id}', ['BookingController', 'update']);
 Router::delete('/api/bookings/{id}', ['BookingController', 'delete']);
 
-// Users API
-Router::get('/api/users/profile', ['ProfileController', 'getProfile']);
-Router::post('/api/users/profile', ['ProfileController', 'updateProfile']);
-Router::post('/api/users/language', ['ProfileController', 'updateLanguage']);
-
 // Sessió
 Router::get('/api/session-check', ['AuthController', 'checkSession']);
 Router::get('/api/session-status', ['AuthController', 'getSessionStatus']);
@@ -174,33 +132,73 @@ Router::get('/accessibilitat', function() {
 });
 
 // ==========================================
-// 🔧 ADMIN (si tens zona d'administració)
+// 🔧 ADMIN (Panel d'Administració)
 // ==========================================
+require_once CONTROLLERS_PATH . '/admin/AdminController.php';
 
-Router::get('/admin', function() {
-    // Comprovar si és admin
-    require_once PUBLIC_PATH . '/php/admin/index.php';
-});
+// Dashboard principal d'admin
+Router::get('/admin', ['AdminController', 'dashboard']);
+Router::get('/admin/dashboard', ['AdminController', 'dashboard']);
 
-Router::get('/admin/dashboard', function() {
-    require_once PUBLIC_PATH . '/php/admin/dashboard.php';
-});
+// Gestió de vehicles
+Router::get('/admin/vehicles', ['AdminController', 'vehicles']);
+
+// Gestió de reserves
+Router::get('/admin/bookings', ['AdminController', 'bookings']);
+
+// Incidències
+Router::get('/admin/incidencies', ['AdminController', 'incidencies']);
+
+// Configuració (settings page removed)
+
+// ==========================================
+// 👥 CRUD USUARIS
+// ==========================================
+require_once CONTROLLERS_PATH . '/admin/UserController.php';
 
 Router::get('/admin/users', function() {
-    require_once PUBLIC_PATH . '/php/admin/users.php';
+    $controller = new UserController();
+    $controller->index();
 });
 
-Router::get('/admin/vehicles', function() {
-    require_once PUBLIC_PATH . '/php/admin/vehicles.php';
+Router::get('/admin/users/create', function() {
+    $controller = new UserController();
+    $controller->create();
 });
 
-Router::get('/admin/bookings', function() {
-    require_once PUBLIC_PATH . '/php/admin/bookings.php';
+Router::post('/admin/users/store', function() {
+    $controller = new UserController();
+    $controller->store();
 });
 
-Router::get('/admin/settings', function() {
-    require_once PUBLIC_PATH . '/php/admin/settings.php';
-});
+// ==========================================
+// 🚗 ADMIN - CRUD DE VEHICLES (MVC)
+// ==========================================
+
+// INDEX - Listar todos los vehículos
+Router::get('/admin/vehicles', ['AdminVehicleController', 'index']);
+
+// CREATE - Mostrar formulario de crear
+Router::get('/admin/vehicles/create', ['AdminVehicleController', 'create']);
+
+// STORE - Guardar nuevo vehículo
+Router::post('/admin/vehicles', ['AdminVehicleController', 'store']);
+
+// SHOW - Ver detalle de un vehículo
+Router::get('/admin/vehicles/{id}', ['AdminVehicleController', 'show']);
+
+// EDIT - Mostrar formulario de editar
+Router::get('/admin/vehicles/{id}/edit', ['AdminVehicleController', 'edit']);
+
+// UPDATE - Actualizar vehículo (soporta PUT y POST)
+Router::put('/admin/vehicles/{id}', ['AdminVehicleController', 'update']);
+Router::post('/admin/vehicles/{id}', ['AdminVehicleController', 'update']);
+
+// DESTROY - Eliminar vehículo (simulando DELETE con POST + _method)
+Router::delete('/admin/vehicles/{id}', ['AdminVehicleController', 'destroy']);
+
+// API - Obtener vehículos en JSON
+Router::get('/admin/api/vehicles', ['AdminVehicleController', 'api']);
 
 // ==========================================
 // ⚡ CHARGING STATIONS (PUNTS DE CÀRREGA)
@@ -225,16 +223,4 @@ Router::get('/api/charging-stations', ['ChargingStationController', 'getStations
 // 🧪 DEBUG / TESTING (només en desenvolupament)
 // ==========================================
 
-if (getenv('APP_ENV') === 'development' || !getenv('APP_ENV')) {
-    Router::get('/debug/db', function() {
-        require_once PUBLIC_PATH . '/php/api/debug-db.php';
-    });
-    
-    Router::get('/debug/vehicle', function() {
-        require_once PUBLIC_PATH . '/php/api/debug-vehicle.php';
-    });
-    
-    Router::get('/test/claim', function() {
-        require_once PUBLIC_PATH . '/php/api/test-claim.php';
-    });
-}
+// Test d'autorització removed from routes - dev-only view deleted
