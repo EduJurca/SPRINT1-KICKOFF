@@ -371,6 +371,8 @@ return [
         'delete' => 'Delete',
         'no_cards' => 'You don\'t have any saved cards.',
         'delete_card_confirm' => 'Are you sure you want to delete this card?',
+        'delete_card_title' => 'Delete card',
+        'cancel' => 'Cancel',
     ],
     'dashboard' => [
         'management_window' => 'Management Window',
