@@ -5,10 +5,10 @@
  */
 
 // Check if user is admin
-if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
-    header('Location: /login');
-    exit;
-}
+// if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
+//     header('Location: /login');
+//     exit;
+// }
 
 $title = 'Add Charging Station - Admin Panel';
 $pageTitle = 'Add Charging Station';

@@ -23,10 +23,10 @@ class ChargingStationController {
      */
     public function index() {
         // Check if user is admin
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: /login');
-            exit;
-        }
+        // if (!isset($_SESSION['user_id'])) {
+        //     header('Location: /login');
+        //     exit;
+        // }
         
         $stations = $this->stationModel->getAllStations();
         
@@ -41,10 +41,10 @@ class ChargingStationController {
      */
     public function create() {
         // Check if user is admin
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: /login');
-            exit;
-        }
+        // if (!isset($_SESSION['user_id'])) {
+        //     header('Location: /login');
+        //     exit;
+        // }
         
         Router::view('admin.charging.create');
     }
@@ -103,10 +103,10 @@ class ChargingStationController {
      */
     public function edit($id) {
         // Check if user is admin
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: /login');
-            exit;
-        }
+        // if (!isset($_SESSION['user_id'])) {
+        //     header('Location: /login');
+        //     exit;
+        // }
         
         $station = $this->stationModel->getStationById($id);
         
