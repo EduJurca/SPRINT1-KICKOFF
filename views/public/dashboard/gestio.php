@@ -107,11 +107,11 @@
           <?php endif; ?>
 
           <?php if ($auth['is_manager'] || $auth['is_admin']): ?>
-          <a href="/fleet"
+          <a href="/admin/vehicles"
             class=" bg-purple-100 p-4 rounded-lg shadow-sm flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105 border-2 border-purple-300"
-            aria-label="Gestió Flota">
-            <img src="/public_html/images/fleet.png" alt="Flota" class="h-12 w-12 mb-2">
-            <p class="font-bold text-base text-purple-900">Gestió Flota</p>
+            aria-label="Gestió Vehicles">
+            <img src="/public_html/images/fleet.png" alt="Vehicles" class="h-12 w-12 mb-2">
+            <p class="font-bold text-base text-purple-900">Gestió Vehicles</p>
           </a>
           <?php endif; ?>
 

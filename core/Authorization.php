@@ -68,7 +68,6 @@ class Authorization {
             'disable_vehicle',
             'view_all_bookings',
             'manage_vehicle_maintenance',
-            'view_fleet_stats',
         ],
         
    
