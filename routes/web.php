@@ -201,26 +201,23 @@ Router::delete('/admin/vehicles/{id}', ['AdminVehicleController', 'destroy']);
 Router::get('/admin/api/vehicles', ['AdminVehicleController', 'api']);
 
 // ==========================================
-// ⚡ CHARGING STATIONS (PUNTS DE CÀRREGA)
+// 🔧 ADMIN - OTRAS SECCIONES
 // ==========================================
 
-// ADMIN ROUTES (gestió CRUD)
-Router::get('/admin/charging-stations', ['ChargingStationController', 'index']);
-Router::get('/admin/charging-stations/create', ['ChargingStationController', 'create']);
-Router::post('/admin/charging-stations/store', ['ChargingStationController', 'store']);
-Router::get('/admin/charging-stations/{id}/edit', ['ChargingStationController', 'edit']);
-Router::post('/admin/charging-stations/{id}/update', ['ChargingStationController', 'update']);
-Router::post('/admin/charging-stations/{id}/delete', ['ChargingStationController', 'delete']);
+Router::post('/admin/users/update', function() {
+    $controller = new UserController();
+    $controller->update();
+});
 
-// PUBLIC ROUTES (mapa i detalls)
-Router::get('/charging-stations', ['ChargingStationController', 'showMap']);
-Router::get('/charging-stations/{id}', ['ChargingStationController', 'getStationDetails']);
+Router::post('/admin/users/delete', function() {
+    $controller = new UserController();
+    $controller->delete();
+});
 
-// API ROUTES (JSON endpoints)
-Router::get('/api/charging-stations', ['ChargingStationController', 'getStationsJSON']);
 
-// ==========================================
-// 🧪 DEBUG / TESTING (només en desenvolupament)
+
+//==============
+// 🧪 TEST D'AUTORITZACIÓ
 // ==========================================
 
 // Test d'autorització removed from routes - dev-only view deleted
