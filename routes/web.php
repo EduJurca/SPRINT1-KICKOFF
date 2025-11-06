@@ -188,7 +188,7 @@ Router::post('/admin/users/delete', function() {
 
 
 
-/==============
+//==============
 // 🧪 TEST D'AUTORITZACIÓ
 // ==========================================
 
