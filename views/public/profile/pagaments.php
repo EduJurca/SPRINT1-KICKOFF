@@ -116,18 +116,18 @@
     <!-- Modal de confirmación de eliminación -->
     <div id="delete-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
         <div class="bg-white rounded-lg p-6 max-w-sm mx-4 shadow-xl">
-            <h3 class="text-lg font-semibold mb-2 text-gray-900">Eliminar targeta</h3>
+            <h3 class="text-lg font-semibold mb-2 text-gray-900"><?php echo __('profile.delete_card_title'); ?></h3>
             <p class="text-gray-600 mb-4">
-                Estàs segur que vols eliminar aquesta targeta?
+                <?php echo __('profile.delete_card_confirm'); ?>
                 <br>
                 <span id="modal-card-number" class="font-medium text-gray-900"></span>
             </p>
             <div class="flex gap-3">
                 <button id="cancel-delete-btn" class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
-                    Cancel·lar
+                    <?php echo __('profile.cancel'); ?>
                 </button>
                 <button id="confirm-delete-btn" class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
-                    Eliminar
+                    <?php echo __('profile.delete'); ?>
                 </button>
             </div>
         </div>
