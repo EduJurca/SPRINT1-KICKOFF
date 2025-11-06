@@ -355,17 +355,17 @@ class ProfileController {
         
         if (strlen($cardNumber) < 13 || strlen($cardNumber) > 19) {
             $_SESSION['error'] = 'Número de targeta invàlid';
-            return Router::redirect('/pagaments');
+            return Router::redirect('/perfil/pagaments');
         }
         
         if (empty($expiry)) {
             $_SESSION['error'] = 'Data d\'expiració requerida';
-            return Router::redirect('/pagaments');
+            return Router::redirect('/perfil/pagaments');
         }
         
         if (!preg_match('/^\d{3,4}$/', $cvc)) {
             $_SESSION['error'] = 'CVC invàlid';
-            return Router::redirect('/pagaments');
+            return Router::redirect('/perfil/pagaments');
         }
         
         // Extreure dades per guardar (només metadades segures)
@@ -422,12 +422,12 @@ class ProfileController {
             $stmt->close();
             
             $_SESSION['success'] = 'Mètode de pagament afegit correctament';
-            return Router::redirect('/pagaments');
+            return Router::redirect('/perfil/pagaments');
             
         } catch (Exception $e) {
             error_log('Error adding payment method: ' . $e->getMessage());
             $_SESSION['error'] = 'Error al guardar el mètode de pagament';
-            return Router::redirect('/pagaments');
+            return Router::redirect('/perfil/pagaments');
         }
     }
     
@@ -472,17 +472,17 @@ class ProfileController {
             if ($stmt->affected_rows > 0) {
                 $stmt->close();
                 $_SESSION['success'] = 'Targeta eliminada correctament';
-                return Router::redirect('/pagaments');
+                return Router::redirect('/perfil/pagaments');
             } else {
                 $stmt->close();
                 $_SESSION['error'] = 'No s\'ha pogut eliminar la targeta';
-                return Router::redirect('/pagaments');
+                return Router::redirect('/perfil/pagaments');
             }
             
         } catch (Exception $e) {
             error_log('Error deleting payment method: ' . $e->getMessage());
             $_SESSION['error'] = 'Error al eliminar la targeta';
-            return Router::redirect('/pagaments');
+            return Router::redirect('/perfil/pagaments');
         }
     }
 }
