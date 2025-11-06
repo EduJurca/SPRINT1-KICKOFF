@@ -372,6 +372,8 @@ return [
         'delete' => 'Eliminar',
         'no_cards' => 'No tens cap targeta guardada.',
         'delete_card_confirm' => 'Estàs segur que vols eliminar aquesta targeta?',
+        'delete_card_title' => 'Eliminar targeta',
+        'cancel' => 'Cancel·lar',
     ],
     'dashboard' => [
         'management_window' => 'Finestra de Gestió',
