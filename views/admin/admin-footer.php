@@ -2,24 +2,8 @@
         </main>
     </div>
 
-    <script>
-        (function (d) {
-            var s = d.createElement("script");
-            s.setAttribute("data-account","<?php echo getenv('USERWAY_ACCOUNT_ID'); ?>");
-            s.src = "https://cdn.userway.org/widget.js";
-            (d.body || d.head).appendChild(s);
-        })(document);
-    </script>
-    <style>
-        [class*="userway"], [id*="userway"] {
-            position: fixed !important;
-            bottom: 20px !important;
-            right: 20px !important;
-            top: auto !important;
-            left: auto !important;
-            z-index: 99999 !important;
-        }
-    </style>
+    <!-- Widget de Chatbot Flotante -->
+    <?php include __DIR__ . '/../commons/chatbot-widget.php'; ?>
 
     <!-- Scripts -->
     <script src="/assets/js/main.js"></script>

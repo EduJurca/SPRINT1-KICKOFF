@@ -156,6 +156,13 @@ Router::get('/chat', ['ChatController', 'index']);
 Router::post('/chat/send', ['ChatController', 'send']);
 
 // ==========================================
+// � CHAT / ASISTENTE IA
+// ==========================================
+
+Router::get('/chat', ['ChatController', 'index']);
+Router::post('/chat/send', ['ChatController', 'send']);
+
+// ==========================================
 // �🔧 ADMIN (si tens zona d'administració)
 // ==========================================
 

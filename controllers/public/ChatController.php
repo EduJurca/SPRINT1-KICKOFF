@@ -36,13 +36,6 @@ class ChatController {
         // Obtener el mensaje del usuario
         $input = json_decode(file_get_contents('php://input'), true);
         
-        // Validar errores de parseo JSON
-        if ($input === null || !is_array($input)) {
-            http_response_code(400);
-            echo json_encode(['error' => 'Invalid JSON']);
-            return;
-        }
-        
         if (empty($input['message'])) {
             http_response_code(400);
             echo json_encode(['error' => 'Message is required']);
@@ -67,20 +60,11 @@ class ChatController {
             return;
         }
         
-        // Preparar el prompt del sistema según el idioma del usuario
-        $systemPrompts = [
-            'es' => 'Eres un asistente virtual útil para VoltiaCar, una aplicación de car sharing de vehículos eléctricos. Ayuda a los usuarios con preguntas sobre vehículos, reservas, pagos y uso de la aplicación. Responde de forma concisa y amigable en el idioma del usuario.',
-            'en' => 'You are a helpful virtual assistant for VoltiaCar, an electric vehicle car sharing app. Help users with questions about vehicles, bookings, payments, and app usage. Respond concisely and in a friendly manner in the user\'s language.',
-            'ca' => 'Ets un assistent virtual útil per a VoltiaCar, una aplicació de car sharing de vehicles elèctrics. Ajuda els usuaris amb preguntes sobre vehicles, reserves, pagaments i ús de l\'aplicació. Respon de manera concisa i amigable en l\'idioma de l\'usuari.'
-        ];
-        $lang = isset($_SESSION['lang']) ? $_SESSION['lang'] : 'es';
-        $systemPrompt = isset($systemPrompts[$lang]) ? $systemPrompts[$lang] : $systemPrompts['es'];
-
         // Preparar los mensajes para Groq (formato OpenAI-compatible)
         $messages = [
             [
                 'role' => 'system',
-                'content' => $systemPrompt
+                'content' => 'Eres un asistente virtual útil para VoltiaCar, una aplicación de car sharing de vehículos eléctricos. Ayuda a los usuarios con preguntas sobre vehículos, reservas, pagos y uso de la aplicación. Responde de forma concisa y amigable en el idioma del usuario.'
             ],
             [
                 'role' => 'user',

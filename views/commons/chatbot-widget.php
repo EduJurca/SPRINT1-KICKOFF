@@ -33,7 +33,7 @@ if (!isset($_SESSION['user_id'])) {
                 <p class="text-xs text-blue-100"><?php echo __('chat.subtitle'); ?></p>
             </div>
         </div>
-        <button id="chat-close" class="text-white hover:bg-blue-700 rounded p-1 transition" aria-label="<?php echo __('chat.close'); ?>">
+        <button id="chat-close" class="text-white hover:bg-blue-700 rounded p-1 transition">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
             </svg>
