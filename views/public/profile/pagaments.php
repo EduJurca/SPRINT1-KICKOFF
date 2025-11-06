@@ -41,7 +41,7 @@
                 </div>
             <?php endif; ?>
 
-            <div class="mb-6 border-b pb-4">
+            <div class="mb-6">
                 <h2 class="text-xl font-semibold mb-4 text-gray-900"><?php echo __('profile.current_cards'); ?></h2>
 
                 <!-- Existing cards list -->
@@ -60,11 +60,12 @@
                                         <?php echo __('profile.expires'); ?>: <?php echo str_pad($method['exp_month'], 2, '0', STR_PAD_LEFT); ?>/<?php echo $method['exp_year']; ?>
                                     </p>
                                 </div>
-                                <form action="/perfil/pagaments/delete/<?php echo $method['id']; ?>" method="POST" style="display: inline;" onsubmit="return confirm('<?php echo __('profile.delete_card_confirm'); ?>');">
-                                    <button type="submit" class="text-red-600 hover:text-red-800 text-lg p-2 transition-colors duration-200" title="<?php echo __('profile.delete'); ?>">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </form>
+                                <button type="button" class="delete-card-btn text-red-600 hover:text-red-800 text-lg p-2 transition-colors duration-200" 
+                                        data-card-id="<?php echo $method['id']; ?>"
+                                        data-card-last4="<?php echo $method['last4']; ?>"
+                                        title="<?php echo __('profile.delete'); ?>">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
                             </li>
                         <?php endforeach; ?>
                     </ul>
@@ -72,8 +73,13 @@
                     <p class="text-gray-500 mb-4"><?php echo __('profile.no_cards'); ?></p>
                 <?php endif; ?>
 
-                <!-- Add new card form -->
-                <form id="add-card-form" action="/perfil/pagaments/add" method="POST" class="space-y-4" novalidate>
+                <!-- Button to show add card form -->
+                <button id="show-add-card-btn" type="button" class="w-full bg-[#1565C0] text-white py-3 rounded-lg font-semibold mb-4">
+                    <?php echo __('profile.add_card'); ?>
+                </button>
+
+                <!-- Add new card form (hidden by default) -->
+                <form id="add-card-form" action="/perfil/pagaments/add" method="POST" class="space-y-4 hidden" novalidate>
                     <div>
                         <label for="card-number" class="block text-sm font-medium text-gray-700"><?php echo __('profile.card_number') ?? 'Número de targeta'; ?></label>
                         <input id="card-number" name="card_number" inputmode="numeric" autocomplete="cc-number" placeholder="1234 5678 9012 3456" maxlength="23" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2" required>
@@ -98,14 +104,104 @@
                     <div class="flex items-center justify-between space-x-4">
                         <button type="submit" class="w-full bg-[#1565C0] text-white py-3 rounded-lg font-semibold"><?php echo __('profile.add_card'); ?></button>                    
                     </div>
+                    
+                    <button type="button" id="cancel-add-card-btn" class="w-full bg-gray-300 text-gray-700 py-3 rounded-lg font-semibold">
+                        <?php echo __('vehicle.cancel') ?? 'Cancel·lar'; ?>
+                    </button>
                 </form>
-
-                <!-- Guidance: if you want to navigate programmatically, use JS window.location.href or set the form action to your server endpoint. See comments below. -->
             </div>
         </div>
     </div>
 
+    <!-- Modal de confirmación de eliminación -->
+    <div id="delete-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 max-w-sm mx-4 shadow-xl">
+            <h3 class="text-lg font-semibold mb-2 text-gray-900">Eliminar targeta</h3>
+            <p class="text-gray-600 mb-4">
+                Estàs segur que vols eliminar aquesta targeta?
+                <br>
+                <span id="modal-card-number" class="font-medium text-gray-900"></span>
+            </p>
+            <div class="flex gap-3">
+                <button id="cancel-delete-btn" class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
+                    Cancel·lar
+                </button>
+                <button id="confirm-delete-btn" class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                    Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario oculto para eliminación -->
+    <form id="delete-form" method="POST" style="display: none;">
+    </form>
+
     <script>
+        // Delete card modal functionality
+        const deleteModal = document.getElementById('delete-modal');
+        const modalCardNumber = document.getElementById('modal-card-number');
+        const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
+        const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+        const deleteForm = document.getElementById('delete-form');
+        let currentCardId = null;
+
+        // Open modal when delete button is clicked
+        document.querySelectorAll('.delete-card-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                currentCardId = this.dataset.cardId;
+                const cardLast4 = this.dataset.cardLast4;
+                modalCardNumber.textContent = `**** **** **** ${cardLast4}`;
+                deleteModal.classList.remove('hidden');
+                deleteModal.classList.add('flex');
+            });
+        });
+
+        // Close modal on cancel
+        cancelDeleteBtn.addEventListener('click', function() {
+            deleteModal.classList.add('hidden');
+            deleteModal.classList.remove('flex');
+            currentCardId = null;
+        });
+
+        // Close modal on background click
+        deleteModal.addEventListener('click', function(e) {
+            if (e.target === deleteModal) {
+                deleteModal.classList.add('hidden');
+                deleteModal.classList.remove('flex');
+                currentCardId = null;
+            }
+        });
+
+        // Confirm delete
+        confirmDeleteBtn.addEventListener('click', function() {
+            if (currentCardId) {
+                deleteForm.action = `/perfil/pagaments/delete/${currentCardId}`;
+                deleteForm.submit();
+            }
+        });
+
+        // Show/hide add card form
+        const showBtn = document.getElementById('show-add-card-btn');
+        const cancelBtn = document.getElementById('cancel-add-card-btn');
+        const addCardForm = document.getElementById('add-card-form');
+
+        showBtn.addEventListener('click', function() {
+            addCardForm.classList.remove('hidden');
+            showBtn.classList.add('hidden');
+        });
+
+        cancelBtn.addEventListener('click', function() {
+            addCardForm.classList.add('hidden');
+            showBtn.classList.remove('hidden');
+            addCardForm.reset();
+            // Clear any error messages
+            document.querySelectorAll('[id$="-error"]').forEach(el => {
+                el.textContent = '';
+                el.classList.add('hidden');
+            });
+        });
+
         // Client-side validation for card form
         (function(){
             const form = document.getElementById('add-card-form');
