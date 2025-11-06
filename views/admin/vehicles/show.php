@@ -22,33 +22,44 @@ unset($_SESSION['success']);
         
         <!-- Header -->
         <div class="mb-8">
-            <a href="/admin/vehicles" class="inline-flex items-center px-4 py-2 mb-4 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors shadow-sm">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                </svg>
-                <?= __('admin.vehicles.back') ?>
-            </a>
-            <div class="flex justify-between items-start">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-900">
-                        <?= htmlspecialchars($vehicle['brand']) ?> <?= htmlspecialchars($vehicle['model']) ?>
-                    </h1>
-                </div>
-                <div class="flex gap-3">
-                        <a href="/admin/vehicles/<?= $vehicle['id'] ?>/edit" 
-                                  class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                        </svg>
-                        <?= __('admin.vehicles.buttons.edit') ?>
-                    </a>
-                    <button onclick="confirmDelete()" 
-                            class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                        </svg>
-                        <?= __('admin.vehicles.buttons.delete') ?>
-                    </button>
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900">
+                            <?= htmlspecialchars($vehicle['brand']) ?> <?= htmlspecialchars($vehicle['model']) ?>
+                        </h1>
+                        <?php if (!empty($vehicle['license_plate'])): ?>
+                            <p class="text-sm text-gray-500 mt-1"><?= htmlspecialchars($vehicle['license_plate']) ?></p>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="flex items-center gap-3 mt-3 sm:mt-0">
+                        <!-- Volver al listado (secundario) -->
+                        <a href="/admin/vehicles" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                            <?= __('admin.vehicles.back') ?>
+                        </a>
+
+                        <!-- Editar (botón grande) -->
+                        <a href="/admin/vehicles/<?= $vehicle['id'] ?>/edit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition" title="<?= __('admin.vehicles.buttons.edit') ?>">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.414 6.586a2 2 0 112.828 2.828L12 18l-4 1 1-4 8.414-8.414z"/>
+                            </svg>
+                            <?= __('admin.vehicles.buttons.edit') ?>
+                        </a>
+
+                        <!-- Eliminar (botón grande y rojo) -->
+                        <button type="button" onclick="confirmDelete()" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition" title="<?= __('admin.vehicles.buttons.delete') ?>">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3"/>
+                            </svg>
+                            <?= __('admin.vehicles.buttons.delete') ?>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

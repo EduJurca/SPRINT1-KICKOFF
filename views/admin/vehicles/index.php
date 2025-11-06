@@ -18,16 +18,18 @@ unset($_SESSION['success'], $_SESSION['error']);
         
         <!-- Header -->
         <div class="mb-8">
-            <div class="flex justify-between items-center">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-900"><?= __('admin.vehicles.title') ?></h1>
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900"><?= __('admin.vehicles.title') ?></h1>
+                    </div>
+                    <a href="/admin/vehicles/create" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        <?= __('admin.vehicles.new_button') ?>
+                    </a>
                 </div>
-                <a href="/admin/vehicles/create" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    <?= __('admin.vehicles.new_button') ?>
-                </a>
             </div>
         </div>
 
@@ -88,7 +90,6 @@ unset($_SESSION['success'], $_SESSION['error']);
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?= __('admin.vehicles.table.id') ?></th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?= __('admin.vehicles.table.license_plate') ?></th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?= __('admin.vehicles.table.vehicle') ?></th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?= __('admin.vehicles.table.status') ?></th>
@@ -100,7 +101,7 @@ unset($_SESSION['success'], $_SESSION['error']);
                     <tbody class="bg-white divide-y divide-gray-200">
                         <?php if (empty($vehicles)): ?>
                             <tr>
-                                <td colspan="7" class="px-6 py-12 text-center text-gray-500">
+                                <td colspan="6" class="px-6 py-12 text-center text-gray-500">
                                     <div class="flex flex-col items-center gap-3">
                                         <svg class="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -113,9 +114,6 @@ unset($_SESSION['success'], $_SESSION['error']);
                         <?php else: ?>
                             <?php foreach ($vehicles as $vehicle): ?>
                                 <tr class="hover:bg-gray-50 transition">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                        #<?= $vehicle['id'] ?>
-                                    </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
                                         <?= htmlspecialchars($vehicle['license_plate'] ?? $vehicle['plate'] ?? 'N/A') ?>
                                     </td>
