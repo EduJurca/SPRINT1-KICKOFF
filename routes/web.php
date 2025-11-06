@@ -108,7 +108,14 @@ Router::get('/admin/users/create', ['UserController', 'create']);
 Router::post('/admin/users/store', ['UserController', 'store']);
 
 // ==========================================
-// 🚗 ADMIN - VEHICLES
+// � CHAT / ASISTENTE IA
+// ==========================================
+
+Router::get('/chat', ['ChatController', 'index']);
+Router::post('/chat/send', ['ChatController', 'send']);
+
+// ==========================================
+// �🔧 ADMIN (si tens zona d'administració)
 // ==========================================
 
 Router::get('/admin/vehicles', ['AdminVehicleController', 'index']);

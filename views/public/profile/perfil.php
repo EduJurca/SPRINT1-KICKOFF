@@ -164,7 +164,8 @@
     });
   </script>
 
-
+  <!-- Widget de Chatbot Flotante -->
+  <?php include __DIR__ . '/../../commons/chatbot-widget.php'; ?>
 
 </body>
 
