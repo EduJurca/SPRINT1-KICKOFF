@@ -22,7 +22,7 @@ class BookingController {
      * Llistar totes les reserves de l'usuari
      */
     public function index() {
-       
+        // Requerir autenticació
         $userId = AuthController::requireAuth();
         
         $bookings = $this->bookingModel->getBookingHistory($userId, 20);
@@ -33,9 +33,11 @@ class BookingController {
         ], 200);
     }
     
-   
+    /**
+     * Mostrar una reserva específica
+     */
     public function show($id) {
-       
+        // Requerir autenticació
         $userId = AuthController::requireAuth();
         
         $booking = $this->bookingModel->getBookingById($id);
@@ -47,9 +49,8 @@ class BookingController {
             ], 404);
         }
         
-        // Verificar que la reserva pertany a l'usuari o és Staff
-        $roleId = $_SESSION['role_id'] ?? 3;
-        if ($booking['user_id'] != $userId && !in_array($roleId, [1, 2])) {
+        // Verificar que la reserva pertany a l'usuari
+        if ($booking['user_id'] != $userId && !isset($_SESSION['is_admin'])) {
             return Router::json([
                 'success' => false,
                 'message' => 'Unauthorized'
@@ -62,9 +63,11 @@ class BookingController {
         ], 200);
     }
     
-   
+    /**
+     * Crear nova reserva
+     */
     public function create() {
-   
+        // Requerir autenticació
         $userId = AuthController::requireAuth();
         
         $data = json_decode(file_get_contents('php://input'), true);
@@ -111,7 +114,7 @@ class BookingController {
      * Actualitzar reserva
      */
     public function update($id) {
- 
+        // Requerir autenticació
         $userId = AuthController::requireAuth();
         
         $data = json_decode(file_get_contents('php://input'), true);
@@ -125,9 +128,8 @@ class BookingController {
             ], 404);
         }
         
-  
-        $roleId = $_SESSION['role_id'] ?? 3;
-        if ($booking['user_id'] != $userId && !in_array($roleId, [1, 2])) {
+        // Verificar que la reserva pertany a l'usuari
+        if ($booking['user_id'] != $userId && !isset($_SESSION['is_admin'])) {
             return Router::json([
                 'success' => false,
                 'message' => 'Unauthorized'
@@ -142,9 +144,11 @@ class BookingController {
         ], 200);
     }
     
-   
+    /**
+     * Eliminar/Cancel·lar reserva
+     */
     public function delete($id) {
-  
+        // Requerir autenticació
         $userId = AuthController::requireAuth();
         
         $booking = $this->bookingModel->getBookingById($id);
@@ -156,16 +160,15 @@ class BookingController {
             ], 404);
         }
         
-        // Verificar que la reserva pertany a l'usuari o és Staff
-        $roleId = $_SESSION['role_id'] ?? 3;
-        if ($booking['user_id'] != $userId && !in_array($roleId, [1, 2])) {
+        // Verificar que la reserva pertany a l'usuari
+        if ($booking['user_id'] != $userId && !isset($_SESSION['is_admin'])) {
             return Router::json([
                 'success' => false,
                 'message' => 'Unauthorized'
             ], 403);
         }
         
-    
+        // Cancel·lar reserva
         if ($this->bookingModel->cancelBooking($id)) {
             // Si el vehicle estava en ús, alliberar-lo
             if ($booking['status'] === 'active') {

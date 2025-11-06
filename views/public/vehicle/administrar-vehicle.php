@@ -158,7 +158,7 @@
     <div class="desktop-view hidden md:block bg-white p-8 rounded-2xl shadow-inner w-full max-w-5xl mx-auto">
         <header class="grid grid-cols-3 items-center mb-6 w-full">
             <div class="text-left">
-                <a href="/dashboard" class="text-[#1565C0] text-sm font-semibold">Tornar</a>
+                <a href="/dashboard" class="text-[#1565C0] text-sm font-semibold">← Tornar</a>
             </div>
             <h2 class="text-3xl font-bold text-gray-900 text-center">Controlar Vehicle</h2>
             <div class="flex justify-end items-center gap-3">
@@ -279,12 +279,12 @@
             crossorigin=""></script>
     
     <!-- Application Scripts -->
-    <script src="/assets/js/toast.js?v=13"></script>
-    <script src="/assets/js/confirm-modal.js?v=13"></script>
-    <script src="/assets/js/main.js?v=13"></script>
-    <script src="/assets/js/auth.js?v=13"></script>
-    <script src="/assets/js/vehicles.js?v=13"></script>
-    <script src="/assets/js/administrar-vehicle.js?v=13"></script>
+    <script src="/assets/js/toast.js?v=12"></script>
+    <script src="/assets/js/confirm-modal.js?v=12"></script>
+    <script src="/assets/js/main.js?v=12"></script>
+    <script src="/assets/js/auth.js?v=12"></script>
+    <script src="/assets/js/vehicles.js?v=12"></script>
+    <script src="/assets/js/administrar-vehicle.js?v=12"></script>
 
     <a href="/resum-projecte"
         class="fixed bottom-10 right-10 block bg-[#1565C0] text-white p-4 rounded-full shadow-lg hover:bg-[#1151a3] transition-colors duration-300 z-50">

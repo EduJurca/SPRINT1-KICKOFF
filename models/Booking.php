@@ -1,4 +1,8 @@
 <?php
+/**
+ * 📊 Booking Model
+ * Gestiona les operacions de reserves/bookings
+ */
 
 class Booking {
     private $db;

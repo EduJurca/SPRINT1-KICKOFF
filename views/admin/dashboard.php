@@ -1,93 +1,218 @@
 <?php
-// Dades reals del controlador
-$currentUser = [
-    'name' => $auth['username'] ?? 'Admin',
-    'email' => $_SESSION['email'] ?? 'admin@voltiacar.com',
-    'role_name' => $auth['role_name'] ?? 'Admin',
-    'initials' => strtoupper(substr($auth['username'] ?? 'AD', 0, 2))
-];
+/**
+ * Vista: Dashboard de Administración
+ * Panel principal con estadísticas y resumen del sistema
+ */
 
-$metrics = [
-    'users' => [
-        'title' => 'Total Usuaris',
-        'value' => $totalUsers ?? '0',
-        'change' => 'Usuaris registrats',
-        'icon' => '<i class="fa fa-users text-[#1565C0]"></i>'
-    ],
-    'vehicles' => [
-        'title' => 'Vehicles',
-        'value' => $totalVehicles ?? '0',
-        'change' => 'Vehicles disponibles',
-        'icon' => '<i class="fa fa-car text-[#1565C0]"></i>'
-    ],
-    'incidents' => [
-        'title' => 'Incidències',
-        'value' => $totalIncidents ?? '0',
-        'change' => 'Incidències registrades',
-        'icon' => '<i class="fa fa-exclamation-triangle text-[#1565C0]"></i>'
-    ],
-    'revenue' => [
-        'title' => 'Ingressos',
-        'value' => '€' . number_format($totalRevenue ?? 0, 2),
-        'change' => 'Aquest mes',
-        'icon' => '<i class="fa fa-money-bill text-[#1565C0]"></i>'
-    ]
-];
+// Verificar que el usuario sea administrador
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+    header('Location: /login');
+    exit;
+}
 
-$chartData = $monthlyBookings ?? [
-    'Gen' => 0, 'Feb' => 0, 'Mar' => 0, 'Abr' => 0,
-    'Mai' => 0, 'Jun' => 0, 'Jul' => 0, 'Ago' => 0,
-    'Set' => 0, 'Oct' => 0, 'Nov' => 0, 'Des' => 0
-];
-$maxValue = max($chartData) ?: 1;
-
-$recentActivity = $recentUsers ?? [];
-
+// Configuración de la vista
+$title = 'Dashboard - Panel d\'Administració';
 $pageTitle = 'Dashboard';
 $currentPage = 'dashboard';
 
-require_once VIEWS_PATH . '/admin/admin-header.php';
+// Incluir el header de admin
+require_once __DIR__ . '/admin-header.php';
 ?>
 
-                
-                <div class="inline-flex gap-1 bg-gray-100 p-0.5 rounded-lg mb-6 shadow-md">
-                    <button class="tab-button px-3 py-1.5 rounded-md text-sm bg-blue-900 text-white hover:bg-blue-700 hover:text-gray-100 transition-colors" data-active="true">
-                        Vista General
-                    </button>
-                    <button class="tab-button px-3 py-1.5 rounded-md text-sm text-gray-600 hover:bg-blue-700 hover:text-gray-100 transition-colors">
-                        Estadístiques
-                    </button>
-                </div>
-                
-                <!-- Metrics -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <?php foreach ($metrics as $metric): ?>
-                    <div class="bg-gray-100 rounded-xl p-6 shadow-md">
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-sm text-gray-900 font-medium"><?php echo $metric['title']; ?></span>
-                            <span class="text-xl"><?php echo $metric['icon']; ?></span>
-                        </div>
-                        <div class="text-3xl font-bold mb-1"><?php echo $metric['value']; ?></div>
-                        <div class="text-xs text-blue-700"><?php echo $metric['change']; ?></div>
-                    </div>
-                    <?php endforeach; ?>
-                </div>
-                
-                <!-- Dashboard Grid -->
-                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                    <!-- Chart -->
-                    <div class="bg-gray-100 rounded-xl p-6 shadow-md col-span-4">
-                        <h2 class="text-lg font-semibold mb-6">Vista</h2>
-                        <div class="flex items-end justify-between h-[300px] w-full">
-                            <?php foreach ($chartData as $month => $value): ?>
-                            <div class="flex flex-col items-center gap-2 h-full flex-1">
-                                <div class="w-4/5 bg-gray-200 rounded-t hover:bg-white transition-all cursor-pointer" 
-                                     style="height: <?php echo ($value / $maxValue) * 100; ?>%;"></div>
-                                <div class="text-xs text-gray-600 mt-auto"><?php echo $month; ?></div>
-                            </div>
-                            <?php endforeach; ?>
-                        </div>
-                    </div>
-                </div>
+<!-- Estadísticas principales -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+    <!-- Total Usuarios -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-500 text-sm font-medium">Total Usuaris</p>
+                <p class="text-3xl font-bold text-gray-900 mt-2">1,234</p>
+            </div>
+            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-users text-blue-600 text-xl"></i>
+            </div>
+        </div>
+        <div class="mt-4 flex items-center text-sm">
+            <span class="text-green-600 font-medium">+12%</span>
+            <span class="text-gray-500 ml-2">vs mes anterior</span>
+        </div>
+    </div>
+    
+    <!-- Total Vehicles -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-500 text-sm font-medium">Total Vehicles</p>
+                <p class="text-3xl font-bold text-gray-900 mt-2">89</p>
+            </div>
+            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-car text-green-600 text-xl"></i>
+            </div>
+        </div>
+        <div class="mt-4 flex items-center text-sm">
+            <span class="text-green-600 font-medium">+5%</span>
+            <span class="text-gray-500 ml-2">vs mes anterior</span>
+        </div>
+    </div>
+    
+    <!-- Reserves actives -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-500 text-sm font-medium">Reserves Actives</p>
+                <p class="text-3xl font-bold text-gray-900 mt-2">45</p>
+            </div>
+            <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-calendar-check text-yellow-600 text-xl"></i>
+            </div>
+        </div>
+        <div class="mt-4 flex items-center text-sm">
+            <span class="text-red-600 font-medium">-3%</span>
+            <span class="text-gray-500 ml-2">vs setmana anterior</span>
+        </div>
+    </div>
+    
+    <!-- Ingressos -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-500 text-sm font-medium">Ingressos Mensuals</p>
+                <p class="text-3xl font-bold text-gray-900 mt-2">12.5K€</p>
+            </div>
+            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-euro-sign text-purple-600 text-xl"></i>
+            </div>
+        </div>
+        <div class="mt-4 flex items-center text-sm">
+            <span class="text-green-600 font-medium">+18%</span>
+            <span class="text-gray-500 ml-2">vs mes anterior</span>
+        </div>
+    </div>
+</div>
 
-<?php require_once VIEWS_PATH . '/admin/admin-footer.php'; ?>
+<!-- Gráficos y tablas -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <!-- Reserves recents -->
+    <div class="bg-white rounded-lg shadow">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-900">Reserves Recents</h3>
+        </div>
+        <div class="p-6">
+            <div class="space-y-4">
+                <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-blue-600"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="font-medium text-gray-900">Joan García</p>
+                        <p class="text-sm text-gray-500">Tesla Model 3 - 3 dies</p>
+                    </div>
+                    <span class="px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">Confirmada</span>
+                </div>
+                <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-blue-600"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="font-medium text-gray-900">Maria López</p>
+                        <p class="text-sm text-gray-500">BMW X5 - 1 setmana</p>
+                    </div>
+                    <span class="px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">Pendent</span>
+                </div>
+                <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-blue-600"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="font-medium text-gray-900">Pere Martínez</p>
+                        <p class="text-sm text-gray-500">Audi A4 - 2 dies</p>
+                    </div>
+                    <span class="px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">Confirmada</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Vehicles més populars -->
+    <div class="bg-white rounded-lg shadow">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-900">Vehicles Més Populars</h3>
+        </div>
+        <div class="p-6">
+            <div class="space-y-4">
+                <div class="flex items-center gap-4">
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-sm font-medium text-gray-900">Tesla Model 3</span>
+                            <span class="text-sm font-medium text-gray-900">156 reserves</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-blue-600 h-2 rounded-full" style="width: 85%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-sm font-medium text-gray-900">BMW X5</span>
+                            <span class="text-sm font-medium text-gray-900">132 reserves</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-blue-600 h-2 rounded-full" style="width: 72%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-sm font-medium text-gray-900">Audi A4</span>
+                            <span class="text-sm font-medium text-gray-900">98 reserves</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-blue-600 h-2 rounded-full" style="width: 53%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-sm font-medium text-gray-900">Mercedes C-Class</span>
+                            <span class="text-sm font-medium text-gray-900">87 reserves</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-blue-600 h-2 rounded-full" style="width: 47%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Accions ràpides -->
+<div class="bg-white rounded-lg shadow p-6">
+    <h3 class="text-lg font-semibold text-gray-900 mb-4">Accions Ràpides</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <a href="/admin/users/add" class="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all">
+            <i class="fas fa-user-plus text-blue-600 text-2xl"></i>
+            <span class="font-medium text-gray-900">Afegir Usuari</span>
+        </a>
+        <a href="/admin/vehicles/add" class="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg hover:border-green-500 hover:bg-green-50 transition-all">
+            <i class="fas fa-car text-green-600 text-2xl"></i>
+            <span class="font-medium text-gray-900">Afegir Vehicle</span>
+        </a>
+        <a href="/admin/bookings" class="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg hover:border-yellow-500 hover:bg-yellow-50 transition-all">
+            <i class="fas fa-calendar-alt text-yellow-600 text-2xl"></i>
+            <span class="font-medium text-gray-900">Veure Reserves</span>
+        </a>
+        <a href="/admin/reports" class="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-all">
+            <i class="fas fa-file-download text-purple-600 text-2xl"></i>
+            <span class="font-medium text-gray-900">Exportar Dades</span>
+        </a>
+    </div>
+</div>
+
+<?php
+// Incluir el footer de admin
+require_once __DIR__ . '/admin-footer.php';
+?>

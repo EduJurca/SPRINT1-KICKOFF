@@ -31,7 +31,7 @@
         <div class="bg-white p-5 rounded-2xl shadow-inner w-full h-full flex flex-col relative space-y-6">
             <header class="grid grid-cols-3 items-center mb-6 w-full">
                 <div class="text-left">
-                    <a href="/purchase-time" class="text-[#1565C0] text-sm font-semibold">Tornar</a>
+                    <a href="/purchase-time" class="text-[#1565C0] text-sm font-semibold">← Tornar</a>
                 </div>
                 <h1 class="text-2xl font-bold text-gray-900 text-center">Subscripció Premium</h1>
                 <div class="flex justify-end">
