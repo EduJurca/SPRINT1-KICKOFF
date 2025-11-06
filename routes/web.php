@@ -186,9 +186,7 @@ Router::post('/admin/users/delete', function() {
     $controller->delete();
 });
 
-
-
-/==============
+// ==========================================
 // 🧪 TEST D'AUTORITZACIÓ
 // ==========================================
 
