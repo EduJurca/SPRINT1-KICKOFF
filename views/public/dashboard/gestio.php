@@ -7,7 +7,7 @@
   <title>VoltiaCar - Gestió</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="/assets/js/toast.js"></script>
+  <script src="/public_html/js/toast.js"></script>
 
   <style>
     .no-scrollbar::-webkit-scrollbar {
@@ -52,18 +52,18 @@
 
   <div class="bg-white p-8 rounded-2xl shadow-inner w-full max-w-sm flex flex-col relative overflow-visible md:hidden">
 
-    <img src="/assets/images/logo.png" alt="Logo App" class="absolute top-4 left-4 h-10 w-10 z-20">
+    <img src="/public_html/images/logo.png" alt="Logo App" class="absolute top-4 left-4 h-10 w-10 z-20">
 
     <h1 class="text-2xl font-bold text-center text-gray-900 mb-8 mt-6">
-      <?php echo __('dashboard.management_window'); ?>
+      Finestra de Gestió
     </h1>
 
     <main class="flex-1 overflow-y-auto no-scrollbar flex flex-col justify-between">
 
       <div>
         <div class="bg-gray-100 p-4 rounded-lg text-center shadow-sm mb-6">
-          <p class="text-gray-700 font-semibold text-lg"><?php echo __('dashboard.available_time'); ?></p>
-          <p id="minutes" class="text-4xl font-bold text-[#1565C0] mt-1"><?php echo htmlspecialchars($minute_balance ?? 0); ?> <?php echo __('dashboard.minutes'); ?></p>
+          <p class="text-gray-700 font-semibold text-lg">Temps disponible:</p>
+          <p id="minutes" class="text-4xl font-bold text-[#1565C0] mt-1"><?php echo htmlspecialchars($minute_balance ?? 0); ?> min</p>
         </div>
 
         <div class="grid grid-cols-2 gap-4 px-2 sm:px-4">
@@ -72,15 +72,15 @@
           <a href="/administrar-vehicle"
             class="bg-gray-100 p-4 rounded-lg shadow-sm flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105"
             ria-label="Control Vehicle">
-            <img src="/assets/images/control-vehicle.png" alt="Control Vehicle" class="h-12 w-12 mb-2">
-            <p class="font-bold text-base text-gray-900"><?php echo __('dashboard.control_vehicle'); ?></p>
+            <img src="/public_html/images/control-vehicle.png" alt="Control Vehicle" class="h-12 w-12 mb-2">
+            <p class="font-bold text-base text-gray-900">Control Vehicle</p>
           </a>
 
           <a href="/localitzar-vehicle"
             class=" bg-gray-100 p-4 rounded-lg shadow-sm flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105"
             aria-label="Reclamar Vehicle">
-            <img src="/assets/images/reclamar-vehicle.png" alt="Reclamar Vehicle" class="h-12 w-12 mb-2">
-            <p class="font-bold text-base text-gray-900"><?php echo __('dashboard.locate_vehicles'); ?></p>
+            <img src="/public_html/images/reclamar-vehicle.png" alt="Reclamar Vehicle" class="h-12 w-12 mb-2">
+            <p class="font-bold text-base text-gray-900">Localitzar Vehicles</p>
           </a>
 
           <a href="/report-incident"
@@ -93,9 +93,36 @@
           <a href="/perfil"
             class=" bg-gray-100 p-4 rounded-lg shadow-sm flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105"
             aria-label="Perfil">
-            <img src="/assets/images/perfil.png" alt="Perfil" class="h-12 w-12 mb-2">
-            <p class="font-bold text-base text-gray-900"><?php echo __('dashboard.profile'); ?></p>
+            <img src="/public_html/images/perfil.png" alt="Perfil" class="h-12 w-12 mb-2">
+            <p class="font-bold text-base text-gray-900">Perfil</p>
           </a>
+
+          <?php if ($auth['is_admin']): ?>
+          <a href="/admin"
+            class="bg-red-100 p-4 rounded-lg shadow-sm flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105 border-2 border-red-300"
+            aria-label="Panell Admin">
+            <img src="/public_html/images/admin.png" alt="Admin" class="h-12 w-12 mb-2">
+            <p class="font-bold text-base text-red-900">Admin Panel</p>
+          </a>
+          <?php endif; ?>
+
+          <?php if ($auth['is_manager'] || $auth['is_admin']): ?>
+          <a href="/admin/vehicles"
+            class=" bg-purple-100 p-4 rounded-lg shadow-sm flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105 border-2 border-purple-300"
+            aria-label="Gestió Vehicles">
+            <img src="/public_html/images/fleet.png" alt="Vehicles" class="h-12 w-12 mb-2">
+            <p class="font-bold text-base text-purple-900">Gestió Vehicles</p>
+          </a>
+          <?php endif; ?>
+
+          <?php if ($auth['is_premium']): ?>
+          <a href="/premium-features"
+            class=" bg-yellow-100 p-4 rounded-lg shadow-sm flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105 border-2 border-yellow-300"
+            aria-label="Funcions Premium">
+            <img src="/public_html/images/premium.png" alt="Premium" class="h-12 w-12 mb-2">
+            <p class="font-bold text-base text-yellow-900">Premium</p>
+          </a>
+          <?php endif; ?>
 
         </div>
       </div>
@@ -104,7 +131,7 @@
         <form method="POST" action="/logout">
           <button type="submit"
             class="block w-full bg-gray-300 text-gray-900 font-semibold py-3 px-6 rounded-lg hover:bg-gray-400 transition-colors duration-300 text-center">
-            <?php echo __('dashboard.logout'); ?>
+            Tancar Sessió
           </button>
         </form>
       </div>
@@ -113,7 +140,7 @@
     <div class="absolute top-4 right-4 z-10 flex gap-2">
       <button id="tutorialRestartBtn" data-tutorial-restart
         class="block bg-blue-100 p-2 rounded-full shadow-lg hover:bg-blue-200 transition-colors duration-300"
-        aria-label="<?php echo __('dashboard.help_tutorial'); ?>" title="<?php echo __('dashboard.help_tutorial'); ?>">
+        aria-label="Ajuda i Tutorial" title="Reiniciar Tutorial">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-blue-600" fill="none" viewBox="0 0 24 24"
           stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -122,20 +149,20 @@
       </button>
       <a href="/accessibilitat"
         class="block bg-gray-100 p-2 rounded-full shadow-lg hover:bg-gray-200 transition-colors duration-300"
-        aria-label="<?php echo __('dashboard.accessibility_options'); ?>">
-        <img src="/assets/images/accessibilitat.png" alt="Accessibilitat" class="h-7 w-7">
+        aria-label="Opcions d'accessibilitat">
+        <img src="/public_html/images/accessibilitat.png" alt="Accessibilitat" class="h-7 w-7">
       </a>
     </div>
 
   </div>
 
   <div class="hidden md:flex bg-white p-8 rounded-2xl shadow-inner w-full max-w-6xl relative overflow-visible">
-    <img src="/assets/images/logo.png" alt="Logo App" class="absolute top-4 left-4 h-10 w-10 z-20">
+    <img src="/public_html/images/logo.png" alt="Logo App" class="absolute top-4 left-4 h-10 w-10 z-20">
 
     <div class="absolute top-4 right-4 z-10 flex gap-2">
       <button id="tutorialRestartBtnDesktop" data-tutorial-restart
         class="block bg-blue-100 p-2 rounded-full shadow-lg hover:bg-blue-200 transition-colors duration-300"
-        aria-label="<?php echo __('dashboard.help_tutorial'); ?>" title="<?php echo __('dashboard.help_tutorial'); ?>">
+        aria-label="Ajuda i Tutorial" title="Reiniciar Tutorial">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-blue-600" fill="none" viewBox="0 0 24 24"
           stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -144,26 +171,26 @@
       </button>
       <a href="/accessibilitat"
         class="block bg-gray-100 p-2 rounded-full shadow-lg hover:bg-gray-200 transition-colors duration-300"
-        aria-label="<?php echo __('dashboard.accessibility_options'); ?>">
-        <img src="/assets/images/accessibilitat.png" alt="Accessibilitat" class="h-7 w-7">
+        aria-label="Opcions d'accessibilitat">
+        <img src="/public_html/images/accessibilitat.png" alt="Accessibilitat" class="h-7 w-7">
       </a>
     </div>
 
     <section class="flex flex-col justify-between w-1/3 pr-12 border-r border-gray-200">
       <div>
         <h2 class="text-3xl font-bold text-gray-900 mb-8 mt-8">
-          <?php echo __('dashboard.management_window'); ?>
+          Finestra de Gestió
         </h2>
         <div class="bg-gray-100 p-6 rounded-lg text-center shadow-sm mb-8">
-          <p class="text-gray-700 font-semibold text-xl"><?php echo __('dashboard.available_time'); ?></p>
-          <p id="minutesDesk" class="text-5xl font-bold text-[#1565C0] mt-2"><?php echo htmlspecialchars($minute_balance ?? 0); ?> <?php echo __('dashboard.minutes'); ?></p>
+          <p class="text-gray-700 font-semibold text-xl">Temps disponible:</p>
+          <p id="minutesDesk" class="text-5xl font-bold text-[#1565C0] mt-2"><?php echo htmlspecialchars($minute_balance ?? 0); ?> min</p>
         </div>
       </div>
       <div>
         <form method="POST" action="/logout">
           <button type="submit"
             class="w-full bg-gray-300 text-gray-900 font-semibold py-4 px-8 rounded-lg hover:bg-gray-400 transition-colors duration-300 text-center">
-            <?php echo __('dashboard.logout'); ?>
+            Tancar Sessió
           </button>
         </form>
       </div>
@@ -174,15 +201,15 @@
       <a href="/administrar-vehicle"
         class=" bg-gray-100 p-6 rounded-lg shadow-sm flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105"
         aria-label="Control Vehicle">
-        <img src="/assets/images/control-vehicle.png" alt="Control Vehicle" class="h-16 w-16 mb-4">
-        <p class="font-bold text-lg text-gray-900"><?php echo __('dashboard.control_vehicle'); ?></p>
+        <img src="/public_html/images/control-vehicle.png" alt="Control Vehicle" class="h-16 w-16 mb-4">
+        <p class="font-bold text-lg text-gray-900">Control Vehicle</p>
       </a>
 
       <a href="/localitzar-vehicle"
         class=" bg-gray-100 p-6 rounded-lg shadow-sm flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105"
         aria-label="Reclamar Vehicle">
-        <img src="/assets/images/reclamar-vehicle.png" alt="Reclamar Vehicle" class="h-16 w-16 mb-4">
-        <p class="font-bold text-lg text-gray-900"><?php echo __('dashboard.locate_vehicles'); ?></p>
+        <img src="/public_html/images/reclamar-vehicle.png" alt="Reclamar Vehicle" class="h-16 w-16 mb-4">
+        <p class="font-bold text-lg text-gray-900">Localitzar Vehicles</p>
       </a>
 
       <a href="/report-incident"
@@ -195,15 +222,15 @@
       <a href="/perfil"
         class=" bg-gray-100 p-6 rounded-lg shadow-sm flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105"
         aria-label="Perfil">
-        <img src="/assets/images/perfil.png" alt="Perfil" class="h-16 w-16 mb-4">
-        <p class="font-bold text-lg text-gray-900"><?php echo __('dashboard.profile'); ?></p>
+        <img src="/public_html/images/perfil.png" alt="Perfil" class="h-16 w-16 mb-4">
+        <p class="font-bold text-lg text-gray-900">Perfil</p>
       </a>
     </section>
   </div>
 
   <a href="/resum-projecte"
     class="fixed bottom-10 right-10 block bg-[#1565C0] text-white p-4 rounded-full shadow-lg hover:bg-[#1151a3] transition-colors duration-300 z-50"
-    aria-label="<?php echo __('dashboard.project_summary'); ?>">
+    aria-label="Resum del projecte">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
       stroke-width="2">
       <path stroke-linecap="round" stroke-linejoin="round"
@@ -225,7 +252,7 @@
   </script>
 
   <!-- Tutorial System -->
-  <script src="/assets/js/tutorial.js"></script>
+  <script src="/public_html/js/tutorial.js"></script>
 
 </body>
 </html>
