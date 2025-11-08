@@ -83,10 +83,6 @@ Router::get('/booking', function() {
 
 Router::post('/book-vehicle', ['VehicleController', 'bookVehicle']);
 
-// Comprar temps (migrat) — ara usem el controlador d'incidències
-Router::get('/report-incident', ['IncidentController', 'createPublicIncident']);
-
-
 
 // Endpoint POST de compra (compatibilitat)
 Router::post('/purchase-time', ['VehicleController', 'purchaseTime']);
@@ -172,18 +168,20 @@ Router::post('/admin/users/store', function() {
     $controller->store();
 });
 
+Router::get('/report-incident', ['IncidentController', 'createIncident']);
+Router::post('/report-incident', ['IncidentController', 'createIncident']);
+
 Router::get('/admin/incidents', ['IncidentController', 'getAllIncidents']);
 Router::get('/admin/incidents/create', ['IncidentController', 'createIncident']);
 Router::post('/admin/incidents/create', ['IncidentController', 'createIncident']);
+Router::get('/admin/incidents/{id}/edit', ['IncidentController', 'getIncident']);
+Router::post('/admin/incidents/{id}/update', ['IncidentController', 'updateIncident']);
+Router::post('/admin/incidents/{id}/resolve', ['IncidentController', 'resolveIncident']);
+Router::delete('/admin/incidents/{id}', ['IncidentController', 'deleteIncident']);
 
-Router::post('/report-incident', ['IncidentController', 'createPublicIncident']);
 
 Router::get('/admin/settings', function() {
     require_once PUBLIC_PATH . '/php/admin/settings.php';
 });
 
-// ==========================================
-// 🧪 DEBUG / TESTING (només en desenvolupament)
-// ==========================================
 
-// Test d'autorització removed from routes - dev-only view deleted

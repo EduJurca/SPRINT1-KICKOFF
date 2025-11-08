@@ -389,5 +389,52 @@ return [
         'submit' => 'Send incident',
         'created_success' => 'Incident created successfully.',
         'created_error' => 'An error occurred while creating the incident.',
+
+        'manage_title' => 'Incidents Management',
+        'create_title' => 'Create Incident',
+        'create_heading' => 'Report an issue or system incident',
+        'edit_title' => 'Edit Incident',
+        'edit_heading' => 'Modify the incident details',
+
+        'label_type' => 'Incident Type',
+        'label_status' => 'Status',
+        'label_creator' => 'Created by',
+        'label_assigned_to' => 'Assigned to',
+        'label_description' => 'Description',
+        'label_notes' => 'Additional Notes',
+
+        'option_unassigned' => 'Unassigned',
+        'option_select_type' => 'Select type...',
+
+        'button_back' => 'Back',
+        'button_save_changes' => 'Save Changes',
+        'button_create' => 'Create Incident',
+        'button_cancel' => 'Cancel',
+
+        'table_type' => 'Type',
+        'table_description' => 'Description',
+        'table_creator' => 'Creator',
+        'table_assignee' => 'Assigned to',
+        'table_created_at' => 'Created At',
+        'table_status' => 'Status',
+        'table_actions' => 'Actions',
+
+        'no_incidents' => 'No incidents registered.',
+
+        'status_pending' => 'Pending',
+        'status_in_progress' => 'In Progress',
+        'status_resolved' => 'Resolved',
+
+        'view' => 'View',
+        'edit' => 'Edit',
+        'mark_resolved' => 'Mark as resolved',
+        'delete' => 'Delete',
+
+        'confirm_resolve' => 'Are you sure you want to mark this incident as resolved?',
+        'confirm_delete' => 'Are you sure you want to delete this incident?',
+
+        'resolved_title' => 'Incident Resolved',
+        'resolved_by' => 'Resolved by',
+        'resolved_at' => 'Date',
     ],
 ];

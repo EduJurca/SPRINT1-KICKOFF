@@ -76,36 +76,55 @@ class Incident {
         }
 
         $userModel = new User();
-        if (!$userModel->exists($data['incident_creator'])) {
+
+        if (!$userModel->findById($data['incident_creator'])) {
             return false;
         }
 
-        if (isset($data['incident_assignee']) && $data['incident_assignee'] !== null) {
-            if (!$userModel->exists($data['incident_assignee'])) {
+        $incident_assignee = null;
+        if (isset($data['incident_assignee']) && $data['incident_assignee'] !== '' && $data['incident_assignee'] !== null) {
+            $incident_assignee = (int)$data['incident_assignee'];
+        }
+
+        if ($incident_assignee !== null) {
+            if (!$userModel->findById($incident_assignee)) {
                 return false;
             }
         }
 
-        $stmt = $this->db->prepare("INSERT INTO incidents
-            (type, status, description, notes, incident_creator, incident_assignee, created_at)
-            VALUES (?, 'pending', ?, ?, ?, ?, NOW())"
-        );
-
         $type = $data['type'] ?? null;
         $description = $data['description'] ?? null;
         $notes = $data['notes'] ?? null;
-        $incident_creator = $data['incident_creator'] ?? null;
-        $incident_assignee = $data['incident_assignee'] ?? null;
+        $incident_creator = (int)($data['incident_creator'] ?? 0);
 
-        $stmt->bind_param('sssii',
-            $type,
-            $description,
-            $notes,
-            $incident_creator,
-            $incident_assignee
-        );
+        if ($incident_assignee === null) {
+            $stmt = $this->db->prepare("INSERT INTO incidents
+                (type, status, description, notes, incident_creator, incident_assignee, created_at)
+                VALUES (?, 'pending', ?, ?, ?, NULL, NOW())");
 
-        return $stmt->execute();
+            $stmt->bind_param('sssi',
+                $type,
+                $description,
+                $notes,
+                $incident_creator
+            );
+
+            return $stmt->execute();
+        } else {
+            $stmt = $this->db->prepare("INSERT INTO incidents
+                (type, status, description, notes, incident_creator, incident_assignee, created_at)
+                VALUES (?, 'pending', ?, ?, ?, ?, NOW())");
+
+            $stmt->bind_param('sssii',
+                $type,
+                $description,
+                $notes,
+                $incident_creator,
+                $incident_assignee
+            );
+
+            return $stmt->execute();
+        }
     }
 
     public function updateIncident($incidentId, $data) {
@@ -123,31 +142,35 @@ class Incident {
 
         $userFields = ['incident_assignee', 'resolved_by'];
         foreach ($userFields as $field) {
-            if (isset($data[$field]) && $data[$field] !== null) {
+            if (isset($data[$field]) && $data[$field] !== null && $data[$field] !== '') {
                 $userModel = new User();
-                if (!$userModel->exists($data[$field])) {
+                if (!$userModel->findById($data[$field])) {
                     return false;
                 }
             }
         }
 
         $setParts = [];
-        $params = [':id' => $incidentId];
+        $types = '';
+        $values = [];
 
         if (isset($data['type'])) {
-            $setParts[] = "type = :type";
-            $params[':type'] = $data['type'];
+            $setParts[] = "type = ?";
+            $types .= 's';
+            $values[] = $data['type'];
         }
 
         if (isset($data['status'])) {
-            $setParts[] = "status = :status";
-            $params[':status'] = $data['status'];
+            $setParts[] = "status = ?";
+            $types .= 's';
+            $values[] = $data['status'];
 
             if ($data['status'] === 'resolved') {
                 $setParts[] = "resolved_at = NOW()";
-                if (isset($data['resolved_by'])) {
-                    $setParts[] = "resolved_by = :resolved_by";
-                    $params[':resolved_by'] = $data['resolved_by'];
+                if (isset($data['resolved_by']) && $data['resolved_by']) {
+                    $setParts[] = "resolved_by = ?";
+                    $types .= 'i';
+                    $values[] = $data['resolved_by'];
                 }
             } elseif (in_array($data['status'], ['pending', 'in_progress'])) {
                 $setParts[] = "resolved_by = NULL";
@@ -156,43 +179,51 @@ class Incident {
         }
 
         if (isset($data['description'])) {
-            $setParts[] = "description = :description";
-            $params[':description'] = $data['description'];
+            $setParts[] = "description = ?";
+            $types .= 's';
+            $values[] = $data['description'];
         }
 
         if (isset($data['notes'])) {
-            $setParts[] = "notes = :notes";
-            $params[':notes'] = $data['notes'];
+            $setParts[] = "notes = ?";
+            $types .= 's';
+            $values[] = $data['notes'];
         }
 
         if (isset($data['incident_assignee'])) {
-            $setParts[] = "incident_assignee = :incident_assignee";
-            $params[':incident_assignee'] = $data['incident_assignee'];
-        }
-
-        if (isset($data['resolved_by']) && !isset($data['status'])) {
-            $setParts[] = "resolved_by = :resolved_by_independent";
-            $params[':resolved_by_independent'] = $data['resolved_by'];
+            if ($data['incident_assignee'] === '' || $data['incident_assignee'] === null) {
+                $setParts[] = "incident_assignee = NULL";
+            } else {
+                $setParts[] = "incident_assignee = ?";
+                $types .= 'i';
+                $values[] = $data['incident_assignee'];
+            }
         }
 
         $setParts[] = "updated_at = NOW()";
 
         if (empty($setParts)) {
-            return false; 
+            return false;
         }
 
-        $sql = "UPDATE incidents SET " . implode(', ', $setParts) . " WHERE id = :id";
+        // Afegir l'ID al final
+        $types .= 'i';
+        $values[] = $incidentId;
 
+        $sql = "UPDATE incidents SET " . implode(', ', $setParts) . " WHERE id = ?";
         $stmt = $this->db->prepare($sql);
 
-        foreach ($params as $param => $value) {
-            $stmt->bindParam($param, $params[$param]);
+        if (!empty($types)) {
+            $stmt->bind_param($types, ...$values);
         }
 
         return $stmt->execute();
     }
 
-    // public function deleteIncident($id)
+    public function deleteIncident($id) {
+        $stmt = $this->db->prepare("DELETE FROM incidents WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        return $stmt->execute();
+    }
 
-    // $stmt = $this->db->prepare(DELETE FROM incidents where id = :id)
 }

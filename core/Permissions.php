@@ -19,9 +19,19 @@ class Permissions {
         'bookings.edit' => [1, 2],
         'bookings.delete' => [1],
         'bookings.cancel_own' => [1, 2, 3],
+
+        'incidents.view_all' => [1, 2],
+        'incidents.view_own' => [1, 2, 3],
+        'incidents.create' => [1, 2],
+        'incidents.create_public' => [1, 2, 3],
+        'incidents.edit' => [1, 2],
+        'incidents.delete' => [1],
+        'incidents.assign' => [1, 2],
+        'incidents.resolve' => [1, 2],
+        'incidents.cancel_own' => [1, 2, 3],
         
-    'admin.dashboard' => [1, 2],
-    'admin.reports' => [1, 2],
+        'admin.dashboard' => [1, 2],
+        'admin.reports' => [1, 2],
         'admin.activity' => [1, 2],
     ];
     
@@ -88,5 +98,17 @@ class Permissions {
     
     public static function canDeleteAnything() {
         return ($_SESSION['role_id'] ?? 3) == 1;
+    }
+    
+    public static function canManageIncidents() {
+        return self::can('incidents.edit');
+    }
+    
+    public static function canAssignIncidents() {
+        return self::can('incidents.assign');
+    }
+    
+    public static function canResolveIncidents() {
+        return self::can('incidents.resolve');
     }
 }

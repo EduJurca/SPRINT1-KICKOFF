@@ -1,10 +1,7 @@
 <?php
 
-require_once MODELS_PATH . '/User.php';
-$userModel = new User();
-$users = $userModel->findAll() ?? [];
 
-$pageTitle = "Crear Incidencia";
+$pageTitle = "Crear Incidència";
 require_once __DIR__ . '/../admin-header.php';
 ?>
 
@@ -12,8 +9,8 @@ require_once __DIR__ . '/../admin-header.php';
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="bg-white shadow-lg rounded-lg overflow-hidden">
             <div class="px-6 py-4 bg-blue-600 border-b border-gray-200">
-                <h1 class="text-2xl font-bold text-white">Crear Nueva Incidencia</h1>
-                <p class="text-blue-100 mt-1">Reporta un problema o incidencia del sistema</p>
+                <h1 class="text-2xl font-bold text-white"><?php echo __("incident.create_title"); ?></h1>
+                <p class="text-blue-100 mt-1"><?php echo __("incident.create_heading"); ?></p>
             </div>
 
             <div class="p-6">
@@ -33,13 +30,13 @@ require_once __DIR__ . '/../admin-header.php';
                     </div>
                 <?php endif; ?>
 
-                <form action="/admin/incidents/create" method="POST" class="space-y-6">
+                <form id="incident-create-form" action="/admin/incidents/create" method="POST" class="space-y-6" novalidate>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700 mb-2">
                                 Tipo de Incidencia *
                             </label>
-                            <select id="type" name="type" required
+                            <select id="type" name="type" data-required="true"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                 <option value="">Seleccionar tipo...</option>
                                 <option value="mechanical">Mecánica</option>
@@ -50,14 +47,14 @@ require_once __DIR__ . '/../admin-header.php';
 
                         <div>
                             <label for="incident_assignee" class="block text-sm font-medium text-gray-700 mb-2">
-                                Asignar a (Opcional)
+                                Assignar a
                             </label>
                             <select id="incident_assignee" name="incident_assignee"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                <option value="">Seleccionar usuario...</option>
-                                <?php foreach ($users as $user): ?>
-                                    <option value="<?php echo $user['id']; ?>">
-                                        <?php echo htmlspecialchars($user['username'] . ' - ' . $user['fullname']); ?>
+                                <option value="">Sense assignar</option>
+                                <?php foreach ($workers as $worker): ?>
+                                    <option value="<?php echo $worker['id']; ?>">
+                                        <?php echo htmlspecialchars($worker['username']); ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
@@ -68,7 +65,7 @@ require_once __DIR__ . '/../admin-header.php';
                         <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
                             Descripción *
                         </label>
-                        <textarea id="description" name="description" rows="4" required
+                        <textarea id="description" name="description" rows="4" data-required="true"
                                   placeholder="Describe detalladamente el problema..."
                                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
                     </div>
@@ -99,3 +96,60 @@ require_once __DIR__ . '/../admin-header.php';
 </div>
 
 <?php require_once __DIR__ . '/../admin-footer.php'; ?>
+
+<script>
+(function(){
+    const form = document.getElementById('incident-create-form');
+    if (!form) return;
+    const requiredSelector = '[data-required]';
+
+    function clearError(el){
+        const next = el.parentNode.querySelector('.field-error');
+        if(next) next.remove();
+        el.removeAttribute('aria-invalid');
+    }
+
+    function showError(el, msg){
+        clearError(el);
+        el.setAttribute('aria-invalid', 'true');
+        const err = document.createElement('p');
+        err.className = 'field-error text-red-600 text-sm mt-1';
+        err.setAttribute('role','alert');
+        err.textContent = msg;
+        el.parentNode.appendChild(err);
+    }
+
+    function validateField(el){
+        clearError(el);
+        const tag = el.tagName.toLowerCase();
+        const val = (el.value || '').toString().trim();
+        if (el.hasAttribute('data-required')){
+            if (val === ''){
+                showError(el, 'Aquest camp és obligatori');
+                return false;
+            }
+        }
+        return true;
+    }
+
+    form.addEventListener('submit', function(e){
+        let valid = true;
+        const fields = form.querySelectorAll(requiredSelector);
+        fields.forEach(function(f){ if(!validateField(f)) valid = false; });
+        if (!valid){
+            e.preventDefault();
+            const firstErr = form.querySelector('.field-error');
+            if (firstErr){ firstErr.scrollIntoView({behavior:'smooth', block:'center'}); }
+        }
+    });
+
+    form.addEventListener('input', function(ev){
+        const t = ev.target; if (t && t.hasAttribute && t.hasAttribute('data-required')) validateField(t);
+    });
+
+    form.addEventListener('blur', function(ev){
+        const t = ev.target; if (t && t.hasAttribute && t.hasAttribute('data-required')) validateField(t);
+    }, true);
+
+})();
+</script>

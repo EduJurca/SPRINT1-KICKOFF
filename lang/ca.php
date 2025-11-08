@@ -389,5 +389,52 @@ return [
         'submit' => 'Enviar incidencia',
         'created_success' => 'Incidència creada correctament.',
         'created_error' => 'S\'ha produït un error en crear la incidència.',
+
+        'manage_title' => 'Gestió d\'Incidents',
+        'create_title' => 'Crear Incidència',
+        'create_heading' => 'Reporta un problema o incidència del sistema',
+        'edit_title' => 'Editar Incidència',
+        'edit_heading' => 'Modifica els detalls de la incidència',
+
+        'label_type' => 'Tipus d\'Incidència',
+        'label_status' => 'Estat',
+        'label_creator' => 'Creat per',
+        'label_assigned_to' => 'Assignat a',
+        'label_description' => 'Descripció',
+        'label_notes' => 'Notes Addicionals',
+
+        'option_unassigned' => 'Sense assignar',
+        'option_select_type' => 'Seleccionar tipus...',
+
+        'button_back' => 'Tornar',
+        'button_save_changes' => 'Guardar Canvis',
+        'button_create' => 'Crear Incidència',
+        'button_cancel' => 'Cancel·lar',
+
+        'table_type' => 'Tipus',
+        'table_description' => 'Descripció',
+        'table_creator' => 'Creador',
+        'table_assignee' => 'Assignat a',
+        'table_created_at' => 'Data Creació',
+        'table_status' => 'Estat',
+        'table_actions' => 'Accions',
+
+        'no_incidents' => 'No hi ha incidents registrats.',
+
+        'status_pending' => 'Pendent',
+        'status_in_progress' => 'En Progrés',
+        'status_resolved' => 'Resolta',
+
+        'view' => 'Veure',
+        'edit' => 'Editar',
+        'mark_resolved' => 'Marcar com resolta',
+        'delete' => 'Eliminar',
+
+        'confirm_resolve' => 'Segur que vols marcar aquesta incidència com resolta?',
+        'confirm_delete' => 'Segur que vols eliminar aquesta incidència?',
+
+        'resolved_title' => 'Incidència Resolta',
+        'resolved_by' => 'Resolta per',
+        'resolved_at' => 'Data',
     ],
 ];
