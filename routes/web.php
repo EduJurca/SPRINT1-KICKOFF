@@ -123,6 +123,8 @@ Router::post('/book-vehicle', ['VehicleController', 'bookVehicle']);
 // Comprar temps (migrat) — ara usem el controlador d'incidències
 Router::get('/report-incident', ['IncidentController', 'createPublicIncident']);
 
+
+
 // Endpoint POST de compra (compatibilitat)
 Router::post('/purchase-time', ['VehicleController', 'purchaseTime']);
 

@@ -66,7 +66,7 @@ class Incident {
         }
 
         $incident = $result->fetch_assoc();
-
+        
         return $incident;
     }
 
@@ -192,7 +192,7 @@ class Incident {
         return $stmt->execute();
     }
 
-    
+    // public function deleteIncident($id)
 
-
+    // $stmt = $this->db->prepare(DELETE FROM incidents where id = :id)
 }

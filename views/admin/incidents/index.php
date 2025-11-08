@@ -10,12 +10,6 @@ require_once __DIR__ . '/../admin-header.php';
         </a>
     </div>
 
-    <?php if (isset($_GET['success']) && $_GET['success'] === 'created'): ?>
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-            Incident creat correctament.
-        </div>
-    <?php endif; ?>
-
     <div class="bg-white shadow-md rounded-lg overflow-hidden">
         <table class="min-w-full table-auto">
             <thead class="bg-gray-50">
@@ -44,7 +38,7 @@ require_once __DIR__ . '/../admin-header.php';
                                 <?php echo htmlspecialchars($incident['id']); ?>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                <?php echo htmlspecialchars($incident['type']); ?>
+                                <?php echo htmlspecialchars($incident['type']) ?>
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-900 max-w-xs truncate">
                                 <?php echo htmlspecialchars($incident['description']); ?>

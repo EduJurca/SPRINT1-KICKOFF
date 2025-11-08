@@ -35,7 +35,6 @@ require_once __DIR__ . '/../admin-header.php';
 
                 <form action="/admin/incidents/create" method="POST" class="space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Tipo de Incidencia -->
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700 mb-2">
                                 Tipo de Incidencia *
@@ -49,7 +48,6 @@ require_once __DIR__ . '/../admin-header.php';
                             </select>
                         </div>
 
-                        <!-- Asignar a Usuario -->
                         <div>
                             <label for="incident_assignee" class="block text-sm font-medium text-gray-700 mb-2">
                                 Asignar a (Opcional)
@@ -66,7 +64,6 @@ require_once __DIR__ . '/../admin-header.php';
                         </div>
                     </div>
 
-                    <!-- Descripción -->
                     <div>
                         <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
                             Descripción *
@@ -76,7 +73,6 @@ require_once __DIR__ . '/../admin-header.php';
                                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
                     </div>
 
-                    <!-- Notas Adicionales -->
                     <div>
                         <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">
                             Notas Adicionales (Opcional)
@@ -86,7 +82,6 @@ require_once __DIR__ . '/../admin-header.php';
                                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
                     </div>
 
-                    <!-- Botones -->
                     <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
                         <a href="/admin/incidents"
                            class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
