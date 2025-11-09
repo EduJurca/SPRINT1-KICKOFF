@@ -52,11 +52,9 @@ class IncidentController {
 
             if ($isAdmin) {
                 $data['notes'] = $_POST['notes'] ?? null;
-                $data['incident_assignee'] = $_POST['incident_assignee'] ?? null;
                 $data['status'] = $_POST['status'] ?? 'pending';
             } else {
                 $data['notes'] = null;
-                $data['incident_assignee'] = $_SESSION['user_id'];
                 $data['status'] = 'pending';
             }
 
@@ -93,7 +91,7 @@ class IncidentController {
         $incident = $this->incidentModel->getIncidentById($id);
         
         if (!$incident) {
-            $_SESSION['error'] = 'Incidència no trobada.';
+            $_SESSION['error'] = __('incident.not_found');
             return Router::redirect('/admin/incidents');
         }
 
@@ -126,9 +124,9 @@ class IncidentController {
         }
 
         if ($this->incidentModel->updateIncident($id, $data)) {
-            $_SESSION['success'] = 'Incidència actualitzada correctament.';
+            $_SESSION['success'] = __('incident.updated_success');
         } else {
-            $_SESSION['error'] = 'Error al actualitzar la incidència.';
+            $_SESSION['error'] = __('incident.updated_error');
         }
 
         return Router::redirect('/admin/incidents');
@@ -144,9 +142,9 @@ class IncidentController {
         ];
 
         if ($this->incidentModel->updateIncident($id, $data)) {
-            $_SESSION['success'] = 'Incidència marcada com resolta.';
+            $_SESSION['success'] = __('incident.resolved_success');
         } else {
-            $_SESSION['error'] = 'Error al resoldre la incidència.';
+            $_SESSION['error'] = __('incident.resolve_error');
         }
 
         return Router::redirect('/admin/incidents');

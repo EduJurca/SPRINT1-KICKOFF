@@ -1,6 +1,28 @@
 <?php
 
 return [
+    'actions' => [
+        'cancel' => 'Cancel·lar',
+        'delete' => 'Eliminar',
+        'edit' => 'Editar',
+        'save' => 'Guardar canvis',
+        'back' => 'Tornar'
+        
+    ],
+    'form' => [
+        'labels' => [
+            'type' => 'Tipus',
+            'description' => 'Descripció',
+            'creator' => 'Creador',
+            'assignee' => 'Assignació',
+            'creation_date' => 'Data de creació',
+            'status' => 'Estat',
+            'actions' => 'Accions'
+        ],
+        'validations' => [
+            'required_field' => 'Camp requerit'
+        ]        
+    ],
     'auth' => [
         'login_title' => 'Inicia Sessió',
         'register_title' => 'Registrar-se',
@@ -343,6 +365,7 @@ return [
     ],
     'dashboard' => [
         'management_window' => 'Finestra de Gestió',
+        'welcome' => 'Benvingut',
         'available_time' => 'Temps Disponible',
         'minutes' => 'minuts',
         'control_vehicle' => 'Controlar Vehicle',
@@ -402,6 +425,7 @@ return [
         'label_assigned_to' => 'Assignat a',
         'label_description' => 'Descripció',
         'label_notes' => 'Notes Addicionals',
+        'label_assignee' => "Assignar a",        
 
         'option_unassigned' => 'Sense assignar',
         'option_select_type' => 'Seleccionar tipus...',
@@ -436,5 +460,15 @@ return [
         'resolved_title' => 'Incidència Resolta',
         'resolved_by' => 'Resolta per',
         'resolved_at' => 'Data',
+        'incidents_management' => 'Gestió d\'Incidències',
+        'create_new_incident' => 'Crear nova',
+        'actions' => 'Accions',
+        'no_registered_incidents' => 'No hi ha incidents registrats.',
+        'unknown' => 'Desconegut',
+        'unassigned' => 'No assignat',
+        'view_details' => 'Veure detalls',
+        'confirm_resolve_incident' => 'Segur que vols marcar aquesta incidència com resolta?',
+        'mark_as_resolved' => 'Marcar com resolta',
+        'confirm_delete_incident' => 'Segur que vols eliminar aquesta incidència?',
     ],
 ];

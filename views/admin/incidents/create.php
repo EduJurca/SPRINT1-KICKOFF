@@ -1,7 +1,7 @@
 <?php
 
 
-$pageTitle = "Crear Incidència";
+$pageTitle = __("incident.create_title");
 require_once __DIR__ . '/../admin-header.php';
 ?>
 
@@ -23,7 +23,7 @@ require_once __DIR__ . '/../admin-header.php';
                                 </svg>
                             </div>
                             <div class="ml-3">
-                                <h3 class="text-sm font-medium text-red-800">Error</h3>
+                                <h3 class="text-sm font-medium text-red-800"><?php echo __("incident.error_title"); ?></h3>
                                 <p class="text-sm text-red-700 mt-1"><?php echo htmlspecialchars($error); ?></p>
                             </div>
                         </div>
@@ -34,24 +34,24 @@ require_once __DIR__ . '/../admin-header.php';
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700 mb-2">
-                                Tipo de Incidencia *
+                                <?php echo __("incident.label_type"); ?> *
                             </label>
                             <select id="type" name="type" data-required="true"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                <option value="">Seleccionar tipo...</option>
-                                <option value="mechanical">Mecánica</option>
-                                <option value="electrical">Eléctrica</option>
-                                <option value="other">Otra</option>
+                                <option value=""><?php echo __("incident.type_select"); ?></option>
+                                <option value="mechanical"><?php echo __("incident.type_mechanical"); ?></option>
+                                <option value="electrical"><?php echo __("incident.type_electrical"); ?></option>
+                                <option value="other"><?php echo __("incident.type_other"); ?></option>
                             </select>
                         </div>
 
                         <div>
                             <label for="incident_assignee" class="block text-sm font-medium text-gray-700 mb-2">
-                                Assignar a
+                                <?php echo __("incident.label_assignee"); ?>
                             </label>
                             <select id="incident_assignee" name="incident_assignee"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                <option value="">Sense assignar</option>
+                                <option value="">-</option>
                                 <?php foreach ($workers as $worker): ?>
                                     <option value="<?php echo $worker['id']; ?>">
                                         <?php echo htmlspecialchars($worker['username']); ?>
@@ -63,30 +63,30 @@ require_once __DIR__ . '/../admin-header.php';
 
                     <div>
                         <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
-                            Descripción *
+                            <?php echo __("incident.description"); ?> *
                         </label>
                         <textarea id="description" name="description" rows="4" data-required="true"
-                                  placeholder="Describe detalladamente el problema..."
+                                  placeholder="<?php echo __("incident.placeholder_description"); ?>"
                                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
                     </div>
 
                     <div>
                         <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">
-                            Notas Adicionales (Opcional)
+                            <?php echo __("incident.notes"); ?>
                         </label>
                         <textarea id="notes" name="notes" rows="3"
-                                  placeholder="Información adicional, pasos para reproducir, etc."
+                                  placeholder="<?php echo __("incident.placeholder_notes"); ?>"
                                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
                     </div>
 
                     <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
                         <a href="/admin/incidents"
                            class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Cancelar
+                            <?php echo __("actions.cancel"); ?>
                         </a>
                         <button type="submit"
                                 class="px-4 py-2 bg-blue-600 border border-transparent rounded-md text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Crear Incidencia
+                            <?php echo __("incident.submit"); ?>
                         </button>
                     </div>
                 </form>
@@ -125,7 +125,7 @@ require_once __DIR__ . '/../admin-header.php';
         const val = (el.value || '').toString().trim();
         if (el.hasAttribute('data-required')){
             if (val === ''){
-                showError(el, 'Aquest camp és obligatori');
+                showError(el, '<?php echo __("form.validations.required_field"); ?>');
                 return false;
             }
         }

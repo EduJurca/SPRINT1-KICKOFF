@@ -4,9 +4,9 @@ require_once __DIR__ . '/../admin-header.php';
 
 <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">Gestió d'Incidents</h1>
+        <h1 class="text-3xl font-bold text-gray-800"><?php echo __('incident.incidents_management'); ?></h1>
         <a href="/admin/incidents/create" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Crear Nou Incident
+            <?php echo __('incident.button_create'); ?>
         </a>
     </div>
 
@@ -14,20 +14,20 @@ require_once __DIR__ . '/../admin-header.php';
         <table class="min-w-full table-auto">
             <thead class="bg-gray-50">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipus</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descripció</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Creador</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Assignat a</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data Creació</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estat</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Accions</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo __('form.labels.type'); ?></th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo __('form.labels.description'); ?></th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo __('form.labels.creator'); ?></th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo __('form.labels.assignee'); ?></th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo __('form.labels.creation_date'); ?></th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo __('form.labels.status'); ?></th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo __('form.labels.actions'); ?></th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 <?php if (empty($incidents)): ?>
                     <tr>
                         <td colspan="8" class="px-6 py-4 text-center text-gray-500">
-                            No hi ha incidents registrats.
+                            <?php echo __('no_registered_incidents'); ?>
                         </td>
                     </tr>
                 <?php else: ?>
@@ -40,10 +40,10 @@ require_once __DIR__ . '/../admin-header.php';
                                 <?php echo htmlspecialchars($incident['description']); ?>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                <?php echo htmlspecialchars($incident['creator_name'] ?? 'Desconegut'); ?>
+                                <?php echo htmlspecialchars($incident['creator_name'] ?? __('unknown')); ?>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                <?php echo htmlspecialchars($incident['assignee_name'] ?? 'No assignat'); ?>
+                                <?php echo htmlspecialchars($incident['assignee_name'] ?? '-'); ?>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                 <?php echo htmlspecialchars($incident['created_at']); ?>
@@ -56,9 +56,9 @@ require_once __DIR__ . '/../admin-header.php';
                                     'resolved' => 'bg-green-100 text-green-800'
                                 ];
                                 $statusLabels = [
-                                    'pending' => 'Pendent',
-                                    'in_progress' => 'En Progrés',
-                                    'resolved' => 'Resolta'
+                                    'pending' => __('incident.status_pending'),
+                                    'in_progress' => __('incident.status_in_progress'),
+                                    'resolved' => __('incident.status_resolved')
                                 ];
                                 $color = $statusColors[$incident['status']] ?? 'bg-gray-100 text-gray-800';
                                 $label = $statusLabels[$incident['status']] ?? $incident['status'];
@@ -68,25 +68,22 @@ require_once __DIR__ . '/../admin-header.php';
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <a href="#" class="text-gray-600 hover:text-indigo-900 mr-3" title="Veure detalls">
-                                    <i class="fas fa-eye"></i>
-                                </a>
                                 <?php if (Permissions::can('incidents.edit')): ?>
-                                    <a href="/admin/incidents/<?= $incident['id'] ?>/edit" class="text-blue-600 hover:text-blue-900 mr-3" title="Editar">
+                                    <a href="/admin/incidents/<?= $incident['id'] ?>/edit" class="text-blue-600 hover:text-blue-900 mr-3" title="<?php echo __('actions.edit'); ?>">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                 <?php endif; ?>
                                 <?php if (Permissions::can('incidents.resolve') && $incident['status'] !== 'resolved'): ?>
-                                    <form method="POST" action="/admin/incidents/<?= $incident['id'] ?>/resolve" class="inline js-confirm" data-confirm-message="Segur que vols marcar aquesta incidència com resolta?">
-                                        <button type="submit" class="text-green-600 hover:text-green-900 mr-3" title="Marcar com resolta">
+                                    <form method="POST" action="/admin/incidents/<?= $incident['id'] ?>/resolve" class="inline js-confirm" data-confirm-message="<?php echo __('confirm_resolve_incident'); ?>">
+                                        <button type="submit" class="text-green-600 hover:text-green-900 mr-3" title="<?php echo __('incident.mark_as_resolved'); ?>">
                                             <i class="fas fa-check-circle"></i>
                                         </button>
                                     </form>
                                 <?php endif; ?>
                                 <?php if (Permissions::can('incidents.delete')): ?>
-                                    <form method="POST" action="/admin/incidents/<?= $incident['id'] ?>" class="inline js-confirm" data-confirm-message="Segur que vols eliminar aquesta incidència?">
+                                    <form method="POST" action="/admin/incidents/<?= $incident['id'] ?>" class="inline js-confirm" data-confirm-message="<?php echo __('confirm_delete_incident'); ?>">
                                         <input type="hidden" name="_method" value="DELETE">
-                                        <button type="submit" class="text-red-600 hover:text-red-900" title="Eliminar">
+                                        <button type="submit" class="text-red-600 hover:text-red-900" title="<?php echo __('actions.delete'); ?>">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>

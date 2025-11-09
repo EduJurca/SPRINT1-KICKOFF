@@ -206,7 +206,6 @@ class Incident {
             return false;
         }
 
-        // Afegir l'ID al final
         $types .= 'i';
         $values[] = $incidentId;
 

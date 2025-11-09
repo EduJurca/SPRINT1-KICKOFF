@@ -1,6 +1,27 @@
 <?php
 
 return [
+    'actions' => [
+        'cancel' => 'Cancel',
+        'delete' => 'Delete',
+        'edit' => 'Edit',
+        'save' => 'Save changes',
+        'back' => 'Go back'
+    ],
+    'form' => [
+        'labels' => [
+            'type' => 'Type',
+            'description' => 'Description',
+            'creator' => 'Creator',
+            'assignee' => 'Assignee',
+            'creation_date' => 'Creation date',
+            'status' => 'Atatus',
+            'actions' => 'Actions'
+        ],
+        'validations' => [
+            'required_field' => "Required field"
+        ]
+    ],    
     'auth' => [
         'login_title' => 'Sign In',
         'register_title' => 'Register',
@@ -343,6 +364,7 @@ return [
     ],
     'dashboard' => [
         'management_window' => 'Management Window',
+        'welcome' => 'Welcome',
         'available_time' => 'Available Time',
         'minutes' => 'minutes',
         'control_vehicle' => 'Control Vehicle',
@@ -402,6 +424,7 @@ return [
         'label_assigned_to' => 'Assigned to',
         'label_description' => 'Description',
         'label_notes' => 'Additional Notes',
+        'label_assignee' => "Assign to",
 
         'option_unassigned' => 'Unassigned',
         'option_select_type' => 'Select type...',
@@ -436,5 +459,15 @@ return [
         'resolved_title' => 'Incident Resolved',
         'resolved_by' => 'Resolved by',
         'resolved_at' => 'Date',
+        'incidents_management' => 'Incidents Management',
+        'create_new_incident' => 'Create New Incident',
+        'actions' => 'Actions',
+        'no_registered_incidents' => 'No incidents registered.',
+        'unknown' => 'Unknown',
+        'unassigned' => 'Unassigned',
+        'view_details' => 'View Details',
+        'confirm_resolve_incident' => 'Are you sure you want to mark this incident as resolved?',
+        'mark_as_resolved' => 'Mark as Resolved',
+        'confirm_delete_incident' => 'Are you sure you want to delete this incident?',
     ],
 ];
