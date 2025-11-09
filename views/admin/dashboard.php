@@ -23,7 +23,7 @@ $metrics = [
     'incidents' => [
         'title' => 'Incidències',
         'value' => $totalIncidents ?? '0',
-        'change' => 'Incidències registrades',
+        'change' => 'Incidències actives',
         'icon' => '<i class="fa fa-exclamation-triangle text-[#1565C0]"></i>'
     ],
     'revenue' => [

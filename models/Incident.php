@@ -226,4 +226,12 @@ class Incident {
         return $stmt->execute();
     }
 
+    public function getActiveIncidents() {
+        $stmt = $this->db->prepare("SELECT COUNT(*) as total FROM incidents WHERE status != 'resolved'");
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        return $row['total'];
+    }
+
 }
