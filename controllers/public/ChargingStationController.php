@@ -23,10 +23,11 @@ class ChargingStationController {
      */
     public function index() {
         // Check if user is admin
-        // if (!isset($_SESSION['user_id'])) {
-        //     header('Location: /login');
-        //     exit;
-        // }
+        if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
+            $_SESSION['error'] = 'Unauthorized access';
+            header('Location: /login');
+            exit;
+        }
         
         $stations = $this->stationModel->getAllStations();
         
