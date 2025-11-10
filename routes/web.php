@@ -32,7 +32,42 @@ Router::post('/recover-password', ['AuthController', 'recoverPassword']);
 
 Router::get('/dashboard', ['DashboardController', 'showGestio']);
 Router::get('/gestio', ['DashboardController', 'showGestio']);
-Router::get('/resum-projecte', ['DashboardController', 'showResum']);
+
+// ==========================================
+// 👤 PERFIL D'USUARI
+// ==========================================
+
+// Perfil
+Router::get('/perfil', ['ProfileController', 'showProfile']);
+
+Router::get('/profile', ['ProfileController', 'showProfile']);
+
+// Completar perfil
+Router::get('/completar-perfil', ['ProfileController', 'showCompleteProfile']);
+
+Router::post('/completar-perfil', ['ProfileController', 'completeProfile']);
+
+// Verificar carnet de conduir
+Router::get('/verificar-conduir', function() {
+    Router::view('public.profile.verificar-conduir');
+});
+
+Router::post('/verificar-conduir', ['ProfileController', 'verifyLicense']);
+
+// Historial
+Router::get('/historial', function() {
+    Router::view('public.profile.historial');
+});
+
+// Pagaments
+Router::get('/pagaments', function() {
+    Router::view('public.profile.pagaments');
+});
+
+// Premium
+Router::get('/premium', function() {
+    Router::view('public.profile.premium');
+});
 
 // ==========================================
 // 🚗 VEHICLES

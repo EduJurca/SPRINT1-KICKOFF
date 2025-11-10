@@ -136,13 +136,6 @@ O simplement:
 
 ---
 
-## 📚 Recursos Addicionals
-
-- **Resum tècnic**: `assets/pages/dashboard/resum-projecte.html`
-- **Panel d'administració**: `assets/php/admin/`
-
----
-
 ## ⚡ Notes finals
 
 - Utilitza rutes relatives per AJAX/fetch en desenvolupament.
