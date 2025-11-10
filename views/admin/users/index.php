@@ -44,9 +44,8 @@ require_once VIEWS_PATH . '/admin/admin-header.php';
         <div class="bg-white rounded-lg shadow-sm overflow-hidden">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
+            <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom Complet</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rol</th>
@@ -64,7 +63,6 @@ require_once VIEWS_PATH . '/admin/admin-header.php';
                 <?php else: ?>
                     <?php foreach ($users as $user): ?>
                         <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 whitespace-nowrap"><?= $user['id'] ?></td>
                             <td class="px-6 py-4 whitespace-nowrap font-medium">
                                 <?= htmlspecialchars($user['username']) ?>
                             </td>
