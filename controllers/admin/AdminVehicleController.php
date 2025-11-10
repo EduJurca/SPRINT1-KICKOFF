@@ -222,25 +222,4 @@ class AdminVehicleController {
         
         Router::redirect('/admin/vehicles');
     }
-    
-    /**
-     * 📊 API - Obtener vehículos en formato JSON
-     * Para uso con JavaScript/AJAX
-     */
-    public function api() {
-        try {
-            $vehicles = $this->vehicleModel->getAllVehicles();
-            
-            Router::json([
-                'success' => true,
-                'vehicles' => $vehicles
-            ]);
-            
-        } catch (Exception $e) {
-            Router::json([
-                'success' => false,
-                'message' => 'Error al obtener vehículos'
-            ], 500);
-        }
-    }
 }

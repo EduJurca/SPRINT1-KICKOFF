@@ -167,6 +167,32 @@ Router::post('/admin/users/store', function() {
     $controller = new UserController();
     $controller->store();
 });
+Router::get('/admin/vehicles', ['AdminVehicleController', 'index']);
+Router::get('/admin/vehicles/create', ['AdminVehicleController', 'create']);
+Router::post('/admin/vehicles', ['AdminVehicleController', 'store']);
+Router::get('/admin/vehicles/{id}', ['AdminVehicleController', 'show']);
+Router::get('/admin/vehicles/{id}/edit', ['AdminVehicleController', 'edit']);
+Router::put('/admin/vehicles/{id}', ['AdminVehicleController', 'update']);
+Router::post('/admin/vehicles/{id}', ['AdminVehicleController', 'update']);
+
+// DESTROY - Eliminar vehículo (simulando DELETE con POST + _method)
+Router::delete('/admin/vehicles/{id}', ['AdminVehicleController', 'destroy']);
+Router::get('/admin/api/vehicles', ['AdminVehicleController', 'api']);
+
+// ADMIN ROUTES (gestió CRUD)
+Router::get('/admin/charging-stations', ['ChargingStationController', 'index']);
+Router::get('/admin/charging-stations/create', ['ChargingStationController', 'create']);
+Router::post('/admin/charging-stations/store', ['ChargingStationController', 'store']);
+Router::get('/admin/charging-stations/{id}/edit', ['ChargingStationController', 'edit']);
+Router::post('/admin/charging-stations/{id}/update', ['ChargingStationController', 'update']);
+Router::post('/admin/charging-stations/{id}/delete', ['ChargingStationController', 'delete']);
+
+// PUBLIC ROUTES (mapa i detalls)
+Router::get('/charging-stations', ['ChargingStationController', 'showMap']);
+Router::get('/charging-stations/{id}', ['ChargingStationController', 'getStationDetails']);
+
+// API ROUTES (JSON endpoints)
+Router::get('/api/charging-stations', ['ChargingStationController', 'getStationsJSON']);
 
 // Public incident reporting
 Router::get('/report-incident', ['IncidentController', 'createIncident']);
