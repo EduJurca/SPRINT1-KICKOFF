@@ -133,20 +133,14 @@ Router::get('/accessibilitat', function() {
 // ==========================================
 require_once CONTROLLERS_PATH . '/admin/AdminController.php';
 
-// Dashboard principal d'admin
+// Dashboard principal d'admin (solo estadísticas)
 Router::get('/admin', ['AdminController', 'dashboard']);
 Router::get('/admin/dashboard', ['AdminController', 'dashboard']);
 
-// Gestió de vehicles
-Router::get('/admin/vehicles', ['AdminController', 'vehicles']);
-
-// Gestió de reserves
-Router::get('/admin/bookings', ['AdminController', 'bookings']);
-
-// Incidències
-Router::get('/admin/incidencies', ['AdminController', 'incidencies']);
-
-// Configuració (settings page removed)
+// Gestión delegada a controladores especializados:
+// - AdminVehicleController para /admin/vehicles
+// - UserController para /admin/users
+// - AdminIncidentController para incidencias
 
 // ==========================================
 // 👥 CRUD USUARIS
