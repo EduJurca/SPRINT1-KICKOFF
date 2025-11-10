@@ -243,7 +243,7 @@
       // Animación: añadir efecto pulsante si no hay minutos
       const minutesText = document.querySelector('#minutes')?.textContent || '0 min';
       const minutesValue = parseInt(minutesText);
-    const btnComprarTemps = document.querySelector('a[href="/report-incident"]');
+      const btnComprarTemps = document.querySelector('a[href="/report-incident"]');
       
       if (minutesValue === 0 && btnComprarTemps) {
         btnComprarTemps.classList.add("animate-pulse", "ring-2", "ring-[#1565C0]");

@@ -668,8 +668,7 @@ document.addEventListener('DOMContentLoaded', () => {
     else if (path.includes('administrar-vehicle')) {
         Tutorial.init('vehicleControl');
     }
-    
-    // Eeport incident
+
     else if (path.includes('report-incident')) {
         Tutorial.init('purchaseTime');
     }

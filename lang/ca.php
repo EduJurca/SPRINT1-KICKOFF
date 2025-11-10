@@ -409,7 +409,7 @@ return [
         'notes' => 'Notes',
         'placeholder_notes' => 'Informació addicional (opcional)',
         'optional' => 'opcional',
-        'submit' => 'Enviar incidencia',
+        'submit' => 'Enviar incidència',
         'created_success' => 'Incidència creada correctament.',
         'created_error' => 'S\'ha produït un error en crear la incidència.',
 
@@ -456,10 +456,14 @@ return [
 
         'confirm_resolve' => 'Segur que vols marcar aquesta incidència com resolta?',
         'confirm_delete' => 'Segur que vols eliminar aquesta incidència?',
-
-        'resolved_title' => 'Incidència Resolta',
-        'resolved_by' => 'Resolta per',
-        'resolved_at' => 'Data',
+        'deleted_success' => 'Incidència eliminada correctament',
+        'error_title' => 'S\'ha produït un error',
+        'updated_success' => 'Incidència actualitzada correctament.',
+        'updated_error' => 'No s\'ha pogut actualitzar la incidència.',
+        'deleted_error' => 'No s\'ha pogut eliminar la incidència.',
+        'resolved_success' => 'Incidència resolta correctament.',
+        'resolve_error' => 'No s\'ha pogut resoldre la incidència.',
+        'not_found' => 'Incidència no trobada.',
         'incidents_management' => 'Gestió d\'Incidències',
         'create_new_incident' => 'Crear nova',
         'actions' => 'Accions',
@@ -470,5 +474,6 @@ return [
         'confirm_resolve_incident' => 'Segur que vols marcar aquesta incidència com resolta?',
         'mark_as_resolved' => 'Marcar com resolta',
         'confirm_delete_incident' => 'Segur que vols eliminar aquesta incidència?',
+        'not_available' => 'Incidència no disponible.',
     ],
 ];

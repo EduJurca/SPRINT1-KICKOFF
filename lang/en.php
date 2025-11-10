@@ -15,7 +15,7 @@ return [
             'creator' => 'Creator',
             'assignee' => 'Assignee',
             'creation_date' => 'Creation date',
-            'status' => 'Atatus',
+            'status' => 'Status',
             'actions' => 'Actions'
         ],
         'validations' => [
@@ -455,6 +455,7 @@ return [
 
         'confirm_resolve' => 'Are you sure you want to mark this incident as resolved?',
         'confirm_delete' => 'Are you sure you want to delete this incident?',
+        'deleted_success' => 'Incident deleted successfully.',
 
         'resolved_title' => 'Incident Resolved',
         'resolved_by' => 'Resolved by',
@@ -469,5 +470,13 @@ return [
         'confirm_resolve_incident' => 'Are you sure you want to mark this incident as resolved?',
         'mark_as_resolved' => 'Mark as Resolved',
         'confirm_delete_incident' => 'Are you sure you want to delete this incident?',
+        'error_title' => 'An error occurred',
+        'updated_success' => 'Incident updated successfully.',
+        'updated_error' => 'Failed to update the incident.',
+        'deleted_error' => 'Failed to delete the incident.',
+        'resolved_success' => 'Incident resolved successfully.',
+        'resolve_error' => 'Failed to resolve the incident.',
+        'not_found' => 'Incident not found.',
+        'not_available' => 'Incident not available.',
     ],
 ];

@@ -1,10 +1,6 @@
 -- VoltiaCar MariaDB Initialization Script
 -- Creates database, tables, and sample data
 
--- Create database
-CREATE DATABASE IF NOT EXISTS simsdb;
-USE simsdb;
-
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS payments;
 DROP TABLE IF EXISTS vehicle_usage;
@@ -16,6 +12,7 @@ DROP TABLE IF EXISTS nationalities;
 DROP TABLE IF EXISTS bookings;
 DROP TABLE IF EXISTS charging_sessions;
 DROP TABLE IF EXISTS charging_stations;
+DROP TABLE IF EXISTS incidents;
 
 
 SET FOREIGN_KEY_CHECKS = 1;

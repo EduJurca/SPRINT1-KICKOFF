@@ -26,7 +26,7 @@ require_once __DIR__ . '/../admin-header.php';
             <tbody class="bg-white divide-y divide-gray-200">
                 <?php if (empty($incidents)): ?>
                     <tr>
-                        <td colspan="8" class="px-6 py-4 text-center text-gray-500">
+                        <td colspan="7" class="px-6 py-4 text-center text-gray-500">
                             <?php echo __('no_registered_incidents'); ?>
                         </td>
                     </tr>
@@ -96,19 +96,5 @@ require_once __DIR__ . '/../admin-header.php';
         </table>
     </div>
 </div>
-
-<?php
-
-?>
-<script src="/assets/js/toast.js"></script>
-<?php if (session_status() === PHP_SESSION_NONE) { session_start(); } ?>
-<?php if (!empty($_SESSION['success'])): ?>
-    <script>window.Toast && window.Toast.success(<?php echo json_encode($_SESSION['success']); ?>, 5000);</script>
-    <?php unset($_SESSION['success']); ?>
-<?php endif; ?>
-<?php if (!empty($_SESSION['error'])): ?>
-    <script>window.Toast && window.Toast.error(<?php echo json_encode($_SESSION['error']); ?>, 5000);</script>
-    <?php unset($_SESSION['error']); ?>
-<?php endif; ?>
 
 <?php require_once __DIR__ . '/../admin-footer.php'; ?>

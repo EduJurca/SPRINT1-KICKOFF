@@ -84,47 +84,29 @@ class Incident {
         $incident_assignee = null;
         if (isset($data['incident_assignee']) && $data['incident_assignee'] !== '' && $data['incident_assignee'] !== null) {
             $incident_assignee = (int)$data['incident_assignee'];
-        }
-
-        if ($incident_assignee !== null) {
             if (!$userModel->findById($incident_assignee)) {
                 return false;
             }
         }
 
         $type = $data['type'] ?? null;
-        $description = $data['description'] ?? null;
-        $notes = $data['notes'] ?? null;
+        $description = isset($data['description']) ? htmlspecialchars($data['description'], ENT_QUOTES, 'UTF-8') : null;
+        $notes = isset($data['notes']) ? htmlspecialchars($data['notes'], ENT_QUOTES, 'UTF-8') : null;
         $incident_creator = (int)($data['incident_creator'] ?? 0);
 
-        if ($incident_assignee === null) {
-            $stmt = $this->db->prepare("INSERT INTO incidents
-                (type, status, description, notes, incident_creator, incident_assignee, created_at)
-                VALUES (?, 'pending', ?, ?, ?, NULL, NOW())");
+        $stmt = $this->db->prepare("INSERT INTO incidents
+            (type, status, description, notes, incident_creator, incident_assignee, created_at)
+            VALUES (?, 'pending', ?, ?, ?, ?, NOW())");
 
-            $stmt->bind_param('sssi',
-                $type,
-                $description,
-                $notes,
-                $incident_creator
-            );
+        $stmt->bind_param('sssii',
+            $type,
+            $description,
+            $notes,
+            $incident_creator,
+            $incident_assignee
+        );
 
-            return $stmt->execute();
-        } else {
-            $stmt = $this->db->prepare("INSERT INTO incidents
-                (type, status, description, notes, incident_creator, incident_assignee, created_at)
-                VALUES (?, 'pending', ?, ?, ?, ?, NOW())");
-
-            $stmt->bind_param('sssii',
-                $type,
-                $description,
-                $notes,
-                $incident_creator,
-                $incident_assignee
-            );
-
-            return $stmt->execute();
-        }
+        return $stmt->execute();
     }
 
     public function updateIncident($incidentId, $data) {

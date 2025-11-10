@@ -168,16 +168,18 @@ Router::post('/admin/users/store', function() {
     $controller->store();
 });
 
+// Public incident reporting
 Router::get('/report-incident', ['IncidentController', 'createIncident']);
 Router::post('/report-incident', ['IncidentController', 'createIncident']);
 
-Router::get('/admin/incidents', ['IncidentController', 'getAllIncidents']);
-Router::get('/admin/incidents/create', ['IncidentController', 'createIncident']);
-Router::post('/admin/incidents/create', ['IncidentController', 'createIncident']);
-Router::get('/admin/incidents/{id}/edit', ['IncidentController', 'getIncident']);
-Router::post('/admin/incidents/{id}/update', ['IncidentController', 'updateIncident']);
-Router::post('/admin/incidents/{id}/resolve', ['IncidentController', 'resolveIncident']);
-Router::delete('/admin/incidents/{id}', ['IncidentController', 'deleteIncident']);
+// Admin incident management
+Router::get('/admin/incidents', ['AdminIncidentController', 'getAllIncidents']);
+Router::get('/admin/incidents/create', ['AdminIncidentController', 'createIncident']);
+Router::post('/admin/incidents/create', ['AdminIncidentController', 'createIncident']);
+Router::get('/admin/incidents/{id}/edit', ['AdminIncidentController', 'getIncident']);
+Router::post('/admin/incidents/{id}/update', ['AdminIncidentController', 'updateIncident']);
+Router::post('/admin/incidents/{id}/resolve', ['AdminIncidentController', 'resolveIncident']);
+Router::delete('/admin/incidents/{id}', ['AdminIncidentController', 'deleteIncident']);
 
 
 Router::get('/admin/settings', function() {
