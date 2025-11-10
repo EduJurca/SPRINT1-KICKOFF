@@ -183,6 +183,12 @@ tailwind.config = {
         },
     },
     plugins: [],
+    variants: {
+        extend: {
+            backgroundColor: ['active'],
+            textColor: ['active'],
+        },
+    },
     // Safelist important classes that might be added dynamically
     safelist: [
         'bg-primary-500',
