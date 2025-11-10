@@ -181,6 +181,7 @@ Router::get('/admin/api/vehicles', ['AdminVehicleController', 'api']);
 
 // ADMIN ROUTES (gestió CRUD)
 Router::get('/admin/charging-stations', ['ChargingStationController', 'index']);
+Router::get('/admin/charging-points', ['ChargingStationController', 'index']); // Alias
 Router::get('/admin/charging-stations/create', ['ChargingStationController', 'create']);
 Router::post('/admin/charging-stations/store', ['ChargingStationController', 'store']);
 Router::get('/admin/charging-stations/{id}/edit', ['ChargingStationController', 'edit']);

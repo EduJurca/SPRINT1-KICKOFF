@@ -23,7 +23,8 @@ class ChargingStationController {
      */
     public function index() {
         // Check if user is admin
-        if (!isset($_SESSION['user_id'])) {
+        if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
+            $_SESSION['error'] = 'Unauthorized access';
             header('Location: /login');
             exit;
         }
@@ -41,10 +42,10 @@ class ChargingStationController {
      */
     public function create() {
         // Check if user is admin
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: /login');
-            exit;
-        }
+        // if (!isset($_SESSION['user_id'])) {
+        //     header('Location: /login');
+        //     exit;
+        // }
         
         Router::view('admin.charging.create');
     }
@@ -103,10 +104,10 @@ class ChargingStationController {
      */
     public function edit($id) {
         // Check if user is admin
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: /login');
-            exit;
-        }
+        // if (!isset($_SESSION['user_id'])) {
+        //     header('Location: /login');
+        //     exit;
+        // }
         
         $station = $this->stationModel->getStationById($id);
         
