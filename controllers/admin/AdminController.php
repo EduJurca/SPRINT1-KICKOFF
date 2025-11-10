@@ -3,6 +3,7 @@
 require_once MODELS_PATH . '/User.php';
 require_once MODELS_PATH . '/Booking.php';
 require_once MODELS_PATH . '/Vehicle.php';
+require_once MODELS_PATH . '/Incident.php';
 require_once CONTROLLERS_PATH . '/auth/AuthController.php';
 
 class AdminController {
@@ -10,12 +11,14 @@ class AdminController {
     private $userModel;
     private $bookingModel;
     private $vehicleModel;
+    private $incidentModel;
     
     public function __construct() {
         $this->db = Database::getMariaDBConnection();
         $this->userModel = new User();
         $this->bookingModel = new Booking($this->db);
         $this->vehicleModel = new Vehicle($this->db);
+        $this->incidentModel = new Incident($this->db);
     }
     
     public function dashboard() {
@@ -25,6 +28,7 @@ class AdminController {
         $totalVehicles = $this->getTotalVehicles();
         $totalBookings = $this->getTotalBookings();
         $totalRevenue = $this->getTotalRevenue();
+        $totalIncidents = $this->incidentModel->getActiveIncidents();
         $monthlyBookings = $this->getMonthlyBookings();
         $recentUsers = $this->getRecentUsers(5);
         
@@ -33,6 +37,7 @@ class AdminController {
             'totalVehicles' => $totalVehicles,
             'totalBookings' => $totalBookings,
             'totalRevenue' => $totalRevenue,
+            'totalIncidents' => $totalIncidents,
             'monthlyBookings' => $monthlyBookings,
             'recentUsers' => $recentUsers,
             'pageTitle' => 'Dashboard'
@@ -169,12 +174,12 @@ class AdminController {
         ";
         
         if (!empty($status)) {
-            $stmt = $db->prepare($query . " WHERE b.status = ? ORDER BY b.created_at DESC LIMIT 100");
+            $stmt = $this->db->prepare($query . " WHERE b.status = ? ORDER BY b.created_at DESC LIMIT 100");
             $stmt->bind_param('s', $status);
             $stmt->execute();
             $result = $stmt->get_result();
         } else {
-            $result = $db->query($query . " ORDER BY b.created_at DESC LIMIT 100");
+            $result = $this->db->query($query . " ORDER BY b.created_at DESC LIMIT 100");
         }
         
         $bookings = [];

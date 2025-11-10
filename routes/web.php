@@ -83,11 +83,8 @@ Router::get('/booking', function() {
 
 Router::post('/book-vehicle', ['VehicleController', 'bookVehicle']);
 
-// Comprar temps
-Router::get('/purchase-time', function() {
-    Router::view('public.vehicle.purchase-time');
-});
 
+// Endpoint POST de compra (compatibilitat)
 Router::post('/purchase-time', ['VehicleController', 'purchaseTime']);
 
 // ==========================================
@@ -171,56 +168,22 @@ Router::post('/admin/users/store', function() {
     $controller->store();
 });
 
-// ==========================================
-// 🚗 ADMIN - CRUD DE VEHICLES (MVC)
-// ==========================================
+// Public incident reporting
+Router::get('/report-incident', ['IncidentController', 'createIncident']);
+Router::post('/report-incident', ['IncidentController', 'createIncident']);
 
-// INDEX - Listar todos los vehículos
-Router::get('/admin/vehicles', ['AdminVehicleController', 'index']);
+// Admin incident management
+Router::get('/admin/incidents', ['AdminIncidentController', 'getAllIncidents']);
+Router::get('/admin/incidents/create', ['AdminIncidentController', 'createIncident']);
+Router::post('/admin/incidents/create', ['AdminIncidentController', 'createIncident']);
+Router::get('/admin/incidents/{id}/edit', ['AdminIncidentController', 'getIncident']);
+Router::post('/admin/incidents/{id}/update', ['AdminIncidentController', 'updateIncident']);
+Router::post('/admin/incidents/{id}/resolve', ['AdminIncidentController', 'resolveIncident']);
+Router::delete('/admin/incidents/{id}', ['AdminIncidentController', 'deleteIncident']);
 
-// CREATE - Mostrar formulario de crear
-Router::get('/admin/vehicles/create', ['AdminVehicleController', 'create']);
 
-// STORE - Guardar nuevo vehículo
-Router::post('/admin/vehicles', ['AdminVehicleController', 'store']);
+Router::get('/admin/settings', function() {
+    require_once PUBLIC_PATH . '/php/admin/settings.php';
+});
 
-// SHOW - Ver detalle de un vehículo
-Router::get('/admin/vehicles/{id}', ['AdminVehicleController', 'show']);
 
-// EDIT - Mostrar formulario de editar
-Router::get('/admin/vehicles/{id}/edit', ['AdminVehicleController', 'edit']);
-
-// UPDATE - Actualizar vehículo (soporta PUT y POST)
-Router::put('/admin/vehicles/{id}', ['AdminVehicleController', 'update']);
-Router::post('/admin/vehicles/{id}', ['AdminVehicleController', 'update']);
-
-// DESTROY - Eliminar vehículo (simulando DELETE con POST + _method)
-Router::delete('/admin/vehicles/{id}', ['AdminVehicleController', 'destroy']);
-
-// API - Obtener vehículos en JSON
-Router::get('/admin/api/vehicles', ['AdminVehicleController', 'api']);
-
-// ==========================================
-// ⚡ CHARGING STATIONS (PUNTS DE CÀRREGA)
-// ==========================================
-
-// ADMIN ROUTES (gestió CRUD)
-Router::get('/admin/charging-stations', ['ChargingStationController', 'index']);
-Router::get('/admin/charging-stations/create', ['ChargingStationController', 'create']);
-Router::post('/admin/charging-stations/store', ['ChargingStationController', 'store']);
-Router::get('/admin/charging-stations/{id}/edit', ['ChargingStationController', 'edit']);
-Router::post('/admin/charging-stations/{id}/update', ['ChargingStationController', 'update']);
-Router::post('/admin/charging-stations/{id}/delete', ['ChargingStationController', 'delete']);
-
-// PUBLIC ROUTES (mapa i detalls)
-Router::get('/charging-stations', ['ChargingStationController', 'showMap']);
-Router::get('/charging-stations/{id}', ['ChargingStationController', 'getStationDetails']);
-
-// API ROUTES (JSON endpoints)
-Router::get('/api/charging-stations', ['ChargingStationController', 'getStationsJSON']);
-
-// ==========================================
-// 🧪 DEBUG / TESTING (només en desenvolupament)
-// ==========================================
-
-// Test d'autorització removed from routes - dev-only view deleted

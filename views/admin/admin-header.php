@@ -1,3 +1,11 @@
+<?php
+if (!isset($_SESSION['success'])) $_SESSION['success'] = null;
+if (!isset($_SESSION['error'])) $_SESSION['error'] = null;
+if (!isset($_SESSION['warning'])) $_SESSION['warning'] = null;
+if (!isset($_SESSION['info'])) $_SESSION['info'] = null;
+if (!isset($_SESSION['alert'])) $_SESSION['alert'] = null;
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,8 +14,30 @@
     <title><?php echo htmlspecialchars($_SESSION['username'] ?? 'Admin'); ?> - <?php echo $pageTitle ?? 'Dashboard'; ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/assets/js/toast.js"></script>
 </head>
 <body class="font-sans bg-white text-black leading-normal">
+    <?php if (!empty($_SESSION['success'])): ?>
+        <script>window.Toast && window.Toast.success(<?php echo json_encode($_SESSION['success']); ?>, 5000);</script>
+        <?php unset($_SESSION['success']); ?>
+    <?php endif; ?>
+    <?php if (!empty($_SESSION['error'])): ?>
+        <script>window.Toast && window.Toast.error(<?php echo json_encode($_SESSION['error']); ?>, 5000);</script>
+        <?php unset($_SESSION['error']); ?>
+    <?php endif; ?>
+    <?php if (!empty($_SESSION['warning'])): ?>
+        <script>window.Toast && window.Toast.warning(<?php echo json_encode($_SESSION['warning']); ?>, 5000);</script>
+        <?php unset($_SESSION['warning']); ?>
+    <?php endif; ?>
+    <?php if (!empty($_SESSION['info'])): ?>
+        <script>window.Toast && window.Toast.info(<?php echo json_encode($_SESSION['info']); ?>, 5000);</script>
+        <?php unset($_SESSION['info']); ?>
+    <?php endif; ?>
+    <?php if (!empty($_SESSION['alert'])): ?>
+        <script>window.Toast && window.Toast.alert(<?php echo json_encode($_SESSION['alert']); ?>, 5000);</script>
+        <?php unset($_SESSION['alert']); ?>
+    <?php endif; ?>
+    
     <div class="flex min-h-screen">
         <aside class="w-60 bg-sky-50 flex flex-col shadow-lg">
             <div class="px-4 py-5">

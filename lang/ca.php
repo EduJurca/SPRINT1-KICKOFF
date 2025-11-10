@@ -1,6 +1,28 @@
 <?php
 
 return [
+    'actions' => [
+        'cancel' => 'Cancel·lar',
+        'delete' => 'Eliminar',
+        'edit' => 'Editar',
+        'save' => 'Guardar canvis',
+        'back' => 'Tornar'
+        
+    ],
+    'form' => [
+        'labels' => [
+            'type' => 'Tipus',
+            'description' => 'Descripció',
+            'creator' => 'Creador',
+            'assignee' => 'Assignació',
+            'creation_date' => 'Data de creació',
+            'status' => 'Estat',
+            'actions' => 'Accions'
+        ],
+        'validations' => [
+            'required_field' => 'Camp requerit'
+        ]        
+    ],
     'auth' => [
         'login_title' => 'Inicia Sessió',
         'register_title' => 'Registrar-se',
@@ -343,11 +365,13 @@ return [
     ],
     'dashboard' => [
         'management_window' => 'Finestra de Gestió',
+        'welcome' => 'Benvingut',
         'available_time' => 'Temps Disponible',
         'minutes' => 'minuts',
         'control_vehicle' => 'Controlar Vehicle',
         'locate_vehicles' => 'Localitzar Vehicles',
         'buy_time' => 'Comprar Temps',
+        'report_incident' => 'Reportar incidència',
         'profile' => 'Perfil',
         'logout' => 'Tancar Sessió',
         'help_tutorial' => 'Ajuda Tutorial',
@@ -372,5 +396,84 @@ return [
         'license_front_preview' => 'Vista prèvia del carnet de conduir (davant)',
         'license_back_preview' => 'Vista prèvia del carnet de conduir (darrere)',
         'submit_for_verification' => 'Enviar per verificar',
+    ],
+    'incident' => [
+        'title' => 'Reportar incidència',
+        'type' => 'Tipus',
+        'type_select' => 'Seleccionar...',
+        'type_mechanical' => 'Mecànica',
+        'type_electrical' => 'Elèctrica',
+        'type_other' => 'Altres',
+        'description' => 'Descripció',
+        'placeholder_description' => 'Descriu el problema',
+        'notes' => 'Notes',
+        'placeholder_notes' => 'Informació addicional (opcional)',
+        'optional' => 'opcional',
+        'submit' => 'Enviar incidència',
+        'created_success' => 'Incidència creada correctament.',
+        'created_error' => 'S\'ha produït un error en crear la incidència.',
+
+        'manage_title' => 'Gestió d\'Incidents',
+        'create_title' => 'Crear Incidència',
+        'create_heading' => 'Reporta un problema o incidència del sistema',
+        'edit_title' => 'Editar Incidència',
+        'edit_heading' => 'Modifica els detalls de la incidència',
+
+        'label_type' => 'Tipus d\'Incidència',
+        'label_status' => 'Estat',
+        'label_creator' => 'Creat per',
+        'label_assigned_to' => 'Assignat a',
+        'label_description' => 'Descripció',
+        'label_notes' => 'Notes Addicionals',
+        'label_assignee' => "Assignar a",        
+
+        'option_unassigned' => 'Sense assignar',
+        'option_select_type' => 'Seleccionar tipus...',
+
+        'button_back' => 'Tornar',
+        'button_save_changes' => 'Guardar Canvis',
+        'button_create' => 'Crear Incidència',
+        'button_cancel' => 'Cancel·lar',
+
+        'table_type' => 'Tipus',
+        'table_description' => 'Descripció',
+        'table_creator' => 'Creador',
+        'table_assignee' => 'Assignat a',
+        'table_created_at' => 'Data Creació',
+        'table_status' => 'Estat',
+        'table_actions' => 'Accions',
+
+        'no_incidents' => 'No hi ha incidents registrats.',
+
+        'status_pending' => 'Pendent',
+        'status_in_progress' => 'En Progrés',
+        'status_resolved' => 'Resolta',
+
+        'view' => 'Veure',
+        'edit' => 'Editar',
+        'mark_resolved' => 'Marcar com resolta',
+        'delete' => 'Eliminar',
+
+        'confirm_resolve' => 'Segur que vols marcar aquesta incidència com resolta?',
+        'confirm_delete' => 'Segur que vols eliminar aquesta incidència?',
+        'deleted_success' => 'Incidència eliminada correctament',
+        'error_title' => 'S\'ha produït un error',
+        'updated_success' => 'Incidència actualitzada correctament.',
+        'updated_error' => 'No s\'ha pogut actualitzar la incidència.',
+        'deleted_error' => 'No s\'ha pogut eliminar la incidència.',
+        'resolved_success' => 'Incidència resolta correctament.',
+        'resolve_error' => 'No s\'ha pogut resoldre la incidència.',
+        'not_found' => 'Incidència no trobada.',
+        'incidents_management' => 'Gestió d\'Incidències',
+        'create_new_incident' => 'Crear nova',
+        'actions' => 'Accions',
+        'no_registered_incidents' => 'No hi ha incidents registrats.',
+        'unknown' => 'Desconegut',
+        'unassigned' => 'No assignat',
+        'view_details' => 'Veure detalls',
+        'confirm_resolve_incident' => 'Segur que vols marcar aquesta incidència com resolta?',
+        'mark_as_resolved' => 'Marcar com resolta',
+        'confirm_delete_incident' => 'Segur que vols eliminar aquesta incidència?',
+        'not_available' => 'Incidència no disponible.',
     ],
 ];

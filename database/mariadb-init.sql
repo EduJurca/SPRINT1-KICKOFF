@@ -1,11 +1,6 @@
 -- VoltiaCar MariaDB Initialization Script
 -- Creates database, tables, and sample data
 
--- Create database
-CREATE DATABASE IF NOT EXISTS simsdb;
-USE simsdb;
-
--- Drop existing tables (in order of dependencies)
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS payments;
 DROP TABLE IF EXISTS vehicle_usage;
@@ -17,6 +12,7 @@ DROP TABLE IF EXISTS nationalities;
 DROP TABLE IF EXISTS bookings;
 DROP TABLE IF EXISTS charging_sessions;
 DROP TABLE IF EXISTS charging_stations;
+DROP TABLE IF EXISTS incidents;
 
 
 SET FOREIGN_KEY_CHECKS = 1;
@@ -135,6 +131,28 @@ CREATE TABLE vehicle_usage (
     INDEX idx_user_id (user_id),
     INDEX idx_vehicle_id (vehicle_id),
     INDEX idx_start_time (start_time)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE incidents (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    type ENUM('mechanical', 'electrical', 'other') NOT NULL,
+    status ENUM('in_progress', 'pending', 'resolved') DEFAULT 'pending',
+    description TEXT NOT NULL,
+    notes TEXT,
+    incident_creator INT NOT NULL,
+    incident_assignee INT,
+    resolved_by INT,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    resolved_at DATETIME,
+    FOREIGN KEY (incident_creator) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (incident_assignee) REFERENCES users(id) ON DELETE SET NULL,
+    FOREIGN KEY (resolved_by) REFERENCES users(id) ON DELETE SET NULL,
+    INDEX idx_type (type),
+    INDEX idx_status (status),
+    INDEX idx_incident_creator (incident_creator),
+    INDEX idx_incident_assignee (incident_assignee),
+    INDEX idx_created_at (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Table: payments

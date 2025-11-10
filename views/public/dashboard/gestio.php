@@ -83,11 +83,11 @@
             <p class="font-bold text-base text-gray-900">Localitzar Vehicles</p>
           </a>
 
-          <a href="/purchase-time"
+          <a href="/report-incident"
             class=" bg-gray-100 p-4 rounded-lg shadow-sm flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105"
-            aria-label="Comprar Temps">
-            <img src="/public_html/images/comprar-temps.png" alt="Comprar Temps" class="h-12 w-12 mb-2">
-            <p class="font-bold text-base text-gray-900">Comprar Temps</p>
+            aria-label="<?php echo __('dashboard.report_incident'); ?>">
+            <img src="/assets/images/report-incident.svg" alt="<?php echo __('dashboard.report_incident'); ?>" class="h-12 w-12 mb-2">
+            <p class="font-bold text-base text-gray-900"><?php echo __('dashboard.report_incident'); ?></p>
           </a>
 
           <a href="/perfil"
@@ -212,11 +212,11 @@
         <p class="font-bold text-lg text-gray-900">Localitzar Vehicles</p>
       </a>
 
-      <a href="/purchase-time"
+      <a href="/report-incident"
         class=" bg-gray-100 p-6 rounded-lg shadow-sm flex flex-col items-center justify-center text-center transition-transform transform hover:scale-105"
-        aria-label="Comprar Temps">
-        <img src="/public_html/images/comprar-temps.png" alt="Comprar Temps" class="h-16 w-16 mb-4">
-        <p class="font-bold text-lg text-gray-900">Comprar Temps</p>
+        aria-label="<?php echo __('dashboard.report_incident'); ?>">
+        <img src="/assets/images/report-incident.svg" alt="<?php echo __('dashboard.report_incident'); ?>" class="h-16 w-16 mb-4">
+        <p class="font-bold text-lg text-gray-900"><?php echo __('dashboard.report_incident'); ?></p>
       </a>
 
       <a href="/perfil"
@@ -243,7 +243,7 @@
       // Animación: añadir efecto pulsante si no hay minutos
       const minutesText = document.querySelector('#minutes')?.textContent || '0 min';
       const minutesValue = parseInt(minutesText);
-      const btnComprarTemps = document.querySelector('a[href="/purchase-time"]');
+      const btnComprarTemps = document.querySelector('a[href="/report-incident"]');
       
       if (minutesValue === 0 && btnComprarTemps) {
         btnComprarTemps.classList.add("animate-pulse", "ring-2", "ring-[#1565C0]");
