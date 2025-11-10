@@ -51,11 +51,6 @@ Router::get('/dashboard', ['DashboardController', 'showGestio']);
 
 Router::get('/gestio', ['DashboardController', 'showGestio']);
 
-// Resum del projecte
-Router::get('/resum-projecte', function() {
-    Router::view('public.dashboard.resum-projecte');
-});
-
 // ==========================================
 // 👤 PERFIL D'USUARI
 // ==========================================
