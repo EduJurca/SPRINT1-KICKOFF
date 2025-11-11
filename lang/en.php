@@ -1,6 +1,27 @@
 <?php
 
 return [
+    'actions' => [
+        'cancel' => 'Cancel',
+        'delete' => 'Delete',
+        'edit' => 'Edit',
+        'save' => 'Save changes',
+        'back' => 'Go back'
+    ],
+    'form' => [
+        'labels' => [
+            'type' => 'Type',
+            'description' => 'Description',
+            'creator' => 'Creator',
+            'assignee' => 'Assignee',
+            'creation_date' => 'Creation date',
+            'status' => 'Status',
+            'actions' => 'Actions'
+        ],
+        'validations' => [
+            'required_field' => "Required field"
+        ]
+    ],    
     'auth' => [
         'login_title' => 'Sign In',
         'register_title' => 'Register',
@@ -233,7 +254,6 @@ return [
         'confirm_finish_message' => 'Are you sure you want to finish the reservation of this vehicle?',
         'vehicle_available_message' => 'The vehicle will be available for other users.',
         'cancel' => 'Cancel',
-        'finish' => 'Finish',
         'vehicle_info' => 'Vehicle Information',
         'battery_level' => 'Battery Level',
         'current_speed' => 'Current Speed',
@@ -251,6 +271,63 @@ return [
         'release_warning' => 'Are you sure you want to release this vehicle? This action cannot be undone.',
         'confirm' => 'Confirm',
         'info_location' => 'Information and Location',
+        'vehicles' => [
+            'title' => 'Vehicle Management',
+            'new' => 'New Vehicle',
+            'edit' => 'Edit Vehicle',
+            'back' => '← Back to list',
+            'new_button' => 'New Vehicle',
+            'subtitle_create' => 'Fill in the vehicle details',
+            'subtitle_edit' => 'Modify the vehicle details',
+            'subtitle_show' => 'Vehicle details and status',
+            'filter' => 'Filter',
+            'clear' => 'Clear',
+            'no_vehicles' => 'No vehicles registered',
+            'create_first' => '+ Create the first',
+            'table' => [
+                'id' => 'ID',
+                'license_plate' => 'License Plate',
+                'vehicle' => 'Vehicle',
+                'status' => 'Status',
+                'battery' => 'Battery',
+                'price_per_min' => 'Price/min',
+                'actions' => 'Actions'
+            ],
+            'buttons' => [
+                'create' => 'Create Vehicle',
+                'save' => 'Save Changes',
+                'cancel' => 'Cancel',
+                'edit' => 'Edit',
+                'view' => 'View',
+                'delete' => 'Delete'
+            ],
+            'cards' => [
+                'status' => 'Status',
+                'battery' => 'Battery',
+                'price' => 'Price/min'
+            ],
+            'info' => [
+                'vehicle_information' => 'Vehicle Information',
+                'location' => 'Location',
+                'image' => 'Image'
+            ],
+            'labels' => [
+                'id' => 'ID',
+                'plate' => 'License Plate',
+                'brand' => 'Brand',
+                'model' => 'Model',
+                'year' => 'Year',
+                'is_accessible' => 'Accessible vehicle',
+                'battery_level' => 'Battery Level (%)',
+                'price_per_minute' => 'Price per Minute (€)',
+                'latitude' => 'Latitude',
+                'longitude' => 'Longitude',
+                'image_url' => 'Image URL'
+            ]
+            ,
+            'confirm_delete' => 'Are you sure you want to delete the vehicle :plate? This action cannot be undone.',
+            'showing' => 'Showing :count vehicle(s)'
+        ],
     ],
     'profile' => [
         'page_title' => 'SIMS - Profile',
@@ -278,15 +355,7 @@ return [
         'back_to_profile' => '← Back',
         'full_name' => 'Full Name',
         'dni_nie' => 'DNI/NIE',
-        'phone' => 'Phone',
-        'birth_date' => 'Birth Date',
-        'address' => 'Address',
-        'gender' => 'Gender',
         'select_option' => 'Select',
-        'male' => 'Male',
-        'female' => 'Female',
-        'other' => 'Other',
-        'save' => 'Save',
         'name_min_length' => 'Full name must be at least 3 characters long.',
         'invalid_dni' => 'DNI/NIE must be valid (8 digits + letter or X/Y/Z + 7 digits + letter).',
         'invalid_phone' => 'Phone must have at least 9 digits.',
@@ -295,11 +364,13 @@ return [
     ],
     'dashboard' => [
         'management_window' => 'Management Window',
+        'welcome' => 'Welcome',
         'available_time' => 'Available Time',
         'minutes' => 'minutes',
         'control_vehicle' => 'Control Vehicle',
         'locate_vehicles' => 'Locate Vehicles',
         'buy_time' => 'Buy Time',
+        'report_incident' => 'Report Incident',
         'profile' => 'Profile',
         'logout' => 'Logout',
         'help_tutorial' => 'Help Tutorial',
@@ -312,7 +383,6 @@ return [
         'duration' => 'Duration:',
         'vehicle_id' => 'Vehicle ID:',
         'trip_route' => '[Trip route on the map]',
-        'minutes' => 'minutes',
         'payments_title' => 'Payments',
         'current_cards' => 'Current Cards',
         'add_card' => 'Add Card',
@@ -325,5 +395,88 @@ return [
         'license_front_preview' => 'Driver\'s license preview (front)',
         'license_back_preview' => 'Driver\'s license preview (back)',
         'submit_for_verification' => 'Submit for verification',
+    ],
+    'incident' => [
+        'title' => 'Report Incident',
+        'type' => 'Type',
+        'type_select' => 'Select...',
+        'type_mechanical' => 'Mechanical',
+        'type_electrical' => 'Electrical',
+        'type_other' => 'Other',
+        'description' => 'Description',
+        'placeholder_description' => 'Describe the issue',
+        'notes' => 'Notes',
+        'placeholder_notes' => 'Additional information (optional)',
+        'optional' => 'optional',
+        'submit' => 'Send incident',
+        'created_success' => 'Incident created successfully.',
+        'created_error' => 'An error occurred while creating the incident.',
+
+        'manage_title' => 'Incidents Management',
+        'create_title' => 'Create Incident',
+        'create_heading' => 'Report an issue or system incident',
+        'edit_title' => 'Edit Incident',
+        'edit_heading' => 'Modify the incident details',
+
+        'label_type' => 'Incident Type',
+        'label_status' => 'Status',
+        'label_creator' => 'Created by',
+        'label_assigned_to' => 'Assigned to',
+        'label_description' => 'Description',
+        'label_notes' => 'Additional Notes',
+        'label_assignee' => "Assign to",
+
+        'option_unassigned' => 'Unassigned',
+        'option_select_type' => 'Select type...',
+
+        'button_back' => 'Back',
+        'button_save_changes' => 'Save Changes',
+        'button_create' => 'Create Incident',
+        'button_cancel' => 'Cancel',
+
+        'table_type' => 'Type',
+        'table_description' => 'Description',
+        'table_creator' => 'Creator',
+        'table_assignee' => 'Assigned to',
+        'table_created_at' => 'Created At',
+        'table_status' => 'Status',
+        'table_actions' => 'Actions',
+
+        'no_incidents' => 'No incidents registered.',
+
+        'status_pending' => 'Pending',
+        'status_in_progress' => 'In Progress',
+        'status_resolved' => 'Resolved',
+
+        'view' => 'View',
+        'edit' => 'Edit',
+        'mark_resolved' => 'Mark as resolved',
+        'delete' => 'Delete',
+
+        'confirm_resolve' => 'Are you sure you want to mark this incident as resolved?',
+        'confirm_delete' => 'Are you sure you want to delete this incident?',
+        'deleted_success' => 'Incident deleted successfully.',
+
+        'resolved_title' => 'Incident Resolved',
+        'resolved_by' => 'Resolved by',
+        'resolved_at' => 'Date',
+        'incidents_management' => 'Incidents Management',
+        'create_new_incident' => 'Create New Incident',
+        'actions' => 'Actions',
+        'no_registered_incidents' => 'No incidents registered.',
+        'unknown' => 'Unknown',
+        'unassigned' => 'Unassigned',
+        'view_details' => 'View Details',
+        'confirm_resolve_incident' => 'Are you sure you want to mark this incident as resolved?',
+        'mark_as_resolved' => 'Mark as Resolved',
+        'confirm_delete_incident' => 'Are you sure you want to delete this incident?',
+        'error_title' => 'An error occurred',
+        'updated_success' => 'Incident updated successfully.',
+        'updated_error' => 'Failed to update the incident.',
+        'deleted_error' => 'Failed to delete the incident.',
+        'resolved_success' => 'Incident resolved successfully.',
+        'resolve_error' => 'Failed to resolve the incident.',
+        'not_found' => 'Incident not found.',
+        'not_available' => 'Incident not available.',
     ],
 ];

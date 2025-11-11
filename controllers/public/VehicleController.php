@@ -18,13 +18,11 @@ class VehicleController {
         $this->bookingModel = new Booking($db);
     }
     
-    /**
-     * Obtenir tots els vehicles disponibles
-     */
+  
     public function getAvailableVehicles() {
         $vehicles = $this->vehicleModel->getAvailableVehicles();
         
-        // Processar cada vehicle
+       
         foreach ($vehicles as &$vehicle) {
             // Formatear ubicació
             if (isset($vehicle['latitude']) && isset($vehicle['longitude'])) {
@@ -60,9 +58,7 @@ class VehicleController {
         ], 200);
     }
     
-    /**
-     * Obtenir vehicle per ID
-     */
+  
     public function getVehicleById($id) {
         $vehicle = $this->vehicleModel->getVehicleById($id);
         
@@ -79,9 +75,7 @@ class VehicleController {
         ], 200);
     }
     
-    /**
-     * Mostrar detalls del vehicle (vista)
-     */
+  
     public function show($id) {
         $vehicle = $this->vehicleModel->getVehicleById($id);
         
@@ -93,11 +87,9 @@ class VehicleController {
         Router::view('public.vehicle.detalls-vehicle', ['vehicle' => $vehicle]);
     }
     
-    /**
-     * Reclamar un vehicle
-     */
+   
     public function claimVehicle() {
-        // Requerir autenticació
+    
         $userId = AuthController::requireAuth();
         
         $data = json_decode(file_get_contents('php://input'), true);
@@ -292,43 +284,34 @@ class VehicleController {
         ], 200);
     }
     
-    /**
-     * Cercar vehicles
-     */
+ 
     public function search() {
         return $this->getAvailableVehicles();
     }
     
-    /**
-     * Reservar vehicle
-     */
+
+
     public function bookVehicle() {
         return $this->claimVehicle();
     }
     
-    /**
-     * Comprar temps
-     */
+
     public function purchaseTime() {
-        // Requerir autenticació
+   
         $userId = AuthController::requireAuth();
         
-        // Dual-mode: aceptar JSON o form-data
         $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
         
         if (strpos($contentType, 'application/json') !== false) {
-            // Modo JSON (para JavaScript legacy)
             $data = json_decode(file_get_contents('php://input'), true);
         } else {
-            // Modo form-data (para formularios HTML)
             $data = $_POST;
         }
         
         if (!isset($data['minutes'])) {
-            // Si es form-data, redirigir con error
             if (strpos($contentType, 'application/json') === false) {
                 $_SESSION['error'] = 'Els minuts són obligatoris';
-                return Router::redirect('/purchase-time');
+                return Router::redirect('/report-incident');
             }
             
             return Router::json([
@@ -340,7 +323,6 @@ class VehicleController {
         $minutes = (int)$data['minutes'];
         $price = (float)($data['price'] ?? ($minutes * 0.35));
         
-        // Actualitzar el balanç de minuts de l'usuari
         require_once MODELS_PATH . '/User.php';
         $db = Database::getMariaDBConnection();
         $userModel = new User($db);
@@ -348,10 +330,9 @@ class VehicleController {
         if (!$userModel->addMinutes($userId, $minutes)) {
             error_log("ERROR: Failed to add minutes for user $userId");
             
-            // Si es form-data, redirigir con error
             if (strpos($contentType, 'application/json') === false) {
                 $_SESSION['error'] = 'Error al processar la compra. Intenta-ho de nou.';
-                return Router::redirect('/purchase-time');
+                return Router::redirect('/report-incident');
             }
             
             return Router::json([
@@ -360,16 +341,13 @@ class VehicleController {
             ], 500);
         }
         
-        // Logging de compra exitosa
         error_log("SUCCESS: User $userId purchased $minutes minutes for €$price");
         
-        // Si es form-data, redirigir con success
         if (strpos($contentType, 'application/json') === false) {
             $_SESSION['success'] = "Compra realitzada! Has rebut $minutes minuts per €" . number_format($price, 2);
             return Router::redirect('/dashboard');
         }
         
-        // Si es JSON, retornar JSON
         return Router::json([
             'success' => true,
             'message' => 'Time purchased successfully',
@@ -382,10 +360,10 @@ class VehicleController {
      * Mostrar vista de localitzar vehicles (amb autenticació)
      */
     public function showLocalitzar() {
-        // Requerir autenticació
+   
         AuthController::requireAuth();
         
-        // Mostrar la vista
+      
         return Router::view('public.vehicle.localitzar-vehicle');
     }
     
@@ -440,10 +418,7 @@ class VehicleController {
             'message' => 'Lights activated'
         ], 200);
     }
-    
-    /**
-     * Arrencar motor del vehicle
-     */
+
     public function startEngine() {
         // Requerir autenticació
         $userId = AuthController::requireAuth();
@@ -467,14 +442,12 @@ class VehicleController {
         ], 200);
     }
     
-    /**
-     * Aturar motor del vehicle
-     */
+  
     public function stopEngine() {
-        // Requerir autenticació
+  
         $userId = AuthController::requireAuth();
         
-        // Verificar que l'usuari té un vehicle actiu
+      
         $booking = $this->bookingModel->getActiveBooking($userId);
         
         if (!$booking) {
@@ -484,7 +457,7 @@ class VehicleController {
             ], 404);
         }
         
-        // Mock: simular aturada del motor
+     
         error_log("Engine stopped for vehicle {$booking['vehicle_id']} by user $userId");
         
         return Router::json([
@@ -492,15 +465,12 @@ class VehicleController {
             'message' => 'Engine stopped'
         ], 200);
     }
-    
-    /**
-     * Bloquejar portes del vehicle
-     */
+   
     public function lockDoors() {
-        // Requerir autenticació
+     
         $userId = AuthController::requireAuth();
         
-        // Verificar que l'usuari té un vehicle actiu
+        
         $booking = $this->bookingModel->getActiveBooking($userId);
         
         if (!$booking) {
@@ -510,7 +480,7 @@ class VehicleController {
             ], 404);
         }
         
-        // Mock: simular bloqueig de portes
+      
         error_log("Doors locked for vehicle {$booking['vehicle_id']} by user $userId");
         
         return Router::json([
@@ -519,14 +489,11 @@ class VehicleController {
         ], 200);
     }
     
-    /**
-     * Desbloquejar portes del vehicle
-     */
+   
     public function unlockDoors() {
-        // Requerir autenticació
+      
         $userId = AuthController::requireAuth();
-        
-        // Verificar que l'usuari té un vehicle actiu
+
         $booking = $this->bookingModel->getActiveBooking($userId);
         
         if (!$booking) {
@@ -536,7 +503,6 @@ class VehicleController {
             ], 404);
         }
         
-        // Mock: simular desbloqueig de portes
         error_log("Doors unlocked for vehicle {$booking['vehicle_id']} by user $userId");
         
         return Router::json([

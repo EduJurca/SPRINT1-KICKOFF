@@ -117,6 +117,21 @@ textarea:focus {
     background-color: var(--color-primary-blue);
 }
 
+/* Active and Hover States for Tabs */
+.tab-button {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.tab-button[data-active="true"] {
+    background-color: var(--color-primary-blue);
+    color: var(--color-white);
+}
+
+.tab-button:hover {
+    background-color: var(--color-primary-blue-dark);
+    color: var(--color-white);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .card {
