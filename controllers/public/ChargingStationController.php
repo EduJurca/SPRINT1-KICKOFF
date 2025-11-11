@@ -5,6 +5,7 @@
  */
 
 require_once MODELS_PATH . '/ChargingStation.php';
+require_once CONTROLLERS_PATH . '/auth/AuthController.php';
 
 class ChargingStationController {
     private $stationModel;
@@ -22,13 +23,10 @@ class ChargingStationController {
      * Display list of all charging stations (admin)
      */
     public function index() {
-        // Check if user is admin
-        if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
-            $_SESSION['error'] = 'Unauthorized access';
-            header('Location: /login');
-            exit;
-        }
-        
+        // Require authenticated user and permission to view charging stations
+        AuthController::requireAuth();
+        Permissions::authorize('charging_stations.view_all');
+
         $stations = $this->stationModel->getAllStations();
         
         Router::view('admin.charging.index', [
@@ -41,12 +39,9 @@ class ChargingStationController {
      * Show form to create new station
      */
     public function create() {
-        // Check if user is admin
-        // if (!isset($_SESSION['user_id'])) {
-        //     header('Location: /login');
-        //     exit;
-        // }
-        
+        AuthController::requireAuth();
+        Permissions::authorize('charging_stations.create');
+
         Router::view('admin.charging.create');
     }
     
@@ -54,13 +49,9 @@ class ChargingStationController {
      * Store new charging station
      */
     public function store() {
-        // Check if user is admin
-        if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
-            $_SESSION['error'] = 'Unauthorized access';
-            header('Location: /login');
-            exit;
-        }
-        
+        AuthController::requireAuth();
+        Permissions::authorize('charging_stations.create');
+
         // Get POST data
         $data = [
             'name' => $_POST['name'] ?? '',
@@ -103,12 +94,9 @@ class ChargingStationController {
      * Show form to edit station
      */
     public function edit($id) {
-        // Check if user is admin
-        // if (!isset($_SESSION['user_id'])) {
-        //     header('Location: /login');
-        //     exit;
-        // }
-        
+        AuthController::requireAuth();
+        Permissions::authorize('charging_stations.edit');
+
         $station = $this->stationModel->getStationById($id);
         
         if (!$station) {
@@ -126,13 +114,9 @@ class ChargingStationController {
      * Update charging station
      */
     public function update($id) {
-        // Check if user is admin
-        if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
-            $_SESSION['error'] = 'Unauthorized access';
-            header('Location: /login');
-            exit;
-        }
-        
+        AuthController::requireAuth();
+        Permissions::authorize('charging_stations.edit');
+
         // Get POST data
         $data = [
             'name' => $_POST['name'] ?? '',
@@ -175,13 +159,9 @@ class ChargingStationController {
      * Delete charging station
      */
     public function delete($id) {
-        // Check if user is admin
-        if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
-            $_SESSION['error'] = 'Unauthorized access';
-            header('Location: /login');
-            exit;
-        }
-        
+        AuthController::requireAuth();
+        Permissions::authorize('charging_stations.delete');
+
         $result = $this->stationModel->deleteStation($id);
         
         if ($result) {
@@ -235,13 +215,13 @@ class ChargingStationController {
      */
     public function getStationDetails($id) {
         $station = $this->stationModel->getStationById($id);
-        
+
         if (!$station) {
             $_SESSION['error'] = 'Charging station not found';
             header('Location: /charging-stations');
             exit;
         }
-        
+
         Router::view('charging.details', [
             'station' => $station
         ]);
