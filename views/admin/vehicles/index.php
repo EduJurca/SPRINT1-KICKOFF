@@ -13,18 +13,18 @@ $error = $_SESSION['error'] ?? null;
 unset($_SESSION['success'], $_SESSION['error']);
 ?>
 
-<div class="min-h-screen bg-gray-50 py-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gray-50 py-4 md:py-8">
+    <div class="w-full px-4 md:px-6 lg:px-8">
         
         <!-- Header -->
-        <div class="mb-8">
-            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-                <div class="flex items-center justify-between">
+        <div class="mb-4 md:mb-8">
+            <div class="bg-white rounded-lg shadow-md p-4 md:p-6 mb-4 md:mb-6">
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                     <div>
-                        <h1 class="text-3xl font-bold text-gray-900"><?= __('admin.vehicles.title') ?></h1>
+                        <h1 class="text-2xl md:text-3xl font-bold text-gray-900"><?= __('admin.vehicles.title') ?></h1>
                     </div>
-                    <a href="/admin/vehicles/create" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <a href="/admin/vehicles/create" class="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition text-sm md:text-base">
+                        <svg class="w-4 md:w-5 h-4 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                         </svg>
                         <?= __('admin.vehicles.new_button') ?>
@@ -35,29 +35,29 @@ unset($_SESSION['success'], $_SESSION['error']);
 
         <!-- Mensajes -->
         <?php if ($success): ?>
-            <div class="mb-6 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded" role="alert">
+            <div class="mb-4 md:mb-6 bg-green-100 border-l-4 border-green-500 text-green-700 p-3 md:p-4 rounded text-sm md:text-base" role="alert">
                 <p class="font-semibold"><?= htmlspecialchars($success) ?></p>
             </div>
         <?php endif; ?>
 
         <?php if ($error): ?>
-            <div class="mb-6 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded" role="alert">
+            <div class="mb-4 md:mb-6 bg-red-100 border-l-4 border-red-500 text-red-700 p-3 md:p-4 rounded text-sm md:text-base" role="alert">
                 <p class="font-semibold"><?= htmlspecialchars($error) ?></p>
             </div>
         <?php endif; ?>
 
         <!-- Filtros -->
-        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-            <form method="GET" action="/admin/vehicles" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white rounded-lg shadow-md p-4 md:p-6 mb-4 md:mb-6">
+            <form method="GET" action="/admin/vehicles" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Marca</label>
+                    <label class="block text-xs md:text-sm font-medium text-gray-700 mb-1 md:mb-2">Marca</label>
                     <input type="text" name="brand" value="<?= htmlspecialchars($filters['brand'] ?? '') ?>" 
                            placeholder="Filtrar por marca" 
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                           class="w-full px-3 md:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                 </div>
                 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Estado</label>
+                    <label class="block text-xs md:text-sm font-medium text-gray-700 mb-1 md:mb-2">Estado</label>
                     <select name="status" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         <option value="">Todos</option>
                         <option value="available" <?= ($filters['status'] ?? '') === 'available' ? 'selected' : '' ?>>Disponible</option>

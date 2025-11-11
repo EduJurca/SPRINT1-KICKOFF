@@ -39,45 +39,22 @@ if (!isset($_SESSION['alert'])) $_SESSION['alert'] = null;
     <?php endif; ?>
     
     <div class="flex min-h-screen">
-        <aside class="w-60 bg-sky-50 flex flex-col shadow-lg">
-            <div class="px-4 py-5">
-                <div class="flex items-center gap-3">
-                    <img src="/assets/images/logo.png" alt="Voltacar Logo" class="w-12 h-12">
-                </div>
-            </div>
-            
-            <nav class="flex-1">
-                <div class="mb-6">
-                    <div class="px-4 py-2 text-xs uppercase text-gray-600 font-semibold">General</div>
-                    <a href="/admin/dashboard" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-[#1565C0] hover:text-gray-100 <?php echo ($currentPage ?? '') === 'dashboard' ? 'bg-blue-900 text-white' : 'text-gray-900'; ?>" <?php echo ($currentPage ?? '') === 'dashboard' ? 'data-active="true"' : ''; ?>>
-                        <img src="/assets/images/dashboard.png" alt="Dashboard" class="w-4 h-4 opacity-100"> 
-                        Dashboard
-                    </a>
-                </div>
-                
-                <div class="mb-6">
-                    <div class="px-4 py-2 text-xs uppercase text-gray-600 font-semibold">Pages</div>
-                    <a href="/admin/users" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-blue-700 hover:text-gray-100 <?php echo ($currentPage ?? '') === 'users' ? 'bg-blue-900 text-white' : 'text-gray-900'; ?>" <?php echo ($currentPage ?? '') === 'users' ? 'data-active="true"' : ''; ?>>
-                        <i class="fa fa-users"></i> Usuaris
-                    </a>
-                    <a href="/admin/charging-stations" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-blue-700 hover:text-gray-100 <?php echo ($currentPage ?? '') === 'charging-stations' ? 'bg-blue-900 text-white' : 'text-gray-900'; ?>" <?php echo ($currentPage ?? '') === 'charging-stations' ? 'data-active="true"' : ''; ?>>
-                        <i class="fa fa-charging-station"></i> Punts de càrrega
-                    </a>
-                    <a href="/admin/vehicles" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-blue-700 hover:text-gray-100 <?php echo ($currentPage ?? '') === 'vehicles' ? 'bg-blue-900 text-white' : 'text-gray-900'; ?>" <?php echo ($currentPage ?? '') === 'vehicles' ? 'data-active="true"' : ''; ?>>
-                        <i class="fa fa-car"></i> Vehicles
-                    </a>
-                    <a href="/admin/incidents" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-blue-700 hover:text-gray-100 <?php echo ($currentPage ?? '') === 'incidents' ? 'bg-blue-900 text-white' : 'text-gray-900'; ?>" <?php echo ($currentPage ?? '') === 'incidents' ? 'data-active="true"' : ''; ?>>
-                        <i class="fa fa-flag"></i> Incidencies
-                    </a>
-                </div>
-            </nav>
-        </aside>
+    <?php include __DIR__ . '/admin-sidebar.php'; ?>
+    <!-- Backdrop for mobile sidebar -->
+    <div id="sidebarBackdrop" class="hidden fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden" aria-hidden="true" style="pointer-events: auto;"></div>
         
         <main class="flex-1 overflow-auto">
             <div class="p-10">
-                <div class="flex justify-between items-center mb-8">
-                    <h1 class="text-2xl font-semibold"><?php echo $pageTitle ?? 'Dashboard'; ?></h1>
-                    <div class="flex items-center gap-4">
+                <div class="flex items-center mb-8 sticky top-0 bg-white z-40 border-b border-gray-100 py-4 -mx-4 px-4 md:-mx-6 md:px-6 lg:-mx-10 lg:px-10">
+                    <!-- Mobile hamburger -->
+                    <button id="mobileMenuButton" class="md:hidden p-2 rounded-md mr-2 text-gray-700 hover:bg-gray-100" aria-label="Abrir menú">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+
+                    <div class="flex-1"></div>
+                    <div class="flex items-center gap-3 md:gap-4">
                         <div class="relative">
                             <button id="notificationButton" class="relative p-2 text-[#212121] hover:text-white hover:bg-[#00C853] rounded-lg transition-colors">
                                 <i class="fas fa-bell text-xl"></i>
@@ -106,14 +83,14 @@ if (!isset($_SESSION['alert'])) $_SESSION['alert'] = null;
                                 </div>
                             </div>
                         </div>
-                        <div class="relative">
-                            <button id="profileButton" class="flex items-center gap-3 focus:outline-none" aria-haspopup="true" aria-expanded="false">
+                        <div class="relative" id="profileContainer">
+                            <button id="profileButton" class="flex items-center gap-3 focus:outline-none hover:opacity-80 transition-opacity" aria-haspopup="true" aria-expanded="false">
                                 <div class="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center text-xs font-semibold text-white">
                                     <?php echo strtoupper(substr($_SESSION['username'] ?? 'AD', 0, 2)); ?>
                                 </div>
                                 <div class="flex flex-col text-left">
                                     <span class="text-sm font-medium hidden sm:block"><?php echo htmlspecialchars($_SESSION['username'] ?? 'Admin'); ?></span>
-                                    <span class="text-xs text-gray-500"><?php echo htmlspecialchars($_SESSION['email'] ?? 'admin@voltacar.com'); ?></span>
+                                    <span class="text-xs text-gray-500 hidden sm:block truncate" style="max-width:10rem"><?php echo htmlspecialchars($_SESSION['email'] ?? 'admin@voltacar.com'); ?></span>
                                 </div>
                                 <i class="fas fa-caret-down ml-2 text-gray-500"></i>
                             </button>
@@ -125,3 +102,42 @@ if (!isset($_SESSION['alert'])) $_SESSION['alert'] = null;
                         </div>
                     </div>
                 </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        var btn = document.getElementById('mobileMenuButton');
+                        var sidebar = document.getElementById('adminSidebar');
+                        var backdrop = document.getElementById('sidebarBackdrop');
+                        var closeBtn = document.getElementById('mobileSidebarClose');
+                        var profileBtn = document.getElementById('profileButton');
+
+                        function toggleSidebar() {
+                            if (!sidebar) return;
+                            var isHidden = sidebar.classList.contains('hidden');
+                            if (isHidden) {
+                                sidebar.classList.remove('hidden');
+                                sidebar.classList.add('flex');
+                                backdrop && backdrop.classList.remove('hidden');
+                            } else {
+                                sidebar.classList.add('hidden');
+                                sidebar.classList.remove('flex');
+                                backdrop && backdrop.classList.add('hidden');
+                            }
+                        }
+
+                        function closeSidebar() {
+                            if (!sidebar) return;
+                            sidebar.classList.add('hidden');
+                            sidebar.classList.remove('flex');
+                            backdrop && backdrop.classList.add('hidden');
+                        }
+
+                        btn && btn.addEventListener('click', toggleSidebar);
+                        backdrop && backdrop.addEventListener('click', closeSidebar);
+                        closeBtn && closeBtn.addEventListener('click', closeSidebar);
+                        
+                        // Prevent profile button click from triggering sidebar close
+                        profileBtn && profileBtn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                        });
+                    });
+                </script>
