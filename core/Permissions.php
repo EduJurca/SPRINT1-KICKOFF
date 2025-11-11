@@ -30,6 +30,11 @@ class Permissions {
         'incidents.resolve' => [1, 2],
         'incidents.cancel_own' => [1, 2, 3],
         
+        'charging_stations.view_all' => [1, 2],
+        'charging_stations.create' => [1, 2],
+        'charging_stations.edit' => [1, 2],
+        'charging_stations.delete' => [1, 2],
+
         'admin.dashboard' => [1, 2],
         'admin.reports' => [1, 2],
         'admin.activity' => [1, 2],
