@@ -23,29 +23,58 @@ class AdminVehicleController {
      */
     public function index() {
         try {
-            // Obtener filtros de búsqueda si existen
-            $filters = [];
-            if (isset($_GET['brand'])) $filters['brand'] = $_GET['brand'];
-            if (isset($_GET['status'])) $filters['status'] = $_GET['status'];
-            if (isset($_GET['vehicle_type'])) $filters['vehicle_type'] = $_GET['vehicle_type'];
+            // Paginación
+            $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+            $perPage = 10;
+            $offset = ($page - 1) * $perPage;
             
-            // Obtener vehículos (con filtros o todos)
-            if (!empty($filters)) {
-                $vehicles = $this->vehicleModel->search($filters);
-            } else {
-                $vehicles = $this->vehicleModel->getAllVehicles();
+            // Búsqueda global
+            $search = $_GET['search'] ?? '';
+            
+            // Filtros avanzados
+            $filters = [];
+            if (isset($_GET['brand']) && $_GET['brand'] !== '') {
+                $filters['brand'] = $_GET['brand'];
             }
+            if (isset($_GET['model']) && $_GET['model'] !== '') {
+                $filters['model'] = $_GET['model'];
+            }
+            if (isset($_GET['status']) && $_GET['status'] !== '') {
+                $filters['status'] = $_GET['status'];
+            }
+            if (isset($_GET['is_accessible']) && $_GET['is_accessible'] !== '') {
+                $filters['is_accessible'] = $_GET['is_accessible'];
+            }
+            if (isset($_GET['min_battery']) && $_GET['min_battery'] !== '') {
+                $filters['min_battery'] = $_GET['min_battery'];
+            }
+            
+            // Obtener vehículos con paginación
+            $vehicles = $this->vehicleModel->getAllVehicles($perPage, $offset, $search, $filters);
+            $totalVehicles = $this->vehicleModel->countVehicles($search, $filters);
+            $totalPages = ceil($totalVehicles / $perPage);
             
             // Renderizar vista
             Router::view('admin.vehicles.index', [
                 'vehicles' => $vehicles,
-                'filters' => $filters
+                'search' => $search,
+                'filters' => $filters,
+                'currentPage' => $page,
+                'totalPages' => $totalPages,
+                'totalVehicles' => $totalVehicles,
+                'perPage' => $perPage
             ]);
             
         } catch (Exception $e) {
             error_log('Error in vehicle index: ' . $e->getMessage());
             Router::view('admin.vehicles.index', [
                 'vehicles' => [],
+                'search' => '',
+                'filters' => [],
+                'currentPage' => 1,
+                'totalPages' => 1,
+                'totalVehicles' => 0,
+                'perPage' => 10,
                 'error' => 'Error al cargar los vehículos'
             ]);
         }
