@@ -86,5 +86,12 @@ class AdminController {
         
         return $users;
     }
+
+    /**
+     * Mostrar configuració d'admin
+     */
+    public function showSettings() {
+        require_once PUBLIC_PATH . '/php/admin/settings.php';
+    }
 }
 

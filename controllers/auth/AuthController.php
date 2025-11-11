@@ -376,4 +376,25 @@ class AuthController {
         
         return $userId;
     }
+
+    /**
+     * Mostrar formulari de login
+     */
+    public function showLogin() {
+        Router::view('auth.login');
+    }
+
+    /**
+     * Mostrar formulari de registre
+     */
+    public function showRegister() {
+        Router::view('auth.register');
+    }
+
+    /**
+     * Mostrar formulari de recuperació de contrasenya
+     */
+    public function showRecover() {
+        Router::view('auth.recuperar-contrasenya');
+    }
 }
