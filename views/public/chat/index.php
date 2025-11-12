@@ -101,4 +101,7 @@ require_once __DIR__ . '/../layouts/header.php';
 
 <script src="/assets/js/chat.js"></script>
 
-<?php require_once __DIR__ . '/../layouts/footer.php'; ?>
+<?php
+$hideChat = true;
+require_once __DIR__ . '/../layouts/footer.php';
+?>
