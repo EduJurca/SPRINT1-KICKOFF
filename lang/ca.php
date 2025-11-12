@@ -416,5 +416,7 @@ return [
         'send' => 'Enviar',
         'typing' => 'Escrivint...',
         'info_message' => 'Pots preguntar sobre vehicles, reserves, pagaments o qualsevol aspecte de l\'aplicació.',
+        'error_no_response' => 'No s\'ha pogut obtenir resposta',
+        'error_connection' => 'Error de connexió. Torna-ho a intentar.',
     ],
 ];
