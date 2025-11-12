@@ -36,6 +36,13 @@ class ChatController {
         // Obtener el mensaje del usuario
         $input = json_decode(file_get_contents('php://input'), true);
         
+        // Validar errores de parseo JSON
+        if ($input === null || !is_array($input)) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Invalid JSON']);
+            return;
+        }
+        
         if (empty($input['message'])) {
             http_response_code(400);
             echo json_encode(['error' => 'Message is required']);
