@@ -150,6 +150,12 @@ if (!isset($_SESSION['user_id'])) {
 
 <!-- Script del widget -->
 <script>
+// Translated error messages
+const CHAT_ERRORS = {
+    noResponse: <?php echo json_encode(__('chat.error_no_response')); ?>,
+    connection: <?php echo json_encode(__('chat.error_connection')); ?>
+};
+
 document.addEventListener('DOMContentLoaded', function() {
     const chatToggle = document.getElementById('chat-toggle');
     const chatWidget = document.getElementById('chat-widget');
@@ -210,7 +216,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (response.ok && data.success) {
                 addMessage(data.message, 'bot');
             } else {
-                let errorMsg = data.error || 'No se pudo obtener respuesta';
+                let errorMsg = data.error || CHAT_ERRORS.noResponse;
                 if (data.details && data.details.error && data.details.error.message) {
                     errorMsg += ': ' + data.details.error.message;
                 }
@@ -219,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (error) {
             console.error('Error:', error);
             typingIndicator.classList.add('hidden');
-            addMessage('❌ Error de conexión. Inténtalo de nuevo.', 'error');
+            addMessage('❌ ' + CHAT_ERRORS.connection, 'error');
         } finally {
             chatInput.disabled = false;
             sendButton.disabled = false;
