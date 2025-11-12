@@ -294,6 +294,9 @@
         </svg>
     </a>
     <?php require_once __DIR__ . '/../layouts/footer.php'; ?>
+    <?php include __DIR__ . '/../../commons/chatbot-widget.php'; ?>
+
+>>>>>>> origin/develop
 </body>
 
 </html>

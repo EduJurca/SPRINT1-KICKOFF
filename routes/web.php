@@ -49,11 +49,6 @@ Router::post('/recover-password', ['AuthController', 'recoverPassword']);
 // Dashboard principal (gestió)
 Router::get('/dashboard', ['DashboardController', 'showGestio']);
 
-// Resum del projecte
-Router::get('/resum-projecte', function() {
-    Router::view('public.dashboard.resum-projecte');
-});
-
 // ==========================================
 //  VEHICLES
 // ==========================================
@@ -120,7 +115,14 @@ Router::get('/accessibilitat', function() {
 });
 
 // ==========================================
-// 🔧 ADMIN (Panel d'Administració)
+// � CHAT / ASISTENTE IA
+// ==========================================
+
+Router::get('/chat', ['ChatController', 'index']);
+Router::post('/chat/send', ['ChatController', 'send']);
+
+// ==========================================
+// �🔧 ADMIN (si tens zona d'administració)
 // ==========================================
 require_once CONTROLLERS_PATH . '/admin/AdminController.php';
 

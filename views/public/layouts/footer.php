@@ -41,3 +41,20 @@
     }
   })();
 </script>
+    
+    <!-- Widget de Chatbot Flotante -->
+    <?php include __DIR__ . '/../commons/chatbot-widget.php'; ?>
+    
+    <!-- JavaScript principal -->
+    <script src="/assets/js/main.js"></script>
+    <script src="/assets/js/auth.js"></script>
+    <script src="/assets/js/accessibility.js"></script>
+    
+    <!-- JavaScript addicional per a cada pàgina -->
+    <?php if (isset($additionalJS)): ?>
+        <?php foreach ($additionalJS as $js): ?>
+            <script src="<?php echo $js; ?>"></script>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</body>
+</html>
