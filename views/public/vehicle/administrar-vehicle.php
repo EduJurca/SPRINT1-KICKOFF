@@ -279,12 +279,11 @@
             crossorigin=""></script>
     
     <!-- Application Scripts -->
-    <script src="/assets/js/toast.js?v=13"></script>
-    <script src="/assets/js/confirm-modal.js?v=13"></script>
-    <script src="/assets/js/main.js?v=13"></script>
-    <script src="/assets/js/auth.js?v=13"></script>
-    <script src="/assets/js/vehicles.js?v=13"></script>
-    <script src="/assets/js/administrar-vehicle.js?v=13"></script>
+    <script src="/assets/js/toast.js"></script>
+    <script src="/assets/js/confirm-modal.js"></script>
+    <script src="/assets/js/main.js"></script>
+    <script src="/assets/js/vehicles.js"></script>
+    <script src="/assets/js/administrar-vehicle.js"></script>
 
     <a href="/resum-projecte"
         class="fixed bottom-10 right-10 block bg-[#1565C0] text-white p-4 rounded-full shadow-lg hover:bg-[#1151a3] transition-colors duration-300 z-50">

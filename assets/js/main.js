@@ -356,7 +356,7 @@ const SessionManager = {
      */
     async checkSession() {
         try {
-            const response = await API.get('/gestio.php');
+            const response = await API.get('/dashboard.php');
             if (!response.success) {
                 this.handleSessionExpired();
             }

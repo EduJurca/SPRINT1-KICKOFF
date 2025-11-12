@@ -74,19 +74,6 @@ class VehicleController {
             'vehicle' => $vehicle
         ], 200);
     }
-    
-  
-    public function show($id) {
-        $vehicle = $this->vehicleModel->getVehicleById($id);
-        
-        if (!$vehicle) {
-            Router::redirect('/vehicles');
-            return;
-        }
-        
-        Router::view('public.vehicle.detalls-vehicle', ['vehicle' => $vehicle]);
-    }
-    
    
     public function claimVehicle() {
     
@@ -354,17 +341,6 @@ class VehicleController {
             'minutes' => $minutes,
             'cost' => $price
         ], 200);
-    }
-    
-    /**
-     * Mostrar vista de localitzar vehicles (amb autenticació)
-     */
-    public function showLocalitzar() {
-   
-        AuthController::requireAuth();
-        
-      
-        return Router::view('public.vehicle.localitzar-vehicle');
     }
     
     /**

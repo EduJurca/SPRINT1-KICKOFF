@@ -112,7 +112,7 @@ const VehicleControl = {
                 
                 showToast('No tens cap vehicle reclamat. Redirigint...', 'warning', 2000);
                 setTimeout(() => {
-                    window.location.href = '/localitzar-vehicle';
+                    window.location.href = '/dashboard';
                 }, 2000);
                 return;
             }
@@ -123,7 +123,7 @@ const VehicleControl = {
         } catch (error) {
             showToast('Error al carregar el vehicle. Si us plau, torna-ho a intentar.', 'error', 2000);
             setTimeout(() => {
-                window.location.href = '/localitzar-vehicle';
+                window.location.href = '/dashboard';
             }, 2000);
         }
     },

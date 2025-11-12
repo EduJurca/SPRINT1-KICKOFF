@@ -48,7 +48,6 @@ Router::post('/recover-password', ['AuthController', 'recoverPassword']);
 
 // Dashboard principal (gestió)
 Router::get('/dashboard', ['DashboardController', 'showGestio']);
-Router::get('/gestio', ['DashboardController', 'showGestio']);
 
 // Resum del projecte
 Router::get('/resum-projecte', function() {
@@ -67,11 +66,6 @@ Router::get('/vehicles/search', ['VehicleController', 'search']);
 // Administrar vehicle
 Router::get('/administrar-vehicle', function() {
     Router::view('public.vehicle.administrar-vehicle');
-});
-
-// Detalls del vehicle
-Router::get('/detalls-vehicle', function() {
-    Router::view('public.vehicle.detalls-vehicle');
 });
 
 Router::get('/vehicles/{id}', ['VehicleController', 'show']);
@@ -116,9 +110,6 @@ Router::delete('/api/bookings/{id}', ['BookingController', 'delete']);
 // Sessió
 Router::get('/api/session-check', ['AuthController', 'checkSession']);
 Router::get('/api/session-status', ['AuthController', 'getSessionStatus']);
-
-// Gestió (dashboard data)
-Router::get('/api/gestio', ['DashboardController', 'getGestioData']);
 
 // ==========================================
 // ♿ ACCESSIBILITAT
