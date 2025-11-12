@@ -50,63 +50,46 @@ const VehicleControl = {
      * Cargar el vehículo actual
      */
     async loadCurrentVehicle() {
-        try {
-            console.log('🔍 Buscando vehículo actual...');
-            console.log('👤 User ID de sesión:', window.sessionUserId);
-            
+        try {            
             let vehicleFromServer = null;
             let vehicleFromStorage = null;
             
             // PRIMERO: Intentar obtener desde el servidor (fuente de verdad)
             try {
-                console.log('📡 Consultando servidor...');
                 const response = await fetch('/api/vehicles?action=current', {
                     method: 'GET',
                     credentials: 'include'
                 });
                 
-                console.log('📡 Response status:', response.status);
                 
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('📡 Respuesta del servidor:', data);
                     
                     if (data.success && data.vehicle) {
                         vehicleFromServer = data.vehicle;
-                        console.log('✅ Vehículo encontrado en servidor:', vehicleFromServer);
                         
                         // Guardar en localStorage para uso offline
                         try {
                             localStorage.setItem('currentVehicle', JSON.stringify(data.vehicle));
-                            console.log('💾 Guardado en localStorage');
                         } catch (e) {
-                            console.warn('⚠️ No se pudo guardar en localStorage:', e);
                         }
                     } else {
-                        console.warn('⚠️ Servidor dice: no hay vehículo activo');
                     }
                 } else {
-                    console.warn('⚠️ Error del servidor:', response.status);
                 }
             } catch (serverError) {
-                console.warn('⚠️ No se pudo conectar con el servidor:', serverError);
             }
             
             // SEGUNDO: Si el servidor no tiene nada, intentar localStorage (fallback)
             if (!vehicleFromServer) {
-                console.log('📦 Intentando cargar desde localStorage...');
                 try {
                     const stored = localStorage.getItem('currentVehicle');
-                    console.log('📦 localStorage raw:', stored ? stored.substring(0, 100) + '...' : 'null');
                     
                     if (stored && stored !== 'undefined' && stored !== 'null') {
                         vehicleFromStorage = JSON.parse(stored);
-                        console.log('✅ Vehículo encontrado en localStorage:', vehicleFromStorage);
                     } else {
-                        console.log('⚠️ No hay vehículo válido en localStorage');
                     }
                 } catch (storageError) {
-                    console.warn('⚠️ Error al leer localStorage:', storageError);
                     localStorage.removeItem('currentVehicle');
                 }
             }
@@ -115,8 +98,6 @@ const VehicleControl = {
             this.currentVehicle = vehicleFromServer || vehicleFromStorage;
             
             if (!this.currentVehicle) {
-                console.error('❌ No hay vehículo reclamado');
-                console.log('🔍 Verificando estado en servidor...');
                 
                 // Llamar al endpoint de debug
                 try {
@@ -125,10 +106,8 @@ const VehicleControl = {
                     });
                     if (debugResponse.ok) {
                         const debugData = await debugResponse.json();
-                        console.log('🐛 Debug info:', debugData);
                     }
                 } catch (e) {
-                    console.log('⚠️ No se pudo obtener debug info');
                 }
                 
                 showToast('No tens cap vehicle reclamat. Redirigint...', 'warning', 2000);
@@ -138,13 +117,10 @@ const VehicleControl = {
                 return;
             }
             
-            console.log('✅ Vehículo cargado:', this.currentVehicle);
-            
             // Actualizar UI
             this.updateVehicleInfo();
             
         } catch (error) {
-            console.error('❌ Error al cargar vehículo:', error);
             showToast('Error al carregar el vehicle. Si us plau, torna-ho a intentar.', 'error', 2000);
             setTimeout(() => {
                 window.location.href = '/localitzar-vehicle';
@@ -157,12 +133,8 @@ const VehicleControl = {
      */
     updateVehicleInfo() {
         if (!this.currentVehicle) {
-            console.warn('⚠️ No hay vehículo para actualizar');
             return;
         }
-        
-        console.log('🔄 Actualizando información del vehículo en UI...');
-        console.log('📊 Datos del vehículo:', this.currentVehicle);
         
         // Actualizar matrícula
         const licensePlateElements = document.querySelectorAll('[data-vehicle-license]');
@@ -170,8 +142,6 @@ const VehicleControl = {
         licensePlateElements.forEach(el => {
             el.textContent = licensePlate;
         });
-        console.log(`✓ Matrícula actualizada: ${licensePlate}`);
-        
         // Actualizar modelo (marca + modelo)
         const modelElements = document.querySelectorAll('[data-vehicle-model]');
         let fullModel = 'N/A';
@@ -185,13 +155,9 @@ const VehicleControl = {
         modelElements.forEach(el => {
             el.textContent = fullModel;
         });
-        console.log(`✓ Modelo actualizado: ${fullModel}`);
-        
         // Actualizar batería
         const battery = this.currentVehicle.battery || this.currentVehicle.battery_level || 85;
-        console.log(`🔋 Nivel de batería: ${battery}%`);
         this.updateBattery(battery);
-        console.log(`✓ Batería actualizada: ${battery}%`);
         
         // Actualizar estado
         const statusElements = document.querySelectorAll('[data-vehicle-status]');
@@ -199,9 +165,6 @@ const VehicleControl = {
         statusElements.forEach(el => {
             el.textContent = statusText;
         });
-        console.log(`✓ Estado actualizado: ${statusText}`);
-        
-        console.log('✅ UI actualizada correctamente');
     },
     
     /**
@@ -265,21 +228,17 @@ const VehicleControl = {
      */
     async toggleEngine() {
         try {
-            console.log('🔧 Cambiando estado del motor...');
-            
             if (this.isEngineOn) {
                 const result = await Vehicles.stopEngine();
                 if (result && result.success !== false) {
                     this.isEngineOn = false;
                     this.updateEngineButton();
-                    console.log('✅ Motor apagado');
                 }
             } else {
                 const result = await Vehicles.startEngine();
                 if (result && result.success !== false) {
                     this.isEngineOn = true;
                     this.updateEngineButton();
-                    console.log('✅ Motor encendido');
                 }
             }
         } catch (error) {
@@ -355,10 +314,8 @@ const VehicleControl = {
      */
     async activateHorn() {
         try {
-            console.log('📢 Activando claxon...');
             const result = await Vehicles.activateHorn();
             if (result && result.success !== false) {
-                console.log('✅ Claxon activado');
                 // Feedback visual
                 const hornButtons = document.querySelectorAll('[data-control="horn"]');
                 hornButtons.forEach(btn => {
@@ -369,7 +326,6 @@ const VehicleControl = {
                 });
             }
         } catch (error) {
-            console.error('❌ Error al activar claxon:', error);
         }
     },
     
@@ -378,10 +334,8 @@ const VehicleControl = {
      */
     async activateLights() {
         try {
-            console.log('💡 Activando luces...');
             const result = await Vehicles.activateLights();
             if (result && result.success !== false) {
-                console.log('✅ Luces activadas');
                 // Feedback visual
                 const lightsButtons = document.querySelectorAll('[data-control="lights"]');
                 lightsButtons.forEach(btn => {
@@ -392,7 +346,6 @@ const VehicleControl = {
                 });
             }
         } catch (error) {
-            console.error('❌ Error al activar luces:', error);
         }
     },
     
@@ -401,10 +354,8 @@ const VehicleControl = {
      */
     async toggleDoors() {
         try {
-            console.log('🔒 Cambiando estado de puertas...');
             const result = await Vehicles.toggleDoors(true);
             if (result && result.success !== false) {
-                console.log('✅ Puertas bloqueadas/desbloqueadas');
                 // Feedback visual
                 const doorsButtons = document.querySelectorAll('[data-control="doors"]');
                 doorsButtons.forEach(btn => {
@@ -415,7 +366,6 @@ const VehicleControl = {
                 });
             }
         } catch (error) {
-            console.error('❌ Error al controlar puertas:', error);
         }
     },
     
@@ -425,7 +375,6 @@ const VehicleControl = {
     async initMap() {
         // Esperar a que Leaflet esté disponible
         if (typeof L === 'undefined') {
-            console.warn('⚠️ Leaflet no está cargado, esperando...');
             setTimeout(() => this.initMap(), 500);
             return;
         }
@@ -435,7 +384,6 @@ const VehicleControl = {
         const mapContainerDesktop = document.getElementById('vehicle-map-desktop');
         
         if (!mapContainerMobile && !mapContainerDesktop) {
-            console.warn('⚠️ Contenedores de mapa no encontrados');
             return;
         }
         
@@ -458,10 +406,8 @@ const VehicleControl = {
                 }
             }
             
-            console.log('🗺️ Inicializando mapas en ubicación:', { lat, lng });
             
             if (isNaN(lat) || isNaN(lng)) {
-                console.error('❌ Coordenadas inválidas, usando por defecto');
                 lat = 40.7117;
                 lng = 0.5783;
             }
@@ -511,7 +457,6 @@ const VehicleControl = {
             
             // Inicializar mapa móvil
             if (mapContainerMobile && !this.mapMobile) {
-                console.log('🗺️ Inicializando mapa móvil...');
                 
                 // Asegurar que el contenedor tenga dimensiones
                 mapContainerMobile.style.width = '100%';
@@ -542,13 +487,10 @@ const VehicleControl = {
                     }
                 }, 300);
                 
-                console.log('✅ Mapa móvil inicializado');
             }
             
             // Inicializar mapa escritorio
             if (mapContainerDesktop && !this.mapDesktop) {
-                console.log('🗺️ Inicializando mapa escritorio...');
-                
                 // Asegurar que el contenedor tenga dimensiones
                 mapContainerDesktop.style.width = '100%';
                 mapContainerDesktop.style.height = '100%';
@@ -576,14 +518,10 @@ const VehicleControl = {
                 setTimeout(() => {
                     if (this.mapDesktop) {
                         this.mapDesktop.invalidateSize();
-                        console.log('🔄 Mapa desktop actualizado');
                     }
                 }, 300);
                 
-                console.log('✅ Mapa escritorio inicializado');
             }
-            
-            console.log('✅ Mapas inicializados correctamente');
             
             // Configurar listener de resize para ambos mapas
             let resizeTimeout;
@@ -592,11 +530,9 @@ const VehicleControl = {
                 resizeTimeout = setTimeout(() => {
                     if (this.mapMobile) {
                         this.mapMobile.invalidateSize();
-                        console.log('🔄 Mapa móvil redimensionado');
                     }
                     if (this.mapDesktop) {
                         this.mapDesktop.invalidateSize();
-                        console.log('🔄 Mapa desktop redimensionado');
                     }
                 }, 200);
             });
@@ -608,7 +544,6 @@ const VehicleControl = {
                         if (entry.isIntersecting && this.mapDesktop) {
                             setTimeout(() => {
                                 this.mapDesktop.invalidateSize();
-                                console.log('🔄 Mapa desktop visible - actualizado');
                             }, 100);
                         }
                     });
@@ -623,7 +558,6 @@ const VehicleControl = {
                         if (entry.isIntersecting && this.mapMobile) {
                             setTimeout(() => {
                                 this.mapMobile.invalidateSize();
-                                console.log('🔄 Mapa móvil visible - actualizado');
                             }, 100);
                         }
                     });
@@ -633,7 +567,6 @@ const VehicleControl = {
             }
             
         } catch (error) {
-            console.error('❌ Error al inicializar mapas:', error);
         }
     },
     
@@ -674,7 +607,6 @@ const VehicleControl = {
      * Configurar botón de release
      */
     setupReleaseButton() {
-        console.log('🔧 Configurando botón de release...');
         
         const releaseBtnMobile = document.getElementById('release-vehicle-btn-mobile');
         const releaseBtnDesktop = document.getElementById('release-vehicle-btn-desktop');
@@ -683,19 +615,12 @@ const VehicleControl = {
         const confirmBtn = document.getElementById('confirm-release');
         
         if (!modal || !cancelBtn || !confirmBtn) {
-            console.error('❌ Elementos del modal no encontrados');
-            console.log('Modal:', modal);
-            console.log('Cancel btn:', cancelBtn);
-            console.log('Confirm btn:', confirmBtn);
             return;
         }
         
         // Función para abrir el modal
         const openModal = () => {
-            console.log('📂 Abriendo modal de release...');
-            
             if (!this.currentVehicle) {
-                console.error('❌ No hay vehículo actual');
                 return;
             }
             
@@ -705,14 +630,11 @@ const VehicleControl = {
         
         // Función para cerrar el modal
         const closeModal = () => {
-            console.log('📁 Cerrando modal de release...');
             modal.classList.add('hidden');
         };
         
         // Función para confirmar release
         const confirmRelease = async () => {
-            console.log('✅ Confirmando release del vehículo...');
-            
             try {
                 confirmBtn.disabled = true;
                 confirmBtn.textContent = 'Finalitzant...';
@@ -720,8 +642,6 @@ const VehicleControl = {
                 const result = await Vehicles.releaseVehicle();
                 
                 if (result.success) {
-                    console.log('✅ Vehículo liberado exitosamente');
-                    
                     // Limpiar localStorage
                     localStorage.removeItem('currentVehicle');
                     
@@ -736,13 +656,11 @@ const VehicleControl = {
                         window.location.href = '/localitzar-vehicle';
                     }, 2000);
                 } else {
-                    console.error('❌ Error al liberar vehículo:', result.message);
                     showToast('Error al finalitzar la reserva: ' + result.message, 'error');
                     confirmBtn.disabled = false;
                     confirmBtn.textContent = 'Finalitzar';
                 }
             } catch (error) {
-                console.error('❌ Excepción al liberar vehículo:', error);
                 showToast('Error al finalitzar la reserva. Si us plau, intenta-ho de nou.', 'error');
                 confirmBtn.disabled = false;
                 confirmBtn.textContent = 'Finalitzar';
@@ -752,12 +670,10 @@ const VehicleControl = {
         // Event listeners
         if (releaseBtnMobile) {
             releaseBtnMobile.addEventListener('click', openModal);
-            console.log('✅ Botón mobile configurado');
         }
         
         if (releaseBtnDesktop) {
             releaseBtnDesktop.addEventListener('click', openModal);
-            console.log('✅ Botón desktop configurado');
         }
         
         cancelBtn.addEventListener('click', closeModal);
@@ -770,7 +686,6 @@ const VehicleControl = {
             }
         });
         
-        console.log('✅ Botón de release configurado correctamente');
     }
 };
 

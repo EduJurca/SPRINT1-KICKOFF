@@ -3,57 +3,8 @@ const VehicleClaimModal = {
     currentVehicle: null,
     unlockFee: 0.50,
     init() {
-        this.createModal();
-        this.setupEventListeners();
-    },
-
-    createModal() {
-        const modalHTML = `
-            <div id="claim-modal" class="claim-modal-overlay">
-                <div class="claim-modal-container">
-                    <div class="claim-modal-header">
-                        <h2 class="claim-modal-title">
-                            <span>🚗</span>
-                            <span>Confirmar reclamació</span>
-                        </h2>
-                        <button class="claim-modal-close" id="claim-modal-close">
-                            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
-                    </div>
-                    
-                    <div class="claim-modal-content">
-                        <div class="vehicle-info-card" id="vehicle-info">
-                            <!-- Información del vehículo se insertará aquí -->
-                        </div>
-                        
-                        <div class="charge-warning">
-                            <div class="charge-warning-icon">⚠️</div>
-                            <div class="charge-warning-content">
-                                <div class="charge-warning-title">Cost de desbloqueig</div>
-                            </div>
-                        </div>
-                        
-                        <div class="charge-amount">
-                            ${this.unlockFee.toFixed(2)}€
-                        </div>
-                    </div>
-                    
-                    <div class="claim-modal-footer">
-                        <button class="claim-modal-button claim-modal-button-cancel" id="claim-modal-cancel">
-                            Cancel·lar
-                        </button>
-                        <button class="claim-modal-button claim-modal-button-confirm" id="claim-modal-confirm">
-                            Acceptar i reclamar
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        document.body.insertAdjacentHTML('beforeend', modalHTML);
         this.modal = document.getElementById('claim-modal');
+        this.setupEventListeners();
     },
 
     setupEventListeners() {
@@ -124,7 +75,7 @@ const VehicleClaimModal = {
             <div class="vehicle-info-row">
                 <span class="vehicle-info-label">Bateria:</span>
                 <span class="vehicle-info-value" style="color: ${batteryColor};">
-                    ${vehicle.battery}% 🔋
+                    ${vehicle.battery}%
                 </span>
             </div>
             ${vehicle.distance ? `
@@ -175,7 +126,7 @@ const VehicleClaimModal = {
             if (result.success) {
                 this.close();
                 
-                showToast('✅ Vehicle reclamat amb èxit! Redirigint...', 'success', 2000);
+                showToast('Vehicle reclamat amb èxit! Redirigint...', 'success', 2000);
             } else {
                 confirmBtn.disabled = false;
                 confirmBtn.classList.remove('claim-modal-button-loading');
@@ -183,7 +134,7 @@ const VehicleClaimModal = {
                 
                 const errorMsg = result.message || result.error || 'Error desconegut al reclamar el vehicle';
                 
-                showToast(`❌ Error: ${errorMsg}`, 'error');
+                showToast(`Error: ${errorMsg}`, 'error');
             }
         } catch (error) {
             confirmBtn.disabled = false;

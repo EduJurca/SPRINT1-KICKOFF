@@ -2,7 +2,7 @@
     <div class="container mx-auto px-4">
         <div class="flex justify-center space-x-8">
             <div class="flex flex-col items-center">
-                <a href="/purchase-time" class="flex flex-col items-center text-black hover:text-gray-500 transition-colors p-2 rounded-lg">
+                <a href="/dashboard" class="flex flex-col items-center text-black hover:text-gray-500 transition-colors p-2 rounded-lg">
                     <i class="fas fa-home text-xl"></i>
                 </a>
             </div>
@@ -20,7 +20,7 @@
             </div>
 
             <div class="flex flex-col items-center">
-                <a href="/dashboard" class="flex flex-col items-center text-black hover:text-gray-500 transition-colors p-2 rounded-lg">
+                <a href="/report-incident" class="flex flex-col items-center text-black hover:text-gray-500 transition-colors p-2 rounded-lg">
                     <i class="fas fa-exclamation-triangle text-xl"></i>
                 </a>
             </div>
