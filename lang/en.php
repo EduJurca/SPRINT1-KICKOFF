@@ -405,6 +405,8 @@ return [
         'send' => 'Send',
         'typing' => 'Typing...',
         'info_message' => 'You can ask about vehicles, bookings, payments or any aspect of the app.',
+        'error_no_response' => 'Could not get response',
+        'error_connection' => 'Connection error. Try again.',
     ],
     'incident' => [
         'title' => 'Report Incident',
