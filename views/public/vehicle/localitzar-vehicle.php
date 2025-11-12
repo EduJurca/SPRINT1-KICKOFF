@@ -183,5 +183,9 @@ class="h-6 w-6"
     <script src="/assets/js/vehicles.js?v=11"></script>
     <script src="/assets/js/vehicle-claim-modal.js?v=11"></script>
     <script src="/assets/js/localitzar-vehicle.js?v=11"></script>
+
+    <!-- Widget de Chatbot Flotante -->
+    <?php include __DIR__ . '/../../commons/chatbot-widget.php'; ?>
+
 </body>
 </html>
