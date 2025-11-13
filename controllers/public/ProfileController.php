@@ -179,13 +179,14 @@ class ProfileController {
         $expMonth = isset($expiryParts[1]) ? (int)$expiryParts[1] : 0;
         $expYear = isset($expiryParts[0]) ? (int)$expiryParts[0] : 0;
         
-        // ⚠️ IMPORTANT: En producció, aquí hauries de:
-        // 1. Enviar les dades a Stripe/Adyen/etc i obtenir un token
-        // 2. Xifrar el token abans de guardar-lo
-        // 3. MAI guardar el número complet de targeta ni el CVC
+            $currentYear = (int)date('Y');
+            $currentMonth = (int)date('m');
+        if ($expYear < $currentYear || ($expYear === $currentYear && $expMonth < $currentMonth)) {
+            $_SESSION['error'] = 'La data d\'expiració no pot ser en el passat';
+            return Router::redirect('/perfil/pagaments');
+            }
         
-        // Per ara, creem un token simulat (NO FER EN PRODUCCIÓ)
-        $simulatedToken = 'tok_' . bin2hex(random_bytes(16));
+            $simulatedToken = 'tok_' . bin2hex(random_bytes(16));
         
         try {
             $db = Database::getMariaDBConnection();
@@ -209,7 +210,7 @@ class ProfileController {
             $provider = 'manual';
             $isDefaultInt = $isFirst ? 1 : 0;
             $stmt->bind_param(
-                "isssssii",
+                "issssiii",
                 $userId,
                 $provider,
                 $simulatedToken,
