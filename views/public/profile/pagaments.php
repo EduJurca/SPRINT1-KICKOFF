@@ -31,13 +31,13 @@
             
             <?php if (isset($_SESSION['error'])): ?>
                 <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-                    <span class="block sm:inline"><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></span>
+              <span class="block sm:inline"><?php echo htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?></span>
                 </div>
             <?php endif; ?>
             
             <?php if (isset($_SESSION['success'])): ?>
                 <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-                    <span class="block sm:inline"><?php echo $_SESSION['success']; unset($_SESSION['success']); ?></span>
+                    <span class="block sm:inline"><?php echo htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?></span>
                 </div>
             <?php endif; ?>
 
@@ -80,7 +80,7 @@
 
                 <!-- Add new card form (hidden by default) -->
                 <form id="add-card-form" action="/perfil/pagaments/add" method="POST" class="space-y-4 hidden" novalidate>
-                    <div>
+                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token); ?>">                    <div>
                         <label for="card-number" class="block text-sm font-medium text-gray-700"><?php echo __('profile.card_number') ?? 'Número de targeta'; ?></label>
                         <input id="card-number" name="card_number" inputmode="numeric" autocomplete="cc-number" placeholder="1234 5678 9012 3456" maxlength="23" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2" required>
                         <p id="card-number-error" class="text-red-600 text-sm mt-1 hidden"></p>
@@ -113,7 +113,6 @@
         </div>
     </div>
 
-    <!-- Modal de confirmación de eliminación -->
     <div id="delete-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
         <div class="bg-white rounded-lg p-6 max-w-sm mx-4 shadow-xl">
             <h3 class="text-lg font-semibold mb-2 text-gray-900"><?php echo __('profile.delete_card_title'); ?></h3>
@@ -133,7 +132,6 @@
         </div>
     </div>
 
-    <!-- Formulario oculto para eliminación -->
     <form id="delete-form" method="POST" style="display: none;">
     </form>
 
