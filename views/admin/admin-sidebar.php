@@ -1,13 +1,13 @@
 <?php
 // Admin sidebar extracted from admin-header
 ?>
-<aside id="adminSidebar" class="hidden md:flex md:flex-col w-60 bg-sky-50 shadow-lg fixed md:static inset-y-0 left-0 z-50 md:z-auto flex-col transition-all duration-200">
+<aside id="adminSidebar" class="hidden md:flex md:flex-col w-60 bg-sky-50 shadow-lg fixed md:static inset-y-0 left-0 z-50 md:z-auto flex-col transition-all duration-200 min-h-screen">
     <div class="px-4 py-5 flex items-center justify-between md:justify-start">
         <div class="flex items-center gap-3">
             <img src="/assets/images/logo.png" alt="Voltacar Logo" class="w-12 h-12">
         </div>
         <!-- Close button visible on mobile -->
-        <button id="mobileSidebarClose" class="md:hidden p-2 rounded-md text-gray-600 hover:bg-gray-100" aria-label="Cerrar menú">
+    <button id="mobileSidebarClose" type="button" class="md:hidden p-2 rounded-md text-gray-600 hover:bg-gray-100" aria-label="Cerrar menú">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
         </button>
     </div>

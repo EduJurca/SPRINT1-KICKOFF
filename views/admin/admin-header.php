@@ -15,8 +15,10 @@ if (!isset($_SESSION['alert'])) $_SESSION['alert'] = null;
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="/assets/js/toast.js"></script>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/custom.css">
 </head>
-<body class="font-sans bg-white text-black leading-normal">
+<body class="m-0 font-sans bg-white text-black leading-normal">
     <?php if (!empty($_SESSION['success'])): ?>
         <script>window.Toast && window.Toast.success(<?php echo json_encode($_SESSION['success']); ?>, 5000);</script>
         <?php unset($_SESSION['success']); ?>
@@ -44,10 +46,10 @@ if (!isset($_SESSION['alert'])) $_SESSION['alert'] = null;
     <div id="sidebarBackdrop" class="hidden fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden" aria-hidden="true" style="pointer-events: auto;"></div>
         
         <main class="flex-1 overflow-auto">
-            <div class="p-10">
-                <div class="flex items-center mb-8 sticky top-0 bg-white z-40 border-b border-gray-100 py-4 -mx-4 px-4 md:-mx-6 md:px-6 lg:-mx-10 lg:px-10">
+            <div class="p-10 pt-0">
+                <div class="flex items-center mb-8 sticky top-0 bg-white z-40 border-b border-gray-100 py-4 -mx-4 px-4 md:-mx-6 md:px-6 lg:-mx-10 lg:px-10" style="top:0;">
                     <!-- Mobile hamburger -->
-                    <button id="mobileMenuButton" class="md:hidden p-2 rounded-md mr-2 text-gray-700 hover:bg-gray-100" aria-label="Abrir menú">
+                    <button id="mobileMenuButton" type="button" class="md:hidden p-2 rounded-md mr-2 text-gray-700 hover:bg-gray-100" aria-label="Abrir menú" aria-expanded="false">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
@@ -102,42 +104,4 @@ if (!isset($_SESSION['alert'])) $_SESSION['alert'] = null;
                         </div>
                     </div>
                 </div>
-                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        var btn = document.getElementById('mobileMenuButton');
-                        var sidebar = document.getElementById('adminSidebar');
-                        var backdrop = document.getElementById('sidebarBackdrop');
-                        var closeBtn = document.getElementById('mobileSidebarClose');
-                        var profileBtn = document.getElementById('profileButton');
-
-                        function toggleSidebar() {
-                            if (!sidebar) return;
-                            var isHidden = sidebar.classList.contains('hidden');
-                            if (isHidden) {
-                                sidebar.classList.remove('hidden');
-                                sidebar.classList.add('flex');
-                                backdrop && backdrop.classList.remove('hidden');
-                            } else {
-                                sidebar.classList.add('hidden');
-                                sidebar.classList.remove('flex');
-                                backdrop && backdrop.classList.add('hidden');
-                            }
-                        }
-
-                        function closeSidebar() {
-                            if (!sidebar) return;
-                            sidebar.classList.add('hidden');
-                            sidebar.classList.remove('flex');
-                            backdrop && backdrop.classList.add('hidden');
-                        }
-
-                        btn && btn.addEventListener('click', toggleSidebar);
-                        backdrop && backdrop.addEventListener('click', closeSidebar);
-                        closeBtn && closeBtn.addEventListener('click', closeSidebar);
-                        
-                        // Prevent profile button click from triggering sidebar close
-                        profileBtn && profileBtn.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                        });
-                    });
-                </script>
+                <!-- Sidebar behavior handled in /assets/js/admin.js -->

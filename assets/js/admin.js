@@ -69,4 +69,60 @@ document.addEventListener('DOMContentLoaded', function() {
             this.setAttribute('data-active', 'true');
         });
     });
+
+    // Sidebar (mobile) - toggle, backdrop, Escape key, aria-expanded
+    const mobileMenuButton = document.getElementById('mobileMenuButton');
+    const adminSidebar = document.getElementById('adminSidebar');
+    const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+    const mobileSidebarClose = document.getElementById('mobileSidebarClose');
+
+    function openSidebar() {
+        if (!adminSidebar) return;
+        adminSidebar.classList.remove('hidden');
+        adminSidebar.classList.add('flex');
+        sidebarBackdrop && sidebarBackdrop.classList.remove('hidden');
+        if (mobileMenuButton) mobileMenuButton.setAttribute('aria-expanded', 'true');
+    }
+
+    function closeSidebar() {
+        if (!adminSidebar) return;
+        adminSidebar.classList.add('hidden');
+        adminSidebar.classList.remove('flex');
+        sidebarBackdrop && sidebarBackdrop.classList.add('hidden');
+        if (mobileMenuButton) mobileMenuButton.setAttribute('aria-expanded', 'false');
+    }
+
+    function toggleSidebar() {
+        if (!adminSidebar) return;
+        if (adminSidebar.classList.contains('hidden')) openSidebar();
+        else closeSidebar();
+    }
+
+    // Ensure initial aria state
+    if (mobileMenuButton && !mobileMenuButton.hasAttribute('aria-expanded')) {
+        mobileMenuButton.setAttribute('aria-expanded', 'false');
+    }
+
+    mobileMenuButton && mobileMenuButton.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleSidebar();
+    });
+
+    sidebarBackdrop && sidebarBackdrop.addEventListener('click', function() {
+        closeSidebar();
+    });
+
+    mobileSidebarClose && mobileSidebarClose.addEventListener('click', function(e) {
+        e.stopPropagation();
+        closeSidebar();
+    });
+
+    // Close sidebar with Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' || e.key === 'Esc') {
+            if (adminSidebar && !adminSidebar.classList.contains('hidden')) {
+                closeSidebar();
+            }
+        }
+    });
 });

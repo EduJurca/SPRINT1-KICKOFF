@@ -7,7 +7,6 @@
 
     <!-- Scripts -->
     <script src="/assets/js/main.js"></script>
-    <script src="/assets/js/accessibility.js"></script>
     
     <script>
         // Dashboard tabs functionality
