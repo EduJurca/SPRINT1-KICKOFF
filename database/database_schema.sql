@@ -229,10 +229,10 @@ CREATE TABLE payments (
     payment_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     type ENUM('unlock', 'time', 'subscription') NOT NULL,
     -- non-sensitive metadata for display and tracing (safe to store)
-    card_last4 VARCHAR(4) DEFAULT NULL,
-    card_brand VARCHAR(50) DEFAULT NULL,
-    provider VARCHAR(100) DEFAULT NULL,
-    provider_transaction_id VARCHAR(255) DEFAULT NULL,
+    --card_last4 VARCHAR(4) DEFAULT NULL,
+    --card_brand VARCHAR(50) DEFAULT NULL,
+    --provider VARCHAR(100) DEFAULT NULL,
+    --provider_transaction_id VARCHAR(255) DEFAULT NULL, --commented out to avoid storing sensitive info
     status ENUM('pending','succeeded','failed','refunded') NOT NULL DEFAULT 'pending',
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (vehicle_usage_id) REFERENCES vehicle_usage(id) ON DELETE SET NULL,

@@ -209,7 +209,7 @@ CREATE TABLE payments (
     amount DECIMAL(10,2) NOT NULL,
     payment_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     type ENUM('unlock', 'time', 'subscription') NOT NULL,
-    status ENUM('pending', 'completed', 'failed', 'refunded') DEFAULT 'pending',
+    status ENUM('pending', 'succeeded', 'failed', 'refunded') DEFAULT 'pending',
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (vehicle_usage_id) REFERENCES vehicle_usage(id) ON DELETE SET NULL,
     FOREIGN KEY (payment_method_id) REFERENCES payment_methods(id) ON DELETE SET NULL,
