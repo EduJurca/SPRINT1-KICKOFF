@@ -141,6 +141,10 @@ Router::get('/admin/dashboard', ['AdminController', 'dashboard']);
 Router::get('/admin/users', ['UserController', 'index']);
 Router::get('/admin/users/create', ['UserController', 'create']);
 Router::post('/admin/users/store', ['UserController', 'store']);
+// Edit, update and delete routes for users
+Router::get('/admin/users/edit', ['UserController', 'edit']);
+Router::post('/admin/users/update', ['UserController', 'update']);
+Router::post('/admin/users/delete', ['UserController', 'delete']);
 
 // ==========================================
 // � CHAT / ASISTENTE IA
