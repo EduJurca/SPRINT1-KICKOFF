@@ -83,7 +83,6 @@ Router::get('/historial', function() {
 });
 
 // Pagaments
-Router::get('/pagaments', ['ProfileController', 'showPayments']);
 Router::get('/perfil/pagaments', ['ProfileController', 'showPayments']);
 
 Router::post('/perfil/pagaments/add', ['ProfileController', 'addPaymentMethod']);
