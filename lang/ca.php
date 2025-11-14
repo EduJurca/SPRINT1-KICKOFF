@@ -98,6 +98,11 @@ return [
     ],
     'footer' => [
         'copyright' => '© :year VoltiaCar. Tots els drets reservats.',
+        'home' => 'Inici',
+        'vehicles' => 'Vehicles',
+        'profile' => 'Perfil',
+        'incidents' => 'Incidències',
+        'chatbot' => 'Chatbot',
     ],
     'vehicle' => [
         'page_title' => 'VoltiaCar - Localitzar Vehicles',

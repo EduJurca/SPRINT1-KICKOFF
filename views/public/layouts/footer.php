@@ -1,27 +1,38 @@
-<footer class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 py-3 shadow-lg z-50">
-    <div class="container mx-auto px-4">
-        <div class="flex justify-center space-x-8">
+<footer class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 py-2 shadow-lg z-50">
+    <div class="container mx-auto px-2">
+        <div class="flex justify-around items-end">
+            <div class="flex flex-col items-center">
+                <button onclick="toggleChatbot()" class="flex flex-col items-center text-black hover:text-gray-500 transition-colors p-2 rounded-lg">
+                    <i class="fas fa-comment-dots text-xl mb-1"></i>
+                    <span class="text-xs"><?php echo __('footer.chatbot'); ?></span>
+                </button>
+            </div>
+
             <div class="flex flex-col items-center">
                 <a href="/dashboard" class="flex flex-col items-center text-black hover:text-gray-500 transition-colors p-2 rounded-lg">
-                    <i class="fas fa-home text-xl"></i>
+                    <i class="fas fa-home text-xl mb-1"></i>
+                    <span class="text-xs"><?php echo __('footer.home'); ?></span>
                 </a>
             </div>
 
             <div class="flex flex-col items-center">
                 <a href="/administrar-vehicle" class="flex flex-col items-center text-black hover:text-gray-500 transition-colors p-2 rounded-lg">
-                    <i class="fas fa-car text-xl"></i>
+                    <i class="fas fa-car text-xl mb-1"></i>
+                    <span class="text-xs"><?php echo __('footer.vehicles'); ?></span>
                 </a>
             </div>
 
             <div class="flex flex-col items-center">
                 <a href="/perfil" class="flex flex-col items-center text-black hover:text-gray-500 transition-colors p-2 rounded-lg">
-                    <i class="fas fa-user text-xl"></i>
+                    <i class="fas fa-user text-xl mb-1"></i>
+                    <span class="text-xs"><?php echo __('footer.profile'); ?></span>
                 </a>
             </div>
 
             <div class="flex flex-col items-center">
                 <a href="/report-incident" class="flex flex-col items-center text-black hover:text-gray-500 transition-colors p-2 rounded-lg">
-                    <i class="fas fa-exclamation-triangle text-xl"></i>
+                    <i class="fas fa-exclamation-triangle text-xl mb-1"></i>
+                    <span class="text-xs"><?php echo __('footer.incidents'); ?></span>
                 </a>
             </div>
         </div>
@@ -43,12 +54,11 @@
 </script>
     
     <!-- Widget de Chatbot Flotante -->
-    <?php include __DIR__ . '/../commons/chatbot-widget.php'; ?>
+    <?php include __DIR__ . '/../../commons/chatbot-widget.php'; ?>
     
     <!-- JavaScript principal -->
     <script src="/assets/js/main.js"></script>
     <script src="/assets/js/auth.js"></script>
-    <script src="/assets/js/accessibility.js"></script>
     
     <!-- JavaScript addicional per a cada pàgina -->
     <?php if (isset($additionalJS)): ?>

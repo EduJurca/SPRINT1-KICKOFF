@@ -97,6 +97,11 @@ return [
     ],
     'footer' => [
         'copyright' => '© :year VoltiaCar. All rights reserved.',
+        'home' => 'Home',
+        'vehicles' => 'Vehicles',
+        'profile' => 'Profile',
+        'incidents' => 'Incidents',
+        'chatbot' => 'Chatbot',
     ],
     'vehicle' => [
         'page_title' => 'VoltiaCar - Locate Vehicles',
