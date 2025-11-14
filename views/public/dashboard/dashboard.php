@@ -166,7 +166,6 @@
     <script src="/assets/js/toast.js"></script>
     <script src="/assets/js/confirm-modal.js"></script>
     <script src="/assets/js/main.js"></script>
-    <script src="/assets/js/auth.js"></script>
     <script src="/assets/js/vehicles.js"></script>
     <script src="/assets/js/vehicle-claim-modal.js"></script>
     <script src="/assets/js/localitzar-vehicle.js"></script>

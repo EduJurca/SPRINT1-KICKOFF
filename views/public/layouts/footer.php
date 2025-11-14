@@ -2,13 +2,6 @@
     <div class="container mx-auto px-2">
         <div class="flex justify-around items-end">
             <div class="flex flex-col items-center">
-                <button onclick="toggleChatbot()" class="flex flex-col items-center text-black hover:text-gray-500 transition-colors p-2 rounded-lg">
-                    <i class="fas fa-comment-dots text-xl mb-1"></i>
-                    <span class="text-xs"><?php echo __('footer.chatbot'); ?></span>
-                </button>
-            </div>
-
-            <div class="flex flex-col items-center">
                 <a href="/dashboard" class="flex flex-col items-center text-black hover:text-gray-500 transition-colors p-2 rounded-lg">
                     <i class="fas fa-home text-xl mb-1"></i>
                     <span class="text-xs"><?php echo __('footer.home'); ?></span>
@@ -35,6 +28,13 @@
                     <span class="text-xs"><?php echo __('footer.incidents'); ?></span>
                 </a>
             </div>
+
+            <div class="flex flex-col items-center">
+                <button id="footer-chat-toggle" class=" border-1 flex flex-col items-center text-black hover:text-gray-500 transition-colors p-2 rounded-lg">
+                    <i class="fas fa-comment-dots text-xl mb-1"></i>
+                    <span class="text-xs"><?php echo __('footer.chatbot'); ?></span>
+                </button>
+            </div>            
         </div>
     </div>
 </footer>
@@ -53,18 +53,30 @@
   })();
 </script>
     
-    <!-- Widget de Chatbot Flotante -->
-    <?php include __DIR__ . '/../../commons/chatbot-widget.php'; ?>
+    <?php 
+    $hideChatToggle = true; // Ocultar el botón flotante cuando se usa desde footer
+    include __DIR__ . '/../../commons/chatbot-widget.php'; 
+    ?>
     
-    <!-- JavaScript principal -->
     <script src="/assets/js/main.js"></script>
-    <script src="/assets/js/auth.js"></script>
     
-    <!-- JavaScript addicional per a cada pàgina -->
     <?php if (isset($additionalJS)): ?>
         <?php foreach ($additionalJS as $js): ?>
             <script src="<?php echo $js; ?>"></script>
         <?php endforeach; ?>
     <?php endif; ?>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const footerToggle = document.getElementById('footer-chat-toggle');
+        const chatToggle = document.getElementById('chat-toggle');
+        
+        if (footerToggle && chatToggle) {
+            footerToggle.addEventListener('click', function() {
+                chatToggle.click();
+            });
+        }
+    });
+</script>
 </body>
 </html>
