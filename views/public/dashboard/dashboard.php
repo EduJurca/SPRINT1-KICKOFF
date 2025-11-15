@@ -92,6 +92,33 @@
         </div>
     </div>
 
+    <!-- Botón para abrir modal de reserva -->
+    <button id="reserve-btn" class="fixed bottom-24 bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg shadow-lg transition-all duration-300 z-40 flex items-center justify-center font-semibold">
+        <p class="uppercase">    
+             Reserva  
+        </p>
+    </button>
+
+    <!-- Modal de reserva de vehículos -->
+    <div id="reserve-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
+        <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-11/12 max-h-[80vh] overflow-hidden flex flex-col">
+            <div class="p-6 border-b border-gray-200 flex items-center justify-between">
+                <h2 class="text-xl font-bold text-gray-900">Reservar Vehicle</h2>
+                <button id="close-reserve-modal" class="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                    <i class="fas fa-car- text-xl mb-1"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1">
+                <div id="reserve-vehicles-list" class="space-y-3">
+                    <div class="text-center text-gray-500">
+                        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+                        <p class="mt-2">Carregant vehicles...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
@@ -147,12 +174,14 @@
         class="fixed left-0 right-0 bottom-0 z-50 transform translate-y-full transition-transform duration-300"
         style="display:none; max-height: 80vh;">
         <div class="max-w-3xl mx-auto px-4 pb-20">
-            <div class="bg-white rounded-t-2xl shadow-2xl overflow-hidden flex flex-col" style="max-height: 80vh;">
-                <div class="vehicle-details-content flex-shrink-0"></div>
+            <div class="bg-white rounded-t-2xl shadow-2xl flex flex-col" style="max-height: 80vh;">
+                <div class="overflow-y-auto flex-1">
+                    <div class="vehicle-details-content"></div>
 
-                <div class="px-4 pb-4 overflow-y-auto flex-1">
-                    <h4 class="text-sm font-semibold mt-3 mb-2 sticky top-0 bg-white py-2">Vehicles propers</h4>
-                    <ul id="nearby-vehicles-list" class="divide-y bg-gray-100 rounded-xl divide-gray-100 mb-4"></ul>
+                    <div class="px-4 pb-4">
+                        <h4 class="text-sm font-semibold mt-3 mb-2 sticky top-0 bg-white py-2">Vehicles propers</h4>
+                        <ul id="nearby-vehicles-list" class="divide-y bg-gray-100 rounded-xl divide-gray-100 mb-4"></ul>
+                    </div>
                 </div>
 
                 <div class="p-3 border-t text-center bg-white flex-shrink-0">
@@ -169,6 +198,128 @@
     <script src="/assets/js/vehicles.js"></script>
     <script src="/assets/js/vehicle-claim-modal.js"></script>
     <script src="/assets/js/localitzar-vehicle.js"></script>
+
+    <script>
+        // Helper function to calculate distance
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Radius of the Earth in km
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c;
+        }
+        
+        // Modal de reserva
+        document.getElementById('reserve-btn').addEventListener('click', function() {
+            const modal = document.getElementById('reserve-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            loadAllVehiclesForReserve();
+        });
+
+        document.getElementById('close-reserve-modal').addEventListener('click', function() {
+            const modal = document.getElementById('reserve-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        });
+
+        // Cerrar al hacer clic fuera del modal
+        document.getElementById('reserve-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+                this.classList.remove('flex');
+            }
+        });
+
+        async function loadAllVehiclesForReserve() {
+            const container = document.getElementById('reserve-vehicles-list');
+            
+            try {
+                const response = await fetch('/api/vehicles');
+                const data = await response.json();
+                
+                if (data.success && data.vehicles) {
+                    // Get user location
+                    let userLocation = null;
+                    if (window.VehicleLocator && window.VehicleLocator.userLocation) {
+                        userLocation = window.VehicleLocator.userLocation;
+                    }
+                    
+                    // Calculate distances and sort
+                    const vehiclesWithDistance = data.vehicles.map(vehicle => {
+                        if (userLocation && vehicle.location) {
+                            const distance = calculateDistance(
+                                userLocation.lat, 
+                                userLocation.lng, 
+                                vehicle.location.lat, 
+                                vehicle.location.lng
+                            );
+                            return { ...vehicle, distance };
+                        }
+                        return vehicle;
+                    });
+                    
+                    // Sort by distance
+                    vehiclesWithDistance.sort((a, b) => {
+                        if (a.distance && b.distance) return a.distance - b.distance;
+                        if (a.distance) return -1;
+                        if (b.distance) return 1;
+                        return 0;
+                    });
+                    
+                    container.innerHTML = '';
+                    
+                    vehiclesWithDistance.forEach(vehicle => {
+                        const vehicleCard = document.createElement('div');
+                        vehicleCard.className = 'bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer';
+                        vehicleCard.onclick = function() {
+                            // Cerrar modal de reserva
+                            document.getElementById('reserve-modal').classList.add('hidden');
+                            document.getElementById('reserve-modal').classList.remove('flex');
+                            // Mostrar detalles del vehículo
+                            if (window.VehicleLocator) {
+                                window.VehicleLocator.showVehicleDetails(vehicle.id);
+                            }
+                        };
+                        
+                        const distanceText = vehicle.distance 
+                            ? `<p class="text-xs text-gray-400 flex items-center"><i class="fas fa-map-marker-alt mr-1"></i>${vehicle.distance.toFixed(2)} km</p>`
+                            : '';
+                        
+                        vehicleCard.innerHTML = `
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden">
+                                        <img src="${vehicle.image_url}" alt="${vehicle.model}" class="w-full h-full object-cover">
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-900">${vehicle.model || 'Vehicle'}</h3>
+                                        <p class="text-sm text-gray-500">${vehicle.plate || vehicle.license_plate || 'N/A'}</p>
+                                        <p class="text-xs text-gray-400">${vehicle.battery || 0}% bateria</p>
+                                        ${distanceText}
+                                    </div>
+                                </div>
+                                <div class="text-gray-400">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        `;
+                        container.appendChild(vehicleCard);
+                    });
+                } else {
+                    container.innerHTML = '<p class="text-center text-gray-500">No hi ha vehicles disponibles</p>';
+                }
+            } catch (error) {
+                console.error('Error loading vehicles:', error);
+                container.innerHTML = '<p class="text-center text-red-500">Error carregant vehicles</p>';
+            }
+        }
+    </script>
 
     <?php require_once __DIR__ . '/../layouts/footer.php'; ?>
 </body>

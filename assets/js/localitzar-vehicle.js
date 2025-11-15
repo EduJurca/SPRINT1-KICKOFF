@@ -308,18 +308,21 @@ const VehicleLocator = {
 
         modalContent.innerHTML = `
             <div class="p-6">
-                <div class="flex items-start justify-between">
+                <div class="flex gap-4 mb-4">
                     <div class="flex-1">
                         <h3 class="text-xl font-bold text-gray-900">${vehicle.model}</h3>
                         <p class="text-sm text-gray-600 mt-1">${vehicle.license_plate || ''}</p>
-                        ${userDistance ? `<p class="text-xs text-gray-500 mt-1 flex items-center"><i class="fas fa-map-marker-alt mr-1"></i> ${userDistance.toFixed(2)} km de tu</p>` : ''}
-                    </div>
-                    <div class="text-right ml-4">
-                        <div class="flex items-center justify-end">
-                            <i class="fas fa-battery-three-quarters mr-2" style="color: ${this.getBatteryColor(vehicle.battery)}"></i>
-                            <p class="text-lg font-bold" style="color: ${this.getBatteryColor(vehicle.battery)}">${vehicle.battery}%</p>
+                        ${userDistance ? `<p class="text-xs text-gray-500 mt-2 flex items-center"><i class="fas fa-map-marker-alt mr-1"></i> ${userDistance.toFixed(2)} km de tu</p>` : ''}
+                        <div class="flex items-center mt-2">
+                            <i class="fas fa-battery-three-quarters mr-2 text-xl" style="color: ${this.getBatteryColor(vehicle.battery)}"></i>
+                            <p class="text-base font-bold" style="color: ${this.getBatteryColor(vehicle.battery)}">${vehicle.battery}%</p>
                         </div>
                     </div>
+                    ${vehicle.image_url ? `
+                    <div class="flex-[2]">
+                        <img src="${vehicle.image_url}" alt="${vehicle.model}" class="w-full max-w-[200px] h-auto object-cover rounded-lg">
+                    </div>
+                    ` : ''}
                 </div>
                 ${vehicle.description ? `<p class="mt-3 text-sm text-gray-700">${vehicle.description}</p>` : ''}
                 <div class="mt-4">

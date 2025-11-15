@@ -9,7 +9,7 @@ services:
     networks:
       - sims-net
     ports:
-      - "8081:80"
+      - "8080:80"
     volumes:
       # Estructura MVC
       - ./:/var/www/html
@@ -50,7 +50,7 @@ services:
       - mariadb_data:/var/lib/mysql
       - ./database/mariadb-init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - "3307:3306"
+      - "3306:3306"
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
@@ -94,7 +94,7 @@ services:
       PMA_USER: ${PMA_USER}
       PMA_PASSWORD: ${PMA_PASSWORD}
     ports:
-      - "8082:80"
+      - "8081:80"
     networks:
       - sims-net
     restart: unless-stopped

@@ -22,7 +22,7 @@
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
 
     <div class="mobile-view md:hidden">
-        <div class="bg-white p-5 rounded-2xl shadow-inner w-full max-w-sm flex flex-col relative">
+        <div class="bg-white p-5 rounded-2xl shadow-inner w-full max-w-sm flex flex-col relative mb-20">
             <header class="grid grid-cols-3 items-center mb-6 w-full">
                 <div class="text-left">
                   <a href="/dashboard" class="text-[#1565C0] font-semibold hover:underline"><?php echo __('admin.back'); ?></a>
@@ -62,7 +62,7 @@
             </div>
 
             <!-- Contenido desplazable horizontal -->
-            <main class="flex-1 overflow-x-auto no-scrollbar flex snap-x snap-mandatory">
+            <main class="flex-1 overflow-x-auto no-scrollbar flex snap-x snap-mandatory pb-20">
                 <section class="flex-none w-full px-2 sm:px-4 flex flex-col justify-center snap-start">
                     <h2 class="text-xl font-bold text-gray-900 mb-4"><?php echo __('admin.vehicle_controls'); ?></h2>
                     <div class="grid grid-cols-2 gap-4 sm:gap-6 p-2">
@@ -155,7 +155,7 @@
         </div>
     </div>
 
-    <div class="desktop-view hidden md:block bg-white p-8 rounded-2xl shadow-inner w-full max-w-5xl mx-auto">
+    <div class="desktop-view hidden md:block bg-white p-8 rounded-2xl shadow-inner w-full max-w-5xl mx-auto mb-20">
         <header class="grid grid-cols-3 items-center mb-6 w-full">
             <div class="text-left">
                 <a href="/dashboard" class="text-[#1565C0] text-sm font-semibold">Tornar</a>
@@ -194,7 +194,7 @@
             </div>
         </div>
 
-        <main class="flex flex-row gap-8">
+        <main class="flex flex-row gap-8 pb-20">
             <section class="flex-1 flex flex-col">
                 <h2 class="text-2xl font-bold text-gray-900 mb-6"><?php echo __('admin.vehicle_controls'); ?></h2>
                 <div class="grid grid-cols-2 gap-8">
@@ -240,7 +240,7 @@
                     <p class="text-gray-900 font-semibold text-xl mb-2"><?php echo __('admin.license_plate'); ?> <span class="font-normal" data-vehicle-license><?php echo __('admin.loading'); ?>...</span></p>
                     <p class="text-gray-700 text-lg"><?php echo __('admin.model'); ?> <span class="font-normal" data-vehicle-model><?php echo __('admin.loading'); ?>...</span></p>
                 </div>
-                <div class="flex-1 w-full rounded-lg relative" style="min-height: 320px;">
+                <div class="flex-1 w-full rounded-lg relative" style="min-height: 320px; z-index: 1;">
                     <div id="vehicle-map-desktop" style="height: 100%; width: 100%; border-radius: 0.5rem;"></div>
                 </div>
             </section>
@@ -285,18 +285,9 @@
     <script src="/assets/js/vehicles.js"></script>
     <script src="/assets/js/administrar-vehicle.js"></script>
 
-    <a href="/resum-projecte"
-        class="fixed bottom-10 right-10 block bg-[#1565C0] text-white p-4 rounded-full shadow-lg hover:bg-[#1151a3] transition-colors duration-300 z-50">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-            stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-        </svg>
-    </a>
+    
     <?php require_once __DIR__ . '/../layouts/footer.php'; ?>
-    <?php include __DIR__ . '/../../commons/chatbot-widget.php'; ?>
 
->>>>>>> origin/develop
 </body>
 
 </html>

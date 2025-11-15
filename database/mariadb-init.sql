@@ -217,11 +217,11 @@ CREATE TABLE IF NOT EXISTS bookings (
 
 -- Insert sample vehicles with Amposta locations
 INSERT INTO vehicles (plate, brand, model, year, status, battery_level, latitude, longitude, vehicle_type, is_accessible, price_per_minute, image_url) VALUES
-('1234ABC', 'Tesla', 'Model 3', 2023, 'available', 85, 40.71170000, 0.57830000, 'car', 0, 0.40, '/images/tesla-model3.jpg'),
-('5678DEF', 'Nissan', 'Leaf', 2022, 'available', 92, 40.71350000, 0.57650000, 'car', 1, 0.35, '/images/nissan-leaf.jpg'),
-('9012GHI', 'Renault', 'Zoe', 2023, 'available', 78, 40.71000000, 0.58100000, 'car', 0, 0.35, '/images/renault-zoe.jpg'),
-('3456JKL', 'BMW', 'i3', 2022, 'available', 65, 40.71450000, 0.57500000, 'car', 1, 0.45, '/images/bmw-i3.jpg'),
-('7890MNO', 'Volkswagen', 'ID.3', 2023, 'available', 88, 40.70950000, 0.58300000, 'car', 0, 0.38, '/images/vw-id3.jpg');
+('1234ABC', 'Tesla', 'Model 3', 2023, 'available', 85, 40.71170000, 0.57830000, 'car', 0, 0.40, '/assets/images/cars/tesla-model3.png'),
+('5678DEF', 'Nissan', 'Leaf', 2022, 'available', 92, 40.71350000, 0.57650000, 'car', 1, 0.35, '/assets/images/cars/nissan-leaf.png'),
+('9012GHI', 'Renault', 'Zoe', 2023, 'available', 78, 40.71000000, 0.58100000, 'car', 0, 0.35, '/assets/images/cars/renault-zoe.png'),
+('3456JKL', 'BMW', 'i3', 2022, 'available', 65, 40.71450000, 0.57500000, 'car', 1, 0.45, '/assets/images/cars/bmw-i3.png'),
+('7890MNO', 'Volkswagen', 'ID.3', 2023, 'available', 88, 40.70950000, 0.58300000, 'car', 0, 0.38, '/assets/images/cars/vw-id3.png');
 
 -- ==========================================
 -- USUARIS DE PROVA AMB ROLS
