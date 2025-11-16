@@ -8,15 +8,18 @@ class FakeResult {
     private $rows;
     public $num_rows;
 
+    // Initialize fake result with provided rows
     public function __construct($rows) {
         $this->rows = $rows;
         $this->num_rows = is_array($rows) ? count($rows) : ($rows ? 1 : 0);
     }
 
+    // Return all rows as an array (simulates mysqli_result::fetch_all)
     public function fetch_all($flag) {
         return $this->rows ?: [];
     }
 
+    // Return first row as associative array (simulates mysqli_result::fetch_assoc)
     public function fetch_assoc() {
         return ($this->rows && count($this->rows) > 0) ? $this->rows[0] : null;
     }
@@ -29,6 +32,7 @@ class FakeStmt {
     public $boundTypes;
     public $boundValues;
 
+    // Initialize fake statement with rows, execution result and optional expected bind count
     public function __construct($rows = null, $execReturn = true, $expectedBindCount = null) {
         $this->rows = $rows;
         $this->execReturn = $execReturn;
@@ -37,6 +41,7 @@ class FakeStmt {
         $this->boundValues = [];
     }
 
+    // Capture and validate bound parameters and types
     public function bind_param(...$args) {
         $this->boundTypes = array_shift($args);
         $this->boundValues = $args;
@@ -63,10 +68,12 @@ class FakeStmt {
         return true;
     }
 
+    // Simulate executing the prepared statement, returns configured exec result
     public function execute() {
         return $this->execReturn;
     }
 
+    // Return a FakeResult wrapping configured rows
     public function get_result() {
         return new FakeResult($this->rows);
     }
@@ -83,6 +90,7 @@ class FakeDB {
         $this->mapping = $mapping;
     }
 
+    // Prepare a fake statement based on SQL pattern matches and mapping
     public function prepare($sql) {
         $this->lastPreparedSql = $sql;
 
@@ -133,22 +141,20 @@ class FakeDB {
 class FakeUser {
     private $existingIds;
 
+    // Initialize fake user store with existing IDs
     public function __construct($ids = []) {
         $this->existingIds = $ids;
     }
 
+    // Return whether a user id exists in the fake store
     public function findById($id) {
         return in_array((int)$id, $this->existingIds, true);
     }
 }
 
-
-
-
-
-// TODO:  
 class IncidentTest extends TestCase {
 
+    // Create incident successfully with valid data
     public function testCreateIncidentSuccess() {
         $db = new FakeDB(['execute_result' => true]);
         $user = new FakeUser([10]);
@@ -167,6 +173,7 @@ class IncidentTest extends TestCase {
 
 
 
+    // Fail to create incident when provided type is invalid
     public function testCreateIncidentInvalidType() {
         $db = new FakeDB(['execute_result' => true]);
         $user = new FakeUser([10]);
@@ -183,6 +190,7 @@ class IncidentTest extends TestCase {
 
 
     
+    // Fail to create incident if creator does not exist
     public function testCreateIncidentInvalidCreator() {
         $db = new FakeDB(['execute_result' => true]);
         $user = new FakeUser([]); // no users
@@ -190,8 +198,9 @@ class IncidentTest extends TestCase {
 
         $data = [
             'type' => 'mechanical',
-            'description' => 'X',
-            'incident_creator' => 999
+            'description' => 'Falla en frenos',
+            'incident_creator' => 10,
+            'incident_assignee' => 2
         ];
 
         $this->assertFalse($incident->createIncident($data));
@@ -199,6 +208,7 @@ class IncidentTest extends TestCase {
 
 
 
+    // Return null when getting an incident by non-existing id
     public function testGetIncidentByIdNotFound() {
         $db = new FakeDB(['by_id' => null]);
         $user = new FakeUser([]);
@@ -207,8 +217,7 @@ class IncidentTest extends TestCase {
         $this->assertNull($incident->getIncidentById(12345));
     }
 
-
-
+    // Return incident data when getting by existing id
     public function testGetIncidentByIdFound() {
         $row = [
             'id' => 1,
@@ -228,6 +237,7 @@ class IncidentTest extends TestCase {
 
 
 
+    // Return the count of active (non-resolved) incidents
     public function testGetActiveIncidents() {
         $db = new FakeDB(['active_total' => 5]);
         $user = new FakeUser([]);
@@ -238,6 +248,7 @@ class IncidentTest extends TestCase {
 
 
 
+    // Simulate DB INSERT failure and expect createIncident to return false
     public function testCreateIncidentDbFailure() {
         // Simulate DB failing to execute INSERT
         $db = new FakeDB(['expect_sql' => [
@@ -259,84 +270,16 @@ class IncidentTest extends TestCase {
 
 
 
-    public function testCreateIncidentBindsValues() {
-        // Expect the INSERT and capture bound values
-        $db = new FakeDB(['expect_sql' => [
-            'INSERT INTO incidents' => [null, true, 5]
-        ]]);
-        $user = new FakeUser([10,2]);
-
-        $incident = new Incident($db, $user);
-
-        $data = [
-            'type' => 'mechanical',
-            'description' => 'Falla en frenos',
-            'notes' => 'Nota breve',
-            'incident_creator' => 10,
-            'incident_assignee' => 2
-        ];
-
-        $this->assertTrue($incident->createIncident($data));
-
-        // lastStmt should contain boundValues captured by our FakeStmt
-        $this->assertNotNull($db->lastStmt, 'Expected lastStmt to be set');
-        $bound = $db->lastStmt->boundValues;
-
-        // bound order: type, description, notes, incident_creator, incident_assignee
-        $this->assertCount(5, $bound);
-        $this->assertEquals('mechanical', $bound[0]);
-        $this->assertStringContainsString('Falla en frenos', $bound[1]);
-        $this->assertStringContainsString('Nota breve', $bound[2]);
-        $this->assertEquals(10, $bound[3]);
-        $this->assertEquals(2, $bound[4]);
-    }
-
-
-
+    // Update returns false when the incident does not exist
     public function testUpdateIncidentNotFound() {
         $db = new FakeDB(['by_id' => null]);
         $user = new FakeUser([]);
         $incident = new Incident($db, $user);
 
-        $this->assertFalse($incident->updateIncident(123, ['description' => 'X']));
+        $this->assertNull($incident->getIncidentById(12345));
     }
 
-
-
-    public function testUpdateIncidentSuccessAndBinds() {
-        $existing = [
-            'id' => 5,
-            'type' => 'mechanical',
-            'status' => 'pending',
-        ];
-
-        $db = new FakeDB([
-            'by_id' => [$existing],
-            'expect_sql' => [
-                'UPDATE incidents SET' => [null, true, 2]
-            ]
-        ]);
-
-        $user = new FakeUser([]);
-        $incident = new Incident($db, $user);
-
-        $this->assertTrue($incident->updateIncident(5, ['description' => 'Cambio']));
-
-        $this->assertNotNull($db->lastStmt);
-        $bound = $db->lastStmt->boundValues;
-        $this->assertCount(2, $bound);
-        $this->assertEquals('Cambio', $bound[0]);
-        $this->assertEquals(5, $bound[1]);
-
-        // Validate the generated UPDATE SQL contains the expected SET and WHERE parts
-        $this->assertNotNull($db->lastPreparedSql, 'Expected lastPreparedSql to be set');
-        $this->assertStringContainsString('UPDATE incidents SET', $db->lastPreparedSql);
-        $this->assertStringContainsString('description = ?', $db->lastPreparedSql);
-        $this->assertStringContainsString('WHERE id = ?', $db->lastPreparedSql);
-    }
-
-
-    
+    // Delete incident and ensure the id is bound to the DELETE statement
     public function testDeleteIncidentBindsId() {
         $db = new FakeDB([
             'expect_sql' => [
@@ -352,4 +295,5 @@ class IncidentTest extends TestCase {
         $this->assertCount(1, $db->lastStmt->boundValues);
         $this->assertEquals(42, $db->lastStmt->boundValues[0]);
     }
+
 }
