@@ -1,10 +1,15 @@
 <?php 
 
 class Incident {
+    private const ALLOWED_TYPES = ['mechanical', 'electrical', 'other'];
+    private const ALLOWED_STATUSES = ['pending', 'in_progress', 'resolved'];
+
     private $db;
+    private $userModel;
     
-    public function __construct($dbConnection = null){
+    public function __construct($dbConnection = null, $userModel = null){
         $this->db = $dbConnection ?? Database::getMariaDBConnection();
+        $this->userModel = $userModel ?? new User();
     }
 
     public function getAllIncidents() {
@@ -75,16 +80,18 @@ class Incident {
             return false;
         }
 
-        $userModel = new User();
+        if (!in_array($data['type'], self::ALLOWED_TYPES, true)) {
+            return false;
+        }
 
-        if (!$userModel->findById($data['incident_creator'])) {
+        if (!$this->userModel->findById($data['incident_creator'])) {
             return false;
         }
 
         $incident_assignee = null;
         if (isset($data['incident_assignee']) && $data['incident_assignee'] !== '' && $data['incident_assignee'] !== null) {
             $incident_assignee = (int)$data['incident_assignee'];
-            if (!$userModel->findById($incident_assignee)) {
+            if (!$this->userModel->findById($incident_assignee)) {
                 return false;
             }
         }
@@ -125,8 +132,7 @@ class Incident {
         $userFields = ['incident_assignee', 'resolved_by'];
         foreach ($userFields as $field) {
             if (isset($data[$field]) && $data[$field] !== null && $data[$field] !== '') {
-                $userModel = new User();
-                if (!$userModel->findById($data[$field])) {
+                if (!$this->userModel->findById($data[$field])) {
                     return false;
                 }
             }
@@ -137,12 +143,18 @@ class Incident {
         $values = [];
 
         if (isset($data['type'])) {
+            if (!in_array($data['type'], self::ALLOWED_TYPES, true)) {
+                return false;
+            }
             $setParts[] = "type = ?";
             $types .= 's';
             $values[] = $data['type'];
         }
 
         if (isset($data['status'])) {
+            if (!in_array($data['status'], self::ALLOWED_STATUSES, true)) {
+                return false;
+            }
             $setParts[] = "status = ?";
             $types .= 's';
             $values[] = $data['status'];
