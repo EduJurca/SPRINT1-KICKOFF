@@ -3,4 +3,5 @@ final_editar.code-workspace
 venv
 .venv
 .env
+vendor
 test-results
