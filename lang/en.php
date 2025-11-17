@@ -404,6 +404,7 @@ return [
         'license_front_preview' => 'Driver\'s license preview (front)',
         'license_back_preview' => 'Driver\'s license preview (back)',
         'submit_for_verification' => 'Submit for verification',
+        'trip_history_title' => "Trip history"        
     ],
     'dashboard' => [
         'management_window' => 'Management Window',

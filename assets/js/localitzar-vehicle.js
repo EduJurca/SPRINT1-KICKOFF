@@ -180,7 +180,10 @@ const VehicleLocator = {
     addVehicleMarkers(map, markersArray) {
         if (!map) return;
         
-        this.vehicles.forEach(vehicle => {
+        // Filtrar solo vehículos disponibles
+        const availableVehicles = this.vehicles.filter(vehicle => vehicle.status === 'available');
+        
+        availableVehicles.forEach(vehicle => {
             if (!vehicle.location) return;
             
             const color = this.getBatteryColor(vehicle.battery);
@@ -235,8 +238,11 @@ const VehicleLocator = {
     },
 
     updateVehicleLists() {
-        const normalVehicles = this.vehicles.filter(v => !v.is_accessible);
-        const accessibleVehicles = this.vehicles.filter(v => v.is_accessible);
+        // Filtrar solo vehículos disponibles
+        const availableVehicles = this.vehicles.filter(v => v.status === 'available');
+        
+        const normalVehicles = availableVehicles.filter(v => !v.is_accessible);
+        const accessibleVehicles = availableVehicles.filter(v => v.is_accessible);
         
         this.renderVehicleList('normal-list', normalVehicles);
         this.renderVehicleList('special-list', accessibleVehicles);

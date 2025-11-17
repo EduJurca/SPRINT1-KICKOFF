@@ -113,7 +113,7 @@ class VehicleController {
             error_log("ERROR: User already has active booking: " . json_encode($activeBooking));
             return Router::json([
                 'success' => false,
-                'message' => 'You already have an active booking'
+                'message' => 'Ja tens un vehicle reclamat. Has de finalitzar-lo abans de reclamar-ne un altre.'
             ], 400);
         }
         

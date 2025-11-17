@@ -8,7 +8,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="stylesheet" href="/assets/css/custom.css">
     <link rel="stylesheet" href="/assets/css/accessibility.css">
 
 </head>

@@ -405,6 +405,7 @@ return [
         'license_front_preview' => 'Vista prèvia del carnet de conduir (davant)',
         'license_back_preview' => 'Vista prèvia del carnet de conduir (darrere)',
         'submit_for_verification' => 'Enviar per verificar',
+        'trip_history_title' => "Historial de viatges"        
     ],
     'dashboard' => [
         'management_window' => 'Finestra de Gestió',

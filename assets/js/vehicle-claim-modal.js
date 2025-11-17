@@ -196,15 +196,15 @@ const VehicleClaimModal = {
                 
                 const errorMsg = result.message || result.error || 'Error desconegut al reclamar el vehicle';
                 
-                showToast(`Error: ${errorMsg}`, 'error');
+                showToast(errorMsg, 'error', 4000);
             }
         } catch (error) {
             confirmBtn.disabled = false;
             confirmBtn.classList.remove('claim-modal-button-loading');
             cancelBtn.disabled = false;
             
-            const errorMsg = error.message || 'Error al procesar la reclamació';
-            showToast(`❌ Error: ${errorMsg}`, 'error');
+            const errorMsg = error.message || 'Error al processar la reclamació';
+            showToast(errorMsg, 'error', 4000);
         }
     }
 };

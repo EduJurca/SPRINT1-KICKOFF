@@ -15,8 +15,6 @@
           crossorigin="">
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../../css/custom.css">
-    <link rel="stylesheet" href="../../css/administrar-vehicle.css">
 </head>
 
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
@@ -26,9 +24,6 @@
             <header class="grid grid-cols-3 items-center mb-6 w-full">
                                 <div class="text-left">
                                     <a href="/dashboard" class="inline-flex items-center gap-2 text-[#1565C0] font-semibold hover:underline py-1 px-2 rounded-lg border border-transparent hover:border-gray-200">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-2.207-9.207a1 1 0 011.414-1.414L12 8.586l-3.793 3.793a1 1 0 01-1.414-1.414L9.172 10H6a1 1 0 110-2h4.172L7.793 8.793z" clip-rule="evenodd" />
-                                        </svg>
                                         <?php echo __('admin.back'); ?>
                                     </a>
                                 </div>
@@ -162,7 +157,7 @@
     <div class="desktop-view hidden md:block bg-white p-8 rounded-2xl shadow-inner w-full max-w-5xl mx-auto mb-20">
         <header class="grid grid-cols-3 items-center mb-6 w-full">
             <div class="text-left">
-                <a href="/dashboard" class="text-[#1565C0] text-sm font-semibold">Tornar</a>
+                <a href="/dashboard" class="text-[#1565C0] text-sm font-semibold">Tornar</a>    
             </div>
             <h2 class="text-3xl font-bold text-gray-900 text-center">Controlar Vehicle</h2>
             <div class="flex justify-end items-center gap-3">
@@ -289,7 +284,6 @@
     <script src="/assets/js/confirm-modal.js"></script>
     <script src="/assets/js/main.js"></script>
     <script src="/assets/js/vehicles.js"></script>
-    <script src="/assets/js/administrar-vehicle.js"></script>
 
     
     <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

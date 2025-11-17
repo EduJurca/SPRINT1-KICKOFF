@@ -96,18 +96,6 @@ const VehicleControl = {
             this.currentVehicle = vehicleFromServer || vehicleFromStorage;
             
             if (!this.currentVehicle) {
-                
-                // Llamar al endpoint de debug
-                try {
-                    const debugResponse = await fetch('/php/api/debug-vehicle.php', {
-                        credentials: 'include'
-                    });
-                    if (debugResponse.ok) {
-                        const debugData = await debugResponse.json();
-                    }
-                } catch (e) {
-                }
-                
                 showToast('No tens cap vehicle reclamat. Redirigint...', 'warning', 2000);
                 setTimeout(() => {
                     window.location.href = '/dashboard';
@@ -657,7 +645,7 @@ const VehicleControl = {
                         window.location.href = '/dashboard';
                     }, 2000);
                 } else {
-                    showToast('Error al finalitzar la reserva: ' + result.message, 'error');
+                    showToast(result.message || 'Error al finalitzar la reserva', 'error', 4000);
                     confirmBtn.disabled = false;
                     confirmBtn.textContent = 'Finalitzar';
                 }

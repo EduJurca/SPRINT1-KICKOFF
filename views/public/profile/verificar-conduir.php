@@ -83,5 +83,6 @@ class="mt-2 preview-img hidden"
   document.getElementById('file_front').addEventListener('change', e=>preview(e.target,'preview_front'));
   document.getElementById('file_back').addEventListener('change', e=>preview(e.target,'preview_back'));
   </script>
+  <?php require_once __DIR__ . '/../layouts/footer.php'; ?>
 </body>
 </html>
