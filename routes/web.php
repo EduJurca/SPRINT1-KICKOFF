@@ -157,6 +157,8 @@ Router::delete('/api/bookings/{id}', ['BookingController', 'delete']);
 Router::get('/api/session-check', ['AuthController', 'checkSession']);
 Router::get('/api/session-status', ['AuthController', 'getSessionStatus']);
 
+Router::post('/api/users/language', ['ProfileController', 'updateLanguage']);
+
 // ==========================================
 // ♿ ACCESSIBILITAT
 // ==========================================
