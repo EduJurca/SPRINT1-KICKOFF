@@ -47,7 +47,7 @@
                 <div id="map" class="absolute inset-0 w-full h-full"></div>
                 <header class="relative flex items-center justify-center p-10 shadow-sm flex-shrink-0 z-20">
                     <div class="absolute left-4">
-                        <img src="/assets/images/logo.png" class="h-14 w-14 bg-gray-50 rounded-full object-cover"
+                        <img src="/assets/images/logo.png" class="h-14 w-14 bg-gray-50 rounded-full object-cover border-2 border-gray-200"
                             alt="<?php echo __(key: 'vehicle.logo_alt'); ?>">
                     </div>
                 </header>

@@ -106,11 +106,14 @@
             </option>
           </select>
         </form>
-
-        <div class="mt-4 flex gap-2">
-          <button id="editBtn" class="pushable flex-1"><?php echo __('profile.edit'); ?></button>
-          <button id="saveBtn" class="pushable flex-1 bg-green-600 hidden"><?php echo __('profile.save'); ?></button>
-        </div>
+      </div>
+      <div class="mt-8">
+        <form method="POST" action="/logout">
+          <button type="submit"
+            class="block w-full bg-blue-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-gray-400 transition-colors duration-300 text-center">
+            Tancar Sessió
+          </button>
+        </form>
       </div>
 
     <!-- Right column: Actions -->

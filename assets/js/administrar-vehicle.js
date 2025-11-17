@@ -15,7 +15,6 @@ const VehicleControl = {
      * Inicializar la página
      */
     async init() {
-        console.log('🚗 Inicializando control de vehículo...');
         
         // Esperar un momento para asegurar que localStorage esté actualizado
         await new Promise(resolve => setTimeout(resolve, 200));
@@ -43,7 +42,6 @@ const VehicleControl = {
             this.initMap();
         }, 500);
         
-        console.log('✅ Control de vehículo inicializado');
     },
     
     /**
