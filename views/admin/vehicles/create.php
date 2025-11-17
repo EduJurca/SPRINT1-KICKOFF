@@ -61,7 +61,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
 
         <!-- Formulario -->
         <div class="bg-gray-100 rounded-lg shadow-md p-8">
-            <form method="POST" action="/admin/vehicles" class="space-y-6">
+            <form method="POST" action="/admin/vehicles" class="space-y-6" id="vehicleForm" novalidate>
                 
                 <!-- Información Básica -->
                 <div class="border-b border-gray-200 pb-6">
@@ -76,6 +76,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                                    value="<?= htmlspecialchars($oldData['plate'] ?? '') ?>"
                                    placeholder="1234ABC"
                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all">
+                            <p id="error-plate" class="text-red-600 text-sm mt-1 hidden"></p>
                         </div>
                         
                         <div>
@@ -86,6 +87,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                                    value="<?= htmlspecialchars($oldData['year'] ?? date('Y')) ?>"
                                    min="1900" max="<?= date('Y') + 1 ?>"
                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all">
+                            <p id="error-year" class="text-red-600 text-sm mt-1 hidden"></p>
                         </div>
                         
                         <div>
@@ -96,6 +98,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                                    value="<?= htmlspecialchars($oldData['brand'] ?? '') ?>"
                                    placeholder="Tesla, Nissan, BMW..."
                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all">
+                            <p id="error-brand" class="text-red-600 text-sm mt-1 hidden"></p>
                         </div>
                         
                         <div>
@@ -106,6 +109,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                                    value="<?= htmlspecialchars($oldData['model'] ?? '') ?>"
                                    placeholder="Model 3, Leaf, i3..."
                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all">
+                            <p id="error-model" class="text-red-600 text-sm mt-1 hidden"></p>
                         </div>
                         
                         <div>
@@ -245,6 +249,53 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" 
         crossorigin=""></script>
+
+<!-- Validación de formulario -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('vehicleForm');
+    const requiredMsg = '<?php echo addslashes(__('form.validations.required_field')); ?>';
+    
+    // Validar formulari al submit
+    form.addEventListener('submit', function(e) {
+        let isValid = true;
+        
+        // Camps obligatoris
+        const requiredFields = ['plate', 'year', 'brand', 'model'];
+        
+        requiredFields.forEach(fieldName => {
+            const field = document.getElementById(fieldName);
+            const errorEl = document.getElementById(`error-${fieldName}`);
+            
+            if (!field.value.trim()) {
+                errorEl.textContent = requiredMsg;
+                errorEl.classList.remove('hidden');
+                field.classList.add('border-red-500');
+                isValid = false;
+            } else {
+                errorEl.classList.add('hidden');
+                field.classList.remove('border-red-500');
+            }
+            
+            // Netejar error quan l'usuari escriu
+            field.addEventListener('input', function() {
+                errorEl.classList.add('hidden');
+                field.classList.remove('border-red-500');
+            });
+        });
+        
+        if (!isValid) {
+            e.preventDefault();
+            // Scroll al primer error
+            const firstError = form.querySelector('.border-red-500');
+            if (firstError) {
+                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                firstError.focus();
+            }
+        }
+    });
+});
+</script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {

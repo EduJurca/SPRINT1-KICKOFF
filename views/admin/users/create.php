@@ -36,7 +36,7 @@
 
         <!-- Formulari -->
         <div class="bg-gray-100 rounded-lg shadow-md p-8">
-            <form method="POST" action="/admin/users/store" class="space-y-6">
+            <form method="POST" action="/admin/users/store" class="space-y-6" id="createUserForm" novalidate>
                 
                 <!-- Informació Bàsica -->
                 <div class="border-b border-gray-200 pb-6">
@@ -54,6 +54,7 @@
                                 required
                                 class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all"
                             >
+                            <p id="error-username" class="text-red-600 text-sm mt-1 hidden"></p>
                         </div>
 
                         <!-- Email -->
@@ -68,6 +69,7 @@
                                 required
                                 class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all"
                             >
+                            <p id="error-email" class="text-red-600 text-sm mt-1 hidden"></p>
                         </div>
 
                         <!-- Password -->
@@ -83,6 +85,7 @@
                                 minlength="6"
                                 class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all"
                             >
+                            <p id="error-password" class="text-red-600 text-sm mt-1 hidden"></p>
                             <p class="text-xs text-gray-500 mt-1">Mínim 6 caràcters</p>
                         </div>
 
@@ -154,5 +157,85 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('createUserForm');
+    const requiredMsg = '<?php echo addslashes(__('form.validations.required_field')); ?>';
+    
+    form.addEventListener('submit', function(e) {
+        let isValid = true;
+        
+        // Username
+        const username = document.getElementById('username');
+        const errorUsername = document.getElementById('error-username');
+        if (!username.value.trim()) {
+            errorUsername.textContent = requiredMsg;
+            errorUsername.classList.remove('hidden');
+            username.classList.add('border-red-500');
+            isValid = false;
+        } else {
+            errorUsername.classList.add('hidden');
+            username.classList.remove('border-red-500');
+        }
+        
+        // Email
+        const email = document.getElementById('email');
+        const errorEmail = document.getElementById('error-email');
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email.value.trim()) {
+            errorEmail.textContent = requiredMsg;
+            errorEmail.classList.remove('hidden');
+            email.classList.add('border-red-500');
+            isValid = false;
+        } else if (!emailRegex.test(email.value.trim())) {
+            errorEmail.textContent = 'Correu no vàlid';
+            errorEmail.classList.remove('hidden');
+            email.classList.add('border-red-500');
+            isValid = false;
+        } else {
+            errorEmail.classList.add('hidden');
+            email.classList.remove('border-red-500');
+        }
+        
+        // Password
+        const password = document.getElementById('password');
+        const errorPassword = document.getElementById('error-password');
+        if (!password.value) {
+            errorPassword.textContent = requiredMsg;
+            errorPassword.classList.remove('hidden');
+            password.classList.add('border-red-500');
+            isValid = false;
+        } else if (password.value.length < 6) {
+            errorPassword.textContent = 'Mínim 6 caràcters';
+            errorPassword.classList.remove('hidden');
+            password.classList.add('border-red-500');
+            isValid = false;
+        } else {
+            errorPassword.classList.add('hidden');
+            password.classList.remove('border-red-500');
+        }
+        
+        if (!isValid) {
+            e.preventDefault();
+            const firstError = form.querySelector('.border-red-500');
+            if (firstError) {
+                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                firstError.focus();
+            }
+        }
+    });
+    
+    // Netejar errors quan l'usuari escriu
+    ['username', 'email', 'password'].forEach(fieldName => {
+        const field = document.getElementById(fieldName);
+        const errorEl = document.getElementById(`error-${fieldName}`);
+        field.addEventListener('input', function() {
+            errorEl.classList.add('hidden');
+            field.classList.remove('border-red-500');
+        });
+    });
+});
+</script>
 
 <?php require_once VIEWS_PATH . '/admin/admin-footer.php'; ?>
