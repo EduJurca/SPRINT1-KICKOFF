@@ -16,7 +16,43 @@ class AdminIncidentController {
         AuthController::requireAuth();
         Permissions::authorize('incidents.view_all');
 
-        $incidents = $this->incidentModel->getAllIncidents();
+        // Pagination
+        $itemsPerPage = 10;
+        $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+        $offset = ($page - 1) * $itemsPerPage;
+
+        // Search
+        $search = $_GET['search'] ?? '';
+
+        // Advanced filters
+        $filters = [];
+        if (isset($_GET['type']) && $_GET['type'] !== '') {
+            $filters['type'] = $_GET['type'];
+        }
+        if (isset($_GET['assignee']) && $_GET['assignee'] !== '') {
+            $filters['assignee'] = $_GET['assignee'];
+        }
+        if (isset($_GET['status']) && $_GET['status'] !== '') {
+            $filters['status'] = $_GET['status'];
+        }
+        if (isset($_GET['created_from']) && $_GET['created_from'] !== '') {
+            $filters['created_from'] = $_GET['created_from'];
+        }
+        if (isset($_GET['created_to']) && $_GET['created_to'] !== '') {
+            $filters['created_to'] = $_GET['created_to'];
+        }
+
+        // Get incidents with filters and pagination
+        $incidents = $this->incidentModel->getAllIncidents($itemsPerPage, $offset, $search, $filters);
+        $totalIncidents = $this->incidentModel->countIncidents($search, $filters);
+        $totalPages = ceil($totalIncidents / $itemsPerPage);
+
+        // Get all users for assignee filter
+        $userModel = new User();
+        $allUsers = $userModel->getUsersByRole(1); // admins
+        $workers = $userModel->getUsersByRole(2); // workers
+        $allUsers = array_merge($allUsers, $workers);
+
         require_once VIEWS_PATH . '/admin/incidents/index.php';
     }
 

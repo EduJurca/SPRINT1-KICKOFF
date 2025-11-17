@@ -69,7 +69,7 @@ class Vehicle {
             return null;
         }
         
-        $vehicle = $result->fetch_assoc();
+        $vehicle = $result->fetch_assoc(); //Todo:
         
         // Formatear ubicació
         if (isset($vehicle['latitude']) && isset($vehicle['longitude'])) {
@@ -249,11 +249,8 @@ class Vehicle {
         $query .= " ORDER BY v.id DESC";
         
         // Paginación
-        if ($limit !== null) {
-            $query .= " LIMIT ? OFFSET ?";
-            $params[] = (int)$limit;
-            $params[] = (int)$offset;
-            $types .= 'ii';
+        if ($limit !== null && $offset !== null) {
+            $query .= " LIMIT " . (int)$limit . " OFFSET " . (int)$offset;
         }
         
         $stmt = $this->db->prepare($query);

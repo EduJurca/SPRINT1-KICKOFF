@@ -11,14 +11,14 @@ class AdminVehicleController {
     private $vehicleModel;
     
     public function __construct() {
-        // TODO: Verificar que el usuario es admin (implementar cuando esté listo el sistema de usuarios)
+        // Verificar que el usuario es admin (implementar cuando esté listo el sistema de usuarios)
         // AuthController::requireAdmin();
         
         $this->vehicleModel = new Vehicle();
     }
     
     /**
-     * 📋 INDEX - Listar todos los vehículos
+     * INDEX - Listar todos los vehículos
      * Ruta: GET /admin/vehicles
      */
     public function index() {
@@ -29,15 +29,15 @@ class AdminVehicleController {
             $offset = ($page - 1) * $perPage;
             
             // Búsqueda global
-            $search = $_GET['search'] ?? '';
+            $search = trim($_GET['search'] ?? '');
             
             // Filtros avanzados
             $filters = [];
-            if (isset($_GET['brand']) && $_GET['brand'] !== '') {
-                $filters['brand'] = $_GET['brand'];
+            if (isset($_GET['brand']) && trim($_GET['brand']) !== '') {
+                $filters['brand'] = trim($_GET['brand']);
             }
-            if (isset($_GET['model']) && $_GET['model'] !== '') {
-                $filters['model'] = $_GET['model'];
+            if (isset($_GET['model']) && trim($_GET['model']) !== '') {
+                $filters['model'] = trim($_GET['model']);
             }
             if (isset($_GET['status']) && $_GET['status'] !== '') {
                 $filters['status'] = $_GET['status'];
@@ -46,13 +46,23 @@ class AdminVehicleController {
                 $filters['is_accessible'] = $_GET['is_accessible'];
             }
             if (isset($_GET['min_battery']) && $_GET['min_battery'] !== '') {
-                $filters['min_battery'] = $_GET['min_battery'];
+                $filters['min_battery'] = (int)$_GET['min_battery'];
             }
             
             // Obtener vehículos con paginación
             $vehicles = $this->vehicleModel->getAllVehicles($perPage, $offset, $search, $filters);
             $totalVehicles = $this->vehicleModel->countVehicles($search, $filters);
-            $totalPages = ceil($totalVehicles / $perPage);
+            $totalPages = max(1, ceil($totalVehicles / $perPage));
+            
+            // Asegurar que la página actual no exceda el total
+            if ($page > $totalPages && $totalPages > 0) {
+                $page = $totalPages;
+                // Redirigir a la última página válida
+                $queryParams = $_GET;
+                $queryParams['page'] = $totalPages;
+                $queryString = http_build_query($queryParams);
+                return Router::redirect('/admin/vehicles?' . $queryString);
+            }
             
             // Renderizar vista
             Router::view('admin.vehicles.index', [
@@ -81,7 +91,7 @@ class AdminVehicleController {
     }
     
     /**
-     * 👁️ SHOW - Ver detalle de un vehículo
+     * SHOW - Ver detalle de un vehículo
      * Ruta: GET /admin/vehicles/{id}
      */
     public function show($id) {
@@ -113,7 +123,7 @@ class AdminVehicleController {
     }
     
     /**
-     * 💾 STORE - Guardar nuevo vehículo
+     * STORE - Guardar nuevo vehículo
      * Ruta: POST /admin/vehicles
      */
     public function store() {
@@ -162,12 +172,12 @@ class AdminVehicleController {
     }
     
     /**
-     * ✏️ EDIT - Mostrar formulario de editar
+     * EDIT - Mostrar formulario de editar
      * Ruta: GET /admin/vehicles/{id}/edit
      */
     public function edit($id) {
         try {
-            $vehicle = $this->vehicleModel->getVehicleById($id);
+            $vehicle = $this->vehicleModel->getVehicleById($id); //crida al model
             
             if (!$vehicle) {
                 $_SESSION['error'] = 'Vehículo no encontrado';
@@ -186,7 +196,7 @@ class AdminVehicleController {
     }
     
     /**
-     * 🔄 UPDATE - Actualizar vehículo
+     * UPDATE - Actualizar vehículo
      * Ruta: PUT /admin/vehicles/{id}
      */
     public function update($id) {
@@ -233,7 +243,7 @@ class AdminVehicleController {
     }
     
     /**
-     * 🗑️ DESTROY - Eliminar vehículo
+     * DESTROY - Eliminar vehículo
      * Ruta: DELETE /admin/vehicles/{id}
      */
     public function destroy($id) {

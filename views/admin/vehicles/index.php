@@ -296,7 +296,12 @@ unset($_SESSION['success'], $_SESSION['error']);
                 <div class="bg-gray-200 px-6 py-4 border-t border-gray-200">
                     <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
                         <p class="text-sm font-medium text-gray-700">
-                            Mostrando <?= count($vehicles) ?> de <?= $totalVehicles ?> vehículos
+                            <?php
+                            $showing = count($vehicles);
+                            $startItem = (($currentPage - 1) * $perPage) + 1;
+                            $endItem = min($startItem + $showing - 1, $totalVehicles);
+                            ?>
+                            Mostrando <?= $startItem ?> - <?= $endItem ?> de <?= $totalVehicles ?> vehículos
                         </p>
                         
                         <!-- Paginación dinámica -->
@@ -309,8 +314,15 @@ unset($_SESSION['success'], $_SESSION['error']);
                         if (!empty($filters['status'])) $urlParams[] = 'status=' . urlencode($filters['status']);
                         if (isset($filters['is_accessible']) && $filters['is_accessible'] !== '') $urlParams[] = 'is_accessible=' . urlencode($filters['is_accessible']);
                         if (!empty($filters['min_battery'])) $urlParams[] = 'min_battery=' . urlencode($filters['min_battery']);
-                        $baseUrl = '/admin/vehicles?' . implode('&', $urlParams);
-                        $separator = empty($urlParams) ? '?' : '&';
+                        
+                        // Construir la URL base sin el parámetro page
+                        $baseUrl = '/admin/vehicles';
+                        if (!empty($urlParams)) {
+                            $baseUrl .= '?' . implode('&', $urlParams);
+                            $separator = '&';
+                        } else {
+                            $separator = '?';
+                        }
                         
                         // Solo mostrar paginación si hay más de 1 página
                         if ($totalPages > 1):

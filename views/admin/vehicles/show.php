@@ -145,10 +145,6 @@ unset($_SESSION['success']);
                 </h2>
                 <dl class="space-y-3">
                     <div class="flex justify-between py-2 border-b border-gray-100">
-                        <dt class="text-sm font-medium text-gray-500">ID</dt>
-                        <dd class="text-sm text-gray-900 font-semibold">#<?= $vehicle['id'] ?></dd>
-                    </div>
-                    <div class="flex justify-between py-2 border-b border-gray-100">
                         <dt class="text-sm font-medium text-gray-500"><?= __('admin.vehicles.labels.plate') ?></dt>
                         <dd class="text-sm text-gray-900 font-semibold"><?= htmlspecialchars($vehicle['license_plate'] ?? $vehicle['plate'] ?? 'N/A') ?></dd>
                     </div>
@@ -266,12 +262,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Agregar marcador del vehículo
     const marker = L.marker([lat, lng], { icon: vehicleIcon }).addTo(map);
     
-    // Popup con información del vehículo
+    // Popup con información del vehículo (sin emoticonos)
     marker.bindPopup(`
         <div style="text-align: center; padding: 5px;">
             <strong style="font-size: 1.1em;"><?= htmlspecialchars($vehicle['brand']) ?> <?= htmlspecialchars($vehicle['model']) ?></strong><br>
-            <span style="font-size: 0.9em; color: #666;">📋 <?= htmlspecialchars($vehicle['license_plate'] ?? $vehicle['plate'] ?? '') ?></span><br>
-            <span style="font-size: 0.85em; color: #888;">📍 ${lat.toFixed(6)}, ${lng.toFixed(6)}</span>
+            <span style="font-size: 0.9em; color: #666;"><?= htmlspecialchars($vehicle['license_plate'] ?? $vehicle['plate'] ?? '') ?></span><br>
+            <span style="font-size: 0.85em; color: #888;">${lat.toFixed(6)}, ${lng.toFixed(6)}</span>
         </div>
     `).openPopup();
 });

@@ -27,12 +27,67 @@ class ChargingStationController {
         AuthController::requireAuth();
         Permissions::authorize('charging_stations.view_all');
 
-        $stations = $this->stationModel->getAllStations();
-        
-        Router::view('admin.charging.index', [
-            'stations' => $stations,
-            'totalStations' => count($stations)
-        ]);
+        try {
+            // Paginación
+            $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+            $perPage = 10;
+            $offset = ($page - 1) * $perPage;
+            
+            // Búsqueda global
+            $search = trim($_GET['search'] ?? '');
+            
+            // Filtros avanzados
+            $filters = [];
+            if (isset($_GET['city']) && trim($_GET['city']) !== '') {
+                $filters['city'] = trim($_GET['city']);
+            }
+            if (isset($_GET['status']) && $_GET['status'] !== '') {
+                $filters['status'] = $_GET['status'];
+            }
+            if (isset($_GET['availability']) && $_GET['availability'] !== '') {
+                $filters['availability'] = $_GET['availability'];
+            }
+            if (isset($_GET['min_power']) && $_GET['min_power'] !== '') {
+                $filters['min_power'] = (int)$_GET['min_power'];
+            }
+            
+            // Obtener estaciones con paginación
+            $stations = $this->stationModel->getAllStations($perPage, $offset, $search, $filters);
+            $totalStations = $this->stationModel->countStations($search, $filters);
+            $totalPages = max(1, ceil($totalStations / $perPage));
+            
+            // Asegurar que la página actual no exceda el total
+            if ($page > $totalPages && $totalPages > 0) {
+                $page = $totalPages;
+                $queryParams = $_GET;
+                $queryParams['page'] = $totalPages;
+                $queryString = http_build_query($queryParams);
+                return Router::redirect('/admin/charging-stations?' . $queryString);
+            }
+            
+            Router::view('admin.charging.index', [
+                'stations' => $stations,
+                'search' => $search,
+                'filters' => $filters,
+                'page' => $page,
+                'totalPages' => $totalPages,
+                'totalStations' => $totalStations,
+                'perPage' => $perPage
+            ]);
+            
+        } catch (Exception $e) {
+            error_log('Error in charging station index: ' . $e->getMessage());
+            Router::view('admin.charging.index', [
+                'stations' => [],
+                'search' => '',
+                'filters' => [],
+                'currentPage' => 1,
+                'totalPages' => 1,
+                'totalStations' => 0,
+                'perPage' => 10,
+                'error' => 'Error al cargar las estaciones de carga'
+            ]);
+        }
     }
     
     /**
