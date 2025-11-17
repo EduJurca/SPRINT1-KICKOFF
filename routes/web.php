@@ -105,8 +105,7 @@ Router::get('/premium', function() {
 // ==========================================
 
 // Localitzar vehicle
-Router::get('/localitzar-vehicle', ['VehicleController', 'showLocalitzar']);
-
+    
 Router::get('/vehicles/search', ['VehicleController', 'search']);
 
 // Administrar vehicle

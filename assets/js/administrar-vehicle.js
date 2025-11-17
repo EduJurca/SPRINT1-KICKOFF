@@ -654,7 +654,7 @@ const VehicleControl = {
                     
                     // Redirigir a localitzar vehículos
                     setTimeout(() => {
-                        window.location.href = '/localitzar-vehicle';
+                        window.location.href = '/dashboard';
                     }, 2000);
                 } else {
                     showToast('Error al finalitzar la reserva: ' + result.message, 'error');
