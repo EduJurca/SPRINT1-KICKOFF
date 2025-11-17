@@ -140,6 +140,52 @@
                 <div class="bg-gray-50 rounded-lg p-4 mb-5" id="vehicle-info">
                     <?php echo __('vehicle.loading'); ?>
                 </div>
+
+                <!-- Selector de tiempo de alquiler -->
+                <div class="mb-5">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2"><?php echo __('vehicle.rental_duration'); ?></label>
+                    <select id="rental-duration" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all">
+                        <option value="30"><?php echo __('vehicle.rental_30min'); ?></option>
+                        <option value="60"><?php echo __('vehicle.rental_1h'); ?></option>
+                        <option value="90"><?php echo __('vehicle.rental_1h30'); ?></option>
+                        <option value="120"><?php echo __('vehicle.rental_2h'); ?></option>
+                        <option value="180"><?php echo __('vehicle.rental_3h'); ?></option>
+                        <option value="240"><?php echo __('vehicle.rental_4h'); ?></option>
+                        <option value="360"><?php echo __('vehicle.rental_6h'); ?></option>
+                        <option value="480"><?php echo __('vehicle.rental_8h'); ?></option>
+                        <option value="720"><?php echo __('vehicle.rental_12h'); ?></option>
+                        <option value="1440"><?php echo __('vehicle.rental_24h'); ?></option>
+                    </select>
+                </div>
+
+                <!-- Resumen de costos -->
+                <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-4 mb-5">
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-700"><?php echo __('vehicle.price_per_minute'); ?></span>
+                            <span class="font-semibold text-gray-900" id="price-per-minute">€0.00/min</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-700"><?php echo __('vehicle.selected_time'); ?></span>
+                            <span class="font-semibold text-gray-900" id="selected-duration">30 minuts</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-700"><?php echo __('vehicle.time_cost'); ?></span>
+                            <span class="font-semibold text-gray-900" id="time-cost">€0.00</span>
+                        </div>
+                        <div class="border-t border-blue-300 pt-2 mt-2"></div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-700"><?php echo __('vehicle.unlock_fee'); ?></span>
+                            <span class="font-semibold text-gray-900">€0.50</span>
+                        </div>
+                        <div class="border-t-2 border-blue-400 pt-2 mt-2"></div>
+                        <div class="flex justify-between">
+                            <span class="font-bold text-gray-900"><?php echo __('vehicle.total'); ?></span>
+                            <span class="font-black text-blue-600 text-xl" id="total-cost">€0.50</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 mb-5 flex items-start gap-3">
                     <div class="text-2xl flex-shrink-0">⚠️</div>
                     <div class="flex-1">
@@ -147,11 +193,11 @@
                             <?php echo __('vehicle.unlock_cost'); ?>
                         </div>
                         <div class="text-orange-700 text-sm leading-relaxed">
-                            <?php echo __('vehicle.unlock_fee_warning'); ?>
+                            <?php echo __('vehicle.payment_info'); ?>
                         </div>
                     </div>
                 </div>
-                <div class="text-3xl font-black text-blue-600 text-center my-5">0.50€</div>
+
                 <p class="text-center text-gray-500 text-sm mt-4">
                     <?php echo __('vehicle.terms_acceptance'); ?>
                 </p>

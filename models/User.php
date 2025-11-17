@@ -28,8 +28,8 @@ class User {
 
     public function create($data) {
         $stmt = $this->db->prepare("INSERT INTO users 
-            (username, fullname, nationality_id, phone, birth_date, sex, dni, address, email, password, iban, driver_license_photo, minute_balance, role_id, lang, created_at) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            (username, fullname, nationality_id, phone, birth_date, sex, dni, address, email, password, iban, driver_license_photo, role_id, lang, created_at) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         $username = $data['username'] ?? null;
         $fullname = $data['fullname'] ?? null;
@@ -42,14 +42,13 @@ class User {
         $iban = $data['iban'] ?? null;
         $email = $data['email'] ?? null;
         $driver_license_photo = $data['driver_license_photo'] ?? null;
-        $minute_balance = 0;
         $role_id = isset($data['role_id']) ? (int)$data['role_id'] : 3;
         $lang = $data['lang'] ?? 'ca';
         $created_at = date('Y-m-d H:i:s');
         $password_hash = password_hash($data['password'], PASSWORD_DEFAULT);
 
         $stmt->bind_param(
-            "ssisssssssssiiss",
+            "ssisssssssssiss",
             $username,
             $fullname,
             $nationality_id,
@@ -62,7 +61,6 @@ class User {
             $password_hash,
             $iban,
             $driver_license_photo,
-            $minute_balance,
             $role_id,
             $lang,
             $created_at
@@ -118,7 +116,7 @@ class User {
     }
 
     public function getUserInfo($user_id) {
-        $stmt = $this->db->prepare("SELECT username, email, minute_balance, role_id FROM users WHERE id = ?");
+        $stmt = $this->db->prepare("SELECT username, email, role_id FROM users WHERE id = ?");
         $stmt->bind_param('i', $user_id);
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
@@ -129,20 +127,6 @@ class User {
         $stmt->bind_param("i", $id);
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
-    }
-    
-    public function addMinutes($user_id, $minutes) {
-        $stmt = $this->db->prepare("UPDATE users SET minute_balance = minute_balance + ? WHERE id = ?");
-        $stmt->bind_param("ii", $minutes, $user_id);
-        return $stmt->execute();
-    }
-    
-    public function getMinuteBalance($user_id) {
-        $stmt = $this->db->prepare("SELECT minute_balance FROM users WHERE id = ?");
-        $stmt->bind_param("i", $user_id);
-        $stmt->execute();
-        $result = $stmt->get_result()->fetch_assoc();
-        return $result ? (int)$result['minute_balance'] : null;
     }
     
     public function getAll($limit = 20, $offset = 0, $search = '') {

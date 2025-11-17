@@ -56,7 +56,6 @@ CREATE TABLE users (
     iban VARCHAR(34),
     driver_license_photo VARCHAR(255),
     nationality_id INT,
-    minute_balance INT DEFAULT 0,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (nationality_id) REFERENCES nationalities(id) ON DELETE SET NULL,
     FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE SET NULL,
@@ -252,18 +251,18 @@ INSERT INTO vehicles (plate, brand, model, year, status, battery_level, latitude
 -- ==========================================
 -- USUARIS DE PROVA AMB ROLS
 -- ==========================================
-INSERT INTO users (username, email, password, fullname, role_id, minute_balance, created_at) VALUES
+INSERT INTO users (username, email, password, fullname, role_id, created_at) VALUES
 -- SuperAdmin (password: admin123)
-('admin', 'admin@sims.cat', '$2y$10$FDHmfPCgzisG0KHG2Q9K8eoAodytkui9A0nMmtDY4W6sIbbN2FfA.', 'Administrator', 1, 1000, NOW()),
+('admin', 'admin@sims.cat', '$2y$10$FDHmfPCgzisG0KHG2Q9K8eoAodytkui9A0nMmtDY4W6sIbbN2FfA.', 'Administrator', 1, NOW()),
 
 -- Treballadors (password: treballador123)
-('treballador1', 'treballador1@sims.cat', '$2y$10$uvFEE/dr3fKA.Do/CC7f3uv9IWw71o2zlSX40vCNu05rcx8wgqFU6', 'Joan Pérez', 2, 500, NOW()),
-('treballador2', 'treballador2@sims.cat', '$2y$10$uvFEE/dr3fKA.Do/CC7f3uv9IWw71o2zlSX40vCNu05rcx8wgqFU6', 'Maria García', 2, 500, NOW()),
+('treballador1', 'treballador1@sims.cat', '$2y$10$uvFEE/dr3fKA.Do/CC7f3uv9IWw71o2zlSX40vCNu05rcx8wgqFU6', 'Joan Pérez', 2, NOW()),
+('treballador2', 'treballador2@sims.cat', '$2y$10$uvFEE/dr3fKA.Do/CC7f3uv9IWw71o2zlSX40vCNu05rcx8wgqFU6', 'Maria García', 2, NOW()),
 
 -- Clients (password: client123)
-('client1', 'client1@example.com', '$2y$10$LMsChqzpt0EcZu.VQWdPLu6ZEu8DaEJfHK3/h8zzAWrNbJIfKgPtW', 'Pau Martínez', 3, 100, NOW()),
-('client2', 'client2@example.com', '$2y$10$LMsChqzpt0EcZu.VQWdPLu6ZEu8DaEJfHK3/h8zzAWrNbJIfKgPtW', 'Anna López', 3, 150, NOW()),
-('client3', 'client3@example.com', '$2y$10$LMsChqzpt0EcZu.VQWdPLu6ZEu8DaEJfHK3/h8zzAWrNbJIfKgPtW', 'Marc Vila', 3, 75, NOW());
+('client1', 'client1@example.com', '$2y$10$LMsChqzpt0EcZu.VQWdPLu6ZEu8DaEJfHK3/h8zzAWrNbJIfKgPtW', 'Pau Martínez', 3, NOW()),
+('client2', 'client2@example.com', '$2y$10$LMsChqzpt0EcZu.VQWdPLu6ZEu8DaEJfHK3/h8zzAWrNbJIfKgPtW', 'Anna López', 3, NOW()),
+('client3', 'client3@example.com', '$2y$10$LMsChqzpt0EcZu.VQWdPLu6ZEu8DaEJfHK3/h8zzAWrNbJIfKgPtW', 'Marc Vila', 3, NOW());
 
 -- ==========================================
 -- DADES DE PROVA: HISTORIAL DE VIATGES
@@ -342,4 +341,18 @@ INSERT INTO charging_stations (name, address, city, postal_code, latitude, longi
 ('Hospital Comarcal Station', 'Avinguda de la Ràpita, 15', 'Amposta', '43870', 40.710000, 0.585000, 4, 2, 50, 'active'),
 ('Sant Carles Station', 'Carrer Major, 10', 'Sant Carles de la Rapita', '43540', 40.616667, 0.583333, 4, 4, 50, 'active');
 
+-- Insert sample completed bookings (mes actual: Noviembre 2025)
+INSERT INTO bookings (user_id, vehicle_id, start_datetime, end_datetime, status, total_minutes, total_cost, created_at) VALUES
+-- Cliente 1: 3 reservas completadas
+(4, 1, '2025-11-01 10:00:00', '2025-11-01 10:30:00', 'completed', 30, 12.50, '2025-11-01 10:00:00'),
+(4, 2, '2025-11-05 14:30:00', '2025-11-05 15:30:00', 'completed', 60, 21.50, '2025-11-05 14:30:00'),
+(4, 3, '2025-11-10 09:00:00', '2025-11-10 11:00:00', 'completed', 120, 42.50, '2025-11-10 09:00:00'),
+-- Cliente 2: 2 reservas completadas
+(5, 4, '2025-11-03 08:15:00', '2025-11-03 09:15:00', 'completed', 60, 27.50, '2025-11-03 08:15:00'),
+(5, 5, '2025-11-08 16:00:00', '2025-11-08 18:00:00', 'completed', 120, 46.10, '2025-11-08 16:00:00'),
+-- Cliente 3: 2 reservas completadas
+(6, 1, '2025-11-07 11:30:00', '2025-11-07 12:00:00', 'completed', 30, 12.50, '2025-11-07 11:30:00'),
+(6, 2, '2025-11-12 13:00:00', '2025-11-12 15:00:00', 'completed', 120, 42.50, '2025-11-12 13:00:00');
+
 SELECT 'Charging stations table created successfully!' AS message;
+SELECT 'Sample bookings inserted successfully!' AS message;

@@ -38,10 +38,8 @@ const Vehicles = {
             }
             
             // Return mock data for development
-            console.log('⚠️ Using mock vehicles data');
             return this.getMockVehicles();
         } catch (error) {
-            console.error('Error fetching vehicles:', error);
             return this.getMockVehicles();
         }
     },
@@ -63,7 +61,6 @@ const Vehicles = {
                 const contentType = response.headers.get('content-type');
                 if (contentType && contentType.includes('application/json')) {
                     const data = await response.json();
-                    console.log('🔍 Nearby vehicles API response:', data);
                     if (data.success && data.vehicles) {
                         return data.vehicles;
                     }
@@ -72,7 +69,6 @@ const Vehicles = {
             
             return [];
         } catch (error) {
-            console.error('Error fetching nearby vehicles:', error);
             return [];
         }
     },
@@ -149,7 +145,6 @@ const Vehicles = {
             const vehicles = this.getMockVehicles();
             return vehicles.find(v => v.id === parseInt(vehicleId));
         } catch (error) {
-            console.error('Error fetching vehicle details:', error);
             return null;
         }
     },
@@ -157,10 +152,8 @@ const Vehicles = {
     /**
      * Claim a vehicle
      */
-    async claimVehicle(vehicleId) {
+    async claimVehicle(vehicleId, duration = 30) {
         try {
-            console.log('🚗 Reclamando vehículo ID:', vehicleId);
-            
             const response = await fetch('/api/vehicles/claim', {
                 method: 'POST',
                 headers: {
@@ -168,27 +161,19 @@ const Vehicles = {
                 },
                 credentials: 'include',
                 body: JSON.stringify({
-                    vehicle_id: vehicleId
+                    vehicle_id: vehicleId,
+                    duration: duration
                 })
             });
-            
-            console.log('📡 Response status:', response.status, response.statusText);
             
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
             
             const data = await response.json();
-            console.log('✅ Respuesta completa de claim:', data);
-            console.log('📦 data.success:', data.success);
-            console.log('📦 data.vehicle:', data.vehicle);
-            console.log('📦 data.booking:', data.booking);
-            console.log('📦 data.booking_id:', data.booking_id);
-            console.log('📦 Todas las keys:', Object.keys(data));
-            
+           
             // Si la API devuelve success pero no vehicle, intentar construirlo desde booking
             if (data.success && !data.vehicle && data.booking) {
-                console.log('⚠️ API no devolvió vehicle, usando datos de booking...');
                 data.vehicle = {
                     id: data.booking.vehicle_id,
                     license_plate: data.booking.license_plate,
@@ -202,7 +187,6 @@ const Vehicles = {
                     booking_start: data.booking.start_datetime,
                     price_per_minute: data.booking.price_per_minute || '0.38'
                 };
-                console.log('✅ Vehicle reconstruido:', data.vehicle);
             }
             
             if (data.success && data.vehicle) {
@@ -210,70 +194,46 @@ const Vehicles = {
                 
                 // Asegurar que tiene todos los campos necesarios
                 if (!data.vehicle.id || !data.vehicle.license_plate) {
-                    console.error('❌ Vehicle data incompleto:', data.vehicle);
                     return {
                         success: false,
                         message: 'Vehicle data incomplete'
                     };
                 }
                 
-                console.log('💾 Vehicle data válido, guardando en localStorage...');
-                
                 // Guardar en localStorage
                 try {
                     const vehicleJson = JSON.stringify(data.vehicle);
-                    console.log('💾 JSON a guardar:', vehicleJson);
-                    console.log('💾 Longitud del JSON:', vehicleJson.length);
-                    
+                 
                     localStorage.setItem('currentVehicle', vehicleJson);
-                    console.log('✅ localStorage.setItem ejecutado');
                     
                     // Verificar que se guardó correctamente
                     const saved = localStorage.getItem('currentVehicle');
-                    console.log('🔍 Verificación - localStorage contenido:', saved);
-                    console.log('🔍 Tipo de dato:', typeof saved);
-                    console.log('🔍 Es null?', saved === null);
-                    console.log('🔍 Es undefined string?', saved === 'undefined');
                     
                     if (!saved || saved === 'undefined' || saved === 'null') {
-                        console.error('❌ FALLO: localStorage no guardó correctamente');
-                        console.error('❌ Valor guardado:', saved);
                         return {
                             success: false,
                             message: 'Failed to save vehicle to localStorage'
                         };
                     }
                     
-                    console.log('✅ Vehicle guardado correctamente en localStorage');
-                    
                 } catch (e) {
-                    console.error('❌ Excepción al guardar en localStorage:', e);
                     return {
                         success: false,
                         message: 'localStorage error: ' + e.message
                     };
                 }
                 
-                console.log('✅ Vehículo reclamado exitosamente, redirigiendo en 1 segundo...');
-                
                 // Redirigir a la página de administrar vehículo
                 setTimeout(() => {
-                    console.log('🔄 Redirigiendo a administrar-vehicle...');
                     window.location.href = '/administrar-vehicle';
                 }, 1000);
                 
                 return { success: true, vehicle: data.vehicle };
             } else {
                 const errorMsg = data.message || 'Error en reclamar el vehicle';
-                console.error('❌ Error en claim:', errorMsg);
-                console.error('❌ data.success:', data.success);
-                console.error('❌ data.vehicle:', data.vehicle);
-                
                 return { success: false, message: errorMsg };
             }
         } catch (error) {
-            console.error('❌ Error claiming vehicle:', error);
-            
             return { success: false, error: error.message };
         }
     },
@@ -283,8 +243,6 @@ const Vehicles = {
      */
     async releaseVehicle() {
         try {
-            console.log("🔓 Liberando vehículo...");
-            
             const response = await fetch('/api/vehicles/release', {
                 method: 'POST',
                 headers: {
@@ -299,19 +257,15 @@ const Vehicles = {
             }
             
             const data = await response.json();
-            console.log("✅ Respuesta de release:", data);
             
             if (data.success) {
                 this.currentVehicle = null;
                 localStorage.removeItem('currentVehicle');
-                console.log('✅ Vehículo liberado correctamente');
                 return { success: true, message: data.message };
             } else {
-                console.error('❌ Error al liberar:', data.message);
                 return { success: false, message: data.message };
             }
         } catch (error) {
-            console.error('❌ Excepción al liberar vehículo:', error);
             return { success: false, message: error.message };
         }
     },
@@ -328,7 +282,6 @@ const Vehicles = {
                     this.currentVehicle = JSON.parse(stored);
                 }
             } catch (e) {
-                console.warn('Could not load from localStorage:', e);
             }
         }
         return this.currentVehicle;
@@ -358,7 +311,6 @@ const Vehicles = {
                 return { success: false };
             }
         } catch (error) {
-            console.error('Error activating horn:', error);
             // Removed Utils.showToast
             return { success: false };
         }
@@ -388,7 +340,6 @@ const Vehicles = {
                 return { success: false };
             }
         } catch (error) {
-            console.error('Error activating lights:', error);
             // Removed Utils.showToast
             return { success: false };
         }
@@ -399,7 +350,6 @@ const Vehicles = {
      */
     async startEngine() {
         try {
-            console.log("⏳ Loading...");
             
             const response = await fetch('/api/vehicles/start', {
                 method: 'POST',
@@ -411,7 +361,6 @@ const Vehicles = {
             });
             
             const data = await response.json();
-            console.log("✅ Loaded");
             
             if (data.success) {
                 // Removed Utils.showToast
@@ -421,8 +370,6 @@ const Vehicles = {
                 return { success: false };
             }
         } catch (error) {
-            console.log("✅ Loaded");
-            console.error('Error starting engine:', error);
             // Removed Utils.showToast
             return { success: false };
         }
@@ -433,8 +380,6 @@ const Vehicles = {
      */
     async stopEngine() {
         try {
-            console.log("⏳ Loading...");
-            
             const response = await fetch('/api/vehicles/stop', {
                 method: 'POST',
                 headers: {
@@ -445,7 +390,6 @@ const Vehicles = {
             });
             
             const data = await response.json();
-            console.log("✅ Loaded");
             
             if (data.success) {
                 // Removed Utils.showToast
@@ -455,8 +399,6 @@ const Vehicles = {
                 return { success: false };
             }
         } catch (error) {
-            console.log("✅ Loaded");
-            console.error('Error stopping engine:', error);
             // Removed Utils.showToast
             return { success: false };
         }
@@ -487,7 +429,6 @@ const Vehicles = {
                 return { success: false };
             }
         } catch (error) {
-            console.error('Error toggling doors:', error);
             // Removed Utils.showToast
             return { success: false };
         }

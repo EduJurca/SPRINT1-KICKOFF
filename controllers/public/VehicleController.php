@@ -119,6 +119,8 @@ class VehicleController {
         
         error_log("No active bookings for user");
         
+        $duration = isset($data['duration']) ? (int)$data['duration'] : 30;
+        
         // Actualitzar estat del vehicle
         error_log("Updating vehicle status to 'in_use'...");
         if (!$this->vehicleModel->updateStatus($vehicleId, 'in_use')) {
@@ -131,10 +133,10 @@ class VehicleController {
         
         error_log("Vehicle status updated successfully");
         
-        // Crear booking
+        // Crear booking amb durada i càlcul de preu
         error_log("Creating booking...");
         $unlockFee = 0.50;
-        $bookingId = $this->bookingModel->createBooking($userId, $vehicleId, $unlockFee);
+        $bookingId = $this->bookingModel->createBooking($userId, $vehicleId, $unlockFee, $duration);
         
         if (!$bookingId) {
             error_log("ERROR: Failed to create booking");
@@ -270,79 +272,16 @@ class VehicleController {
             ]
         ], 200);
     }
-    
  
     public function search() {
         return $this->getAvailableVehicles();
     }
-    
-
 
     public function bookVehicle() {
         return $this->claimVehicle();
     }
     
 
-    public function purchaseTime() {
-   
-        $userId = AuthController::requireAuth();
-        
-        $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
-        
-        if (strpos($contentType, 'application/json') !== false) {
-            $data = json_decode(file_get_contents('php://input'), true);
-        } else {
-            $data = $_POST;
-        }
-        
-        if (!isset($data['minutes'])) {
-            if (strpos($contentType, 'application/json') === false) {
-                $_SESSION['error'] = 'Els minuts són obligatoris';
-                return Router::redirect('/report-incident');
-            }
-            
-            return Router::json([
-                'success' => false,
-                'message' => 'Minutes are required'
-            ], 400);
-        }
-        
-        $minutes = (int)$data['minutes'];
-        $price = (float)($data['price'] ?? ($minutes * 0.35));
-        
-        require_once MODELS_PATH . '/User.php';
-        $db = Database::getMariaDBConnection();
-        $userModel = new User($db);
-        
-        if (!$userModel->addMinutes($userId, $minutes)) {
-            error_log("ERROR: Failed to add minutes for user $userId");
-            
-            if (strpos($contentType, 'application/json') === false) {
-                $_SESSION['error'] = 'Error al processar la compra. Intenta-ho de nou.';
-                return Router::redirect('/report-incident');
-            }
-            
-            return Router::json([
-                'success' => false,
-                'message' => 'Failed to update minute balance'
-            ], 500);
-        }
-        
-        error_log("SUCCESS: User $userId purchased $minutes minutes for €$price");
-        
-        if (strpos($contentType, 'application/json') === false) {
-            $_SESSION['success'] = "Compra realitzada! Has rebut $minutes minuts per €" . number_format($price, 2);
-            return Router::redirect('/dashboard');
-        }
-        
-        return Router::json([
-            'success' => true,
-            'message' => 'Time purchased successfully',
-            'minutes' => $minutes,
-            'cost' => $price
-        ], 200);
-    }
-    
     /**
      * Activar botzina del vehicle
      */

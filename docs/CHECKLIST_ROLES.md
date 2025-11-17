@@ -133,9 +133,6 @@ UPDATE users SET role_id = 5, is_admin = 1 WHERE username = 'admin';
 -- Manager
 UPDATE users SET role_id = 4 WHERE username = 'manager';
 
--- Premium
-UPDATE users SET role_id = 3, minute_balance = 999999 WHERE username = 'premium';
-
 -- User estàndard (ja és el default)
 UPDATE users SET role_id = 2 WHERE username = 'user';
 ```
