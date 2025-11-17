@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ca">
-
+<?php require_once __DIR__ . '/../../locale/Lang.php'; ?>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,18 +28,20 @@
             </div>
         <?php endif; ?>
         
-        <form method="POST" action="/login" autocomplete="off">
+        <form method="POST" action="/login" autocomplete="off" novalidate>
             <div class="mb-4">
                 <label for="username" class="block text-gray-900 font-semibold mb-2">Usuari *</label>
                 <input type="text" id="username" name="username" required
                     class="w-full px-4 py-2 bg-[#F5F5F5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1565C0]"
                     placeholder="Nom d'usuari">
+                <p id="error-username" class="text-red-600 text-sm mt-1 hidden"></p>
             </div>
             <div class="mb-6">
                 <label for="password" class="block text-gray-900 font-semibold mb-2">Contrasenya *</label>
                 <input type="password" id="password" name="password" required
                     class="w-full px-4 py-2 bg-[#F5F5F5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1565C0]"
                     placeholder="••••••••">
+                <p id="error-password" class="text-red-600 text-sm mt-1 hidden"></p>
             </div>
             <p class="text-right mt-2">
                 <a href="/recover-password" class="text-[#1565C0] hover:underline text-sm">He oblidat la
@@ -54,6 +56,60 @@
             No tens compte? <a href="/register" class="text-[#1565C0] hover:underline">Registra't</a>
         </p>
     </div>
+
+    <script>
+        // Validació personalitzada amb missatges sota els camps
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const username = document.getElementById('username');
+            const password = document.getElementById('password');
+            const errorUsername = document.getElementById('error-username');
+            const errorPassword = document.getElementById('error-password');
+            const requiredMsg = '<?php echo addslashes(__('form.validations.required_field')); ?>';
+
+            // Validar formulari al submit
+            form.addEventListener('submit', function(e) {
+                let isValid = true;
+
+                // Validar username
+                if (username.value.trim() === '') {
+                    errorUsername.textContent = requiredMsg;
+                    errorUsername.classList.remove('hidden');
+                    username.classList.add('border-red-500');
+                    isValid = false;
+                } else {
+                    errorUsername.classList.add('hidden');
+                    username.classList.remove('border-red-500');
+                }
+
+                // Validar password
+                if (password.value.trim() === '') {
+                    errorPassword.textContent = requiredMsg;
+                    errorPassword.classList.remove('hidden');
+                    password.classList.add('border-red-500');
+                    isValid = false;
+                } else {
+                    errorPassword.classList.add('hidden');
+                    password.classList.remove('border-red-500');
+                }
+
+                if (!isValid) {
+                    e.preventDefault();
+                }
+            });
+
+            // Netejar errors quan l'usuari escriu
+            username.addEventListener('input', function() {
+                errorUsername.classList.add('hidden');
+                username.classList.remove('border-red-500');
+            });
+
+            password.addEventListener('input', function() {
+                errorPassword.classList.add('hidden');
+                password.classList.remove('border-red-500');
+            });
+        });
+    </script>
 </body>
 
 </html>

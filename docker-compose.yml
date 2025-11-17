@@ -31,6 +31,7 @@ services:
       - DB_PASS=${DB_PASS}
       - DB_NAME=${DB_NAME}
       - APP_ENV=development
+      - GROQ_API_KEY=${GROQ_API_KEY}
     restart: unless-stopped
 
   mariadb:

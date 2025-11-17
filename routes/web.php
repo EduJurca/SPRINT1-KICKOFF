@@ -50,13 +50,46 @@ Router::post('/recover-password', ['AuthController', 'recoverPassword']);
 Router::get('/dashboard', ['DashboardController', 'showGestio']);
 Router::get('/gestio', ['DashboardController', 'showGestio']);
 
-// Resum del projecte
-Router::get('/resum-projecte', function() {
-    Router::view('public.dashboard.resum-projecte');
+// ==========================================
+// 👤 PERFIL D'USUARI
+// ==========================================
+
+// Perfil
+Router::get('/perfil', ['ProfileController', 'showProfile']);
+
+Router::get('/profile', ['ProfileController', 'showProfile']);
+
+// Completar perfil
+Router::get('/completar-perfil', ['ProfileController', 'showCompleteProfile']);
+
+Router::post('/completar-perfil', ['ProfileController', 'completeProfile']);
+
+// Verificar carnet de conduir
+Router::get('/verificar-conduir', function() {
+    Router::view('public.profile.verificar-conduir');
+});
+
+Router::post('/verificar-conduir', ['ProfileController', 'verifyLicense']);
+
+// Historial
+Router::get('/historial', function() {
+    Router::view('public.profile.historial');
+});
+
+// Pagaments
+Router::get('/perfil/pagaments', ['ProfileController', 'showPayments']);
+
+Router::post('/perfil/pagaments/add', ['ProfileController', 'addPaymentMethod']);
+
+Router::post('/perfil/pagaments/delete/{id}', ['ProfileController', 'deletePaymentMethod']);
+
+// Premium
+Router::get('/premium', function() {
+    Router::view('public.profile.premium');
 });
 
 // ==========================================
-//  VEHICLES
+// 🚗 VEHICLES
 // ==========================================
 
 // Localitzar vehicle
@@ -129,7 +162,14 @@ Router::get('/accessibilitat', function() {
 });
 
 // ==========================================
-// 🔧 ADMIN (Panel d'Administració)
+// � CHAT / ASISTENTE IA
+// ==========================================
+
+Router::get('/chat', ['ChatController', 'index']);
+Router::post('/chat/send', ['ChatController', 'send']);
+
+// ==========================================
+// �🔧 ADMIN (si tens zona d'administració)
 // ==========================================
 require_once CONTROLLERS_PATH . '/admin/AdminController.php';
 
