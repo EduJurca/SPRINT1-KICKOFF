@@ -22,22 +22,30 @@
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
 
     <div class="mobile-view md:hidden">
-        <div class="bg-white p-5 rounded-2xl shadow-inner w-full max-w-sm flex flex-col relative mb-20">
+        <div class="bg-gradient-to-b from-gray-50 to-white p-5 rounded-2xl shadow-inner w-full max-w-sm flex flex-col relative mb-20">
             <header class="grid grid-cols-3 items-center mb-6 w-full">
-                <div class="text-left">
-                  <a href="/dashboard" class="text-[#1565C0] font-semibold hover:underline"><?php echo __('admin.back'); ?></a>
-                </div>
+                                <div class="text-left">
+                                    <a href="/dashboard" class="inline-flex items-center gap-2 text-[#1565C0] font-semibold hover:underline py-1 px-2 rounded-lg border border-transparent hover:border-gray-200">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-2.207-9.207a1 1 0 011.414-1.414L12 8.586l-3.793 3.793a1 1 0 01-1.414-1.414L9.172 10H6a1 1 0 110-2h4.172L7.793 8.793z" clip-rule="evenodd" />
+                                        </svg>
+                                        <?php echo __('admin.back'); ?>
+                                    </a>
+                                </div>
                 <h1 class="text-2xl font-bold text-gray-900 text-center"><?php echo __('admin.control_vehicle'); ?></h1>
                 <div class="flex justify-end items-center gap-2">
-                    <button id="release-vehicle-btn-mobile" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-3 rounded-lg text-xs transition-colors" title="Finalitzar Reserva">
-                        <?php echo __('admin.finish'); ?>
-                    </button>
-                    <img src="/assets/images/logo.png" alt="<?php echo __('admin.logo_alt'); ?>" class="h-10 w-10">
+                    <img src="/assets/images/logo.png" alt="<?php echo __('admin.logo_alt'); ?>" class="h-10 w-10 border-2 border-black rounded-full">
                 </div>
             </header>
 
+            <div class="w-full px-2 mt-3">
+                <button id="release-vehicle-btn-mobile" aria-label="Finalitzar Reserva" class="block w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-lg text-sm transition-colors" title="Finalitzar Reserva">
+                    <?php echo __('admin.finish'); ?>
+                </button>
+            </div>
+
             <!-- Parte superior fixa: Estat del Servei y Bateria en fila -->
-            <div class="mb-4 sticky top-0 z-10 bg-white p-2 rounded-lg shadow-sm flex flex-row justify-between items-center gap-2">
+                <div class="mb-4 sticky top-0 z-10 bg-white p-2 rounded-lg shadow-sm flex flex-row justify-between items-center gap-2">
                 <div class="pushable green flex-1">
                     <span class="shadow"></span>
                     <span class="edge"></span>
@@ -80,7 +88,7 @@
                             <span class="front flex-1 flex flex-col items-center justify-center text-base p-2">
                                 <img src="/assets/images/claxon.png" alt="<?php echo __('admin.activate_horn'); ?>" class="h-12 w-12 mb-2">
                                 <?php echo __('admin.activate_horn'); ?>
-                            </span>
+                                </span>
                         </button>
                         <button class="pushable h-32" data-control="lights">
                             <span class="shadow"></span>
@@ -106,29 +114,25 @@
                     <div class="bg-white rounded-lg shadow-md p-4">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="flex items-center space-x-3">
-                                <img src="/assets/images/bateria.png" alt="<?php echo __('admin.battery_alt'); ?>" class="h-8 w-8">
                                 <div>
                                     <p class="text-sm text-gray-600"><?php echo __('admin.battery_level'); ?></p>
                                     <p class="text-lg font-semibold text-gray-900" id="battery-level">85%</p>
                                 </div>
                             </div>
                             <div class="flex items-center space-x-3">
-                                <img src="/assets/images/velocitat.png" alt="<?php echo __('admin.speed_alt'); ?>" class="h-8 w-8">
                                 <div>
                                     <p class="text-sm text-gray-600"><?php echo __('admin.current_speed'); ?></p>
                                     <p class="text-lg font-semibold text-gray-900" id="current-speed">0 km/h</p>
                                 </div>
                             </div>
                             <div class="flex items-center space-x-3">
-                                <img src="/assets/images/distancia.png" alt="<?php echo __('admin.distance_alt'); ?>" class="h-8 w-8">
                                 <div>
                                     <p class="text-sm text-gray-600"><?php echo __('admin.distance_traveled'); ?></p>
                                     <p class="text-lg font-semibold text-gray-900" id="distance-traveled">0 km</p>
                                 </div>
                             </div>
                             <div class="flex items-center space-x-3">
-                                <img src="/assets/images/temps.png" alt="<?php echo __('admin.time_alt'); ?>" class="h-8 w-8">
-                                <div>
+                                    <div>
                                     <p class="text-sm text-gray-600"><?php echo __('admin.time_used'); ?></p>
                                     <p class="text-lg font-semibold text-gray-900" id="time-used">0 min</p>
                                 </div>
@@ -162,10 +166,10 @@
             </div>
             <h2 class="text-3xl font-bold text-gray-900 text-center">Controlar Vehicle</h2>
             <div class="flex justify-end items-center gap-3">
-                <button id="release-vehicle-btn-desktop" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition-colors" title="Finalitzar Reserva">
+                    <button id="release-vehicle-btn-desktop" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors" title="Finalitzar Reserva">
                     Finalitzar Reserva
                 </button>
-                <img src="/assets/images/logo.png" alt="Logo" class="h-10 w-10">
+                <img src="/assets/images/logo.png" alt="Logo" class="h-10 w-10 border-2 border-black rounded-full">
             </div>
         </header>
 
@@ -258,7 +262,7 @@
     </div>
 
     <!-- Modal de Confirmación para Finalizar Reserva -->
-        <div id="release-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4" style="z-index: 9999;">
+        <div id="release-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 items-center justify-center p-4" style="z-index: 9999;">
         <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
             <h3 class="text-lg font-semibold text-gray-900 mb-4"><?php echo __('admin.confirm_release'); ?></h3>
             <p class="text-gray-700 mb-6"><?php echo __('admin.release_warning'); ?></p>
@@ -272,6 +276,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Removed fixed CTA because it was causing clipping on some mobile devices -->
 
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"

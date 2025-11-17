@@ -624,10 +624,13 @@ const VehicleControl = {
             
             // Mostrar modal
             modal.classList.remove('hidden');
+            // Ensure display flex for centering
+            modal.classList.add('flex');
         };
         
         // Función para cerrar el modal
         const closeModal = () => {
+            modal.classList.remove('flex');
             modal.classList.add('hidden');
         };
         
