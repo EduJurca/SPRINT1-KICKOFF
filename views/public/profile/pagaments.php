@@ -79,7 +79,7 @@
                 </button>
 
                 <!-- Add new card form (hidden by default) -->
-                <form id="add-card-form" action="/perfil/pagaments/add" method="POST" class="space-y-4 hidden" novalidate>
+                <form id="add-card-form" action="/profile/pagaments/add" method="POST" class="space-y-4 hidden" novalidate>
                     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token); ?>">                    <div>
                         <label for="card-number" class="block text-sm font-medium text-gray-700"><?php echo __('profile.card_number') ?? 'Número de targeta'; ?></label>
                         <input id="card-number" name="card_number" inputmode="numeric" autocomplete="cc-number" placeholder="1234 5678 9012 3456" maxlength="23" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2" required>
@@ -174,7 +174,7 @@
         // Confirm delete
         confirmDeleteBtn.addEventListener('click', function() {
             if (currentCardId) {
-                deleteForm.action = `/perfil/pagaments/delete/${currentCardId}`;
+                deleteForm.action = `/profile/pagaments/delete/${currentCardId}`;
                 deleteForm.submit();
             }
         });

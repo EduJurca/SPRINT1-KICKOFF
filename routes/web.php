@@ -67,7 +67,7 @@ Router::get('/dashboard', ['DashboardController', 'showGestio']);
 // ==========================================
 
 // Perfil
-Router::get('/perfil', ['ProfileController', 'showProfile']);
+Router::get('/profile', ['ProfileController', 'showProfile']);
 
 Router::get('/profile', ['ProfileController', 'showProfile']);
 
@@ -89,11 +89,11 @@ Router::get('/historial', function() {
 });
 
 // Pagaments
-Router::get('/perfil/pagaments', ['ProfileController', 'showPayments']);
+Router::get('/profile/pagaments', ['ProfileController', 'showPayments']);
 
-Router::post('/perfil/pagaments/add', ['ProfileController', 'addPaymentMethod']);
+Router::post('/profile/pagaments/add', ['ProfileController', 'addPaymentMethod']);
 
-Router::post('/perfil/pagaments/delete/{id}', ['ProfileController', 'deletePaymentMethod']);
+Router::post('/profile/pagaments/delete/{id}', ['ProfileController', 'deletePaymentMethod']);
 
 // Premium
 Router::get('/premium', function() {

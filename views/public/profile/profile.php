@@ -140,7 +140,7 @@
           <?php echo __('profile.trip_history'); ?>
         </a>
 
-        <a href="/perfil/pagaments" class="action-card">
+        <a href="/profile/pagaments" class="action-card">
           <svg viewBox="0 0 24 24">
             <path
               d="M21 4H3c-1.1 0-2 .9-2 2v2h22V6c0-1.1-.9-2-2-2zm0 4H1v10c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8zm-2 3c0 .6-.4 1-1 1s-1-.4-1-1 .4-1 1-1 1 .4 1 1z" />
