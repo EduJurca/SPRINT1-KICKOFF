@@ -160,6 +160,9 @@ Router::post('/admin/users/store', function() {
     $controller = new UserController();
     $controller->store();
 });
+
+
+
 Router::get('/admin/vehicles', ['AdminVehicleController', 'index']);
 Router::get('/admin/vehicles/create', ['AdminVehicleController', 'create']);
 Router::post('/admin/vehicles', ['AdminVehicleController', 'store']);
