@@ -1,8 +1,4 @@
-<?php
-/**
- * ProfileController
- * Controlador minimal per gestionar el perfil d'usuari públic
- */
+<?php   
 
 require_once MODELS_PATH . '/User.php';
 require_once CONTROLLERS_PATH . '/auth/AuthController.php';

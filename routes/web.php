@@ -1,21 +1,9 @@
 <?php
-/**
- * 📍 Definició CENTRALITZADA de rutes
- * Totes les rutes de l'aplicació es defineixen aquí
- */
-
-// ==========================================
-// 🏠 RUTES PÚBLIQUES
-// ==========================================
 
 // Pàgina principal
 Router::get('/', function() {
     Router::view('auth.home');
 });
-
-// ==========================================
-// 🔐 AUTENTICACIÓ
-// ==========================================
 
 // Login
 Router::get('/login', function() {
