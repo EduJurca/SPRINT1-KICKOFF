@@ -143,9 +143,6 @@ require_once CONTROLLERS_PATH . '/admin/AdminController.php';
 Router::get('/admin', ['AdminController', 'dashboard']);
 Router::get('/admin/dashboard', ['AdminController', 'dashboard']);
 
-// Gestió de vehicles
-Router::get('/admin/vehicles', ['AdminController', 'vehicles']);
-
 // Gestió de reserves
 Router::get('/admin/bookings', ['AdminController', 'bookings']);
 
@@ -174,7 +171,25 @@ Router::post('/admin/users/store', function() {
     $controller->store();
 });
 
+Router::get('/admin/users/{id}/edit', function() {
+    $controller = new UserController();
+    $controller->edit();
+});
 
+Router::post('/admin/users/{id}/update', function() {
+    $controller = new UserController();
+    $controller->update();
+});
+
+Router::post('/admin/users/{id}/delete', function() {
+    $controller = new UserController();
+    $controller->delete();
+});
+
+// ==========================================
+// 🚗 CRUD VEHICLES
+// ==========================================
+require_once CONTROLLERS_PATH . '/admin/AdminVehicleController.php';
 
 Router::get('/admin/vehicles', ['AdminVehicleController', 'index']);
 Router::get('/admin/vehicles/create', ['AdminVehicleController', 'create']);
@@ -193,6 +208,7 @@ Router::get('/admin/charging-stations', ['ChargingStationController', 'index']);
 Router::get('/admin/charging-points', ['ChargingStationController', 'index']); // Alias
 Router::get('/admin/charging-stations/create', ['ChargingStationController', 'create']);
 Router::post('/admin/charging-stations/store', ['ChargingStationController', 'store']);
+Router::get('/admin/charging-stations/{id}', ['ChargingStationController', 'getStationDetails']);
 Router::get('/admin/charging-stations/{id}/edit', ['ChargingStationController', 'edit']);
 Router::post('/admin/charging-stations/{id}/update', ['ChargingStationController', 'update']);
 Router::post('/admin/charging-stations/{id}/delete', ['ChargingStationController', 'delete']);

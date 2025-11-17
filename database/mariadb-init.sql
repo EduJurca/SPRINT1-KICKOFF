@@ -156,7 +156,7 @@ CREATE TABLE vehicle_usage (
 
 CREATE TABLE incidents (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    type ENUM('mechanical', 'electrical', 'other') NOT NULL,
+    type ENUM('technical', 'maintenance', 'user_complaint', 'accident', 'other') NOT NULL,
     status ENUM('in_progress', 'pending', 'resolved') DEFAULT 'pending',
     description TEXT NOT NULL,
     notes TEXT,

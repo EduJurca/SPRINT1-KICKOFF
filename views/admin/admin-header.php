@@ -16,6 +16,17 @@ if (!isset($_SESSION['alert'])) $_SESSION['alert'] = null;
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="/assets/js/toast.js"></script>
+    <style>
+        /* Ensure sidebar link hover works consistently */
+        .nav-link, .nav-link i, .nav-link svg { transition: background-color .2s ease, color .2s ease; }
+        .nav-link i, .nav-link svg { color: inherit; }
+        .nav-link:hover, .nav-link[data-active="true"]:hover {
+            background-color: #1565C0 !important; /* Lighter blue for hover */
+            color: #FFFFFF !important;
+        }
+        /* For active items, ensure icons inherit color */
+        .nav-link[data-active="true"] i, .nav-link[data-active="true"] svg { color: #FFFFFF; }
+    </style>
 </head>
 <body class="font-sans bg-white text-black leading-normal">
     <?php if (!empty($_SESSION['success'])): ?>
@@ -50,7 +61,7 @@ if (!isset($_SESSION['alert'])) $_SESSION['alert'] = null;
             <nav class="flex-1">
                 <div class="mb-6">
                     <div class="px-4 py-2 text-xs uppercase text-gray-600 font-semibold">General</div>
-                    <a href="/admin/dashboard" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-[#1565C0] hover:text-gray-100 <?php echo ($currentPage ?? '') === 'dashboard' ? 'bg-blue-900 text-white' : 'text-gray-900'; ?>" <?php echo ($currentPage ?? '') === 'dashboard' ? 'data-active="true"' : ''; ?>>
+                    <a href="/admin/dashboard" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-blue-700 hover:text-gray-100 <?php echo ($currentPage ?? '') === 'dashboard' ? 'bg-blue-900 text-white' : 'text-gray-900'; ?>" <?php echo ($currentPage ?? '') === 'dashboard' ? 'data-active="true"' : ''; ?>>
                         <img src="/assets/images/dashboard.png" alt="Dashboard" class="w-4 h-4 opacity-100"> 
                         Dashboard
                     </a>
@@ -59,16 +70,16 @@ if (!isset($_SESSION['alert'])) $_SESSION['alert'] = null;
                 <div class="mb-6">
                     <div class="px-4 py-2 text-xs uppercase text-gray-600 font-semibold">Pages</div>
                     <a href="/admin/users" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-blue-700 hover:text-gray-100 <?php echo ($currentPage ?? '') === 'users' ? 'bg-blue-900 text-white' : 'text-gray-900'; ?>" <?php echo ($currentPage ?? '') === 'users' ? 'data-active="true"' : ''; ?>>
-                        <i class="fa fa-users"></i> Usuaris
+                        <i class="fa fa-users text-current"></i> Usuaris
                     </a>
                     <a href="/admin/charging-stations" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-blue-700 hover:text-gray-100 <?php echo ($currentPage ?? '') === 'charging-stations' ? 'bg-blue-900 text-white' : 'text-gray-900'; ?>" <?php echo ($currentPage ?? '') === 'charging-stations' ? 'data-active="true"' : ''; ?>>
-                        <i class="fa fa-charging-station"></i> Punts de càrrega
+                        <i class="fa fa-charging-station text-current"></i> Punts de càrrega
                     </a>
                     <a href="/admin/vehicles" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-blue-700 hover:text-gray-100 <?php echo ($currentPage ?? '') === 'vehicles' ? 'bg-blue-900 text-white' : 'text-gray-900'; ?>" <?php echo ($currentPage ?? '') === 'vehicles' ? 'data-active="true"' : ''; ?>>
-                        <i class="fa fa-car"></i> Vehicles
+                        <i class="fa fa-car text-current"></i> Vehicles
                     </a>
                     <a href="/admin/incidents" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-blue-700 hover:text-gray-100 <?php echo ($currentPage ?? '') === 'incidents' ? 'bg-blue-900 text-white' : 'text-gray-900'; ?>" <?php echo ($currentPage ?? '') === 'incidents' ? 'data-active="true"' : ''; ?>>
-                        <i class="fa fa-flag"></i> Incidencies
+                        <i class="fa fa-flag text-current"></i> Incidencies
                     </a>
                 </div>
             </nav>
