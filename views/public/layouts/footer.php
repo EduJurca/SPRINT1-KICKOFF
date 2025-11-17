@@ -16,7 +16,7 @@
             </div>
 
             <div class="flex flex-col items-center">
-                <a href="/perfil" class="flex flex-col items-center text-black hover:text-gray-500 transition-colors p-2 rounded-lg">
+                <a href="/profile" class="flex flex-col items-center text-black hover:text-gray-500 transition-colors p-2 rounded-lg">
                     <i class="fas fa-user text-xl mb-1"></i>
                     <span class="text-xs"><?php echo __('footer.profile'); ?></span>
                 </a>

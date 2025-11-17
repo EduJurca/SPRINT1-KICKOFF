@@ -100,7 +100,7 @@ Revisa les vistes i afegeix condicionals:
 <?php endif; ?>
 ```
 
-**Exemple en `/views/profile/perfil.php`**:
+**Exemple en `/views/profile/profile.php`**:
 ```php
 <?php if ($auth['is_premium']): ?>
     <div class="badge-premium">

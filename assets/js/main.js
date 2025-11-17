@@ -415,7 +415,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         // Initialize session manager for authenticated pages
         const isAuthPage = window.location.pathname.includes('/dashboard') ||
-                           window.location.pathname.includes('/perfil') ||
+                           window.location.pathname.includes('/profile') ||
                            window.location.pathname.includes('/profile') ||
                            window.location.pathname.includes('/vehicle') ||
                            window.location.pathname.includes('/historial') ||

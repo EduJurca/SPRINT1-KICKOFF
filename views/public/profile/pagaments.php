@@ -20,7 +20,7 @@
         <div class="bg-white p-5 rounded-2xl shadow-inner w-full h-full flex flex-col relative space-y-6">
             <header class="grid grid-cols-3 items-center mb-6 w-full">
                 <div class="text-left">
-                    <a href="/perfil" class="text-[#1565C0] text-sm font-semibold"><?php echo __('profile.back_to_profile'); ?></a>
+                    <a href="/profile" class="text-[#1565C0] text-sm font-semibold"><?php echo __('profile.back_to_profile'); ?></a>
                 </div>
                 <h1 class="text-2xl font-bold text-gray-900 text-center"><?php echo __('profile.payments_title'); ?></h1>
                 <div class="flex justify-end">
