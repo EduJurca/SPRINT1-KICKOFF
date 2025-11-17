@@ -12,9 +12,8 @@ class Incident {
         $this->userModel = $userModel ?? new User();
     }
 
-    public function getAllIncidents() {
-        $stmt = $this->db->prepare("
-            SELECT 
+    public function getAllIncidents($limit = 10, $offset = 0, $search = '', $filters = []) {
+        $query = "SELECT 
                 i.id,
                 i.type,
                 i.status,
@@ -33,10 +32,125 @@ class Incident {
             LEFT JOIN users creator ON i.incident_creator = creator.id
             LEFT JOIN users assignee ON i.incident_assignee = assignee.id
             LEFT JOIN users resolver ON i.resolved_by = resolver.id
-        ");
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
+            WHERE 1=1";
+
+        $params = [];
+        $types = '';
+
+        // Global search by description
+        if (!empty($search)) {
+            $searchWords = array_filter(explode(' ', $search));
+            $searchConditions = [];
+            foreach ($searchWords as $word) {
+                $searchConditions[] = "i.description LIKE ?";
+                $params[] = '%' . $word . '%';
+                $types .= 's';
+            }
+            if (!empty($searchConditions)) {
+                $query .= " AND (" . implode(' OR ', $searchConditions) . ")";
+            }
+        }
+
+        // Advanced filters
+        if (isset($filters['type']) && $filters['type'] !== '') {
+            $query .= " AND i.type = ?";
+            $params[] = $filters['type'];
+            $types .= 's';
+        }
+
+        if (isset($filters['assignee']) && $filters['assignee'] !== '') {
+            $query .= " AND i.incident_assignee = ?";
+            $params[] = $filters['assignee'];
+            $types .= 'i';
+        }
+
+        if (isset($filters['status']) && $filters['status'] !== '') {
+            $query .= " AND i.status = ?";
+            $params[] = $filters['status'];
+            $types .= 's';
+        }
+
+        if (isset($filters['created_date']) && $filters['created_date'] !== '') {
+            // Filter by exact creation date (YYYY-MM-DD)
+            $query .= " AND DATE(i.created_at) = ?";
+            $params[] = $filters['created_date'];
+            $types .= 's';
+        }
+
+        $query .= " ORDER BY i.created_at DESC";
+        $query .= " LIMIT " . (int)$limit . " OFFSET " . (int)$offset;
+
+        if (!empty($params)) {
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param($types, ...$params);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            return $result->fetch_all(MYSQLI_ASSOC);
+        } else {
+            $result = $this->db->query($query);
+            return $result->fetch_all(MYSQLI_ASSOC);
+        }
+    }
+
+    public function countIncidents($search = '', $filters = []): int {
+        $query = "SELECT COUNT(*) as total
+                FROM incidents i
+                WHERE 1=1";
+
+        $params = [];
+        $types = '';
+
+        // Global search by description
+        if (!empty($search)) {
+            $searchWords = array_filter(explode(' ', $search));
+            $searchConditions = [];
+            foreach ($searchWords as $word) {
+                $searchConditions[] = "i.description LIKE ?";
+                $params[] = '%' . $word . '%';
+                $types .= 's';
+            }
+            if (!empty($searchConditions)) {
+                $query .= " AND (" . implode(' OR ', $searchConditions) . ")";
+            }
+        }
+
+        // Advanced filters
+        if (isset($filters['type']) && $filters['type'] !== '') {
+            $query .= " AND i.type = ?";
+            $params[] = $filters['type'];
+            $types .= 's';
+        }
+
+        if (isset($filters['assignee']) && $filters['assignee'] !== '') {
+            $query .= " AND i.incident_assignee = ?";
+            $params[] = $filters['assignee'];
+            $types .= 'i';
+        }
+
+        if (isset($filters['status']) && $filters['status'] !== '') {
+            $query .= " AND i.status = ?";
+            $params[] = $filters['status'];
+            $types .= 's';
+        }
+
+        if (isset($filters['created_date']) && $filters['created_date'] !== '') {
+            // Filter by exact creation date (YYYY-MM-DD)
+            $query .= " AND DATE(i.created_at) = ?";
+            $params[] = $filters['created_date'];
+            $types .= 's';
+        }
+
+        if (!empty($params)) {
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param($types, ...$params);
+            $stmt->execute();
+            $result = $stmt->get_result();
+        } else {
+            $result = $this->db->query($query);
+        }
+        
+        $row = $result->fetch_assoc();
+        return $row['total'];
     }
 
     public function getIncidentById($incidentId) {
