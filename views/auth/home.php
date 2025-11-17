@@ -8,7 +8,7 @@
     <script>
         (function(d){
             var s = d.createElement("script");
-            s.setAttribute("data-account","RrwQjeYdrh");
+            s.setAttribute("data-account","<?php echo getenv('USERWAY_ACCOUNT_ID'); ?>");
             s.src = "https://cdn.userway.org/widget.js";
             (d.body || d.head).appendChild(s);
         })(document);
