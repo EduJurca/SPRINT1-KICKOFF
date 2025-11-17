@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 
-    <link rel="stylesheet" href="/assets/css/accessibility.css">
     <link rel="stylesheet" href="/assets/css/vehicle-claim-modal.css">
 
     <script src="/assets/css/tailwind.config.js"></script>
@@ -91,27 +90,24 @@
         </div>
     </div>
 
-    <!-- Botón para abrir modal de reserva -->
     <button id="reserve-btn" class="fixed bottom-24 bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg shadow-lg transition-all duration-300 z-40 flex items-center justify-center font-semibold">
-        <p class="uppercase">    
-             Reserva  
-        </p>
+        <p class="uppercase"><?php echo __('vehicle.reserve'); ?></p>
     </button>
 
     <!-- Modal de reserva de vehículos -->
     <div id="reserve-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
         <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-11/12 max-h-[80vh] overflow-hidden flex flex-col">
             <div class="p-6 border-b border-gray-200 flex items-center justify-between">
-                <h2 class="text-xl font-bold text-gray-900">Reservar Vehicle</h2>
+                <h2 class="text-xl font-bold text-gray-900"><?php echo __('vehicle.reserve_vehicle'); ?></h2>
                 <button id="close-reserve-modal" class="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100 transition-colors">
                     <i class="fas fa-car- text-xl mb-1"></i>
                 </button>
             </div>
             <div class="p-6 overflow-y-auto flex-1">
-                <div id="reserve-vehicles-list" class="space-y-3">
+                    <div id="reserve-vehicles-list" class="space-y-3">
                     <div class="text-center text-gray-500">
                         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                        <p class="mt-2">Carregant vehicles...</p>
+                        <p class="mt-2"><?php echo __('vehicle.loading_vehicles'); ?></p>
                     </div>
                 </div>
             </div>
@@ -224,14 +220,14 @@
                     <div class="vehicle-details-content"></div>
 
                     <div class="px-4 pb-4">
-                        <h4 class="text-sm font-semibold mt-3 mb-2 sticky top-0 bg-white py-2">Vehicles propers</h4>
+                        <h4 class="text-sm font-semibold mt-3 mb-2 sticky top-0 bg-white py-2"><?php echo __('vehicle.nearby_vehicles'); ?></h4>
                         <ul id="nearby-vehicles-list" class="divide-y bg-gray-100 rounded-xl divide-gray-100 mb-4"></ul>
                     </div>
                 </div>
 
                 <div class="p-3 border-t text-center bg-white flex-shrink-0">
                     <button id="close-vehicle-details"
-                        class="text-gray-500 hover:text-gray-700 font-medium">Tancar</button>
+                        class="text-gray-500 hover:text-gray-700 font-medium"><?php echo __('vehicle.close'); ?></button>
                 </div>
             </div>
         </div>
@@ -341,7 +337,7 @@
                                         <img src="${vehicle.image_url}" alt="${vehicle.model}" class="w-full h-full object-cover">
                                     </div>
                                     <div>
-                                        <h3 class="font-semibold text-gray-900">${vehicle.model || 'Vehicle'}</h3>
+                                        <h3 class="font-semibold text-gray-900">${vehicle.model || '<?php echo __('vehicle.unknown_vehicle'); ?>'}</h3>
                                         <p class="text-sm text-gray-500">${vehicle.plate || vehicle.license_plate || 'N/A'}</p>
                                         <p class="text-xs text-gray-400">${vehicle.battery || 0}% bateria</p>
                                         ${distanceText}
