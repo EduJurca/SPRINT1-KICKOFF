@@ -78,5 +78,19 @@
         }
     });
 </script>
+<script>
+    window.TRANSLATIONS = window.TRANSLATIONS || {};
+    (function() {
+        $export = Lang::export(['vehicle', 'errors', 'search']);
+        $export['footer.home'] = __('footer.home');
+        $export['footer.vehicles'] = __('footer.vehicles');
+        $export['footer.profile'] = __('footer.profile');
+        $export['footer.incidents'] = __('footer.incidents');
+        $export['footer.chatbot'] = __('footer.chatbot');
+
+        const translations = <?php echo json_encode($export); ?>;
+        Object.assign(window.TRANSLATIONS, translations);
+    })();
+</script>
 </body>
 </html>

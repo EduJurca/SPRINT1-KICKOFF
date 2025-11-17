@@ -171,10 +171,10 @@ const VehicleLocator = {
             iconAnchor: [10, 10]
         });
         
-        L.marker([this.userLocation.lat, this.userLocation.lng], {
+            L.marker([this.userLocation.lat, this.userLocation.lng], {
             icon: userIcon,
             zIndexOffset: 1000
-        }).addTo(map).bindPopup('<b>La teva ubicació</b>');
+        }).addTo(map).bindPopup(`<b>${(window.TRANSLATIONS && window.TRANSLATIONS['vehicle.your_location']) || 'Your location'}</b>`);
     },
 
     addVehicleMarkers(map, markersArray) {
@@ -258,7 +258,7 @@ const VehicleLocator = {
         if (vehicles.length === 0) {
             list.innerHTML = `
                 <li class="bg-gray-100 p-4 rounded-lg shadow-sm text-center text-gray-500">
-                    No hi ha vehicles disponibles
+                    ${(window.TRANSLATIONS && window.TRANSLATIONS['vehicle.no_vehicles_available']) || 'No vehicles available'}
                 </li>
             `;
             return;
@@ -269,13 +269,13 @@ const VehicleLocator = {
                 onclick="VehicleLocator.showVehicleDetails(${vehicle.id})">
                 <div>
                     <h3 class="font-bold text-base">${vehicle.model || vehicle.license_plate}</h3>
-                    <p class="text-gray-700 text-sm">Bateria: ${vehicle.battery}%</p>
+                    <p class="text-gray-700 text-sm">${vehicle.battery}% ${(window.TRANSLATIONS && window.TRANSLATIONS['vehicle.battery_unit']) || 'battery'}</p>
                     ${vehicle.distance ? `<p class="text-gray-700 text-xs">📍 ${vehicle.distance.toFixed(2)} km</p>` : ''}
                 </div>
                 <button 
                     onclick="event.stopPropagation(); VehicleLocator.handleClaimVehicle(${vehicle.id})"
                     class="bg-[#1565C0] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#1151a3] transition-colors duration-300">
-                    Reclamar
+                        ${(window.TRANSLATIONS && window.TRANSLATIONS['vehicle.claim']) || 'Claim'}
                 </button>
             </li>
         `).join('');
@@ -318,7 +318,7 @@ const VehicleLocator = {
                     <div class="flex-1">
                         <h3 class="text-xl font-bold text-gray-900">${vehicle.model}</h3>
                         <p class="text-sm text-gray-600 mt-1">${vehicle.license_plate || ''}</p>
-                        ${userDistance ? `<p class="text-xs text-gray-500 mt-2 flex items-center"><i class="fas fa-map-marker-alt mr-1"></i> ${userDistance.toFixed(2)} km de ti</p>` : ''}
+                        ${userDistance ? `<p class="text-xs text-gray-500 mt-2 flex items-center"><i class="fas fa-map-marker-alt mr-1"></i> ${userDistance.toFixed(2)} km</p>` : ''}
                         <div class="flex items-center mt-2">
                             <i class="fas fa-battery-three-quarters mr-2 text-xl" style="color: ${this.getBatteryColor(vehicle.battery)}"></i>
                             <p class="text-base font-bold" style="color: ${this.getBatteryColor(vehicle.battery)}">${vehicle.battery}%</p>
@@ -333,7 +333,7 @@ const VehicleLocator = {
                 ${vehicle.description ? `<p class="mt-3 text-sm text-gray-700">${vehicle.description}</p>` : ''}
                 <div class="mt-4">
                     <button id="vehicle-claim-btn" class="w-full bg-[#1565C0] hover:bg-[#0D47A1] text-white py-3 rounded-lg font-semibold transition-colors shadow-md">
-                        <i class="fas fa-key mr-2"></i>Reclamar Vehicle
+                        <i class="fas fa-key mr-2"></i>${(window.TRANSLATIONS && window.TRANSLATIONS['vehicle.claim_this_vehicle']) || 'Claim This Vehicle'}
                     </button>
                 </div>
             </div>

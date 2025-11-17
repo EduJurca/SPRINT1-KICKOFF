@@ -339,7 +339,7 @@
                                     <div>
                                         <h3 class="font-semibold text-gray-900">${vehicle.model || '<?php echo __('vehicle.unknown_vehicle'); ?>'}</h3>
                                         <p class="text-sm text-gray-500">${vehicle.plate || vehicle.license_plate || 'N/A'}</p>
-                                        <p class="text-xs text-gray-400">${vehicle.battery || 0}% bateria</p>
+                                        <p class="text-xs text-gray-400">${vehicle.battery || 0}% <?php echo __('vehicle.battery_unit'); ?></p>
                                         ${distanceText}
                                     </div>
                                 </div>
@@ -353,11 +353,11 @@
                         container.appendChild(vehicleCard);
                     });
                 } else {
-                    container.innerHTML = '<p class="text-center text-gray-500">No hi ha vehicles disponibles</p>';
+                    container.innerHTML = '<p class="text-center text-gray-500"><?php echo __('vehicle.no_vehicles_available'); ?></p>';
                 }
             } catch (error) {
                 console.error('Error loading vehicles:', error);
-                container.innerHTML = '<p class="text-center text-red-500">Error carregant vehicles</p>';
+                container.innerHTML = '<p class="text-center text-red-500"><?php echo __('errors.loading_vehicles'); ?></p>';
             }
         }
     </script>

@@ -123,28 +123,28 @@ const VehicleClaimModal = {
         const infoHTML = `
             <div class="space-y-3">
                 <div class="flex justify-between items-center">
-                    <span class="text-gray-600 text-sm">Model:</span>
+                    <span class="text-gray-600 text-sm">${(window.TRANSLATIONS && window.TRANSLATIONS['vehicle.model']) || 'Model:'}</span>
                     <span class="font-semibold text-gray-900">${vehicle.model}</span>
                 </div>
                 <div class="flex justify-between items-center">
-                    <span class="text-gray-600 text-sm">Matrícula:</span>
+                    <span class="text-gray-600 text-sm">${(window.TRANSLATIONS && window.TRANSLATIONS['vehicle.license_plate']) || 'License Plate:'}</span>
                     <span class="font-semibold text-gray-900">${vehicle.license_plate}</span>
                 </div>
                 <div class="flex justify-between items-center">
-                    <span class="text-gray-600 text-sm">Bateria:</span>
+                    <span class="text-gray-600 text-sm">${(window.TRANSLATIONS && window.TRANSLATIONS['vehicle.battery']) || 'Battery:'}</span>
                     <span class="font-semibold" style="color: ${batteryColor};">
                         ${vehicle.battery}%
                     </span>
                 </div>
                 ${vehicle.distance ? `
                     <div class="flex justify-between items-center">
-                        <span class="text-gray-600 text-sm">Distància:</span>
+                        <span class="text-gray-600 text-sm">${(window.TRANSLATIONS && window.TRANSLATIONS['vehicle.distance']) || 'Distance:'}</span>
                         <span class="font-semibold text-gray-900">${vehicle.distance.toFixed(2)} km</span>
                     </div>
                 ` : ''}
                 ${vehicle.is_accessible ? `
                     <div class="flex justify-between items-center">
-                        <span class="text-gray-600 text-sm">Accessible:</span>
+                        <span class="text-gray-600 text-sm">${(window.TRANSLATIONS && window.TRANSLATIONS['vehicle.accessible_label']) || 'Accessible:'}</span>
                         <span class="font-semibold text-green-600">✓ Sí</span>
                     </div>
                 ` : ''}
@@ -168,7 +168,7 @@ const VehicleClaimModal = {
     
     async confirm() {
         if (!this.currentVehicle) {
-            showToast('Error: No hay vehículo seleccionado', 'error');
+            showToast((window.TRANSLATIONS && window.TRANSLATIONS['vehicle.no_vehicle_selected']) || 'No vehicle selected', 'error');
             return;
         }
         
@@ -188,13 +188,13 @@ const VehicleClaimModal = {
             if (result.success) {
                 this.close();
                 
-                showToast('Vehicle reclamat amb èxit! Redirigint...', 'success', 2000);
+                showToast((window.TRANSLATIONS && window.TRANSLATIONS['vehicle.claimed_success']) || 'Vehicle claimed successfully! Redirecting...', 'success', 2000);
             } else {
                 confirmBtn.disabled = false;
                 confirmBtn.classList.remove('claim-modal-button-loading');
                 cancelBtn.disabled = false;
                 
-                const errorMsg = result.message || result.error || 'Error desconegut al reclamar el vehicle';
+                const errorMsg = result.message || result.error || (window.TRANSLATIONS && window.TRANSLATIONS['vehicle.claim_error_unknown']) || 'Unknown error while claiming the vehicle';
                 
                 showToast(errorMsg, 'error', 4000);
             }
@@ -203,7 +203,7 @@ const VehicleClaimModal = {
             confirmBtn.classList.remove('claim-modal-button-loading');
             cancelBtn.disabled = false;
             
-            const errorMsg = error.message || 'Error al processar la reclamació';
+            const errorMsg = error.message || (window.TRANSLATIONS && window.TRANSLATIONS['vehicle.claim_processing_error']) || 'Error processing claim';
             showToast(errorMsg, 'error', 4000);
         }
     }

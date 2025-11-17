@@ -167,9 +167,23 @@ const Vehicles = {
             });
             
             if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                // Try to read JSON error from server (e.g. message explaining why claim failed)
+                let errMsg = (window.TRANSLATIONS && window.TRANSLATIONS['vehicle.claim_error']) || 'Failed to claim the vehicle';
+                try {
+                    const text = await response.text();
+                    if (text) {
+                        const parsed = JSON.parse(text);
+                        if (parsed && parsed.message) {
+                            errMsg = parsed.message;
+                        }
+                    }
+                } catch (e) {
+                    // ignore parse errors
+                }
+
+                return { success: false, message: errMsg, status: response.status };
             }
-            
+
             const data = await response.json();
            
             // Si la API devuelve success pero no vehicle, intentar construirlo desde booking
@@ -230,7 +244,7 @@ const Vehicles = {
                 
                 return { success: true, vehicle: data.vehicle };
             } else {
-                const errorMsg = data.message || 'Error en reclamar el vehicle';
+                const errorMsg = data.message || (window.TRANSLATIONS && window.TRANSLATIONS['vehicle.claim_error']) || 'Failed to claim the vehicle';
                 return { success: false, message: errorMsg };
             }
         } catch (error) {

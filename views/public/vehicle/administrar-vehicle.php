@@ -151,10 +151,6 @@
                                     <p class="text-lg font-semibold text-gray-900" id="time-used">0 min</p>
                                 </div>
                                 <div>
-                                    <p class="text-sm text-gray-600"><?php echo __('admin.last_charge'); ?></p>
-                                    <p class="text-lg font-semibold text-gray-900">12/09/2025</p>
-                                </div>
-                                <div>
                                     <p class="text-sm text-gray-600"><?php echo __('admin.total_charges'); ?></p>
                                     <p class="text-lg font-semibold text-gray-900">3</p>
                                 </div>
@@ -283,7 +279,6 @@
                             <li class="bg-[#F5F5F5] p-4 rounded-lg"><strong><?php echo __('admin.current_speed'); ?></strong>: <span id="current-speed-desktop">0 km/h</span></li>
                             <li class="bg-[#F5F5F5] p-4 rounded-lg"><strong><?php echo __('admin.distance_traveled'); ?></strong>: <span id="distance-traveled-desktop">0 km</span></li>
                             <li class="bg-[#F5F5F5] p-4 rounded-lg"><strong><?php echo __('admin.time_used'); ?></strong>: <span id="time-used-desktop">0 min</span></li>
-                            <li class="bg-[#F5F5F5] p-4 rounded-lg"><strong><?php echo __('admin.last_charge'); ?></strong>: 12/09/2025</li>
                             <li class="bg-[#F5F5F5] p-4 rounded-lg"><strong><?php echo __('admin.total_charges'); ?></strong>: 3</li>
                         </ul>
                         </li>
