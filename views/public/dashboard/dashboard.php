@@ -366,3 +366,60 @@
 </body>
 
 </html>
+
+<script>
+// Load charging stations and add simple markers (green if available, red if none)
+document.addEventListener('DOMContentLoaded', async () => {
+    // wait for VehicleLocator maps to be ready
+    let attempts = 0;
+    while ((!window.VehicleLocator || (!window.VehicleLocator.mobileMap && !window.VehicleLocator.desktopMap)) && attempts < 25) {
+        await new Promise(r => setTimeout(r, 200));
+        attempts++;
+    }
+
+    const mobileMap = window.VehicleLocator && window.VehicleLocator.mobileMap;
+    const desktopMap = window.VehicleLocator && window.VehicleLocator.desktopMap;
+    if (!mobileMap && !desktopMap) return; // no maps available
+
+    try {
+        const res = await fetch('/api/charging-stations');
+        const json = await res.json();
+        if (!json.success || !Array.isArray(json.stations)) return;
+
+        window.chargingStationMarkers = [];
+
+        json.stations.forEach(station => {
+            const lat = parseFloat(station.latitude);
+            const lng = parseFloat(station.longitude);
+            if (isNaN(lat) || isNaN(lng)) return;
+
+            const hasAvailable = parseInt(station.available_slots) > 0;
+            const color = hasAvailable ? '#10B981' : '#EF4444';
+
+            const icon = L.divIcon({
+                className: 'charging-station-icon',
+                html: `
+                    <div style="display:flex;align-items:center;justify-content:center;background-color: ${color}; width: 22px; height: 22px; border-radius: 50%; border: 3px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.3);">
+                        <i class="fa fa-charging-station" style="color:white; font-size:12px; line-height:12px; width:12px; height:12px; text-align:center; display:inline-block;"></i>
+                    </div>
+                `,
+                iconSize: [28, 28],
+                iconAnchor: [14, 14]
+            });
+
+            const popup = `<strong>${station.name || ''}</strong><br>${station.available_slots} / ${station.total_slots} slots`;
+
+            if (mobileMap) {
+                const m = L.marker([lat, lng], { icon }).addTo(mobileMap).bindPopup(popup);
+                window.chargingStationMarkers.push(m);
+            }
+            if (desktopMap) {
+                const m2 = L.marker([lat, lng], { icon }).addTo(desktopMap).bindPopup(popup);
+                window.chargingStationMarkers.push(m2);
+            }
+        });
+    } catch (err) {
+        console.error('Error loading charging stations on dashboard:', err);
+    }
+});
+</script>
