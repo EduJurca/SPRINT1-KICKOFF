@@ -109,7 +109,6 @@ SIMS---GRUP-2/
 ├── 📁 controllers/                 # ✅ Lógica de negocio
 │   ├── AuthController.php         # ✅ Autenticación
 │   ├── VehicleController.php      # ✅ Vehículos
-│   ├── ProfileController.php      # ✅ Perfiles
 │   ├── BookingController.php      # ✅ Reservas
 │   └── DashboardController.php    # ✅ Dashboard
 │

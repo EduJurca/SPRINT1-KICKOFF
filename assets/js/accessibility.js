@@ -230,24 +230,7 @@ class AccessibilityManager {
         });
     }
     
-    /**
-     * Add skip to main content link
-     */
-    addSkipLink() {
-        const skipLink = document.createElement('a');
-        skipLink.href = '#main-content';
-        skipLink.className = 'skip-link';
-        skipLink.textContent = 'Skip to main content';
-        skipLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            const mainContent = document.getElementById('main-content') || document.querySelector('main');
-            if (mainContent) {
-                mainContent.setAttribute('tabindex', '-1');
-                mainContent.focus();
-            }
-        });
-        document.body.insertBefore(skipLink, document.body.firstChild);
-    }
+   
     
     /**
      * Check system preferences

@@ -679,11 +679,14 @@ const VehicleControl = {
         const releaseBtnMobile = document.getElementById('release-vehicle-btn-mobile');
         const releaseBtnDesktop = document.getElementById('release-vehicle-btn-desktop');
         const modal = document.getElementById('release-modal');
-        const cancelBtn = document.getElementById('release-cancel-btn');
-        const confirmBtn = document.getElementById('release-confirm-btn');
+        const cancelBtn = document.getElementById('cancel-release');
+        const confirmBtn = document.getElementById('confirm-release');
         
         if (!modal || !cancelBtn || !confirmBtn) {
             console.error('❌ Elementos del modal no encontrados');
+            console.log('Modal:', modal);
+            console.log('Cancel btn:', cancelBtn);
+            console.log('Confirm btn:', confirmBtn);
             return;
         }
         
@@ -695,37 +698,6 @@ const VehicleControl = {
                 console.error('❌ No hay vehículo actual');
                 return;
             }
-            
-            // Actualizar información del modal
-            const licensePlate = this.currentVehicle.license_plate || this.currentVehicle.plate || 'N/A';
-            const brand = this.currentVehicle.brand || '';
-            const model = this.currentVehicle.model || '';
-            const vehicleInfo = brand && model ? `${brand} ${model} (${licensePlate})` : licensePlate;
-            
-            document.getElementById('release-vehicle-info').textContent = vehicleInfo;
-            
-            // Calcular tiempo de uso (ejemplo simple)
-            const startTime = new Date(this.currentVehicle.booking_start || Date.now());
-            const now = new Date();
-            const diffMs = now - startTime;
-            const diffMins = Math.floor(diffMs / 60000);
-            const hours = Math.floor(diffMins / 60);
-            const mins = diffMins % 60;
-            
-            let timeText = '';
-            if (hours > 0) {
-                timeText = `${hours}h ${mins}min`;
-            } else {
-                timeText = `${mins} minuts`;
-            }
-            
-            document.getElementById('release-time-info').textContent = timeText;
-            
-            // Calcular costo estimado
-            const pricePerMin = parseFloat(this.currentVehicle.price_per_minute || 0.38);
-            const estimatedCost = (diffMins * pricePerMin).toFixed(2);
-            
-            document.getElementById('release-cost-info').textContent = `${estimatedCost}€`;
             
             // Mostrar modal
             modal.classList.remove('hidden');

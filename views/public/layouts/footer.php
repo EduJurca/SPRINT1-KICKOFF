@@ -11,6 +11,9 @@
         </footer>
     <?php endif; ?>
     
+    <!-- Widget de Chatbot Flotante -->
+    <?php include __DIR__ . '/../commons/chatbot-widget.php'; ?>
+    
     <!-- JavaScript principal -->
     <script src="/assets/js/main.js"></script>
     <script src="/assets/js/auth.js"></script>
