@@ -79,15 +79,6 @@
           <p><strong><?php echo __('profile.name'); ?></strong> <span id="fullname_span"><?php echo htmlspecialchars($fullname ?? $username ?? __('profile.not_defined')); ?></span></p>
           <p><strong><?php echo __('profile.dni'); ?></strong> <span id="dni_span"><?php echo htmlspecialchars($dni ?? __('profile.not_defined')); ?></span></p>
           <p><strong><?php echo __('profile.phone'); ?></strong> <span id="phone_span"><?php echo htmlspecialchars($phone ?? __('profile.not_defined')); ?></span></p>
-          <p><strong><?php echo __('profile.birth_date'); ?></strong> <span id="birthdate_span"><?php echo htmlspecialchars($birthdate ?? __('profile.not_defined')); ?></span></p>
-          <p><strong><?php echo __('profile.address'); ?></strong> <span id="address_span"><?php echo htmlspecialchars($address ?? __('profile.not_defined')); ?></span></p>
-          <p><strong><?php echo __('profile.gender'); ?></strong> <span id="sex_span"><?php 
-            if (isset($sex)) {
-              echo $sex === 'M' ? __('profile.male') : ($sex === 'F' ? __('profile.female') : ($sex === 'O' ? __('profile.other') : __('profile.not_defined')));
-            } else {
-              echo __('profile.not_defined');
-            }
-          ?></span></p>
         </div>
 
         <form method="POST" action="/api/users/language" class="mt-6 p-4 bg-gray-50 rounded-lg">
@@ -106,14 +97,14 @@
             </option>
           </select>
         </form>
-      </div>
-      <div class="mt-8">
-        <form method="POST" action="/logout">
-          <button type="submit"
-            class="block w-full bg-blue-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-gray-400 transition-colors duration-300 text-center">
-            Tancar Sessió
-          </button>
-        </form>
+        <div class="mt-6">
+          <form method="POST" action="/logout">
+            <button type="submit"
+              class="block w-full bg-blue-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-600 transition-colors duration-300 text-center">
+              <?php echo __('dashboard.logout') ?? 'Tancar Sessió'; ?>
+            </button>
+          </form>
+        </div>
       </div>
 
     <!-- Right column: Actions -->
@@ -153,8 +144,6 @@
 
       </div>
     </div>
-  </div>
-
   </div>
 
   <script>

@@ -421,7 +421,13 @@ return [
         'license_front_preview' => 'Driver\'s license preview (front)',
         'license_back_preview' => 'Driver\'s license preview (back)',
         'submit_for_verification' => 'Submit for verification',
-        'trip_history_title' => "Trip history"        
+        'trip_history_title' => "Trip history",
+        'no_trips_title' => 'You have no trips yet',
+        'no_trips_message' => 'When you claim your first vehicle, trips will appear here.',
+        'no_trips_cta' => 'Locate Vehicles',
+        'in_progress' => 'In progress',
+        'origin' => 'Origin:',
+        'destination' => 'Destination:'
     ],
     'dashboard' => [
         'management_window' => 'Management Window',

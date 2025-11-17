@@ -167,7 +167,7 @@
             </div>
         </div>
 
-        <div class="desktop-view hidden md:block bg-white p-8 rounded-2xl shadow-inner w-full max-w-5xl mx-auto mb-20">
+        <div class="desktop-view hidden md:block ">
             <header class="grid grid-cols-3 items-center mb-6 w-full">
                 <div class="text-left">
                     <a href="/dashboard" class="text-[#1565C0] text-sm font-semibold">Tornar</a>
