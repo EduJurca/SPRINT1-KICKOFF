@@ -3,8 +3,4 @@ final_editar.code-workspace
 venv
 .venv
 .env
-<<<<<<< HEAD
-=======
-vendor
->>>>>>> 3f5cfc3 (Add PHPUnit configuration and IncidentTest class for incident management)
 test-results
