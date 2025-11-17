@@ -59,7 +59,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
 
         <!-- Formulario -->
         <div class="bg-gray-100 rounded-lg shadow-md p-8">
-            <form action="/admin/charging-stations/store" method="POST" class="space-y-6">
+            <form id="createChargingStationForm" action="/admin/charging-stations/store" method="POST" novalidate class="space-y-6">
                 
                 <!-- Información Básica -->
                 <div class="border-b border-gray-200 pb-6">
@@ -74,6 +74,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                                    value="<?= htmlspecialchars($oldData['name'] ?? '') ?>"
                                    placeholder="p. ex., Estació Centre Amposta"
                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all">
+                            <p id="error-name" class="text-red-600 text-sm mt-1 hidden"></p>
                         </div>
                         
                         <div class="md:col-span-2">
@@ -84,6 +85,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                                    value="<?= htmlspecialchars($oldData['address'] ?? '') ?>"
                                    placeholder="p. ex., Plaça d'Espanya, 1"
                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all">
+                            <p id="error-address" class="text-red-600 text-sm mt-1 hidden"></p>
                         </div>
                         
                         <div>
@@ -94,6 +96,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                                    value="<?= htmlspecialchars($oldData['city'] ?? '') ?>"
                                    placeholder="p. ex., Amposta"
                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all">
+                            <p id="error-city" class="text-red-600 text-sm mt-1 hidden"></p>
                         </div>
                         
                         <div>
@@ -177,6 +180,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                                    min="1"
                                    onchange="syncAvailableSlots()"
                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all">
+                            <p id="error-total_slots" class="text-red-600 text-sm mt-1 hidden"></p>
                         </div>
                         
                         <div>
@@ -187,6 +191,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                                    value="<?= htmlspecialchars($oldData['available_slots'] ?? '4') ?>"
                                    min="0"
                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all">
+                            <p id="error-available_slots" class="text-red-600 text-sm mt-1 hidden"></p>
                         </div>
                         
                         <div>
@@ -216,6 +221,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                                 <option value="maintenance" <?= ($oldData['status'] ?? '') === 'maintenance' ? 'selected' : '' ?>>Manteniment</option>
                                 <option value="out_of_service" <?= ($oldData['status'] ?? '') === 'out_of_service' ? 'selected' : '' ?>>Fora de Servei</option>
                             </select>
+                            <p id="error-status" class="text-red-600 text-sm mt-1 hidden"></p>
                         </div>
                         
                         <div>
@@ -328,6 +334,53 @@ function syncAvailableSlots() {
     }
     availableSlots.max = totalSlots;
 }
+
+// Form validation
+const form = document.getElementById('createChargingStationForm');
+const requiredMsg = '<?php echo addslashes(__('form.validations.required_field')); ?>';
+
+form.addEventListener('submit', function(e) {
+    let isValid = true;
+    let firstError = null;
+
+    // Required fields
+    const requiredFields = ['name', 'address', 'city', 'total_slots', 'available_slots', 'status'];
+    
+    requiredFields.forEach(fieldName => {
+        const field = document.getElementById(fieldName);
+        const errorElement = document.getElementById(`error-${fieldName}`);
+        
+        if (!field.value.trim()) {
+            isValid = false;
+            errorElement.textContent = requiredMsg;
+            errorElement.classList.remove('hidden');
+            field.classList.add('border-red-500');
+            if (!firstError) firstError = field;
+        } else {
+            errorElement.classList.add('hidden');
+            field.classList.remove('border-red-500');
+        }
+    });
+
+    if (!isValid) {
+        e.preventDefault();
+        if (firstError) {
+            firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            firstError.focus();
+        }
+    }
+});
+
+// Clear errors on input
+['name', 'address', 'city', 'total_slots', 'available_slots', 'status'].forEach(fieldName => {
+    const field = document.getElementById(fieldName);
+    field.addEventListener('input', function() {
+        const errorElement = document.getElementById(`error-${fieldName}`);
+        errorElement.classList.add('hidden');
+        field.classList.remove('border-red-500');
+    });
+});
+
 </script>
 
 <?php require_once __DIR__ . '/../admin-footer.php'; ?>
