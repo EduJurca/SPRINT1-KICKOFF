@@ -6,7 +6,6 @@ DROP TABLE IF EXISTS payments;
 DROP TABLE IF EXISTS vehicle_usage;
 DROP TABLE IF EXISTS subscriptions;
 DROP TABLE IF EXISTS payment_methods;
-DROP TABLE IF EXISTS payment_methods;
 DROP TABLE IF EXISTS vehicles;
 DROP TABLE IF EXISTS locations;
 DROP TABLE IF EXISTS users;
@@ -65,27 +64,6 @@ CREATE TABLE users (
     INDEX idx_username (username),
     INDEX idx_role_id (role_id),
     INDEX idx_lang (lang)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Table: payment_methods
--- Stores tokenized payment methods for users (DO NOT store raw PAN/CVC)
--- Use tokens returned by a PCI-compliant gateway (Stripe, Adyen, etc.)
-CREATE TABLE payment_methods (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    provider VARCHAR(100) NOT NULL,
-    provider_token VARBINARY(512) NOT NULL,
-    last4 CHAR(4),
-    brand VARCHAR(50),
-    exp_month TINYINT UNSIGNED,
-    exp_year SMALLINT UNSIGNED,
-    is_default BOOLEAN DEFAULT FALSE,
-    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    UNIQUE KEY uniq_provider_token (provider, provider_token),
-    INDEX idx_user_id (user_id),
-    INDEX idx_provider (provider)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Table: payment_methods
@@ -205,7 +183,6 @@ CREATE TABLE payments (
     user_id INT NOT NULL,
     vehicle_usage_id INT,
     payment_method_id INT,
-    payment_method_id INT,
     amount DECIMAL(10,2) NOT NULL,
     payment_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     type ENUM('unlock', 'time', 'subscription') NOT NULL,
@@ -213,11 +190,8 @@ CREATE TABLE payments (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (vehicle_usage_id) REFERENCES vehicle_usage(id) ON DELETE SET NULL,
     FOREIGN KEY (payment_method_id) REFERENCES payment_methods(id) ON DELETE SET NULL,
-    FOREIGN KEY (payment_method_id) REFERENCES payment_methods(id) ON DELETE SET NULL,
     INDEX idx_user_id (user_id),
     INDEX idx_payment_date (payment_date),
-    INDEX idx_type (type),
-    INDEX idx_status (status)
     INDEX idx_type (type),
     INDEX idx_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

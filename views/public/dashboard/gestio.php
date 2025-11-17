@@ -247,5 +247,8 @@
   <!-- Widget de Chatbot Flotante -->
   <?php include __DIR__ . '/../../commons/chatbot-widget.php'; ?>
 
+  <!-- Widget de Chatbot Flotante -->
+  <?php include __DIR__ . '/../../commons/chatbot-widget.php'; ?>
+
 </body>
 </html>
