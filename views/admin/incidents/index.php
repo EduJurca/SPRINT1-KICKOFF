@@ -200,7 +200,7 @@ unset($_SESSION['success'], $_SESSION['error']);
                                     </svg>
                                 </div>
                                 <div>
-                                    <p class="text-lg font-semibold text-gray-900 mb-1"><?php echo __('no_registered_incidents'); ?></p>
+                                    <p class="text-lg font-semibold text-gray-900 mb-1"><?php echo __('incident.no_registered_incidents'); ?></p>
                                     <p class="text-sm text-gray-500 mb-4">Comença creant la primera incidència</p>
                                 </div>
                                 <a href="/admin/incidents/create" class="text-[#1565C0] hover:text-blue-700 font-semibold inline-flex items-center gap-2">
