@@ -483,9 +483,6 @@ return [
         'label_notes' => 'Notes Addicionals',
         'label_assignee' => "Assignar a",        
 
-        'option_unassigned' => 'Sense assignar',
-        'option_select_type' => 'Seleccionar tipus...',
-
         'button_back' => 'Tornar',
         'button_save_changes' => 'Guardar Canvis',
         'button_create' => 'Crear Incidència',

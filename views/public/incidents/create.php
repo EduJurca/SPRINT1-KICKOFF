@@ -103,11 +103,11 @@
             let valid = true;
 
             if (!type) {
-                document.getElementById('error-type').textContent = '<?php echo addslashes(__('incident.select_type')); ?>';
+                document.getElementById('error-type').textContent = '<?php echo addslashes(__('form.validations.required_field')); ?>';
                 valid = false;
             }
             if (description.length < 10) {
-                document.getElementById('error-description').textContent = '<?php echo addslashes(__('incident.description_min')); ?>';
+                document.getElementById('error-description').textContent = '<?php echo addslashes(__('form.validations.required_field')); ?>';
                 valid = false;
             }
 

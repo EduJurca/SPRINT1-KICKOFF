@@ -20,7 +20,7 @@
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
 
     <div class="mobile-view md:hidden">
-        <div class="bg-gradient-to-b from-gray-50 to-white p-5 rounded-2xl shadow-inner w-full max-w-sm flex flex-col relative mb-20">
+        <div class=" p-5 rounded-2xls w-full max-w-sm flex flex-col relative mb-20">
             <header class="grid grid-cols-3 items-center mb-6 w-full">
                                 <div class="text-left">
                                     <a href="/dashboard" class="inline-flex items-center gap-2 text-[#1565C0] font-semibold hover:underline py-1 px-2 rounded-lg border border-transparent hover:border-gray-200">

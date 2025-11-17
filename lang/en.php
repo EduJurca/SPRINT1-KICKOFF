@@ -482,9 +482,6 @@ return [
         'label_notes' => 'Additional Notes',
         'label_assignee' => "Assign to",
 
-        'option_unassigned' => 'Unassigned',
-        'option_select_type' => 'Select type...',
-
         'button_back' => 'Back',
         'button_save_changes' => 'Save Changes',
         'button_create' => 'Create Incident',
