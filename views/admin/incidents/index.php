@@ -4,6 +4,8 @@
  * Muestra tabla con todas las incidencias y permite filtrar, crear, editar, eliminar
  */
 
+$currentPage = 'incidents';
+
 // Incluir header de admin
 require_once __DIR__ . '/../admin-header.php';
 
@@ -21,7 +23,7 @@ unset($_SESSION['success'], $_SESSION['error']);
             <div class="flex items-center justify-between">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-900"><?php echo __('incident.incidents_management'); ?></h2>
-                    <p class="text-sm text-gray-600 mt-1">Gestiona les incidències del sistema</p>
+                    <p class="text-sm text-gray-600 mt-1"><?php echo __('incident.create_heading'); ?></p>
                 </div>
                 <a href="/admin/incidents/create" class="bg-[#1565C0] hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition shadow-md hover:shadow-lg">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -60,7 +62,7 @@ unset($_SESSION['success'], $_SESSION['error']);
             <form method="GET" action="/admin/incidents" class="space-y-4">
                 <!-- Barra de búsqueda principal -->
                 <?php 
-                $hasAdvancedFilters = !empty($filters['type']) || !empty($filters['assignee']) || !empty($filters['status']) || !empty($filters['created_from']) || !empty($filters['created_to']);
+                $hasAdvancedFilters = !empty($filters['type']) || !empty($filters['assignee']) || !empty($filters['status']) || !empty($filters['created_date']);
                 ?>
                 <div class="flex gap-3">
                     <div class="flex-1 relative">
@@ -73,7 +75,7 @@ unset($_SESSION['success'], $_SESSION['error']);
                             type="text" 
                             name="search" 
                             value="<?= htmlspecialchars($_GET['search'] ?? '') ?>"
-                            placeholder="Buscar por descripción..."
+                            placeholder="<?php echo __('incident.placeholder_description'); ?>..."
                             <?= $hasAdvancedFilters ? 'disabled' : '' ?>
                             class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all <?= $hasAdvancedFilters ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : '' ?>"
                         >
@@ -82,14 +84,14 @@ unset($_SESSION['success'], $_SESSION['error']);
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
-                        Buscar
+                        <?php echo __('incident.search_button'); ?>
                     </button>
                     <?php if (!empty($_GET['search']) || !empty($filters)): ?>
                         <a href="/admin/incidents" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-2.5 rounded-lg font-semibold transition-all shadow-sm hover:shadow-md flex items-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                             </svg>
-                            Limpiar
+                            <?php echo __('incident.clear_button'); ?>
                         </a>
                     <?php endif; ?>
                 </div>
@@ -100,14 +102,13 @@ unset($_SESSION['success'], $_SESSION['error']);
                         <svg id="filterIcon" class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
-                        <span id="filterText">Mostrar filtros avanzados</span>
+                        <span id="filterText"><?php echo __('incident.show_advanced_filters'); ?></span>
                         <?php 
                         $activeFilters = 0;
                         if (!empty($filters['type'])) $activeFilters++;
                         if (!empty($filters['assignee'])) $activeFilters++;
                         if (!empty($filters['status'])) $activeFilters++;
-                        if (!empty($filters['created_from'])) $activeFilters++;
-                        if (!empty($filters['created_to'])) $activeFilters++;
+                        if (!empty($filters['created_date'])) $activeFilters++;
                         
                         if ($activeFilters > 0): 
                         ?>
@@ -120,22 +121,22 @@ unset($_SESSION['success'], $_SESSION['error']);
                         
                         <!-- Filtro por Tipo -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Tipo de Incidencia</label>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2"><?php echo __('incident.filter_type_label'); ?></label>
                             <select name="type" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all">
-                                <option value="">Todos</option>
-                                <option value="technical" <?= ($_GET['type'] ?? '') === 'technical' ? 'selected' : '' ?>>Técnica</option>
-                                <option value="maintenance" <?= ($_GET['type'] ?? '') === 'maintenance' ? 'selected' : '' ?>>Mantenimiento</option>
-                                <option value="user_complaint" <?= ($_GET['type'] ?? '') === 'user_complaint' ? 'selected' : '' ?>>Queja de Usuario</option>
-                                <option value="accident" <?= ($_GET['type'] ?? '') === 'accident' ? 'selected' : '' ?>>Accidente</option>
-                                <option value="other" <?= ($_GET['type'] ?? '') === 'other' ? 'selected' : '' ?>>Otros</option>
+                                <option value=""><?php echo __('incident.filter_all'); ?></option>
+                                <option value="technical" <?= ($_GET['type'] ?? '') === 'technical' ? 'selected' : '' ?>><?php echo __('incident.type_technical'); ?></option>
+                                <option value="maintenance" <?= ($_GET['type'] ?? '') === 'maintenance' ? 'selected' : '' ?>><?php echo __('incident.type_maintenance'); ?></option>
+                                <option value="user_complaint" <?= ($_GET['type'] ?? '') === 'user_complaint' ? 'selected' : '' ?>><?php echo __('incident.type_user_complaint'); ?></option>
+                                <option value="accident" <?= ($_GET['type'] ?? '') === 'accident' ? 'selected' : '' ?>><?php echo __('incident.type_accident'); ?></option>
+                                <option value="other" <?= ($_GET['type'] ?? '') === 'other' ? 'selected' : '' ?>><?php echo __('incident.type_other'); ?></option>
                             </select>
                         </div>
 
                         <!-- Filtro por Usuario Asignado -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Asignado a</label>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2"><?php echo __('incident.filter_assigned_to'); ?></label>
                             <select name="assignee" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all">
-                                <option value="">Todos</option>
+                                <option value=""><?php echo __('incident.filter_all'); ?></option>
                                 <?php foreach ($allUsers as $user): ?>
                                     <option value="<?= $user['id'] ?>" <?= ($_GET['assignee'] ?? '') == $user['id'] ? 'selected' : '' ?>>
                                         <?= htmlspecialchars($user['username']) ?>
@@ -146,34 +147,26 @@ unset($_SESSION['success'], $_SESSION['error']);
 
                         <!-- Filtro por Estado -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Estado</label>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2"><?php echo __('incident.filter_status_label'); ?></label>
                             <select name="status" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all">
-                                <option value="">Todos</option>
-                                <option value="pending" <?= ($_GET['status'] ?? '') === 'pending' ? 'selected' : '' ?>>Pendiente</option>
-                                <option value="in_progress" <?= ($_GET['status'] ?? '') === 'in_progress' ? 'selected' : '' ?>>En Progreso</option>
-                                <option value="resolved" <?= ($_GET['status'] ?? '') === 'resolved' ? 'selected' : '' ?>>Resuelta</option>
+                                <option value=""><?php echo __('incident.filter_all'); ?></option>
+                                <option value="pending" <?= ($_GET['status'] ?? '') === 'pending' ? 'selected' : '' ?>><?php echo __('incident.status_pending'); ?></option>
+                                <option value="in_progress" <?= ($_GET['status'] ?? '') === 'in_progress' ? 'selected' : '' ?>><?php echo __('incident.status_in_progress'); ?></option>
+                                <option value="resolved" <?= ($_GET['status'] ?? '') === 'resolved' ? 'selected' : '' ?>><?php echo __('incident.status_resolved'); ?></option>
                             </select>
                         </div>
 
                         <!-- Filtro por Fecha de Creación -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Fecha de Creación</label>
-                            <div class="flex gap-2">
-                                <input 
-                                    type="date" 
-                                    name="created_from" 
-                                    value="<?= htmlspecialchars($_GET['created_from'] ?? '') ?>"
-                                    class="flex-1 px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all text-sm"
-                                    placeholder="Desde"
-                                >
-                                <input 
-                                    type="date" 
-                                    name="created_to" 
-                                    value="<?= htmlspecialchars($_GET['created_to'] ?? '') ?>"
-                                    class="flex-1 px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all text-sm"
-                                    placeholder="Hasta"
-                                >
-                            </div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2"><?php echo __('incident.filter_created_date'); ?></label>
+                                <div>
+                                    <input
+                                        type="date"
+                                        name="created_date"
+                                        value="<?= htmlspecialchars($_GET['created_date'] ?? '') ?>"
+                                        class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all text-sm"
+                                    >
+                                </div>
                         </div>
 
                     </div>
@@ -182,31 +175,57 @@ unset($_SESSION['success'], $_SESSION['error']);
         </div>
 
         <!-- Tabla de Incidencias -->
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-        <table class="min-w-full table-auto">
+        <div class="bg-gray-100 rounded-lg shadow-md overflow-hidden">
+        <div class="overflow-x-auto">
+        <table class="min-w-full table-auto divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo __('form.labels.type'); ?></th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo __('form.labels.description'); ?></th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo __('form.labels.creator'); ?></th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo __('form.labels.assignee'); ?></th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo __('form.labels.creation_date'); ?></th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo __('form.labels.status'); ?></th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo __('form.labels.actions'); ?></th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider bg-gray-200"><?php echo __('form.labels.type'); ?></th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider bg-gray-200"><?php echo __('form.labels.description'); ?></th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider bg-gray-200"><?php echo __('form.labels.creator'); ?></th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider bg-gray-200"><?php echo __('form.labels.assignee'); ?></th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider bg-gray-200"><?php echo __('form.labels.creation_date'); ?></th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider bg-gray-200"><?php echo __('form.labels.status'); ?></th>
+                    <th class="px-6 py-4 text-right text-xs font-bold text-gray-700 uppercase tracking-wider bg-gray-200"><?php echo __('form.labels.actions'); ?></th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 <?php if (empty($incidents)): ?>
                     <tr>
-                        <td colspan="7" class="px-6 py-4 text-center text-gray-500">
-                            <?php echo __('no_registered_incidents'); ?>
+                        <td colspan="7" class="px-6 py-16 text-center">
+                            <div class="flex flex-col items-center gap-4">
+                                <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-lg font-semibold text-gray-900 mb-1"><?php echo __('no_registered_incidents'); ?></p>
+                                    <p class="text-sm text-gray-500 mb-4">Comença creant la primera incidència</p>
+                                </div>
+                                <a href="/admin/incidents/create" class="text-[#1565C0] hover:text-blue-700 font-semibold inline-flex items-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                    </svg>
+                                    Crear la primera incidència
+                                </a>
+                            </div>
                         </td>
                     </tr>
                 <?php else: ?>
                     <?php foreach ($incidents as $incident): ?>
-                        <tr>
+                        <tr class="hover:bg-gray-50 transition-colors">
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                <?php echo htmlspecialchars($incident['type']) ?>
+                                <?php 
+                                $typeLabels = [
+                                    'technical' => __('incident.type_technical'),
+                                    'maintenance' => __('incident.type_maintenance'),
+                                    'user_complaint' => __('incident.type_user_complaint'),
+                                    'accident' => __('incident.type_accident'),
+                                    'other' => __('incident.type_other')
+                                ];
+                                echo $typeLabels[$incident['type']] ?? htmlspecialchars($incident['type']);
+                                ?>
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-900 max-w-xs truncate">
                                 <?php echo htmlspecialchars($incident['description']); ?>
@@ -239,93 +258,122 @@ unset($_SESSION['success'], $_SESSION['error']);
                                     <?= $label ?>
                                 </span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <div class="flex items-center justify-end gap-2">
                                 <?php if (Permissions::can('incidents.edit')): ?>
-                                    <a href="/admin/incidents/<?= $incident['id'] ?>/edit" class="text-blue-600 hover:text-blue-900 mr-3" title="<?php echo __('actions.edit'); ?>">
-                                        <i class="fas fa-edit"></i>
+                                    <a href="/admin/incidents/<?= $incident['id'] ?>/edit" class="text-gray-500 hover:text-blue-600 transition-colors p-2 hover:bg-gray-100 rounded-lg" title="<?php echo __('actions.edit'); ?>">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                        </svg>
                                     </a>
                                 <?php endif; ?>
                                 <?php if (Permissions::can('incidents.resolve') && $incident['status'] !== 'resolved'): ?>
                                     <form method="POST" action="/admin/incidents/<?= $incident['id'] ?>/resolve" class="inline js-confirm" data-confirm-message="<?php echo __('confirm_resolve_incident'); ?>">
-                                        <button type="submit" class="text-green-600 hover:text-green-900 mr-3" title="<?php echo __('incident.mark_as_resolved'); ?>">
-                                            <i class="fas fa-check-circle"></i>
+                                        <button type="submit" class="text-gray-500 hover:text-green-600 transition-colors p-2 hover:bg-gray-100 rounded-lg" title="<?php echo __('incident.mark_as_resolved'); ?>">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
                                         </button>
                                     </form>
                                 <?php endif; ?>
                                 <?php if (Permissions::can('incidents.delete')): ?>
                                     <form method="POST" action="/admin/incidents/<?= $incident['id'] ?>" class="inline js-confirm" data-confirm-message="<?php echo __('confirm_delete_incident'); ?>">
                                         <input type="hidden" name="_method" value="DELETE">
-                                        <button type="submit" class="text-red-600 hover:text-red-900" title="<?php echo __('actions.delete'); ?>">
-                                            <i class="fas fa-trash"></i>
+                                        <button type="submit" class="text-gray-500 hover:text-red-600 transition-colors p-2 hover:bg-gray-100 rounded-lg" title="<?php echo __('actions.delete'); ?>">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            </svg>
                                         </button>
                                     </form>
                                 <?php endif; ?>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>
             </tbody>
         </table>
+        </div>
 
         <!-- Pagination -->
         <?php if ($totalPages > 1): ?>
-            <div class="bg-gray-50 px-6 py-4 flex items-center justify-between border-t border-gray-200">
+            <div class="bg-gray-200 px-6 py-4 flex items-center justify-between border-t border-gray-200">
                 <div class="flex-1 flex justify-between sm:hidden">
                     <?php if ($page > 1): ?>
-                        <a href="?page=<?= $page - 1 ?><?= !empty($_GET['search']) ? '&search=' . urlencode($_GET['search']) : '' ?><?= !empty($_GET['type']) ? '&type=' . urlencode($_GET['type']) : '' ?><?= !empty($_GET['assignee']) ? '&assignee=' . urlencode($_GET['assignee']) : '' ?><?= !empty($_GET['status']) ? '&status=' . urlencode($_GET['status']) : '' ?><?= !empty($_GET['created_from']) ? '&created_from=' . urlencode($_GET['created_from']) : '' ?><?= !empty($_GET['created_to']) ? '&created_to=' . urlencode($_GET['created_to']) : '' ?>" 
-                           class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                            Anterior
+                                <a href="?page=<?= $page - 1 ?><?= !empty($_GET['search']) ? '&search=' . urlencode($_GET['search']) : '' ?><?= !empty($_GET['type']) ? '&type=' . urlencode($_GET['type']) : '' ?><?= !empty($_GET['assignee']) ? '&assignee=' . urlencode($_GET['assignee']) : '' ?><?= !empty($_GET['status']) ? '&status=' . urlencode($_GET['status']) : '' ?><?= !empty($_GET['created_date']) ? '&created_date=' . urlencode($_GET['created_date']) : '' ?>" 
+                                    class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                            <?php echo __('incident.pagination_previous'); ?>
                         </a>
                     <?php endif; ?>
                     <?php if ($page < $totalPages): ?>
-                        <a href="?page=<?= $page + 1 ?><?= !empty($_GET['search']) ? '&search=' . urlencode($_GET['search']) : '' ?><?= !empty($_GET['type']) ? '&type=' . urlencode($_GET['type']) : '' ?><?= !empty($_GET['assignee']) ? '&assignee=' . urlencode($_GET['assignee']) : '' ?><?= !empty($_GET['status']) ? '&status=' . urlencode($_GET['status']) : '' ?><?= !empty($_GET['created_from']) ? '&created_from=' . urlencode($_GET['created_from']) : '' ?><?= !empty($_GET['created_to']) ? '&created_to=' . urlencode($_GET['created_to']) : '' ?>" 
+                        <a href="?page=<?= $page + 1 ?><?= !empty($_GET['search']) ? '&search=' . urlencode($_GET['search']) : '' ?><?= !empty($_GET['type']) ? '&type=' . urlencode($_GET['type']) : '' ?><?= !empty($_GET['assignee']) ? '&assignee=' . urlencode($_GET['assignee']) : '' ?><?= !empty($_GET['status']) ? '&status=' . urlencode($_GET['status']) : '' ?><?= !empty($_GET['created_date']) ? '&created_date=' . urlencode($_GET['created_date']) : '' ?>" 
                            class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                            Siguiente
+                            <?php echo __('incident.pagination_next'); ?>
                         </a>
                     <?php endif; ?>
                 </div>
                 <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                     <div>
-                        <p class="text-sm text-gray-700">
-                            Mostrando
+                        <p class="text-sm font-medium text-gray-700">
+                            <?php echo __('incident.pagination_showing'); ?>
                             <span class="font-medium"><?= min(($page - 1) * $itemsPerPage + 1, $totalIncidents) ?></span>
                             -
                             <span class="font-medium"><?= min($page * $itemsPerPage, $totalIncidents) ?></span>
-                            de
+                            <?php echo __('incident.pagination_of'); ?>
                             <span class="font-medium"><?= $totalIncidents ?></span>
-                            resultados
+                            <?php echo __('incident.pagination_results'); ?>
                         </p>
                     </div>
                     <div>
-                        <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+                        <nav class="relative z-0 inline-flex items-center gap-2">
                             <?php if ($page > 1): ?>
-                                <a href="?page=<?= $page - 1 ?><?= !empty($_GET['search']) ? '&search=' . urlencode($_GET['search']) : '' ?><?= !empty($_GET['type']) ? '&type=' . urlencode($_GET['type']) : '' ?><?= !empty($_GET['assignee']) ? '&assignee=' . urlencode($_GET['assignee']) : '' ?><?= !empty($_GET['status']) ? '&status=' . urlencode($_GET['status']) : '' ?><?= !empty($_GET['created_from']) ? '&created_from=' . urlencode($_GET['created_from']) : '' ?><?= !empty($_GET['created_to']) ? '&created_to=' . urlencode($_GET['created_to']) : '' ?>" 
-                                   class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                    <i class="fas fa-chevron-left"></i>
+                                <a href="?page=<?= $page - 1 ?><?= !empty($_GET['search']) ? '&search=' . urlencode($_GET['search']) : '' ?><?= !empty($_GET['type']) ? '&type=' . urlencode($_GET['type']) : '' ?><?= !empty($_GET['assignee']) ? '&assignee=' . urlencode($_GET['assignee']) : '' ?><?= !empty($_GET['status']) ? '&status=' . urlencode($_GET['status']) : '' ?><?= !empty($_GET['created_date']) ? '&created_date=' . urlencode($_GET['created_date']) : '' ?>" 
+                                   class="px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                    </svg>
                                 </a>
                             <?php endif; ?>
                             
-                            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                                <?php if ($i == $page): ?>
-                                    <span class="relative inline-flex items-center px-4 py-2 border border-blue-500 bg-blue-50 text-sm font-medium text-blue-600">
-                                        <?= $i ?>
-                                    </span>
-                                <?php elseif ($i == 1 || $i == $totalPages || abs($i - $page) <= 2): ?>
-                                    <a href="?page=<?= $i ?><?= !empty($_GET['search']) ? '&search=' . urlencode($_GET['search']) : '' ?><?= !empty($_GET['type']) ? '&type=' . urlencode($_GET['type']) : '' ?><?= !empty($_GET['assignee']) ? '&assignee=' . urlencode($_GET['assignee']) : '' ?><?= !empty($_GET['status']) ? '&status=' . urlencode($_GET['status']) : '' ?><?= !empty($_GET['created_from']) ? '&created_from=' . urlencode($_GET['created_from']) : '' ?><?= !empty($_GET['created_to']) ? '&created_to=' . urlencode($_GET['created_to']) : '' ?>" 
-                                       class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
-                                        <?= $i ?>
-                                    </a>
-                                <?php elseif (abs($i - $page) == 3): ?>
-                                    <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
-                                        ...
-                                    </span>
+                            <div class="flex items-center gap-1">
+                            <?php 
+                            $range = 2;
+                            $start = max(1, $page - $range);
+                            $end = min($totalPages, $page + $range);
+                            
+                            if ($start > 1):
+                            ?>
+                                <a href="?page=1<?= !empty($_GET['search']) ? '&search=' . urlencode($_GET['search']) : '' ?><?= !empty($_GET['type']) ? '&type=' . urlencode($_GET['type']) : '' ?><?= !empty($_GET['assignee']) ? '&assignee=' . urlencode($_GET['assignee']) : '' ?><?= !empty($_GET['status']) ? '&status=' . urlencode($_GET['status']) : '' ?><?= !empty($_GET['created_date']) ? '&created_date=' . urlencode($_GET['created_date']) : '' ?>" 
+                                   class="px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">1</a>
+                                <?php if ($start > 2): ?>
+                                    <span class="px-2 text-gray-500">...</span>
                                 <?php endif; ?>
+                            <?php endif; ?>
+                            
+                            <?php for ($i = $start; $i <= $end; $i++): ?>
+                                <a href="?page=<?= $i ?><?= !empty($_GET['search']) ? '&search=' . urlencode($_GET['search']) : '' ?><?= !empty($_GET['type']) ? '&type=' . urlencode($_GET['type']) : '' ?><?= !empty($_GET['assignee']) ? '&assignee=' . urlencode($_GET['assignee']) : '' ?><?= !empty($_GET['status']) ? '&status=' . urlencode($_GET['status']) : '' ?><?= !empty($_GET['created_date']) ? '&created_date=' . urlencode($_GET['created_date']) : '' ?>" 
+                                   class="px-3 py-1.5 text-sm font-<?= $i === $page ? 'semibold text-white bg-[#1565C0]' : 'medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50' ?> rounded-lg transition-colors">
+                                    <?= $i ?>
+                                </a>
                             <?php endfor; ?>
                             
+                            <?php if ($end < $totalPages): ?>
+                                <?php if ($end < $totalPages - 1): ?>
+                                    <span class="px-2 text-gray-500">...</span>
+                                <?php endif; ?>
+                                <a href="?page=<?= $totalPages ?><?= !empty($_GET['search']) ? '&search=' . urlencode($_GET['search']) : '' ?><?= !empty($_GET['type']) ? '&type=' . urlencode($_GET['type']) : '' ?><?= !empty($_GET['assignee']) ? '&assignee=' . urlencode($_GET['assignee']) : '' ?><?= !empty($_GET['status']) ? '&status=' . urlencode($_GET['status']) : '' ?><?= !empty($_GET['created_date']) ? '&created_date=' . urlencode($_GET['created_date']) : '' ?>" 
+                                   class="px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                                    <?= $totalPages ?>
+                                </a>
+                            <?php endif; ?>
+                            </div>
+                            
                             <?php if ($page < $totalPages): ?>
-                                <a href="?page=<?= $page + 1 ?><?= !empty($_GET['search']) ? '&search=' . urlencode($_GET['search']) : '' ?><?= !empty($_GET['type']) ? '&type=' . urlencode($_GET['type']) : '' ?><?= !empty($_GET['assignee']) ? '&assignee=' . urlencode($_GET['assignee']) : '' ?><?= !empty($_GET['status']) ? '&status=' . urlencode($_GET['status']) : '' ?><?= !empty($_GET['created_from']) ? '&created_from=' . urlencode($_GET['created_from']) : '' ?><?= !empty($_GET['created_to']) ? '&created_to=' . urlencode($_GET['created_to']) : '' ?>" 
-                                   class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                    <i class="fas fa-chevron-right"></i>
+                                <a href="?page=<?= $page + 1 ?><?= !empty($_GET['search']) ? '&search=' . urlencode($_GET['search']) : '' ?><?= !empty($_GET['type']) ? '&type=' . urlencode($_GET['type']) : '' ?><?= !empty($_GET['assignee']) ? '&assignee=' . urlencode($_GET['assignee']) : '' ?><?= !empty($_GET['status']) ? '&status=' . urlencode($_GET['status']) : '' ?><?= !empty($_GET['created_date']) ? '&created_date=' . urlencode($_GET['created_date']) : '' ?>" 
+                                   class="px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
                                 </a>
                             <?php endif; ?>
                         </nav>
@@ -351,11 +399,11 @@ document.addEventListener('DOMContentLoaded', function() {
             if (isHidden) {
                 filtersPanel.classList.remove('hidden');
                 filterIcon.style.transform = 'rotate(180deg)';
-                filterText.textContent = 'Ocultar filtros avanzados';
+                filterText.textContent = '<?php echo __('incident.hide_advanced_filters'); ?>';
             } else {
                 filtersPanel.classList.add('hidden');
                 filterIcon.style.transform = 'rotate(0deg)';
-                filterText.textContent = 'Mostrar filtros avanzados';
+                filterText.textContent = '<?php echo __('incident.show_advanced_filters'); ?>';
             }
         });
     }

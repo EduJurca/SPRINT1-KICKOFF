@@ -239,7 +239,7 @@ class ChargingStationController {
     public function showMap() {
         $stations = $this->stationModel->getAllStations();
         
-        Router::view('charging.map', [
+        Router::view('admin.charging.map', [
             'stations' => $stations
         ]);
     }
@@ -277,7 +277,7 @@ class ChargingStationController {
             exit;
         }
 
-        Router::view('charging.details', [
+        Router::view('admin.charging.details', [
             'station' => $station
         ]);
     }

@@ -4,6 +4,8 @@
  * Muestra toda la información de un vehículo específico
  */
 
+$currentPage = 'vehicles';
+
 require_once __DIR__ . '/../admin-header.php';
 
 $success = $_SESSION['success'] ?? null;

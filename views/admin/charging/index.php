@@ -10,8 +10,8 @@
 //     exit;
 // }
 
-$title = 'Charging Stations - Admin Panel';
-$pageTitle = 'Charging Stations';
+$title = 'Estacions de càrrega - Panell d\'Administració';
+$pageTitle = 'Estacions de càrrega';
 $currentPage = 'charging-stations';
 
 require_once __DIR__ . '/../admin-header.php';
@@ -25,14 +25,6 @@ $totalPages = $totalPages ?? 1;
 $totalStations = $totalStations ?? 0;
 $perPage = $perPage ?? 10;
 ?>
-
-<!-- Success/Error Messages -->
-<?php if (isset($_SESSION['success'])): ?>
-<div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-    <?= htmlspecialchars($_SESSION['success']) ?>
-</div>
-<?php unset($_SESSION['success']); endif; ?>
-
 <?php if (isset($_SESSION['error'])): ?>
 <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
     <?= htmlspecialchars($_SESSION['error']) ?>
@@ -41,20 +33,24 @@ $perPage = $perPage ?? 10;
 
 <!-- Header Actions -->
 <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold text-gray-900">
-        <i class="fas fa-charging-station"></i>
-        Charging Stations Management
-    </h1>
+    <div>
+        <h2 class="text-2xl font-bold text-gray-900">Gestió d'estacions de càrrega</h2>
+        <p class="text-sm text-gray-600 mt-1">Gestiona les estacions de càrrega del sistema</p>
+    </div>
     <div class="flex gap-3">
-        <a href="/charging-stations/map" 
-           class="bg-green-600 hover:bg-green-700 text-white hover:text-white px-4 py-2 rounded-lg flex items-center gap-2 transition">
-            <i class="fas fa-map-marked-alt"></i>
-            View Map
+          <a href="/charging-stations/map" 
+              class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition shadow-md hover:shadow-lg">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+            </svg>
+            Veure mapa
         </a>
-        <a href="/admin/charging-stations/create" 
-           class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition">
-            <i class="fas fa-plus"></i>
-            Add New Station
+          <a href="/admin/charging-stations/create" 
+              class="bg-[#1565C0] hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition shadow-md hover:shadow-lg">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            Afegir estació
         </a>
     </div>
 </div>
@@ -168,35 +164,46 @@ $perPage = $perPage ?? 10;
 </div>
 
 <!-- Stations Table -->
-<div class="bg-white rounded-lg shadow overflow-hidden">
-    <div class="p-6 border-b">
-        <h2 class="text-lg font-semibold text-gray-900">All Charging Stations</h2>
-    </div>
-    
+<div class="bg-gray-100 rounded-lg shadow-md overflow-hidden">
     <div class="overflow-x-auto">
-        <table class="w-full">
+        <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">City</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Address</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Slots</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Power</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider bg-gray-200">Nom</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider bg-gray-200">Ciutat</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider bg-gray-200">Adreça</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider bg-gray-200">Places</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider bg-gray-200">Potència</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider bg-gray-200">Estat</th>
+                    <th class="px-6 py-4 text-right text-xs font-bold text-gray-700 uppercase tracking-wider bg-gray-200">Accions</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 <?php if (empty($stations)): ?>
                 <tr>
-                    <td colspan="8" class="px-6 py-8 text-center text-gray-500">
-                        <i class="fas fa-inbox text-4xl mb-3"></i>
-                        <p>No charging stations found. Add your first station!</p>
+                    <td colspan="7" class="px-6 py-16 text-center">
+                        <div class="flex flex-col items-center gap-4">
+                            <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center">
+                                <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-lg font-semibold text-gray-900 mb-1">No s'han trobat estacions de càrrega</p>
+                                <p class="text-sm text-gray-500 mb-4">Afegeix la teva primera estació de càrrega</p>
+                            </div>
+                            <a href="/admin/charging-stations/create" class="text-[#1565C0] hover:text-blue-700 font-semibold inline-flex items-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                </svg>
+                                Crear primera estació
+                            </a>
+                        </div>
                     </td>
                 </tr>
                 <?php else: ?>
                     <?php foreach ($stations as $station): ?>
-                    <tr class="hover:bg-gray-50 transition">
+                    <tr class="hover:bg-gray-50 transition-colors">
                         
                         <td class="px-6 py-4">
                             <div class="text-sm font-medium text-gray-900"><?= htmlspecialchars($station['name']) ?></div>
@@ -204,45 +211,57 @@ $perPage = $perPage ?? 10;
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-900"><?= htmlspecialchars($station['city']) ?></td>
                         <td class="px-6 py-4 text-sm text-gray-500"><?= htmlspecialchars($station['address']) ?></td>
-                        <td class="px-6 py-4">
-                            <span class="text-sm font-medium">
-                                <?= $station['available_slots'] ?>/<?= $station['total_slots'] ?>
-                            </span>
-                            <?php if ($station['available_slots'] > 0): ?>
-                                <span class="ml-2 text-green-600">●</span>
-                            <?php else: ?>
-                                <span class="ml-2 text-red-600">●</span>
-                            <?php endif; ?>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm font-medium text-gray-900">
+                                    <?= $station['available_slots'] ?>/<?= $station['total_slots'] ?>
+                                </span>
+                                <?php if ($station['available_slots'] > 0): ?>
+                                    <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                                <?php else: ?>
+                                    <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+                                <?php endif; ?>
+                            </div>
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-900"><?= $station['power_kw'] ?> kW</td>
                         <td class="px-6 py-4">
                             <?php if ($station['status'] === 'active'): ?>
                                 <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                                    Active
+                                    Activa
                                 </span>
                             <?php elseif ($station['status'] === 'maintenance'): ?>
                                 <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                    Maintenance
+                                    Manteniment
                                 </span>
                             <?php else: ?>
                                 <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
-                                    Out of Service
+                                    Fora de Servei
                                 </span>
                             <?php endif; ?>
                         </td>
-                        <td class="px-6 py-4 text-sm">
-                            <div class="flex gap-3">
-                                <a href="/admin/charging-stations/<?= $station['id'] ?>/edit" 
-                                   class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-medium shadow-sm hover:shadow-md" 
-                                   title="Edit Station">
-                                    <i class="fas fa-edit"></i>
-                                    <span>Edit</span>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <div class="flex items-center justify-end gap-2">
+                                          <a href="/admin/charging-stations/<?= $station['id'] ?>" 
+                                              class="text-gray-500 hover:text-green-600 transition-colors p-2 hover:bg-gray-100 rounded-lg" 
+                                              title="Veure detalls">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
                                 </a>
-                                <button onclick="confirmDelete(<?= $station['id'] ?>, '<?= htmlspecialchars($station['name']) ?>')" 
-                                        class="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition font-medium shadow-sm hover:shadow-md" 
-                                        title="Delete Station">
-                                    <i class="fas fa-trash"></i>
-                                    <span>Delete</span>
+                                          <a href="/admin/charging-stations/<?= $station['id'] ?>/edit" 
+                                              class="text-gray-500 hover:text-blue-600 transition-colors p-2 hover:bg-gray-100 rounded-lg" 
+                                              title="Editar estació">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                    </svg>
+                                </a>
+                <button onclick="confirmDelete(<?= $station['id'] ?>, '<?= htmlspecialchars($station['name']) ?>')" 
+                    class="text-gray-500 hover:text-red-600 transition-colors p-2 hover:bg-gray-100 rounded-lg" 
+                    title="Eliminar estació">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
                                 </button>
                             </div>
                         </td>
@@ -287,7 +306,7 @@ $perPage = $perPage ?? 10;
                 // Solo mostrar paginación si hay más de 1 página
                 if ($totalPages > 1):
                 ?>
-                <nav class="flex items-center gap-2" aria-label="Pagination">
+                <nav class="flex items-center gap-2" aria-label="Paginació">
                     <!-- Botón Anterior -->
                     <a href="<?= $baseUrl . $separator ?>page=<?= max(1, $page - 1) ?>" 
                        class="px-3 py-1.5 text-sm font-medium <?= $page <= 1 ? 'text-gray-400 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' ?> bg-white border border-gray-300 rounded-lg transition-colors <?= $page <= 1 ? 'pointer-events-none' : '' ?>">
@@ -354,19 +373,19 @@ $perPage = $perPage ?? 10;
             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
                 <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
             </div>
-            <h3 class="text-lg leading-6 font-medium text-gray-900 mt-4">Delete Charging Station</h3>
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mt-4">Eliminar estació de càrrega</h3>
             <div class="mt-2 px-7 py-3">
                 <p class="text-sm text-gray-500" id="deleteMessage"></p>
             </div>
             <div class="flex gap-3 justify-center mt-4">
                 <button onclick="closeDeleteModal()" 
                         class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">
-                    Cancel
+                    Cancel·lar
                 </button>
                 <form id="deleteForm" method="POST" class="inline">
                     <button type="submit" 
                             class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
-                        Delete
+                        Eliminar
                     </button>
                 </form>
             </div>
@@ -378,7 +397,7 @@ $perPage = $perPage ?? 10;
 function confirmDelete(id, name) {
     document.getElementById('deleteModal').classList.remove('hidden');
     document.getElementById('deleteMessage').textContent = 
-        `Are you sure you want to delete "${name}"? This action cannot be undone.`;
+        `Estàs segur que vols eliminar "${name}"? Aquesta acció no es pot desfer.`;
     document.getElementById('deleteForm').action = `/admin/charging-stations/${id}/delete`;
 }
 

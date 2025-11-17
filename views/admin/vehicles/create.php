@@ -4,6 +4,8 @@
  * Formulario para añadir un nuevo vehículo a la flota
  */
 
+$currentPage = 'vehicles';
+
 require_once __DIR__ . '/../admin-header.php';
 
 // Obtener errores y datos antiguos

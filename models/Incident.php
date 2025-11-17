@@ -65,15 +65,10 @@ class Incident {
             $types .= 's';
         }
 
-        if (isset($filters['created_from']) && $filters['created_from'] !== '') {
-            $query .= " AND DATE(i.created_at) >= ?";
-            $params[] = $filters['created_from'];
-            $types .= 's';
-        }
-
-        if (isset($filters['created_to']) && $filters['created_to'] !== '') {
-            $query .= " AND DATE(i.created_at) <= ?";
-            $params[] = $filters['created_to'];
+        if (isset($filters['created_date']) && $filters['created_date'] !== '') {
+            // Filter by exact creation date (YYYY-MM-DD)
+            $query .= " AND DATE(i.created_at) = ?";
+            $params[] = $filters['created_date'];
             $types .= 's';
         }
 
@@ -92,7 +87,7 @@ class Incident {
         }
     }
 
-    public function countIncidents($search = '', $filters = []) {
+    public function countIncidents($search = '', $filters = []): int {
         $query = "SELECT COUNT(*) as total
                 FROM incidents i
                 WHERE 1=1";
@@ -133,15 +128,10 @@ class Incident {
             $types .= 's';
         }
 
-        if (isset($filters['created_from']) && $filters['created_from'] !== '') {
-            $query .= " AND DATE(i.created_at) >= ?";
-            $params[] = $filters['created_from'];
-            $types .= 's';
-        }
-
-        if (isset($filters['created_to']) && $filters['created_to'] !== '') {
-            $query .= " AND DATE(i.created_at) <= ?";
-            $params[] = $filters['created_to'];
+        if (isset($filters['created_date']) && $filters['created_date'] !== '') {
+            // Filter by exact creation date (YYYY-MM-DD)
+            $query .= " AND DATE(i.created_at) = ?";
+            $params[] = $filters['created_date'];
             $types .= 's';
         }
 

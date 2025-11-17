@@ -35,11 +35,8 @@ class AdminIncidentController {
         if (isset($_GET['status']) && $_GET['status'] !== '') {
             $filters['status'] = $_GET['status'];
         }
-        if (isset($_GET['created_from']) && $_GET['created_from'] !== '') {
-            $filters['created_from'] = $_GET['created_from'];
-        }
-        if (isset($_GET['created_to']) && $_GET['created_to'] !== '') {
-            $filters['created_to'] = $_GET['created_to'];
+        if (isset($_GET['created_date']) && $_GET['created_date'] !== '') {
+            $filters['created_date'] = $_GET['created_date'];
         }
 
         // Get incidents with filters and pagination
