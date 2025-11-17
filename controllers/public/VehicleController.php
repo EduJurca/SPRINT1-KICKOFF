@@ -510,4 +510,25 @@ class VehicleController {
             'message' => 'Doors unlocked'
         ], 200);
     }
+
+    /**
+     * Mostrar vista d'administrar vehicle
+     */
+    public function showAdministrar() {
+        Router::view('public.vehicle.administrar-vehicle');
+    }
+
+    /**
+     * Mostrar vista de detalls de vehicle
+     */
+    public function showDetalls() {
+        Router::view('public.vehicle.detalls-vehicle');
+    }
+
+    /**
+     * Mostrar vista de booking
+     */
+    public function showBooking() {
+        Router::view('public.vehicle.booking');
+    }
 }

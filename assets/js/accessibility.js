@@ -257,19 +257,9 @@ class AccessibilityManager {
      * Create accessibility panel UI
      */
     createAccessibilityPanel() {
-        // Create floating button
-        const button = document.createElement('button');
-        button.id = 'accessibility-toggle';
-        button.className = 'accessibility-toggle-btn';
-        button.setAttribute('aria-label', 'Open accessibility settings');
-        button.innerHTML = `
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"></circle>
-                <path d="M12 6v6l4 2"></path>
-            </svg>
-        `;
-        button.addEventListener('click', () => this.toggleAccessibilityPanel());
-        document.body.appendChild(button);
+    // Accessibility toggle button removed by request — the panel can still be opened
+    // via the keyboard shortcut Alt+A. If you later want a visible trigger,
+    // recreate the button and attach `this.toggleAccessibilityPanel()` to its click.
         
         // Create panel
         const panel = document.createElement('div');

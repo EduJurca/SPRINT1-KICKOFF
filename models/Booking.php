@@ -191,4 +191,60 @@ class Booking {
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+    
+    /**
+     * Obtenir estadísticas mensuales de reserves del año actual
+     * 
+     * @return array Array associatiu amb mesos i comptages
+     */
+    public function getMonthlyBookingsStats() {
+        $months = ['Gen', 'Feb', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Oct', 'Nov', 'Des'];
+        $data = array_fill_keys($months, 0);
+        
+        $result = $this->db->query("
+            SELECT MONTH(created_at) as month, COUNT(*) as count 
+            FROM bookings 
+            WHERE YEAR(created_at) = YEAR(CURRENT_DATE())
+            GROUP BY MONTH(created_at)
+        ");
+        
+        if ($result) {
+            while ($row = $result->fetch_assoc()) {
+                $monthIndex = (int)$row['month'] - 1;
+                if ($monthIndex >= 0 && $monthIndex < 12) {
+                    $data[$months[$monthIndex]] = (int)$row['count'];
+                }
+            }
+        }
+        
+        return $data;
+    }
+    
+    /**
+     * Obtenir total de reserves actives
+     * 
+     * @return int
+     */
+    public function getTotalActiveBookings() {
+        $result = $this->db->query("SELECT COUNT(*) as total FROM bookings WHERE status = 'active'");
+        $row = $result->fetch_assoc();
+        return (int)($row['total'] ?? 0);
+    }
+    
+    /**
+     * Obtenir ingressos del mes actual
+     * 
+     * @return float
+     */
+    public function getCurrentMonthRevenue() {
+        $result = $this->db->query("
+            SELECT SUM(total_cost) as revenue 
+            FROM bookings 
+            WHERE MONTH(created_at) = MONTH(CURRENT_DATE())
+            AND YEAR(created_at) = YEAR(CURRENT_DATE())
+            AND status IN ('completed', 'active')
+        ");
+        $row = $result->fetch_assoc();
+        return (float)($row['revenue'] ?? 0);
+    }
 }

@@ -321,10 +321,9 @@ img {
     height: auto;
 }
 
-/* Decorative images should be hidden from screen readers */
-img[alt=""] {
-    role: presentation;
-}
+/* Decorative images should be hidden from screen readers.
+    Note: `role` is an HTML attribute and cannot be set via CSS.
+    Ensure decorative images in the HTML use alt="" and role="presentation" or aria-hidden="true`. */
 
 /* ===== Screen Reader Only Content ===== */
 
@@ -530,40 +529,7 @@ img[alt=""] {
 
 /* ===== Accessibility Panel Styles ===== */
 
-/* Accessibility Toggle Button */
-.accessibility-toggle-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background-color: #16a34a;
-    color: white;
-    border: none;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    transition: all 0.3s ease;
-}
-
-.accessibility-toggle-btn:hover {
-    background-color: #15803d;
-    transform: scale(1.1);
-}
-
-.accessibility-toggle-btn:focus {
-    outline: 3px solid #2563eb;
-    outline-offset: 2px;
-}
-
-.accessibility-toggle-btn svg {
-    width: 24px;
-    height: 24px;
-}
+/* Accessibility Toggle Button styles removed (button removed from DOM) */
 
 /* Accessibility Panel */
 .accessibility-panel {
@@ -901,12 +867,7 @@ body.text-size-xlarge {
         max-width: 100%;
     }
     
-    .accessibility-toggle-btn {
-        bottom: 16px;
-        right: 16px;
-        width: 48px;
-        height: 48px;
-    }
+    /* Responsive styles for accessibility-toggle-btn removed */
 }
 
 /* ===== ARIA Live Region ===== */

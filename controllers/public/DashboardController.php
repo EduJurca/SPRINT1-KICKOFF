@@ -108,4 +108,11 @@ class DashboardController {
             ]
         ], 200);
     }
+
+    /**
+     * Mostrar vista de resum del projecte
+     */
+    public function showResum() {
+        Router::view('public.dashboard.resum-projecte');
+    }
 }

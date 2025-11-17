@@ -15,8 +15,10 @@ if (!isset($_SESSION['alert'])) $_SESSION['alert'] = null;
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="/assets/js/toast.js"></script>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/custom.css">
 </head>
-<body class="font-sans bg-white text-black leading-normal">
+<body class="m-0 font-sans bg-white text-black leading-normal">
     <?php if (!empty($_SESSION['success'])): ?>
         <script>window.Toast && window.Toast.success(<?php echo json_encode($_SESSION['success']); ?>, 5000);</script>
         <?php unset($_SESSION['success']); ?>
@@ -39,51 +41,28 @@ if (!isset($_SESSION['alert'])) $_SESSION['alert'] = null;
     <?php endif; ?>
     
     <div class="flex min-h-screen">
-        <aside class="w-60 bg-sky-50 flex flex-col shadow-lg">
-            <div class="px-4 py-5">
-                <div class="flex items-center gap-3">
-                    <img src="/assets/images/logo.png" alt="Voltacar Logo" class="w-12 h-12">
-                </div>
-            </div>
-            
-            <nav class="flex-1">
-                <div class="mb-6">
-                    <div class="px-4 py-2 text-xs uppercase text-gray-600 font-semibold">General</div>
-                    <a href="/admin/dashboard" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-[#1565C0] hover:text-gray-100 <?php echo ($currentPage ?? '') === 'dashboard' ? 'bg-blue-900 text-white' : 'text-gray-900'; ?>" <?php echo ($currentPage ?? '') === 'dashboard' ? 'data-active="true"' : ''; ?>>
-                        <img src="/assets/images/dashboard.png" alt="Dashboard" class="w-4 h-4 opacity-100"> 
-                        Dashboard
-                    </a>
-                </div>
-                
-                <div class="mb-6">
-                    <div class="px-4 py-2 text-xs uppercase text-gray-600 font-semibold">Pages</div>
-                    <a href="/admin/users" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-blue-700 hover:text-gray-100 <?php echo ($currentPage ?? '') === 'users' ? 'bg-blue-900 text-white' : 'text-gray-900'; ?>" <?php echo ($currentPage ?? '') === 'users' ? 'data-active="true"' : ''; ?>>
-                        <i class="fa fa-users"></i> Usuaris
-                    </a>
-                    <a href="/admin/charging-stations" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-blue-700 hover:text-gray-100 <?php echo ($currentPage ?? '') === 'charging-stations' ? 'bg-blue-900 text-white' : 'text-gray-900'; ?>" <?php echo ($currentPage ?? '') === 'charging-stations' ? 'data-active="true"' : ''; ?>>
-                        <i class="fa fa-charging-station"></i> Punts de càrrega
-                    </a>
-                    <a href="/admin/vehicles" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-blue-700 hover:text-gray-100 <?php echo ($currentPage ?? '') === 'vehicles' ? 'bg-blue-900 text-white' : 'text-gray-900'; ?>" <?php echo ($currentPage ?? '') === 'vehicles' ? 'data-active="true"' : ''; ?>>
-                        <i class="fa fa-car"></i> Vehicles
-                    </a>
-                    <a href="/admin/incidents" class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-blue-700 hover:text-gray-100 <?php echo ($currentPage ?? '') === 'incidents' ? 'bg-blue-900 text-white' : 'text-gray-900'; ?>" <?php echo ($currentPage ?? '') === 'incidents' ? 'data-active="true"' : ''; ?>>
-                        <i class="fa fa-flag"></i> Incidencies
-                    </a>
-                </div>
-            </nav>
-        </aside>
+    <?php include __DIR__ . '/admin-sidebar.php'; ?>
+    <!-- Backdrop for mobile sidebar -->
+    <div id="sidebarBackdrop" class="hidden fixed inset-0 bg-black/40 z-30 md:hidden" aria-hidden="true" style="pointer-events: auto;"></div>
         
         <main class="flex-1 overflow-auto">
-            <div class="p-10">
-                <div class="flex justify-between items-center mb-8">
-                    <h1 class="text-2xl font-semibold"><?php echo $pageTitle ?? 'Dashboard'; ?></h1>
-                    <div class="flex items-center gap-4">
+            <div class="p-4 md:p-6 lg:p-10 pt-0">
+                <div class="flex items-center mb-4 md:mb-8 sticky top-0 bg-white z-40 border-b border-gray-100 py-3 md:py-4 -mx-4 px-4 md:-mx-6 md:px-6 lg:-mx-10 lg:px-10" style="top:0;">
+                    <!-- Mobile hamburger -->
+                    <button id="mobileMenuButton" type="button" class="md:hidden p-2 rounded-md mr-2 text-gray-700 hover:bg-gray-100" aria-label="Abrir menú" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+
+                    <div class="flex-1"></div>
+                    <div class="flex items-center gap-3 md:gap-4">
                         <div class="relative">
                             <button id="notificationButton" class="relative p-2 text-[#212121] hover:text-white hover:bg-[#00C853] rounded-lg transition-colors">
                                 <i class="fas fa-bell text-xl"></i>
                                 <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
                             </button>
-                            <div id="notificationMenu" class="hidden absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg py-2 z-50">
+                            <div id="notificationMenu" class="hidden absolute right-0 mt-2 w-72 sm:w-80 bg-white rounded-lg shadow-lg py-2 z-50">
                                 <div class="px-4 py-2 border-b border-gray-200">
                                     <h3 class="text-sm font-semibold text-gray-900">Notificacions</h3>
                                 </div>
@@ -106,16 +85,16 @@ if (!isset($_SESSION['alert'])) $_SESSION['alert'] = null;
                                 </div>
                             </div>
                         </div>
-                        <div class="relative">
-                            <button id="profileButton" class="flex items-center gap-3 focus:outline-none" aria-haspopup="true" aria-expanded="false">
+                        <div class="relative" id="profileContainer">
+                            <button id="profileButton" class="flex items-center gap-2 md:gap-3 focus:outline-none hover:opacity-80 transition-opacity" aria-haspopup="true" aria-expanded="false">
                                 <div class="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center text-xs font-semibold text-white">
                                     <?php echo strtoupper(substr($_SESSION['username'] ?? 'AD', 0, 2)); ?>
                                 </div>
-                                <div class="flex flex-col text-left">
-                                    <span class="text-sm font-medium hidden sm:block"><?php echo htmlspecialchars($_SESSION['username'] ?? 'Admin'); ?></span>
-                                    <span class="text-xs text-gray-500"><?php echo htmlspecialchars($_SESSION['email'] ?? 'admin@voltacar.com'); ?></span>
+                                <div class="hidden sm:flex flex-col text-left">
+                                    <span class="text-sm font-medium"><?php echo htmlspecialchars($_SESSION['username'] ?? 'Admin'); ?></span>
+                                    <span class="text-xs text-gray-500 truncate" style="max-width:10rem"><?php echo htmlspecialchars($_SESSION['email'] ?? 'admin@voltacar.com'); ?></span>
                                 </div>
-                                <i class="fas fa-caret-down ml-2 text-gray-500"></i>
+                                <i class="fas fa-caret-down hidden sm:inline text-gray-500 ml-2"></i>
                             </button>
                             <div id="profileMenu" class="hidden absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-lg py-2 z-50">
                                 <form action="/logout" method="post" class="m-0">
@@ -125,3 +104,6 @@ if (!isset($_SESSION['alert'])) $_SESSION['alert'] = null;
                         </div>
                     </div>
                 </div>
+                <!-- Mobile Sidebar Handler -->
+                <script src="/assets/js/sidebar-mobile.js"></script>
+                <!-- Sidebar behavior handled in /assets/js/admin.js -->

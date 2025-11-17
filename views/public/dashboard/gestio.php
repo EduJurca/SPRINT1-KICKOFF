@@ -242,7 +242,10 @@
   </script>
 
   <!-- Tutorial System -->
-  <script src="/public_html/js/tutorial.js"></script>
+  <script src="/assets/js/tutorial.js"></script>
+
+  <!-- Widget de Chatbot Flotante -->
+  <?php include __DIR__ . '/../../commons/chatbot-widget.php'; ?>
 
   <!-- Widget de Chatbot Flotante -->
   <?php include __DIR__ . '/../../commons/chatbot-widget.php'; ?>

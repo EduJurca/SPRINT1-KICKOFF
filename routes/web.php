@@ -8,45 +8,28 @@
 // 🏠 RUTES PÚBLIQUES
 // ==========================================
 
-// Pàgina principal
-Router::get('/', function() {
-    Router::view('auth.home');
-});
+Router::get('/', function() { Router::view('auth.home'); });
 
 // ==========================================
 // 🔐 AUTENTICACIÓ
 // ==========================================
 
-// Login
-Router::get('/login', function() {
-    Router::view('auth.login');
-});
-
+Router::get('/login', ['AuthController', 'showLogin']);
 Router::post('/login', ['AuthController', 'login']);
 
-// Registre
-Router::get('/register', function() {
-    Router::view('auth.register');
-});
-
+Router::get('/register', ['AuthController', 'showRegister']);
 Router::post('/register', ['AuthController', 'register']);
 
-// Logout
 Router::post('/logout', ['AuthController', 'logout']);
 Router::get('/logout', ['AuthController', 'logout']);
 
-// Recuperar contrasenya
-Router::get('/recover-password', function() {
-    Router::view('auth.recuperar-contrasenya');
-});
-
+Router::get('/recover-password', ['AuthController', 'showRecover']);
 Router::post('/recover-password', ['AuthController', 'recoverPassword']);
 
 // ==========================================
 // 📊 DASHBOARD
 // ==========================================
 
-// Dashboard principal (gestió)
 Router::get('/dashboard', ['DashboardController', 'showGestio']);
 Router::get('/gestio', ['DashboardController', 'showGestio']);
 
@@ -92,46 +75,62 @@ Router::get('/premium', function() {
 // 🚗 VEHICLES
 // ==========================================
 
-// Localitzar vehicle
+// Perfil
+Router::get('/perfil', ['ProfileController', 'showProfile']);
+
+Router::get('/profile', ['ProfileController', 'showProfile']);
+
+// Completar perfil
+Router::get('/completar-perfil', ['ProfileController', 'showCompleteProfile']);
+
+Router::post('/completar-perfil', ['ProfileController', 'completeProfile']);
+
+// Verificar carnet de conduir
+Router::get('/verificar-conduir', function() {
+    Router::view('public.profile.verificar-conduir');
+});
+
+Router::post('/verificar-conduir', ['ProfileController', 'verifyLicense']);
+
+// Historial
+Router::get('/historial', function() {
+    Router::view('public.profile.historial');
+});
+
+// Pagaments
+Router::get('/perfil/pagaments', ['ProfileController', 'showPayments']);
+
+Router::post('/perfil/pagaments/add', ['ProfileController', 'addPaymentMethod']);
+
+Router::post('/perfil/pagaments/delete/{id}', ['ProfileController', 'deletePaymentMethod']);
+
+// Premium
+Router::get('/premium', function() {
+    Router::view('public.profile.premium');
+});
+
+// ==========================================
+// 🚗 VEHICLES
+// ==========================================
+
 Router::get('/localitzar-vehicle', ['VehicleController', 'showLocalitzar']);
-
 Router::get('/vehicles/search', ['VehicleController', 'search']);
-
-// Administrar vehicle
-Router::get('/administrar-vehicle', function() {
-    Router::view('public.vehicle.administrar-vehicle');
-});
-
-// Detalls del vehicle
-Router::get('/detalls-vehicle', function() {
-    Router::view('public.vehicle.detalls-vehicle');
-});
-
+Router::get('/administrar-vehicle', ['VehicleController', 'showAdministrar']);
+Router::get('/detalls-vehicle', ['VehicleController', 'showDetalls']);
 Router::get('/vehicles/{id}', ['VehicleController', 'show']);
-
-// Booking
-Router::get('/booking', function() {
-    Router::view('public.vehicle.booking');
-});
-
+Router::get('/booking', ['VehicleController', 'showBooking']);
 Router::post('/book-vehicle', ['VehicleController', 'bookVehicle']);
-
-
-// Endpoint POST de compra (compatibilitat)
 Router::post('/purchase-time', ['VehicleController', 'purchaseTime']);
 
 // ==========================================
-// 📡 API ENDPOINTS
+// 📡 API - VEHICLES
 // ==========================================
 
-// Vehicles API
 Router::get('/api/vehicles', ['VehicleController', 'getAvailableVehicles']);
 Router::get('/api/vehicles/{id}', ['VehicleController', 'getVehicleById']);
 Router::post('/api/vehicles/claim', ['VehicleController', 'claimVehicle']);
 Router::post('/api/vehicles/release', ['VehicleController', 'releaseVehicle']);
 Router::get('/api/vehicles/current', ['VehicleController', 'getCurrentVehicle']);
-
-// Vehicle Control API
 Router::post('/api/vehicles/horn', ['VehicleController', 'activateHorn']);
 Router::post('/api/vehicles/lights', ['VehicleController', 'activateLights']);
 Router::post('/api/vehicles/start', ['VehicleController', 'startEngine']);
@@ -139,27 +138,34 @@ Router::post('/api/vehicles/stop', ['VehicleController', 'stopEngine']);
 Router::post('/api/vehicles/lock', ['VehicleController', 'lockDoors']);
 Router::post('/api/vehicles/unlock', ['VehicleController', 'unlockDoors']);
 
-// Booking API
+// ==========================================
+// 📡 API - BOOKINGS
+// ==========================================
+
 Router::get('/api/bookings', ['BookingController', 'index']);
 Router::get('/api/bookings/{id}', ['BookingController', 'show']);
 Router::post('/api/bookings', ['BookingController', 'create']);
 Router::put('/api/bookings/{id}', ['BookingController', 'update']);
 Router::delete('/api/bookings/{id}', ['BookingController', 'delete']);
 
-// Sessió
+// ==========================================
+// 📡 API - SESSIÓ
+// ==========================================
+
 Router::get('/api/session-check', ['AuthController', 'checkSession']);
 Router::get('/api/session-status', ['AuthController', 'getSessionStatus']);
 
-// Gestió (dashboard data)
-Router::get('/api/gestio', ['DashboardController', 'getGestioData']);
+// ==========================================
+// 📡 API - ESTACIONS
+// ==========================================
+
+Router::get('/api/charging-stations', ['ChargingStationController', 'getStationsJSON']);
 
 // ==========================================
 // ♿ ACCESSIBILITAT
 // ==========================================
 
-Router::get('/accessibilitat', function() {
-    Router::view('commons.accessibility.accessibilitat');
-});
+Router::get('/accessibilitat', function() { Router::view('commons.accessibility.accessibilitat'); });
 
 // ==========================================
 // � CHAT / ASISTENTE IA
@@ -171,42 +177,40 @@ Router::post('/chat/send', ['ChatController', 'send']);
 // ==========================================
 // �🔧 ADMIN (si tens zona d'administració)
 // ==========================================
-require_once CONTROLLERS_PATH . '/admin/AdminController.php';
 
-// Dashboard principal d'admin
 Router::get('/admin', ['AdminController', 'dashboard']);
 Router::get('/admin/dashboard', ['AdminController', 'dashboard']);
 
-// Gestió de vehicles
-Router::get('/admin/vehicles', ['AdminController', 'vehicles']);
+// ==========================================
+// 👥 ADMIN - USUARIOS
+// ==========================================
 
-// Gestió de reserves
-Router::get('/admin/bookings', ['AdminController', 'bookings']);
-
-// Incidències
-Router::get('/admin/incidencies', ['AdminController', 'incidencies']);
-
-// Configuració (settings page removed)
+Router::get('/admin/users', ['UserController', 'index']);
+Router::get('/admin/users/create', ['UserController', 'create']);
+Router::post('/admin/users/store', ['UserController', 'store']);
+// Edit, update and delete routes for users
+Router::get('/admin/users/edit', ['UserController', 'edit']);
+Router::post('/admin/users/update', ['UserController', 'update']);
+Router::post('/admin/users/delete', ['UserController', 'delete']);
 
 // ==========================================
-// 👥 CRUD USUARIS
+// � CHAT / ASISTENTE IA
 // ==========================================
-require_once CONTROLLERS_PATH . '/admin/UserController.php';
 
-Router::get('/admin/users', function() {
-    $controller = new UserController();
-    $controller->index();
-});
+Router::get('/chat', ['ChatController', 'index']);
+Router::post('/chat/send', ['ChatController', 'send']);
 
-Router::get('/admin/users/create', function() {
-    $controller = new UserController();
-    $controller->create();
-});
+// ==========================================
+// � CHAT / ASISTENTE IA
+// ==========================================
 
-Router::post('/admin/users/store', function() {
-    $controller = new UserController();
-    $controller->store();
-});
+Router::get('/chat', ['ChatController', 'index']);
+Router::post('/chat/send', ['ChatController', 'send']);
+
+// ==========================================
+// �🔧 ADMIN (si tens zona d'administració)
+// ==========================================
+
 Router::get('/admin/vehicles', ['AdminVehicleController', 'index']);
 Router::get('/admin/vehicles/create', ['AdminVehicleController', 'create']);
 Router::post('/admin/vehicles', ['AdminVehicleController', 'store']);
@@ -214,32 +218,31 @@ Router::get('/admin/vehicles/{id}', ['AdminVehicleController', 'show']);
 Router::get('/admin/vehicles/{id}/edit', ['AdminVehicleController', 'edit']);
 Router::put('/admin/vehicles/{id}', ['AdminVehicleController', 'update']);
 Router::post('/admin/vehicles/{id}', ['AdminVehicleController', 'update']);
-
-// DESTROY - Eliminar vehículo (simulando DELETE con POST + _method)
 Router::delete('/admin/vehicles/{id}', ['AdminVehicleController', 'destroy']);
 Router::get('/admin/api/vehicles', ['AdminVehicleController', 'api']);
 
-// ADMIN ROUTES (gestió CRUD)
+// ==========================================
+// 🔌 ADMIN - ESTACIONES
+// ==========================================
+
 Router::get('/admin/charging-stations', ['ChargingStationController', 'index']);
-Router::get('/admin/charging-points', ['ChargingStationController', 'index']); // Alias
 Router::get('/admin/charging-stations/create', ['ChargingStationController', 'create']);
 Router::post('/admin/charging-stations/store', ['ChargingStationController', 'store']);
 Router::get('/admin/charging-stations/{id}/edit', ['ChargingStationController', 'edit']);
 Router::post('/admin/charging-stations/{id}/update', ['ChargingStationController', 'update']);
 Router::post('/admin/charging-stations/{id}/delete', ['ChargingStationController', 'delete']);
 
-// PUBLIC ROUTES (mapa i detalls)
+// ==========================================
+// 📍 ESTACIONES PUBLICAS
+// ==========================================
+
 Router::get('/charging-stations', ['ChargingStationController', 'showMap']);
 Router::get('/charging-stations/{id}', ['ChargingStationController', 'getStationDetails']);
 
-// API ROUTES (JSON endpoints)
-Router::get('/api/charging-stations', ['ChargingStationController', 'getStationsJSON']);
+// ==========================================
+// 📋 ADMIN - INCIDENCIAS
+// ==========================================
 
-// Public incident reporting
-Router::get('/report-incident', ['IncidentController', 'createIncident']);
-Router::post('/report-incident', ['IncidentController', 'createIncident']);
-
-// Admin incident management
 Router::get('/admin/incidents', ['AdminIncidentController', 'getAllIncidents']);
 Router::get('/admin/incidents/create', ['AdminIncidentController', 'createIncident']);
 Router::post('/admin/incidents/create', ['AdminIncidentController', 'createIncident']);
@@ -248,9 +251,15 @@ Router::post('/admin/incidents/{id}/update', ['AdminIncidentController', 'update
 Router::post('/admin/incidents/{id}/resolve', ['AdminIncidentController', 'resolveIncident']);
 Router::delete('/admin/incidents/{id}', ['AdminIncidentController', 'deleteIncident']);
 
+// ==========================================
+// 📋 INCIDENCIAS PUBLICAS
+// ==========================================
 
-Router::get('/admin/settings', function() {
-    require_once PUBLIC_PATH . '/php/admin/settings.php';
-});
+Router::get('/report-incident', ['IncidentController', 'createIncident']);
+Router::post('/report-incident', ['IncidentController', 'createIncident']);
 
+// ==========================================
+// ⚙️ ADMIN - CONFIGURACIÓN
+// ==========================================
 
+Router::get('/admin/settings', ['AdminController', 'showSettings']);

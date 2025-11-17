@@ -17,7 +17,6 @@
     <!-- JavaScript principal -->
     <script src="/assets/js/main.js"></script>
     <script src="/assets/js/auth.js"></script>
-    <script src="/assets/js/accessibility.js"></script>
     
     <!-- JavaScript addicional per a cada pàgina -->
     <?php if (isset($additionalJS)): ?>
