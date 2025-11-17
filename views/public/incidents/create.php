@@ -53,7 +53,7 @@
                 <form id="incidentForm" action="/report-incident" method="POST" class="overflow-y-auto no-scrollbar space-y-4 pr-1 h-full">
                     <div>
                         <label for="type" class="block text-gray-900 font-semibold mb-2"><?php echo __('incident.type'); ?></label>
-                        <select id="type" name="type" class="w-full px-4 py-2 bg-[#F5F5F5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1565C0]">
+                        <select id="type" name="type" class="w-full px-4 py-2 bg-[#F5F5F5] rounded-lg border-0 shadow-none appearance-none focus:outline-none focus:ring-2 focus:ring-[#1565C0] focus:border-transparent">
                             <option value=""><?php echo __('incident.type_select'); ?></option>
                             <option value="mechanical"><?php echo __('incident.type_mechanical'); ?></option>
                             <option value="electrical"><?php echo __('incident.type_electrical'); ?></option>
@@ -61,10 +61,14 @@
                         </select>
                         <div class="error-msg" id="error-type"></div>
                     </div>
-
+                    <div>
+                        <label for="fullname" class="block text-gray-900 font-semibold mb-2"><?php echo __('profile.full_name'); ?></label>
+                        <input type="text" id="fullname" name="fullname" value="<?php echo htmlspecialchars($fullname ?? ''); ?>" class="w-full px-4 py-2 bg-[#F5F5F5] rounded-lg border-0 shadow-none focus:outline-none focus:ring-2 focus:ring-[#1565C0] focus:border-transparent">
+                        <div class="error-msg" id="error-fullname"></div>
+                    </div>
                     <div>
                         <label for="description" class="block text-gray-900 font-semibold mb-2"><?php echo __('incident.description'); ?></label>
-                        <textarea id="description" name="description" rows="6" placeholder="<?php echo __('incident.placeholder_description'); ?>" class="w-full px-4 py-2 bg-[#F5F5F5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1565C0] resize-none"></textarea>
+                        <textarea id="description" name="description" rows="6" placeholder="<?php echo __('incident.placeholder_description'); ?>" class="w-full px-4 py-2 bg-[#F5F5F5] rounded-lg border-0 shadow-none focus:outline-none focus:ring-2 focus:ring-[#1565C0] resize-none focus:border-transparent placeholder-gray-400"></textarea>
                         <div class="error-msg" id="error-description"></div>
                     </div>
 

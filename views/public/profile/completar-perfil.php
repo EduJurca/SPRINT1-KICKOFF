@@ -147,7 +147,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!valid) {
       e.preventDefault();
     }
-    // Si valid=true, el form se enviará normalmente al servidor
   });
 });
   </script>
