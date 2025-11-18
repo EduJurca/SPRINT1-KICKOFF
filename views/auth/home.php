@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo __('home.title'); ?></title>
+        <link rel="icon" href="/assets/images/favicon.png" type="image/png">
+        <link rel="apple-touch-icon" href="/assets/images/favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        (function(d){
+            var s = d.createElement("script");
+            s.setAttribute("data-account","<?php echo getenv('USERWAY_ACCOUNT_ID'); ?>");
+            s.src = "https://cdn.userway.org/widget.js";
+            (d.body || d.head).appendChild(s);
+        })(document);
+    </script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white p-8 rounded-2xl shadow-inner w-full max-w-sm flex flex-col justify-center text-center">
+        <h1 class="text-3xl font-bold text-gray-900 mb-6">SIMS</h1>
+        <div class="mb-8">
+            <img src="/assets/images/logo.png" alt="<?php echo __('home.logo_alt'); ?>" class="h-32 w-32 rounded-full mx-auto">
+        </div>
+        <a href="/login" class="block w-full bg-[#1565C0] text-white font-semibold py-3 px-6 rounded-lg hover:opacity-90 transition-opacity duration-300 mb-4">
+            <?php echo __('home.login'); ?>
+        </a>
+        <a href="/register" class="block w-full bg-gray-300 text-gray-900 font-semibold py-3 px-6 rounded-lg hover:bg-gray-400 transition-colors duration-300">
+            <?php echo __('home.register'); ?>
+        </a>
+    </div>
+</body>
+</html>

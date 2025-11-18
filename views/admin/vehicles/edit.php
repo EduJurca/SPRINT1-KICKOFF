@@ -1,0 +1,363 @@
+<?php
+/**
+ * ✏️ Vista: Editar Vehículo (Admin)
+ * Formulario para modificar un vehículo existente
+ */
+
+$currentPage = 'vehicles';
+
+require_once __DIR__ . '/../admin-header.php';
+
+// Obtener errores y datos antiguos
+$errors = $_SESSION['errors'] ?? [];
+$oldData = $_SESSION['old_data'] ?? $vehicle ?? [];
+unset($_SESSION['errors'], $_SESSION['old_data']);
+?>
+<style> .leaflet-control-zoom { 
+            display: none !important;
+        } </style>
+<!-- Leaflet CSS para mapas -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
+      crossorigin=""/>
+
+<div class="min-h-screen">
+    <div class="max-w-7xl mx-auto">
+        
+        <!-- Header -->
+        <div class="mb-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900"><?= __('admin.vehicles.edit') ?></h2>
+                    <p class="text-sm text-gray-600 mt-1"><?= __('admin.vehicles.subtitle_edit') ?></p>
+                </div>
+                <a href="/admin/vehicles" class="inline-flex items-center px-4 py-2.5 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-all shadow-sm hover:shadow-md">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    <?= __('admin.vehicles.back') ?>
+                </a>
+            </div>
+        </div>
+
+        <!-- Mostrar errores -->
+        <?php if (!empty($errors)): ?>
+            <div class="mb-6 bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg shadow-sm">
+                <div class="flex items-start gap-2">
+                    <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                    </svg>
+                    <div>
+                        <p class="font-semibold mb-2">Errores de validación:</p>
+                        <ul class="list-disc list-inside space-y-1">
+                            <?php foreach ($errors as $error): ?>
+                                <li><?= htmlspecialchars($error) ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <!-- Formulario -->
+        <div class="bg-gray-100 rounded-lg shadow-md p-8">
+            <form method="POST" action="/admin/vehicles/<?= $vehicle['id'] ?>" class="space-y-6" id="vehicleEditForm" novalidate>
+                <!-- Campo oculto para simular PUT -->
+                <input type="hidden" name="_method" value="PUT">
+                
+                <!-- Información Básica -->
+                <div class="border-b border-gray-200 pb-6">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Información Básica</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <div>
+                            <label for="plate" class="block text-sm font-semibold text-gray-700 mb-2">
+                                <?= __('admin.vehicles.labels.plate') ?> <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" id="plate" name="plate" required
+                                   value="<?= htmlspecialchars($oldData['plate'] ?? $oldData['license_plate'] ?? '') ?>"
+                                   placeholder="1234ABC"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all">
+                            <p id="error-plate" class="text-red-600 text-sm mt-1 hidden"></p>
+                        </div>
+                        
+                        <div>
+                            <label for="year" class="block text-sm font-semibold text-gray-700 mb-2">
+                                <?= __('admin.vehicles.labels.year') ?> <span class="text-red-500">*</span>
+                            </label>
+                            <input type="number" id="year" name="year" required
+                                   value="<?= htmlspecialchars($oldData['year'] ?? '') ?>"
+                                   min="1900" max="<?= date('Y') + 1 ?>"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all">
+                            <p id="error-year" class="text-red-600 text-sm mt-1 hidden"></p>
+                        </div>
+                        
+                        <div>
+                            <label for="brand" class="block text-sm font-semibold text-gray-700 mb-2">
+                                <?= __('admin.vehicles.labels.brand') ?> <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" id="brand" name="brand" required
+                                   value="<?= htmlspecialchars($oldData['brand'] ?? '') ?>"
+                                   placeholder="Tesla, Nissan, BMW..."
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all">
+                            <p id="error-brand" class="text-red-600 text-sm mt-1 hidden"></p>
+                        </div>
+                        
+                        <div>
+                            <label for="model" class="block text-sm font-semibold text-gray-700 mb-2">
+                                <?= __('admin.vehicles.labels.model') ?> <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" id="model" name="model" required
+                                   value="<?= htmlspecialchars($oldData['model'] ?? '') ?>"
+                                   placeholder="Model 3, Leaf, i3..."
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all">
+                            <p id="error-model" class="text-red-600 text-sm mt-1 hidden"></p>
+                        </div>
+                        
+                        <div>
+                            <label for="status" class="block text-sm font-semibold text-gray-700 mb-2">
+                                <?= __('admin.vehicles.table.status') ?> <span class="text-red-500">*</span>
+                            </label>
+                            <select id="status" name="status" required
+                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all">
+                                <option value="available" <?= ($oldData['status'] ?? '') === 'available' ? 'selected' : '' ?>>Disponible</option>
+                                <option value="in_use" <?= ($oldData['status'] ?? '') === 'in_use' ? 'selected' : '' ?>>En uso</option>
+                                <option value="charging" <?= ($oldData['status'] ?? '') === 'charging' ? 'selected' : '' ?>>Cargando</option>
+                                <option value="maintenance" <?= ($oldData['status'] ?? '') === 'maintenance' ? 'selected' : '' ?>>Mantenimiento</option>
+                                <option value="reserved" <?= ($oldData['status'] ?? '') === 'reserved' ? 'selected' : '' ?>>Reservado</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Características Técnicas -->
+                <div class="border-b border-gray-200 pb-6">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Características Técnicas</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <div>
+                            <label for="battery_level" class="block text-sm font-semibold text-gray-700 mb-2">
+                                <?= __('admin.vehicles.labels.battery_level') ?>
+                            </label>
+                            <input type="number" id="battery_level" name="battery_level"
+                                   value="<?= htmlspecialchars($oldData['battery_level'] ?? $oldData['battery'] ?? '100') ?>"
+                                   min="0" max="100"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all">
+                        </div>
+                        
+                        <div>
+                            <label for="price_per_minute" class="block text-sm font-semibold text-gray-700 mb-2">
+                                <?= __('admin.vehicles.labels.price_per_minute') ?>
+                            </label>
+                            <input type="number" id="price_per_minute" name="price_per_minute"
+                                   value="<?= htmlspecialchars($oldData['price_per_minute'] ?? '0.35') ?>"
+                                   step="0.01" min="0"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all">
+                        </div>
+                        
+                        <div class="md:col-span-2">
+                            <label class="flex items-center cursor-pointer">
+                                <input type="checkbox" id="is_accessible" name="is_accessible"
+                                       <?= !empty($oldData['is_accessible']) ? 'checked' : '' ?>
+                                       class="w-5 h-5 text-[#1565C0] border-gray-300 rounded focus:ring-2 focus:ring-[#1565C0]">
+                                <span class="ml-3 text-sm font-medium text-gray-700">
+                                    <?= __('admin.vehicles.labels.is_accessible') ?>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ubicación -->
+                <div class="border-b border-gray-200 pb-6">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Ubicación</h2>
+                    
+                    <!-- Mapa interactivo -->
+                    <div class="mb-4">
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4">
+                            <p class="text-sm text-blue-700">
+                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Haz clic en el mapa para actualizar la ubicación del vehículo
+                            </p>
+                        </div>
+                        <div id="location-map" style="height: 400px; border-radius: 8px; border: 2px solid #e5e7eb;"></div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <div>
+                            <label for="latitude" class="block text-sm font-semibold text-gray-700 mb-2">
+                                <?= __('admin.vehicles.labels.latitude') ?>
+                            </label>
+                            <input type="number" id="latitude" name="latitude"
+                                   value="<?= htmlspecialchars($oldData['latitude'] ?? $oldData['location']['lat'] ?? '40.7117') ?>"
+                                   step="0.000001"
+                                   placeholder="40.7117"
+                                   readonly
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all">
+                        </div>
+                        
+                        <div>
+                            <label for="longitude" class="block text-sm font-semibold text-gray-700 mb-2">
+                                <?= __('admin.vehicles.labels.longitude') ?>
+                            </label>
+                            <input type="number" id="longitude" name="longitude"
+                                   value="<?= htmlspecialchars($oldData['longitude'] ?? $oldData['location']['lng'] ?? '0.5783') ?>"
+                                   step="0.000001"
+                                   placeholder="0.5783"
+                                   readonly
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Imagen -->
+                <div class="pb-6">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4"><?= __('admin.vehicles.info.image') ?> (opcional)</h2>
+                    <div>
+                        <label for="image_url" class="block text-sm font-semibold text-gray-700 mb-2">
+                            <?= __('admin.vehicles.labels.image_url') ?>
+                        </label>
+                        <input type="url" id="image_url" name="image_url"
+                               value="<?= htmlspecialchars($oldData['image_url'] ?? '') ?>"
+                               placeholder="https://ejemplo.com/imagen.jpg"
+                               class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1565C0] focus:border-transparent transition-all">
+                    </div>
+                </div>
+
+                <!-- Botones -->
+                <div class="flex items-center justify-end gap-4 pt-6 border-t border-gray-200">
+                    <a href="/admin/vehicles" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-all shadow-sm hover:shadow-md">
+                        <?= __('admin.vehicles.buttons.cancel') ?>
+                    </a>
+                    <button type="submit" class="px-6 py-3 bg-[#1565C0] hover:bg-blue-700 text-white rounded-lg font-semibold transition-all flex items-center gap-2 shadow-md hover:shadow-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <?= __('admin.vehicles.buttons.save') ?>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Leaflet JS para mapas -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" 
+        crossorigin=""></script>
+
+<!-- Validación de formulario -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('vehicleEditForm');
+    const requiredMsg = '<?php echo addslashes(__('form.validations.required_field')); ?>';
+    
+    // Validar formulari al submit
+    form.addEventListener('submit', function(e) {
+        let isValid = true;
+        
+        // Camps obligatoris
+        const requiredFields = ['plate', 'year', 'brand', 'model'];
+        
+        requiredFields.forEach(fieldName => {
+            const field = document.getElementById(fieldName);
+            const errorEl = document.getElementById(`error-${fieldName}`);
+            
+            if (!field.value.trim()) {
+                errorEl.textContent = requiredMsg;
+                errorEl.classList.remove('hidden');
+                field.classList.add('border-red-500');
+                isValid = false;
+            } else {
+                errorEl.classList.add('hidden');
+                field.classList.remove('border-red-500');
+            }
+            
+            // Netejar error quan l'usuari escriu
+            field.addEventListener('input', function() {
+                errorEl.classList.add('hidden');
+                field.classList.remove('border-red-500');
+            });
+        });
+        
+        if (!isValid) {
+            e.preventDefault();
+            // Scroll al primer error
+            const firstError = form.querySelector('.border-red-500');
+            if (firstError) {
+                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                firstError.focus();
+            }
+        }
+    });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Obtener coordenadas iniciales
+    const latInput = document.getElementById('latitude');
+    const lngInput = document.getElementById('longitude');
+    const initialLat = parseFloat(latInput.value) || 40.7117;
+    const initialLng = parseFloat(lngInput.value) || 0.5783;
+    
+    // Crear el mapa centrado en la ubicación actual del vehículo
+    const map = L.map('location-map').setView([initialLat, initialLng], 15);
+    
+    // Agregar tiles de OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        minZoom: 10,
+        maxZoom: 18
+    }).addTo(map);
+    
+    // Crear un marcador inicial (arrastrable)
+    let marker = L.marker([initialLat, initialLng], {
+        draggable: true
+    }).addTo(map);
+    
+    // Actualizar coordenadas cuando se arrastra el marcador
+    marker.on('dragend', function(e) {
+        const position = marker.getLatLng();
+        updateCoordinates(position.lat, position.lng);
+    });
+    
+    // Agregar marcador al hacer clic en el mapa
+    map.on('click', function(e) {
+        const lat = e.latlng.lat;
+        const lng = e.latlng.lng;
+        
+        // Mover el marcador a la nueva posición
+        marker.setLatLng([lat, lng]);
+        updateCoordinates(lat, lng);
+        
+        // Centrar el mapa en la nueva posición
+        map.panTo([lat, lng]);
+    });
+    
+    // Función para actualizar las coordenadas en los inputs
+    function updateCoordinates(lat, lng) {
+        latInput.value = lat.toFixed(6);
+        lngInput.value = lng.toFixed(6);
+        
+        // Actualizar el popup del marcador
+        marker.bindPopup(`
+            <div style="text-align: center; padding: 5px;">
+                <strong style="font-size: 1.1em;">Ubicación Actualizada</strong><br>
+                <span style="font-size: 0.85em; color: #666;">
+                    Lat: ${lat.toFixed(6)}<br>
+                    Lng: ${lng.toFixed(6)}
+                </span>
+            </div>
+        `).openPopup();
+    }
+    
+    // Mostrar popup inicial
+    updateCoordinates(initialLat, initialLng);
+});
+</script>
+
+<?php require_once __DIR__ . '/../admin-footer.php'; ?>

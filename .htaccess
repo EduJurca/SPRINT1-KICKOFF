@@ -1,0 +1,34 @@
+# ⚙️ Configuració de reescriptura d'URLs per Apache
+# Redirigeix totes les peticions al Front Controller (index.php)
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Si el directori o fitxer existeix físicament, serveix-lo directament
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    
+    # Redirigeix tot al index.php
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+
+# Configuració de seguretat i rendiment
+<IfModule mod_headers.c>
+    # Evitar clickjacking
+    Header set X-Frame-Options "SAMEORIGIN"
+    
+    # Evitar XSS
+    Header set X-XSS-Protection "1; mode=block"
+    
+    # Evitar MIME sniffing
+    Header set X-Content-Type-Options "nosniff"
+</IfModule>
+
+# Deshabilitar listats de directoris
+Options -Indexes
+
+# Protegir fitxers sensibles
+<FilesMatch "\.(env|htaccess|htpasswd|ini|log|sh|sql)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
