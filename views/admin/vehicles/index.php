@@ -395,20 +395,44 @@ unset($_SESSION['success'], $_SESSION['error']);
     </div>
 </div>
 
-<!-- Formulario oculto para eliminar -->
-<form id="deleteForm" method="POST" action="" style="display: none;">
-    <input type="hidden" name="_method" value="DELETE">
-</form>
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="mt-3 text-center">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+                <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+            </div>
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mt-4">Eliminar vehicle</h3>
+            <div class="mt-2 px-7 py-3">
+                <p class="text-sm text-gray-500" id="deleteMessage"></p>
+            </div>
+            <div class="flex gap-3 justify-center mt-4">
+                <button onclick="closeDeleteModal()" 
+                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">
+                    Cancel·lar
+                </button>
+                <form id="deleteForm" method="POST" class="inline">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" 
+                            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                        Eliminar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
-const confirmTemplateList = <?= json_encode(__('admin.vehicles.confirm_delete')) ?>;
 function confirmDelete(id, plate) {
-    const msg = confirmTemplateList.replace(':plate', plate);
-    if (confirm(msg)) {
-        const form = document.getElementById('deleteForm');
-        form.action = `/admin/vehicles/${id}`;
-        form.submit();
-    }
+    document.getElementById('deleteModal').classList.remove('hidden');
+    document.getElementById('deleteMessage').textContent = 
+        `Estàs segur que vols eliminar el vehicle "${plate}"? Aquesta acció no es pot desfer.`;
+    document.getElementById('deleteForm').action = `/admin/vehicles/${id}`;
+}
+
+function closeDeleteModal() {
+    document.getElementById('deleteModal').classList.add('hidden');
 }
 
 // Toggle para filtros avanzados
