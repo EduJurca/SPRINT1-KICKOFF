@@ -130,9 +130,7 @@ Router::post('/api/users/language', ['ProfileController', 'updateLanguage']);
 Router::get('/chat', ['ChatController', 'index']);
 Router::post('/chat/send', ['ChatController', 'send']);
 
-// ==========================================
-// �🔧 ADMIN (si tens zona d'administració)
-// ==========================================
+
 require_once CONTROLLERS_PATH . '/admin/AdminController.php';
 
 // Dashboard principal d'admin
@@ -146,10 +144,6 @@ Router::get('/admin/bookings', ['AdminController', 'bookings']);
 Router::get('/admin/incidencies', ['AdminController', 'incidencies']);
 
 // Configuració (settings page removed)
-
-// ==========================================
-// 👥 CRUD USUARIS
-// ==========================================
 require_once CONTROLLERS_PATH . '/admin/UserController.php';
 
 Router::get('/admin/users', function() {
@@ -182,9 +176,7 @@ Router::post('/admin/users/{id}/delete', function() {
     $controller->delete();
 });
 
-// ==========================================
-// 🚗 CRUD VEHICLES
-// ==========================================
+
 require_once CONTROLLERS_PATH . '/admin/AdminVehicleController.php';
 
 Router::get('/admin/vehicles', ['AdminVehicleController', 'index']);
