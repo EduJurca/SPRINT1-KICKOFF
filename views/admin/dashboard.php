@@ -106,12 +106,20 @@ require_once VIEWS_PATH . '/admin/admin-header.php';
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
             <!-- Chart -->
             <div class="bg-gray-100 rounded-xl p-6 shadow-md col-span-4">
-                <h2 class="text-lg font-semibold mb-6"><?php echo __('admin.dashboard.overview_title'); ?></h2>
+                <h2 class="text-lg font-semibold mb-2"><?php echo __('admin.dashboard.overview_title'); ?></h2>
+                <?php
+                    $chartLabelKey = 'admin.dashboard.chart_label';
+                    $chartLabel = __($chartLabelKey);
+                    if ($chartLabel === $chartLabelKey) { $chartLabel = 'Bookings'; }
+                ?>
+                <p class="text-sm text-gray-600 mb-4"><?php echo $chartLabel; ?></p>
                 <div class="flex items-end justify-between h-[300px] w-full">
                     <?php foreach ($chartData as $month => $value): ?>
-                        <div class="flex flex-col items-center gap-2 h-full flex-1">
-                            <div class="w-4/5 bg-gray-200 rounded-t hover:bg-white transition-all cursor-pointer"
-                                style="height: <?php echo ($value / $maxValue) * 100; ?>%;"></div>
+                        <?php $pct = ($maxValue > 0) ? (($value / $maxValue) * 100) : 0; ?>
+                        <div class="flex flex-col items-center gap-2 h-full flex-1" aria-label="<?php echo htmlspecialchars($month . ': ' . $value); ?>">
+                            <div class="text-sm text-gray-700 mb-1 font-medium"><?php echo $value; ?></div>
+                            <div class="w-4/5 bg-gray-200 rounded-t hover:bg-white transition-all cursor-pointer" title="<?php echo $value; ?>"
+                                style="height: <?php echo $pct; ?>%;"></div>
                             <div class="text-xs text-gray-600 mt-auto"><?php echo $month; ?></div>
                         </div>
                     <?php endforeach; ?>

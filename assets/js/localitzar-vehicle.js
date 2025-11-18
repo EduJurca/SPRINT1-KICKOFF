@@ -3,6 +3,15 @@
  * Gestiona mapas, listados y reclamación de vehículos
  */
 
+// Safe translation helper to avoid inserting 'undefined' into templates
+function t(key, fallback = '') {
+    try {
+        return (window.TRANSLATIONS && window.TRANSLATIONS[key]) || fallback;
+    } catch (e) {
+        return fallback;
+    }
+}
+
 const VehicleLocator = {
     mobileMap: null,
     desktopMap: null,
@@ -174,7 +183,7 @@ const VehicleLocator = {
             L.marker([this.userLocation.lat, this.userLocation.lng], {
             icon: userIcon,
             zIndexOffset: 1000
-        }).addTo(map).bindPopup(`<b>${(window.TRANSLATIONS && window.TRANSLATIONS['vehicle.your_location']) || 'Your location'}</b>`);
+        }).addTo(map).bindPopup(`<b>${t('vehicle.your_location', 'Your location')}</b>`);
     },
 
     addVehicleMarkers(map, markersArray) {
@@ -255,10 +264,10 @@ const VehicleLocator = {
         const list = document.getElementById(listId);
         if (!list) return;
         
-        if (vehicles.length === 0) {
+            if (vehicles.length === 0) {
             list.innerHTML = `
                 <li class="bg-gray-100 p-4 rounded-lg shadow-sm text-center text-gray-500">
-                    ${(window.TRANSLATIONS && window.TRANSLATIONS['vehicle.no_vehicles_available']) || 'No vehicles available'}
+                    ${t('vehicle.no_vehicles_available', 'No vehicles available')}
                 </li>
             `;
             return;
@@ -269,13 +278,13 @@ const VehicleLocator = {
                 onclick="VehicleLocator.showVehicleDetails(${vehicle.id})">
                 <div>
                     <h3 class="font-bold text-base">${vehicle.model || vehicle.license_plate}</h3>
-                    <p class="text-gray-700 text-sm">${vehicle.battery}% ${(window.TRANSLATIONS && window.TRANSLATIONS['vehicle.battery_unit']) || 'battery'}</p>
+                    <p class="text-gray-700 text-sm">${vehicle.battery}% ${t('vehicle.battery_unit', 'battery')}</p>
                     ${vehicle.distance ? `<p class="text-gray-700 text-xs">📍 ${vehicle.distance.toFixed(2)} km</p>` : ''}
                 </div>
                 <button 
                     onclick="event.stopPropagation(); VehicleLocator.handleClaimVehicle(${vehicle.id})"
                     class="bg-[#1565C0] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#1151a3] transition-colors duration-300">
-                        ${(window.TRANSLATIONS && window.TRANSLATIONS['vehicle.claim']) || 'Claim'}
+                        ${t('vehicle.claim', 'Claim')}
                 </button>
             </li>
         `).join('');
@@ -333,7 +342,7 @@ const VehicleLocator = {
                 ${vehicle.description ? `<p class="mt-3 text-sm text-gray-700">${vehicle.description}</p>` : ''}
                 <div class="mt-4">
                     <button id="vehicle-claim-btn" class="w-full bg-[#1565C0] hover:bg-[#0D47A1] text-white py-3 rounded-lg font-semibold transition-colors shadow-md">
-                        <i class="fas fa-key mr-2"></i>${(window.TRANSLATIONS && window.TRANSLATIONS['vehicle.claim_this_vehicle']) || 'Claim This Vehicle'}
+                        <i class="fas fa-key mr-2"></i>${t('details.claim_this_vehicle', 'Claim this vehicle')}
                     </button>
                 </div>
             </div>

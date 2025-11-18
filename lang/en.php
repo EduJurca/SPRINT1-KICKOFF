@@ -389,6 +389,7 @@ return [
                 'statistics' => 'Statistics'
             ],
             'description' => 'Manage system users',
+            'chart_label' => 'Monthly bookings',
             'new_user' => 'New User',
             'overview_title' => 'Overview',
             'metrics' => [

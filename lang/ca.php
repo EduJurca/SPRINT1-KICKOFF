@@ -385,6 +385,7 @@ return [
                 'statistics' => 'Estadístiques'
             ],
             'description' => 'Gestiona els usuaris del sistema',
+            'chart_label' => 'Reserves mensuals',
             'new_user' => 'Nou Usuari',
             'overview_title' => 'Vista',
             'metrics' => [
