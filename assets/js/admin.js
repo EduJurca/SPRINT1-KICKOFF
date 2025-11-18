@@ -55,18 +55,28 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Funcionalidad para botones de tabs
+    // Funcionalidad para botones de tabs (muestra/oculta contenido)
     tabButtons.forEach(button => {
         button.addEventListener('click', function() {
+            const tabName = this.getAttribute('data-tab');
+
+            // Toggle button active styles
             tabButtons.forEach(btn => {
                 btn.classList.remove('bg-blue-900', 'text-white');
                 btn.classList.add('text-gray-600');
                 btn.removeAttribute('data-active');
             });
-
             this.classList.add('bg-blue-900', 'text-white');
             this.classList.remove('text-gray-600');
             this.setAttribute('data-active', 'true');
+
+            // Show/hide tab content
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(c => c.classList.add('hidden'));
+            if (tabName) {
+                const target = document.getElementById('tab-' + tabName);
+                if (target) target.classList.remove('hidden');
+            }
         });
     });
 });
