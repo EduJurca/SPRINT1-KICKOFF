@@ -38,10 +38,11 @@ db.cars.insertMany([
         battery_level: 85,
         location: {
             type: "Point",
-            coordinates: [2.17009700, 41.38706100]
+            coordinates: [0.57830000, 40.71170000]
         },
-        location_name: "Plaça Catalunya",
-        last_updated: new Date()
+        location_name: "Amposta Centre",
+        last_updated: new Date(),
+        is_accessible: false
     },
     {
         license_plate: "5678DEF",
@@ -52,24 +53,26 @@ db.cars.insertMany([
         battery_level: 92,
         location: {
             type: "Point",
-            coordinates: [2.17432500, 41.40362400]
+            coordinates: [0.57650000, 40.71350000]
         },
-        location_name: "Sagrada Família",
-        last_updated: new Date()
+        location_name: "Parc Natural Delta de l'Ebre",
+        last_updated: new Date(),
+        is_accessible: true
     },
     {
         license_plate: "9012GHI",
         brand: "Renault",
         model: "Zoe",
         year: 2023,
-        status: "in_use",
-        battery_level: 67,
+        status: "available",
+        battery_level: 78,
         location: {
             type: "Point",
-            coordinates: [2.15268900, 41.41449500]
+            coordinates: [0.58100000, 40.71000000]
         },
-        location_name: "Park Güell",
-        last_updated: new Date()
+        location_name: "Platja de la Marquesa",
+        last_updated: new Date(),
+        is_accessible: false
     },
     {
         license_plate: "3456JKL",
@@ -77,27 +80,29 @@ db.cars.insertMany([
         model: "i3",
         year: 2022,
         status: "available",
-        battery_level: 78,
+        battery_level: 65,
         location: {
             type: "Point",
-            coordinates: [2.12282700, 41.38087900]
+            coordinates: [0.57500000, 40.71450000]
         },
-        location_name: "Camp Nou",
-        last_updated: new Date()
+        location_name: "Centre Esportiu Amposta",
+        last_updated: new Date(),
+        is_accessible: true
     },
     {
         license_plate: "7890MNO",
         brand: "Volkswagen",
         model: "ID.3",
         year: 2023,
-        status: "charging",
-        battery_level: 45,
+        status: "available",
+        battery_level: 88,
         location: {
             type: "Point",
-            coordinates: [2.18966700, 41.37545400]
+            coordinates: [0.58300000, 40.70950000]
         },
-        location_name: "Barceloneta Beach",
-        last_updated: new Date()
+        location_name: "Port dels Alfacs",
+        last_updated: new Date(),
+        is_accessible: false
     }
 ]);
 

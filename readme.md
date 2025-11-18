@@ -118,6 +118,22 @@ docker-compose exec mariadb mysql -u root -p
 
 Volums i persistència: el `docker-compose.yml` probablement defineix volums per a MariaDB (dades persistents). Si modifiques l'esquema SQL (`database/mariadb-init.sql`) i vols forçar la re-inicialització, fes `docker-compose down -v` abans d'aixecar els serveis.
 
+### ⚠️ IMPORTANT: Quan canviïs de branca Git
+
+Quan facis `git checkout` a una altra branca amb canvis en `mariadb-init.sql`, **sempre** has d'executar:
+
+```sh
+docker-compose down -v  # El -v elimina els volums antics
+docker-compose up -d --build
+```
+
+O simplement:
+```sh
+./reset-db.sh
+```
+
+**Per què?** Docker guarda la base de dades en un volum persistent. Si no l'elimines, seguirà usant l'esquema antic encara que hagis canviat de branca.
+
 ---
 
 ## 🏛 Arquitectura MVC i estructura del projecte
