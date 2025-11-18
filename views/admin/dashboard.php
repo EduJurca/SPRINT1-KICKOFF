@@ -116,8 +116,8 @@ function switchTab(tabName) {
 <!-- Tab: Estadístiques -->
 <div id="tab-estadistiques" class="tab-content-section" style="display:none;">
     <div class="mb-8">
-        <h2 class="text-3xl font-bold text-gray-800 mb-2">📊 Estadístiques</h2>
-        <p class="text-gray-600">Visió general del rendiment</p>
+        <h2 class="text-3xl font-bold text-gray-800 mb-2">📊 Estadístiques v2</h2>
+        <p class="text-gray-600">✓ NUEVAS TARJETAS VISIBLES - Timestamp: 1763427514</p>
     </div>
 
     <!-- Primera fila: 3 tarjetes -->
@@ -166,7 +166,7 @@ function switchTab(tabName) {
 
     <!-- Segona fila: 3 tarjetes -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <!-- 4. Reserves -->
+        <!-- 4. CONSUM CARD - UPDATED -->
         <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-cyan-500 p-5">
             <div class="flex items-center justify-between mb-3">
                 <div class="w-12 h-12 bg-cyan-100 rounded-xl flex items-center justify-center">
@@ -179,7 +179,7 @@ function switchTab(tabName) {
             <div class="text-xs text-gray-500 mt-2">Sense completar</div>
         </div>
 
-        <!-- 5. Ingressos -->
+        <!-- 5. INCIDENCIES NOVES - UPDATED -->
         <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-emerald-500 p-5">
             <div class="flex items-center justify-between mb-3">
                 <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
@@ -192,7 +192,7 @@ function switchTab(tabName) {
             <div class="text-xs text-gray-500 mt-2">Aquest mes</div>
         </div>
 
-        <!-- 6. Evolució -->
+        <!-- 6. NOUS CLIENTS - UPDATED -->
         <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-orange-500 p-5">
             <div class="flex items-center justify-between mb-3">
                 <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
