@@ -2,65 +2,10 @@ const VehicleClaimModal = {
     modal: null,
     currentVehicle: null,
     unlockFee: 0.50,
+    selectedDuration: 30,
     init() {
-        this.createModal();
-        this.setupEventListeners();
-    },
-
-    createModal() {
-        const modalHTML = `
-            <div id="claim-modal" class="claim-modal-overlay">
-                <div class="claim-modal-container">
-                    <div class="claim-modal-header">
-                        <h2 class="claim-modal-title">
-                            <span>🚗</span>
-                            <span>Confirmar reclamació</span>
-                        </h2>
-                        <button class="claim-modal-close" id="claim-modal-close">
-                            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
-                    </div>
-                    
-                    <div class="claim-modal-content">
-                        <div class="vehicle-info-card" id="vehicle-info">
-                            <!-- Información del vehículo se insertará aquí -->
-                        </div>
-                        
-                        <div class="charge-warning">
-                            <div class="charge-warning-icon">⚠️</div>
-                            <div class="charge-warning-content">
-                                <div class="charge-warning-title">Cost de desbloqueig</div>
-                                <div class="charge-warning-text">
-                                    Es cobrarà una tarifa de desbloqueig al reclamar aquest vehicle. Aquest càrrec es farà immediatament.
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="charge-amount">
-                            ${this.unlockFee.toFixed(2)}€
-                        </div>
-                        
-                        <p style="text-align: center; color: #6B7280; font-size: 14px; margin-top: 16px;">
-                            En confirmar, acceptes els termes i condicions del servei
-                        </p>
-                    </div>
-                    
-                    <div class="claim-modal-footer">
-                        <button class="claim-modal-button claim-modal-button-cancel" id="claim-modal-cancel">
-                            Cancel·lar
-                        </button>
-                        <button class="claim-modal-button claim-modal-button-confirm" id="claim-modal-confirm">
-                            Acceptar i reclamar
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        document.body.insertAdjacentHTML('beforeend', modalHTML);
         this.modal = document.getElementById('claim-modal');
+        this.setupEventListeners();
     },
 
     setupEventListeners() {
@@ -88,6 +33,14 @@ const VehicleClaimModal = {
         if (confirmBtn) {
             confirmBtn.addEventListener('click', () => this.confirm());
         }
+
+        const durationSelect = document.getElementById('rental-duration');
+        if (durationSelect) {
+            durationSelect.addEventListener('change', (e) => {
+                this.selectedDuration = parseInt(e.target.value);
+                this.updatePriceCalculation();
+            });
+        }
         
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && this.modal.classList.contains('active')) {
@@ -102,7 +55,14 @@ const VehicleClaimModal = {
         }
         
         this.currentVehicle = vehicle;
+        this.selectedDuration = 30;
         this.updateVehicleInfo(vehicle);
+        this.updatePriceCalculation();
+        
+        const durationSelect = document.getElementById('rental-duration');
+        if (durationSelect) {
+            durationSelect.value = '30';
+        }
         
         this.modal.style.display = 'flex';
         this.modal.style.opacity = '1';
@@ -110,6 +70,47 @@ const VehicleClaimModal = {
         this.modal.classList.add('active');
         
         document.body.style.overflow = 'hidden';
+    },
+
+    updatePriceCalculation() {
+        if (!this.currentVehicle) return;
+
+        const pricePerMinute = parseFloat(this.currentVehicle.price_per_minute) || 0;
+        const timeCost = pricePerMinute * this.selectedDuration;
+        const totalCost = timeCost + this.unlockFee;
+
+        const pricePerMinuteEl = document.getElementById('price-per-minute');
+        const selectedDurationEl = document.getElementById('selected-duration');
+        const timeCostEl = document.getElementById('time-cost');
+        const totalCostEl = document.getElementById('total-cost');
+
+        if (pricePerMinuteEl) {
+            pricePerMinuteEl.textContent = `€${pricePerMinute.toFixed(2)}/min`;
+        }
+
+        if (selectedDurationEl) {
+            const hours = Math.floor(this.selectedDuration / 60);
+            const minutes = this.selectedDuration % 60;
+            let durationText = '';
+            
+            if (hours > 0) {
+                durationText += `${hours} ${hours === 1 ? 'hora' : 'hores'}`;
+            }
+            if (minutes > 0) {
+                if (hours > 0) durationText += ' ';
+                durationText += `${minutes} min`;
+            }
+            
+            selectedDurationEl.textContent = durationText;
+        }
+
+        if (timeCostEl) {
+            timeCostEl.textContent = `€${timeCost.toFixed(2)}`;
+        }
+
+        if (totalCostEl) {
+            totalCostEl.textContent = `€${totalCost.toFixed(2)}`;
+        }
     },
 
     updateVehicleInfo(vehicle) {
@@ -120,32 +121,34 @@ const VehicleClaimModal = {
                             vehicle.battery >= 20 ? '#F97316' : '#EF4444';
         
         const infoHTML = `
-            <div class="vehicle-info-row">
-                <span class="vehicle-info-label">Model:</span>
-                <span class="vehicle-info-value">${vehicle.model}</span>
-            </div>
-            <div class="vehicle-info-row">
-                <span class="vehicle-info-label">Matrícula:</span>
-                <span class="vehicle-info-value">${vehicle.license_plate}</span>
-            </div>
-            <div class="vehicle-info-row">
-                <span class="vehicle-info-label">Bateria:</span>
-                <span class="vehicle-info-value" style="color: ${batteryColor};">
-                    ${vehicle.battery}% 🔋
-                </span>
-            </div>
-            ${vehicle.distance ? `
-                <div class="vehicle-info-row">
-                    <span class="vehicle-info-label">Distància:</span>
-                    <span class="vehicle-info-value">${vehicle.distance.toFixed(2)} km</span>
+            <div class="space-y-3">
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-600 text-sm">${(window.TRANSLATIONS && window.TRANSLATIONS['vehicle.model']) || 'Model:'}</span>
+                    <span class="font-semibold text-gray-900">${vehicle.model}</span>
                 </div>
-            ` : ''}
-            ${vehicle.is_accessible ? `
-                <div class="vehicle-info-row">
-                    <span class="vehicle-info-label">Accessible:</span>
-                    <span class="vehicle-info-value">✓ Sí</span>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-600 text-sm">${(window.TRANSLATIONS && window.TRANSLATIONS['vehicle.license_plate']) || 'License Plate:'}</span>
+                    <span class="font-semibold text-gray-900">${vehicle.license_plate}</span>
                 </div>
-            ` : ''}
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-600 text-sm">${(window.TRANSLATIONS && window.TRANSLATIONS['vehicle.battery']) || 'Battery:'}</span>
+                    <span class="font-semibold" style="color: ${batteryColor};">
+                        ${vehicle.battery}%
+                    </span>
+                </div>
+                ${vehicle.distance ? `
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600 text-sm">${(window.TRANSLATIONS && window.TRANSLATIONS['vehicle.distance']) || 'Distance:'}</span>
+                        <span class="font-semibold text-gray-900">${vehicle.distance.toFixed(2)} km</span>
+                    </div>
+                ` : ''}
+                ${vehicle.is_accessible ? `
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600 text-sm">${(window.TRANSLATIONS && window.TRANSLATIONS['vehicle.accessible_label']) || 'Accessible:'}</span>
+                        <span class="font-semibold text-green-600">✓ Sí</span>
+                    </div>
+                ` : ''}
+            </div>
         `;
         
         vehicleInfoContainer.innerHTML = infoHTML;
@@ -165,7 +168,7 @@ const VehicleClaimModal = {
     
     async confirm() {
         if (!this.currentVehicle) {
-            showToast('Error: No hay vehículo seleccionado', 'error');
+            showToast((window.TRANSLATIONS && window.TRANSLATIONS['vehicle.no_vehicle_selected']) || 'No vehicle selected', 'error');
             return;
         }
         
@@ -177,28 +180,31 @@ const VehicleClaimModal = {
         cancelBtn.disabled = true;
         
         try {
-            const result = await Vehicles.claimVehicle(this.currentVehicle.id);
+            const result = await Vehicles.claimVehicle(
+                this.currentVehicle.id, 
+                this.selectedDuration
+            );
             
             if (result.success) {
                 this.close();
                 
-                showToast('✅ Vehicle reclamat amb èxit! Redirigint...', 'success', 2000);
+                showToast((window.TRANSLATIONS && window.TRANSLATIONS['vehicle.claimed_success']) || 'Vehicle claimed successfully! Redirecting...', 'success', 2000);
             } else {
                 confirmBtn.disabled = false;
                 confirmBtn.classList.remove('claim-modal-button-loading');
                 cancelBtn.disabled = false;
                 
-                const errorMsg = result.message || result.error || 'Error desconegut al reclamar el vehicle';
+                const errorMsg = result.message || result.error || (window.TRANSLATIONS && window.TRANSLATIONS['vehicle.claim_error_unknown']) || 'Unknown error while claiming the vehicle';
                 
-                showToast(`❌ Error: ${errorMsg}`, 'error');
+                showToast(errorMsg, 'error', 4000);
             }
         } catch (error) {
             confirmBtn.disabled = false;
             confirmBtn.classList.remove('claim-modal-button-loading');
             cancelBtn.disabled = false;
             
-            const errorMsg = error.message || 'Error al procesar la reclamació';
-            showToast(`❌ Error: ${errorMsg}`, 'error');
+            const errorMsg = error.message || (window.TRANSLATIONS && window.TRANSLATIONS['vehicle.claim_processing_error']) || 'Error processing claim';
+            showToast(errorMsg, 'error', 4000);
         }
     }
 };

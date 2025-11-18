@@ -13,15 +13,38 @@ class Booking {
      * @param int $userId ID de l'usuari
      * @param int $vehicleId ID del vehicle
      * @param float $unlockFee Tarifa de desbloqueig
+     * @param int $duration Durada estimada en minuts (default 30)
      * @return int|false ID de la reserva o false si falla
      */
-    public function createBooking($userId, $vehicleId, $unlockFee = 0.50) {
+    public function createBooking($userId, $vehicleId, $unlockFee = 0.50, $duration = 30) {
         $startTime = date('Y-m-d H:i:s');
-        $endTime = date('Y-m-d H:i:s', strtotime('+2 hours')); // Estimat 2 hores
+        $endTime = date('Y-m-d H:i:s', strtotime("+{$duration} minutes"));
+        
+        // Obtenir preu per minut del vehicle
+        $vehicleStmt = $this->db->prepare("
+            SELECT price_per_minute FROM vehicles WHERE id = ?
+        ");
+        $vehicleStmt->bind_param('i', $vehicleId);
+        $vehicleStmt->execute();
+        $vehicleResult = $vehicleStmt->get_result();
+        
+        if ($vehicleResult->num_rows === 0) {
+            error_log("Booking Model Error - Vehicle not found: $vehicleId");
+            return false;
+        }
+        
+        $vehicle = $vehicleResult->fetch_assoc();
+        $pricePerMinute = (float)$vehicle['price_per_minute'];
+        
+        // Calcular cost total: (durada × preu_per_minut) + tarifa_desbloqueig
+        $timeCost = $duration * $pricePerMinute;
+        $totalCost = $timeCost + $unlockFee;
+        
+        error_log("Booking calculation: duration={$duration}min, pricePerMinute={$pricePerMinute}€, timeCost={$timeCost}€, unlockFee={$unlockFee}€, totalCost={$totalCost}€");
         
         $stmt = $this->db->prepare("
-            INSERT INTO bookings (user_id, vehicle_id, start_datetime, end_datetime, total_cost, status)
-            VALUES (?, ?, ?, ?, ?, 'active')
+            INSERT INTO bookings (user_id, vehicle_id, start_datetime, end_datetime, total_minutes, total_cost, status)
+            VALUES (?, ?, ?, ?, ?, ?, 'active')
         ");
         
         if (!$stmt) {
@@ -29,11 +52,11 @@ class Booking {
             return false;
         }
         
-        $stmt->bind_param('iissd', $userId, $vehicleId, $startTime, $endTime, $unlockFee);
+        $stmt->bind_param('iissid', $userId, $vehicleId, $startTime, $endTime, $duration, $totalCost);
         
         if ($stmt->execute()) {
             $bookingId = $this->db->insert_id;
-            error_log("Booking created successfully: ID=$bookingId, User=$userId, Vehicle=$vehicleId");
+            error_log("Booking created successfully: ID=$bookingId, User=$userId, Vehicle=$vehicleId, Duration={$duration}min, TotalCost={$totalCost}€");
             return $bookingId;
         }
         
@@ -98,14 +121,62 @@ class Booking {
      * @return bool Èxit de l'operació
      */
     public function completeBooking($vehicleId, $userId) {
+        // Obtenir la reserva activa
+        $bookingStmt = $this->db->prepare("
+            SELECT b.id, b.start_datetime, b.total_cost
+            FROM bookings b
+            WHERE b.vehicle_id = ? AND b.user_id = ? AND b.status = 'active'
+            LIMIT 1
+        ");
+        $bookingStmt->bind_param('ii', $vehicleId, $userId);
+        $bookingStmt->execute();
+        $result = $bookingStmt->get_result();
+        
+        if ($result->num_rows === 0) {
+            error_log("CompleteBooking Error: No active booking found for vehicle=$vehicleId, user=$userId");
+            return false;
+        }
+        
+        $booking = $result->fetch_assoc();
+        $bookingId = $booking['id'];
+        $startDatetime = $booking['start_datetime'];
+        $paidAmount = $booking['total_cost']; // Cost ja pagat
+        
+        // Calcular minuts reals d'ús (només per estadístiques)
+        $now = date('Y-m-d H:i:s');
+        $start = new DateTime($startDatetime);
+        $end = new DateTime($now);
+        $interval = $start->diff($end);
+        
+        // Calcular segons totals i convertir a minuts (arrodonit cap amunt)
+        $totalSeconds = ($interval->days * 24 * 60 * 60) + ($interval->h * 60 * 60) + ($interval->i * 60) + $interval->s;
+        $totalMinutes = ceil($totalSeconds / 60);
+        
+        if ($totalMinutes < 1) {
+            $totalMinutes = 1;
+        }
+        
+        error_log("CompleteBooking: bookingId=$bookingId, realMinutes=$totalMinutes, paidAmount={$paidAmount}EUR (NO REFUND)");
+        
+        // Actualitzar booking amb temps real PERÒ mantenir el cost pagat
         $stmt = $this->db->prepare("
             UPDATE bookings 
-            SET end_datetime = NOW(), 
+            SET end_datetime = NOW(),
+                total_minutes = ?,
                 status = 'completed'
-            WHERE vehicle_id = ? AND user_id = ? AND status = 'active'
+            WHERE id = ?
         ");
-        $stmt->bind_param('ii', $vehicleId, $userId);
-        return $stmt->execute();
+        $stmt->bind_param('ii', $totalMinutes, $bookingId);
+        
+        $success = $stmt->execute();
+        
+        if ($success) {
+            error_log("Booking $bookingId completed. Real minutes: $totalMinutes. Paid: €{$paidAmount} (prepaid, no refund)");
+        } else {
+            error_log("CompleteBooking Error: Failed to update booking $bookingId");
+        }
+        
+        return $success;
     }
     
     /**

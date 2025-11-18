@@ -1,145 +1,224 @@
-# SPRINT1-KICKOFF – Gestió de Mobilitat Intel·ligent
+# SIMS — Gestió de Mobilitat Intel·ligent
 
-Aquest projecte és una plataforma web per gestionar la mobilitat intel·ligent, pensada per flotes de vehicles, usuaris i administradors. Està desenvolupat amb PHP, HTML, CSS, JavaScript i Python, i utilitza MariaDB i MongoDB com a bases de dades. Tot el sistema s’executa en contenidors Docker per facilitar la instal·lació i el desplegament.
-
----
-
-## 📦 Estructura del Projecte
-
-```
-final_editar_usar/
-├── config/                # Configuració global, scripts d’inicialització, Docker
-├── assets/           # Frontend i backend web (DocumentRoot Apache)
-├── python_gui/            # Eina administrativa en Python
-├── database_schema.sql    # Esquema de la base de dades relacional
-├── bones_practiques.md    # Bones pràctiques i normes de programació
-├── .gitignore             # Exclusió d’arxius sensibles i temporals
-├── readme.md              # Documentació principal (aquest fitxer)
-├── readme_cat.md          # Documentació en català
-```
-
-### Detall de carpetes principals
-
-- **config/**: Scripts SQL, configuració PHP, Dockerfile, docker-compose, inicialització de bases de dades.
-- **assets/**: 
-  - **index.html / index.php**: Entrada principal.
-  - **css/**: Estils, inclou accessibilitat i personalització.
-  - **images/**: Imatges, icones i avatars.
-  - **js/**: Scripts JavaScript modulars (autenticació, reserves, vehicles, accessibilitat, etc.).
-  - **pages/**: Vistes HTML/PHP organitzades per funcionalitat (auth, dashboard, perfil, vehicle, accessibilitat).
-  - **php/**: Backend PHP (API, components, controladors, models, admin, auth, etc.).
-- **python_gui/**: Eina GUI per administradors, amb dependències a `requirements.txt`.
+Projecte web per a la gestió de flotes, usuaris i administradors. Backend en PHP, frontend amb HTML/CSS/JS i suport per MariaDB i MongoDB. El sistema s'orquestra amb Docker per facilitar desplegament i desenvolupament local.
 
 ---
 
-## 🚀 Instal·lació i Execució
+## 📁 Estructura principal
 
-### Requisits previs
+El repositori conté els principals directoris i fitxers que segueixen una organització MVC:
 
-- Docker i Docker Compose instal·lats.
-- Opcional: Python 3 per la GUI administrativa.
+- `config/` : configuració de l'aplicació, fitxers d'inicialització i Docker (`docker-compose.yml`, Dockerfile-web, constants).
+- `assets/` : arxius públics (CSS, imatges, JS). La carpeta `assets/css` i `assets/js` contenen els estils i scripts utilitzats per les vistes.
+- `controllers/` : controladors PHP (admin, auth, public).
+- `core/` : helpers, router i components centrals (`Router.php`, `Authorization.php`).
+- `database/` : connexió i scripts d'inicialització (ex. `mariadb-init.sql`).
+- `models/` : models del domini (User, Vehicle, Booking, Incident, etc.).
+- `routes/` : definició de rutes (`web.php`).
+- `views/` : plantilles i vistes separades per mòduls (admin, auth, public, errors).
+- `test/` : proves unitàries amb PHPUnit (ex. `UserCrudTest.php`, `IncidentTest.php`).
+- `vendor/` : dependències gestionades per Composer.
+- arxius root: `composer.json`, `phpunit.xml`, `index.php`, `docker-compose.yml`, `Dockerfile-web`, `README_MVC.md`.
+---
 
-### Passos bàsics
+## ⚙️ Requisits i execució
 
-1. **Configura les variables i credencials** a `.env` (a la arrel) o a `config/.env` i, si ho prefereixes, revisa `config/docker-compose.yml`.
+Prerequisits mínims:
 
-2. **Primera vegada o després de canviar de branca**:
-  ```sh
-  # Elimina contenidors i volums antics per assegurar esquema actualitzat
-  docker-compose down -v
-  docker-compose up -d --build
-  ```
+- `Docker` i `docker-compose` instal·lats.
+- `PHP 8+` per a desenvolupament local (si no s'utilitza el contenidor).
+- `Composer` per a dependències PHP.
+ 
+## ⚙️ Configuració d'entorn (`.env`)
 
-3. **Si ja tens els contenidors executant-se**:
-  ```sh
-  # Simplement arrenca o reinicia
-  docker-compose up -d
-  ```
+L'aplicació llegeix variables d'entorn des d'un fitxer `.env` a l'arrel (o `config/.env` segons la teva configuració). Assegura't d'afegir-hi les claus privades que fa servir l'aplicació, entre les quals:
 
-4. **Accedeix a l'aplicació** via navegador a `http://localhost:8080` (o el port configurat).
+- `GROQ_API_KEY` (o similar): clau del client per al servei GROQ que alimenta el chatbot del client.
+- `USERWAY_KEY`: clau per al widget d'accessibilitat UserWay.
 
-5. **Script d'inicialització ràpida** (recomanat):
-  ```sh
-  # Executa el script que ho fa tot automàticament
-  ./reset-db.sh
-  ```
 
-6. **Administra la flota** amb la GUI Python:
-  ```sh
-  cd python_gui
-  pip install -r requirements.txt
-  python admin_tool.py
-  ```
+Notes de seguretat:
 
-### ⚠️ IMPORTANT: Quan canviïs de branca Git
+- Gestiona les claus en un gestor de secrets en producció (Vault, Secrets Manager, CI/CD variables, etc.).
+- Si canvies claus o l'esquema, reinicia els contenidors amb `docker-compose down -v` i `docker-compose up -d --build` per assegurar consistència.
 
-Quan facis `git checkout` a una altra branca amb canvis en `mariadb-init.sql`, **sempre** has d'executar:
+Arrancar l'entorn amb Docker (recomanat):
 
-```sh
-docker-compose down -v  # El -v elimina els volums antics
+```zsh
+docker-compose down -v
 docker-compose up -d --build
 ```
 
-O simplement:
-```sh
-./reset-db.sh
+Per reinicis normals (sense reset de volums):
+
+```zsh
+docker-compose up -d
 ```
 
-**Per què?** Docker guarda la base de dades en un volum persistent. Si no l'elimines, seguirà usant l'esquema antic encara que hagis canviat de branca.
+Accés a l'aplicació: `http://localhost:8080` (o el port configurat a `docker-compose.yml`).
+
 
 ---
 
-## 🖥️ Arquitectura i Flux de Treball
+## 🚢 Usar amb Docker (detall)
 
-- **Frontend**: HTML, CSS (Tailwind, custom), JS modular. Vistes organitzades per mòdul.
-- **Backend**: PHP organitzat per components, controladors, models i APIs.
-- **Bases de dades**:
-  - **MariaDB**: Usuaris, vehicles, reserves, pagaments.
-  - **MongoDB**: Logs, historial, dades de sensors.
-- **Docker**: Orquestració de serveis web, MariaDB i MongoDB. Scripts d’inicialització automàtica.
+Aquest projecte està pensat per executar-se en contenidors; els serveis habituals són `web` (PHP + Apache), `mariadb` i `mongodb`.
 
-### Flux d’usuari
+- Arrencar i construir imatges (el `-v` elimina volums antics quan cal reinicialitzar l'esquema):
 
-1. L’usuari accedeix a la web i es registra o inicia sessió.
-2. Pot gestionar el perfil, reservar vehicles, consultar historial i pagaments.
-3. Les accions frontend envien dades a APIs PHP via AJAX/fetch.
-4. El backend valida, processa i retorna la resposta (JSON/HTML).
-5. L’administrador pot gestionar usuaris, vehicles i reserves via web o GUI Python.
+```zsh
+docker-compose down -v
+docker-compose up -d --build
+```
+
+- Arrencar sense eliminar volums (ús habitual):
+
+```zsh
+docker-compose up -d
+```
+
+Comandos útils dins de l'entorn Docker:
+
+Entrar al contenidor web (shell):
+
+```zsh
+docker-compose exec web bash
+# o si el servei té un altre nom: docker exec -it <web_container_name> bash
+```
+
+Instal·lar dependències amb Composer dins del contenidor:
+
+```zsh
+docker-compose exec web composer install
+```
+
+Executar les proves PHPUnit des del contenidor:
+
+```zsh
+docker-compose exec web ./vendor/bin/phpunit --configuration phpunit.xml
+```
+
+Veure logs en temps real:
+
+```zsh
+docker-compose logs -f web mariadb
+```
+
+Si tens un servei `phpmyadmin` a `docker-compose.yml`, normalment queda exposat i es pot consultar des del navegador (ex.: `http://localhost:8081/phpmyadmin` o el port configurat). Per veure els logs del servei:
+
+```zsh
+docker-compose logs -f phpmyadmin
+```
+
+Accedir a la base de dades MariaDB des del contenidor:
+
+```zsh
+docker-compose exec mariadb mysql -u root -p
+```
+
+Volums i persistència: el `docker-compose.yml` probablement defineix volums per a MariaDB (dades persistents). Si modifiques l'esquema SQL (`database/mariadb-init.sql`) i vols forçar la re-inicialització, fes `docker-compose down -v` abans d'aixecar els serveis.
 
 ---
 
-## 🌍 Accessibilitat
+## 🏛 Arquitectura MVC i estructura del projecte
 
-- **Accessibilitat**: 
-  - Estils dedicats (`accessibility.css`), widget UserWay, navegació per teclat, contrast, mida de text, reducció de moviment.
-  - Etiquetes semàntiques i ARIA a les vistes.
+L'aplicació segueix un patró MVC (Model-View-Controller) amb una estructura clara per separar responsabilitats:
 
----
+- `controllers/` — Lògica de negoci i gestió de peticions. Hi ha controladors d'administració (`controllers/admin/*`), d'autenticació (`auth/`) i públics (`controllers/public` o `controllers/` segons la ruta).
+- `models/` — Classes que representen les entitats del domini i encapsulen accés a dades (ex.: `User`, `Vehicle`, `Booking`, `Incident`, `ChargingStation`).
+- `views/` — Plantilles i fragments HTML/PHP que presenten dades a l'usuari (vistes per `admin`, `auth`, `public`, `errors`).
+- `core/` — Infraestructura: `Router.php`, `Authorization.php`, helpers comuns i gestió de permisos.
+- `routes/web.php` — Assignació d'URL a controladors/mètodes.
+- `assets/` — Recursos públics (JS, CSS, imatges) consumits per les vistes.
 
-## 🔒 Seguretat i Bones Pràctiques
+Flux bàsic d'una petició HTTP:
+1. El servidor web rep la sol·licitud i la redirigeix al `Router`.
+2. El `Router` resol la ruta a un mètode d'un controlador.
+3. El controlador crida el model corresponent per obtenir o persistir dades.
+4. El controlador selecciona una vista i la retorna amb les dades per ser renderitzades.
 
-- **Autenticació**: Gestió de sessions PHP, control d’accés a zones privades.
-- **Validació**: Formularis i APIs validen dades tant al frontend com al backend.
-- **Pagaments**: Pre-autorizació de targeta, tarifa de desbloqueig i preu per minut configurables.
-- **Control de versions**: `.gitignore` actualitzat, sense credencials ni dades sensibles al repositori.
-- **Rate limiting i logging**: Configurables a `config/configuration_template.php`.
-- **Estructura MVC**: Separació clara entre models, vistes i controladors.
-- **Escalabilitat**: Arquitectura preparada per milers d’usuaris i vehicles.
-
----
-
-## 🛠️ Desenvolupament i Col·laboració
-
-- **Forks i pull requests** recomanats per col·laborar.
-- **Comentaris i documentació** als fitxers clau.
-- **bones_practiques.md**: Consulta les normes de programació i estil.
+Si vols afegir un nou recurs, normalment cal:
+1. Crear el model a `models/`.
+2. Afegir les operacions al controlador corresponent a `controllers/`.
+3. Crear vistes a `views/` (index, form, show, edit).
+4. Registrar les rutes a `routes/web.php`.
 
 ---
 
-## ⚡ Notes finals
+## 🔁 CRUD i rutes principals (resum)
 
-- Utilitza rutes relatives per AJAX/fetch en desenvolupament.
-- Revisa la configuració de credencials entre Docker i PHP.
-- Realitza proves d’usuari i accessibilitat abans de desplegar.
+El projecte implementa CRUD per les entitats principals. A continuació hi ha un resum de recursos i on buscar/afegir funcionalitats.
+
+- **Usuaris (`User`)**
+	- Models: `models/User.php`
+	- Controladors: `controllers/admin/UserController.php`, possiblement `controllers/auth/AuthController.php` per registre/login.
+	- Operacions típiques: llistar usuaris, crear / registrar, veure perfil, editar, eliminar, canviar rol/permís.
+
+- **Vehicles (`Vehicle`)**
+	- Models: `models/Vehicle.php`
+	- Controladors: `controllers/admin/AdminVehicleController.php`, `controllers/VehicleController.php` per accés públic/usuari.
+	- Operacions típiques: llistar vehicles, crear, editar, esborrar, veure detall, marcar com a disponible/no disponible.
+
+- **Reserves (`Booking`)**
+	- Models: `models/Booking.php`
+	- Controladors: `controllers/public/BookingController.php` o `controllers/BookingController.php`.
+	- Operacions típiques: crear reserva, llistar reserves d'un usuari, cancel·lar reserva, acceptar/rebutjar (admin).
+
+- **Incidències (`Incident`)**
+	- Models: `models/Incident.php`
+	- Controladors: `controllers/IncidentController.php`, `controllers/admin/AdminIncidentController.php`.
+	- Operacions típiques: reportar incidència, llistar, assignar/fer seguiment, tancar incidència.
+
+- **Estacions de càrrega (`ChargingStation`)**
+	- Models: `models/ChargingStation.php`
+	- Controladors: `controllers/public/ChargingStationController.php` o `controllers/ChargingStationController.php`.
+	- Operacions típiques: llistar estacions, veure detall, marcar estació com operativa/no operativa.
+
+- **Xat / Missatgeria (`Chat`)**
+	- Controlador: `controllers/ChatController.php`
+	- Operacions típiques: enviar/recebre missatges, llistar xats, historial.
+
+Notes sobre rutes: la implementació segueix convencions típiques (per exemple `/vehicles`, `/vehicles/create`, `/vehicles/{id}/edit`, `/bookings`, `/incidents`). Revisa `routes/web.php` per veure les rutes exactes i els verbs HTTP (`GET`, `POST`, `PUT/PATCH`, `DELETE`).
 
 ---
+
+
+---
+
+## 🗄 Bases de dades
+
+- MariaDB: dades relacionals (usuaris, vehicles, reserves, pagaments). Els scripts d'inicialització es troben a `database/mariadb-init.sql`.
+- MongoDB: usat per a logs i dades no relacionals (pot variar segons la configuració).
+
+Important:
+
+- MariaDB és l'origen de dades relacional en ús per l'aplicació; assegura't de revisar `database/mariadb-init.sql` si modifiques l'esquema.
+- MongoDB està instal·lat a l'entorn Docker però, en l'estat actual del codi, encara **no** està integrat a l'aplicació. La integració està prevista per una fase futura per emmagatzemar dades de sensors (identificats com a `emes`).
+
+Quan canvies d'una branca amb canvis en l'esquema SQL, fes `docker-compose down -v` per eliminar volums persistents abans d'arrencar si vols garantir l'esquema actualitzat.
+
+---
+
+## 🧪 Tests
+
+El projecte inclou proves amb PHPUnit. Per executar-les localment (sense Docker):
+
+```zsh
+composer install
+./vendor/bin/phpunit --configuration phpunit.xml
+```
+
+Si utilitzes Docker, pots executar phpunit dins del contenidor web o un contenidor de CI configurat.
+
+
+## 📚 Documentació i seguiment
+
+- `README_MVC.md` conté informació específica sobre l'arquitectura MVC usada.
+- `docs/` inclou guies específiques (chatbot, execució de tests, rutes explicades).
+
+---
+
+##  Notes finals i següents passos suggerits
+
+- Revisa `config/` per ajustar les variables d'entorn abans d'arrencar.
+

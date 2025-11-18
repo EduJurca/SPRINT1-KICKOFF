@@ -35,15 +35,24 @@ $metrics = [
 ];
 
 $chartData = $monthlyBookings ?? [
-    'Gen' => 0, 'Feb' => 0, 'Mar' => 0, 'Abr' => 0,
-    'Mai' => 0, 'Jun' => 0, 'Jul' => 0, 'Ago' => 0,
-    'Set' => 0, 'Oct' => 0, 'Nov' => 0, 'Des' => 0
+    'Gen' => 0,
+    'Feb' => 0,
+    'Mar' => 0,
+    'Abr' => 0,
+    'Mai' => 0,
+    'Jun' => 0,
+    'Jul' => 0,
+    'Ago' => 0,
+    'Set' => 0,
+    'Oct' => 0,
+    'Nov' => 0,
+    'Des' => 0
 ];
 $maxValue = max($chartData) ?: 1;
 
 $recentActivity = $recentUsers ?? [];
 
-$pageTitle = 'Dashboard';
+$pageTitle = __('admin.menu.dashboard');
 $currentPage = 'dashboard';
 
 require_once VIEWS_PATH . '/admin/admin-header.php';
@@ -72,18 +81,26 @@ function switchTab(tabName) {
     }
 }
 </script>
-<div class="mb-8">
-        <h2 class="text-3xl font-bold text-gray-800 mb-2">Estadístiques</h2>
-    </div>
 
-<div class="inline-flex gap-1 bg-gray-100 p-0.5 rounded-lg mb-6 shadow-md">
-    <button onclick="switchTab('general')" class="tab-button px-3 py-1.5 rounded-md text-sm bg-blue-900 text-white hover:bg-blue-700 hover:text-gray-100 transition-colors" id="btn-general">
-        Vista General
-    </button>
-    <button onclick="switchTab('estadistiques')" class="tab-button px-3 py-1.5 rounded-md text-sm text-gray-600 hover:bg-blue-700 hover:text-gray-100 transition-colors" id="btn-estadistiques">
-        Estadístiques
-    </button>
-</div>
+
+<div class="min-h-screen">
+    <div class="max-w-7xl mx-auto">
+        <div class="mb-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900"><?php echo __('admin.menu.dashboard'); ?></h2>
+                    <p class="text-sm text-gray-600 mt-1"><?php echo __('admin.dashboard.description'); ?></p>
+                </div>
+            </div>
+        </div>
+    <div class="inline-flex gap-1 bg-gray-100 p-0.5 rounded-lg mb-6 shadow-md">
+        <button onclick="switchTab('general')" class="tab-button px-3 py-1.5 rounded-md text-sm bg-blue-900 text-white hover:bg-blue-700 hover:text-gray-100 transition-colors" id="btn-general">
+                    <?php echo __('admin.dashboard.tabs.overview'); ?>
+        </button>
+        <button onclick="switchTab('estadistiques')" class="tab-button px-3 py-1.5 rounded-md text-sm text-gray-600 hover:bg-blue-700 hover:text-gray-100 transition-colors" id="btn-estadistiques">
+                    <?php echo __('admin.dashboard.tabs.statistics'); ?>
+        </button>
+    </div>
 
 <!-- Tab: Vista General -->
 <div id="tab-general" class="tab-content-section">
@@ -100,20 +117,30 @@ function switchTab(tabName) {
         <?php endforeach; ?>
     </div>
     
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <div class="bg-gray-100 rounded-xl p-6 shadow-md col-span-4">
-            <h2 class="text-lg font-semibold mb-6">Vista</h2>
-            <div class="flex items-end justify-between h-[300px] w-full">
-                <?php foreach ($chartData as $month => $value): ?>
-                <div class="flex flex-col items-center gap-2 h-full flex-1">
-                    <div class="w-4/5 bg-gray-200 rounded-t hover:bg-white transition-all cursor-pointer" 
-                         style="height: <?php echo ($value / $maxValue) * 100; ?>%;"></div>
-                    <div class="text-xs text-gray-600 mt-auto"><?php echo $month; ?></div>
+            <!-- Dashboard Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Chart -->
+            <div class="bg-gray-100 rounded-xl p-6 shadow-md col-span-4">
+                <h2 class="text-lg font-semibold mb-2"><?php echo __('admin.dashboard.overview_title'); ?></h2>
+                <?php
+                    $chartLabelKey = 'admin.dashboard.chart_label';
+                    $chartLabel = __($chartLabelKey);
+                    if ($chartLabel === $chartLabelKey) { $chartLabel = 'Bookings'; }
+                ?>
+                <p class="text-sm text-gray-600 mb-4"><?php echo $chartLabel; ?></p>
+                <div class="flex items-end justify-between h-[300px] w-full">
+                    <?php foreach ($chartData as $month => $value): ?>
+                        <?php $pct = ($maxValue > 0) ? (($value / $maxValue) * 100) : 0; ?>
+                        <div class="flex flex-col items-center gap-2 h-full flex-1" aria-label="<?php echo htmlspecialchars($month . ': ' . $value); ?>">
+                            <div class="text-sm text-gray-700 mb-1 font-medium"><?php echo $value; ?></div>
+                            <div class="w-4/5 bg-gray-200 rounded-t hover:bg-white transition-all cursor-pointer" title="<?php echo $value; ?>"
+                                style="height: <?php echo $pct; ?>%;"></div>
+                            <div class="text-xs text-gray-600 mt-auto"><?php echo $month; ?></div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-                <?php endforeach; ?>
             </div>
         </div>
-    </div>
 </div>
 
 <!-- Tab: Estadístiques -->

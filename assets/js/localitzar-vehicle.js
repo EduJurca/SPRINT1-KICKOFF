@@ -3,6 +3,15 @@
  * Gestiona mapas, listados y reclamación de vehículos
  */
 
+// Safe translation helper to avoid inserting 'undefined' into templates
+function t(key, fallback = '') {
+    try {
+        return (window.TRANSLATIONS && window.TRANSLATIONS[key]) || fallback;
+    } catch (e) {
+        return fallback;
+    }
+}
+
 const VehicleLocator = {
     mobileMap: null,
     desktopMap: null,
@@ -159,31 +168,31 @@ const VehicleLocator = {
             className: 'user-marker',
             html: `
                 <div style="
-                    width: 20px;
-                    height: 20px;
+                    width: 24px;
+                    height: 24px;
                     background-color: #1565C0;
                     border: 3px solid white;
                     border-radius: 50%;
-                    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
                 "></div>
             `,
             iconSize: [20, 20],
             iconAnchor: [10, 10]
         });
         
-        L.marker([this.userLocation.lat, this.userLocation.lng], {
+            L.marker([this.userLocation.lat, this.userLocation.lng], {
             icon: userIcon,
             zIndexOffset: 1000
-        }).addTo(map).bindPopup('<b>La teva ubicació</b>');
+        }).addTo(map).bindPopup(`<b>${t('vehicle.your_location', 'Your location')}</b>`);
     },
-    
-    /**
-     * Añadir marcadores de vehículos
-     */
+
     addVehicleMarkers(map, markersArray) {
         if (!map) return;
         
-        this.vehicles.forEach(vehicle => {
+        // Filtrar solo vehículos disponibles
+        const availableVehicles = this.vehicles.filter(vehicle => vehicle.status === 'available');
+        
+        availableVehicles.forEach(vehicle => {
             if (!vehicle.location) return;
             
             const color = this.getBatteryColor(vehicle.battery);
@@ -191,10 +200,10 @@ const VehicleLocator = {
             const vehicleIcon = L.divIcon({
                 className: 'vehicle-marker',
                 html: `
-                    <div style="position: relative; width: 40px; height: 40px;">
+                    <div style="position: relative; width: 20px; height: 20px;">
                         <div style="
-                            width: 40px;
-                            height: 40px;
+                            width: 30px;
+                            height: 30px;
                             background-color: ${color};
                             border: 3px solid white;
                             border-radius: 50%;
@@ -203,23 +212,8 @@ const VehicleLocator = {
                             align-items: center;
                             justify-content: center;
                             font-size: 20px;
-                        ">🚗</div>
-                        <div style="
-                            position: absolute;
-                            bottom: -5px;
-                            right: -5px;
-                            background-color: white;
-                            border: 2px solid ${color};
-                            border-radius: 50%;
-                            width: 24px;
-                            height: 24px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            font-size: 10px;
-                            font-weight: bold;
-                            color: ${color};
-                        ">${vehicle.battery}%</div>
+                        ">                       
+                        <i class="fas fa-car text-sm"></i>
                     </div>
                 `,
                 iconSize: [40, 40],
@@ -231,35 +225,10 @@ const VehicleLocator = {
                 icon: vehicleIcon
             }).addTo(map);
             
-            const distanceText = vehicle.distance !== undefined 
-                ? `<p style="margin: 4px 0;"><strong>Distància:</strong> ${vehicle.distance.toFixed(2)} km</p>`
-                : '';
-            
-            marker.bindPopup(`
-                <div style="min-width: 200px;">
-                    <h3 style="margin: 0 0 8px 0; font-weight: bold; color: #1565C0;">${vehicle.model}</h3>
-                    <p style="margin: 4px 0;"><strong>Matrícula:</strong> ${vehicle.license_plate}</p>
-                    <p style="margin: 4px 0;"><strong>Bateria:</strong> <span style="color: ${color}; font-weight: bold;">${vehicle.battery}%</span></p>
-                    ${distanceText}
-                    <button 
-                        onclick="VehicleLocator.handleClaimVehicle(${vehicle.id})"
-                        style="
-                            margin-top: 12px;
-                            width: 100%;
-                            background-color: #1565C0;
-                            color: white;
-                            padding: 8px 16px;
-                            border: none;
-                            border-radius: 8px;
-                            font-weight: bold;
-                            cursor: pointer;
-                        "
-                        onmouseover="this.style.opacity='0.9'"
-                        onmouseout="this.style.opacity='1'">
-                        Reclamar Vehicle
-                    </button>
-                </div>
-            `);
+            marker.on('click', (e) => {
+                e.target.closePopup();
+                this.showVehicleDetails(vehicle.id);
+            });
             
             markersArray.push({
                 id: vehicle.id,
@@ -269,43 +238,36 @@ const VehicleLocator = {
         });
     },
     
-    /**
-     * Obtener color según batería
-     */
+
     getBatteryColor(battery) {
-        if (battery >= 80) return '#10B981'; // Verde
-        if (battery >= 50) return '#F59E0B'; // Amarillo
-        if (battery >= 20) return '#F97316'; // Naranja
-        return '#EF4444'; // Rojo
+        if (battery >= 80) return '#10B981';
+        if (battery >= 50) return '#F59E0B'; 
+        if (battery >= 20) return '#F97316'; 
+        return '#EF4444';
     },
-    
-    /**
-     * Actualizar listas de vehículos
-     */
+
     updateVehicleLists() {
-        const normalVehicles = this.vehicles.filter(v => !v.is_accessible);
-        const accessibleVehicles = this.vehicles.filter(v => v.is_accessible);
+        // Filtrar solo vehículos disponibles
+        const availableVehicles = this.vehicles.filter(v => v.status === 'available');
         
-        // Listas móviles
+        const normalVehicles = availableVehicles.filter(v => !v.is_accessible);
+        const accessibleVehicles = availableVehicles.filter(v => v.is_accessible);
+        
         this.renderVehicleList('normal-list', normalVehicles);
         this.renderVehicleList('special-list', accessibleVehicles);
         
-        // Listas desktop
         this.renderVehicleList('normal-list-2', normalVehicles);
         this.renderVehicleList('special-list-2', accessibleVehicles);
     },
     
-    /**
-     * Renderizar lista de vehículos
-     */
     renderVehicleList(listId, vehicles) {
         const list = document.getElementById(listId);
         if (!list) return;
         
-        if (vehicles.length === 0) {
+            if (vehicles.length === 0) {
             list.innerHTML = `
                 <li class="bg-gray-100 p-4 rounded-lg shadow-sm text-center text-gray-500">
-                    No hi ha vehicles disponibles
+                    ${t('vehicle.no_vehicles_available', 'No vehicles available')}
                 </li>
             `;
             return;
@@ -313,26 +275,153 @@ const VehicleLocator = {
         
         list.innerHTML = vehicles.map(vehicle => `
             <li class="bg-gray-100 p-4 rounded-lg shadow-sm flex items-center justify-between hover:bg-gray-200 transition-colors cursor-pointer"
-                onclick="VehicleLocator.focusVehicle(${vehicle.id})">
+                onclick="VehicleLocator.showVehicleDetails(${vehicle.id})">
                 <div>
                     <h3 class="font-bold text-base">${vehicle.model || vehicle.license_plate}</h3>
-                    <p class="text-gray-700 text-sm">Bateria: ${vehicle.battery}%</p>
+                    <p class="text-gray-700 text-sm">${vehicle.battery}% ${t('vehicle.battery_unit', 'battery')}</p>
                     ${vehicle.distance ? `<p class="text-gray-700 text-xs">📍 ${vehicle.distance.toFixed(2)} km</p>` : ''}
                 </div>
                 <button 
                     onclick="event.stopPropagation(); VehicleLocator.handleClaimVehicle(${vehicle.id})"
                     class="bg-[#1565C0] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#1151a3] transition-colors duration-300">
-                    Reclamar
+                        ${t('vehicle.claim', 'Claim')}
                 </button>
             </li>
         `).join('');
     },
     
-    /**
-     * Enfocar vehículo en el mapa
-     */
+    showVehicleDetails(vehicleId) {
+        const vehicle = this.vehicles.find(v => v.id === vehicleId);
+        if (!vehicle) return;
+
+        if (this.mobileMap) {
+            const m = this.mobileMarkers.find(x => x.id === vehicleId);
+            if (m && m.marker) {
+                this.mobileMap.setView(m.marker.getLatLng(), 16);
+            }
+        }
+        if (this.desktopMap) {
+            const d = this.desktopMarkers.find(x => x.id === vehicleId);
+            if (d && d.marker) {
+                this.desktopMap.setView(d.marker.getLatLng(), 16);
+            }
+        }
+
+        const modal = document.getElementById('vehicle-details-modal');
+        const overlay = document.getElementById('vehicle-details-overlay');
+        const modalContent = modal?.querySelector('.vehicle-details-content');
+        const nearbyList = modal?.querySelector('#nearby-vehicles-list');
+        
+        if (!modal || !modalContent || !nearbyList || !overlay) {
+            console.error('Modal elements not found!');
+            return;
+        }
+
+        const userDistance = this.userLocation && vehicle.location 
+            ? this.calculateDistance(this.userLocation, vehicle.location)
+            : null;
+
+        modalContent.innerHTML = `
+            <div class="p-6">
+                <div class="flex gap-4 mb-4">
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold text-gray-900">${vehicle.model}</h3>
+                        <p class="text-sm text-gray-600 mt-1">${vehicle.license_plate || ''}</p>
+                        ${userDistance ? `<p class="text-xs text-gray-500 mt-2 flex items-center"><i class="fas fa-map-marker-alt mr-1"></i> ${userDistance.toFixed(2)} km</p>` : ''}
+                        <div class="flex items-center mt-2">
+                            <i class="fas fa-battery-three-quarters mr-2 text-xl" style="color: ${this.getBatteryColor(vehicle.battery)}"></i>
+                            <p class="text-base font-bold" style="color: ${this.getBatteryColor(vehicle.battery)}">${vehicle.battery}%</p>
+                        </div>
+                    </div>
+                    ${vehicle.image_url ? `
+                    <div class="flex-[2]">
+                        <img src="${vehicle.image_url}" alt="${vehicle.model}" class="w-full max-w-[200px] h-auto object-cover rounded-lg">
+                    </div>
+                    ` : ''}
+                </div>
+                ${vehicle.description ? `<p class="mt-3 text-sm text-gray-700">${vehicle.description}</p>` : ''}
+                <div class="mt-4">
+                    <button id="vehicle-claim-btn" class="w-full bg-[#1565C0] hover:bg-[#0D47A1] text-white py-3 rounded-lg font-semibold transition-colors shadow-md">
+                        <i class="fas fa-key mr-2"></i>${t('details.claim_this_vehicle', 'Claim this vehicle')}
+                    </button>
+                </div>
+            </div>
+        `;
+
+        const others = this.vehicles
+            .filter(v => v.id !== vehicleId && v.location)
+            .map(v => ({ 
+                ...v, 
+                distanceFromSelected: this.calculateDistance(vehicle.location, v.location) 
+            }))
+            .sort((a, b) => (a.distanceFromSelected || Infinity) - (b.distanceFromSelected || Infinity));
+
+        nearbyList.innerHTML = others.slice(0, 8).map(v => `
+            <li class="flex justify-between items-center py-3 hover:bg-gray-50 transition-colors cursor-pointer" onclick="VehicleLocator.showVehicleDetails(${v.id})">
+                <div class="flex items-center flex-1">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3" style="background-color: ${this.getBatteryColor(v.battery)}20;">
+                        <i class="fas fa-car" style="color: ${this.getBatteryColor(v.battery)}"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-medium text-sm">${v.model || v.license_plate}</div>
+                        <div class="text-xs text-gray-500 flex items-center mt-1">
+                            <i class="fas fa-location-arrow mr-1"></i>
+                            ${v.distanceFromSelected ? v.distanceFromSelected.toFixed(2) + ' km' : ''}
+                            <span class="mx-2">•</span>
+                            <i class="fas fa-battery-three-quarters mr-1"></i>
+                            ${v.battery}%
+                        </div>
+                    </div>
+                </div>
+                <button onclick="event.stopPropagation(); VehicleLocator.focusVehicle(${v.id})" class="text-sm text-[#1565C0] hover:text-[#0D47A1] font-medium px-3">
+                    <i class="fas fa-eye"></i>
+                </button>
+            </li>
+        `).join('');
+
+        setTimeout(() => {
+            const claimBtn = document.getElementById('vehicle-claim-btn');
+            if (claimBtn) {
+                claimBtn.onclick = () => this.handleClaimVehicle(vehicleId);
+            }
+        }, 0);
+
+        overlay.style.display = 'block';
+        setTimeout(() => {
+            overlay.classList.remove('opacity-0');
+            overlay.classList.add('opacity-100');
+        }, 10);
+
+        modal.style.display = 'block';
+        setTimeout(() => {
+            modal.classList.remove('translate-y-full');
+            modal.classList.add('translate-y-0');
+        }, 10);
+
+        overlay.onclick = () => this.closeVehicleDetails();
+        
+        document.body.style.overflow = 'hidden';
+    },
+
+    closeVehicleDetails() {
+        const modal = document.getElementById('vehicle-details-modal');
+        const overlay = document.getElementById('vehicle-details-overlay');
+        if (!modal || !overlay) return;
+
+        modal.classList.remove('translate-y-0');
+        modal.classList.add('translate-y-full');
+        overlay.classList.remove('opacity-100');
+        overlay.classList.add('opacity-0');
+        
+        setTimeout(() => { 
+            modal.style.display = 'none'; 
+            overlay.style.display = 'none';
+        }, 300);
+        
+        document.body.style.overflow = '';
+    },
+
     focusVehicle(vehicleId) {
-        // Buscar en marcadores móviles
         let item = this.mobileMarkers.find(m => m.id === vehicleId);
         if (item && item.marker && this.mobileMap) {
             this.mobileMap.setView(item.marker.getLatLng(), 16);
@@ -340,7 +429,6 @@ const VehicleLocator = {
             return;
         }
         
-        // Buscar en marcadores desktop
         item = this.desktopMarkers.find(m => m.id === vehicleId);
         if (item && item.marker && this.desktopMap) {
             this.desktopMap.setView(item.marker.getLatLng(), 16);
@@ -348,31 +436,23 @@ const VehicleLocator = {
         }
     },
     
-    /**
-     * Manejar reclamación de vehículo
-     */
     handleClaimVehicle(vehicleId) {
-        // Buscar vehículo
         const vehicle = this.vehicles.find(v => v.id === vehicleId);
         
         if (!vehicle) {
             return;
         }
         
-        // Mostrar modal de confirmación
+        this.closeVehicleDetails();
+        
         if (typeof window.showClaimModal === 'function') {
             window.showClaimModal(vehicle);
         } else {
-            // Fallback si el modal no está disponible
             Vehicles.claimVehicle(vehicleId);
         }
     },
-    
-    /**
-     * Configurar UI
-     */
+
     setupUI() {
-        // Toggle botones para vehículos accesibles
         const toggleButtons = document.querySelectorAll('#toggle-vehicles, #toggle-vehicles-2');
         toggleButtons.forEach(button => {
             button.addEventListener('click', () => {
@@ -387,22 +467,13 @@ const VehicleLocator = {
             });
         });
         
-        // Drawer móvil
-        const drawer = document.getElementById('vehicles-drawer');
-        const toggleDrawerBtn = document.getElementById('toggle-drawer');
-        const closeDrawerBtn = document.getElementById('close-drawer');
-        
-        if (toggleDrawerBtn && drawer) {
-            toggleDrawerBtn.addEventListener('click', () => {
-                drawer.classList.remove('translate-x-full');
-                drawer.classList.add('translate-x-0');
-            });
-        }
-        
-        if (closeDrawerBtn && drawer) {
-            closeDrawerBtn.addEventListener('click', () => {
-                drawer.classList.remove('translate-x-0');
-                drawer.classList.add('translate-x-full');
+
+
+        // Botón cerrar modal
+        const closeVehicleBtn = document.getElementById('close-vehicle-details');
+        if (closeVehicleBtn) {
+            closeVehicleBtn.addEventListener('click', () => {
+                this.closeVehicleDetails();
             });
         }
     }

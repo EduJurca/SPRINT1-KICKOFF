@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="/assets/images/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/images/favicon.png">
   <title><?php echo __('profile.verify_license_title'); ?></title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -17,7 +19,7 @@
     <div class="bg-white p-5 rounded-2xl shadow-inner w-full h-full flex flex-col relative space-y-6">
             <header class="grid grid-cols-3 items-center mb-6 w-full">
                 <div class="text-left">
-                    <a href="/perfil" class="text-[#1565C0] text-sm font-semibold"><?php echo __('profile.back_to_profile'); ?></a>
+                    <a href="/profile" class="text-[#1565C0] text-sm font-semibold"><?php echo __('profile.back_to_profile'); ?></a>
                 </div>
                 <h1 class="text-2xl font-bold text-gray-900 text-center"><?php echo __('profile.verify_license_title'); ?></h1>
                 <div class="flex justify-end">
@@ -83,5 +85,6 @@ class="mt-2 preview-img hidden"
   document.getElementById('file_front').addEventListener('change', e=>preview(e.target,'preview_front'));
   document.getElementById('file_back').addEventListener('change', e=>preview(e.target,'preview_back'));
   </script>
+  <?php require_once __DIR__ . '/../layouts/footer.php'; ?>
 </body>
 </html>

@@ -74,7 +74,7 @@ Todas las rutas principales verificadas:
 - ✅ `POST /register` → Crear usuario (201 Created)
 - ✅ `POST /login` → Autenticar (200 OK)
 - ✅ `GET /dashboard` → Dashboard (200 OK)
-- ✅ `GET /perfil` → Perfil (200 OK)
+- ✅ `GET /profile` → Perfil (200 OK)
 
 ---
 

@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo __('home.title'); ?></title>
+        <link rel="icon" href="/assets/images/favicon.png" type="image/png">
+        <link rel="apple-touch-icon" href="/assets/images/favicon.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         (function(d){
             var s = d.createElement("script");
-            s.setAttribute("data-account","RrwQjeYdrh");
+            s.setAttribute("data-account","<?php echo getenv('USERWAY_ACCOUNT_ID'); ?>");
             s.src = "https://cdn.userway.org/widget.js";
             (d.body || d.head).appendChild(s);
         })(document);

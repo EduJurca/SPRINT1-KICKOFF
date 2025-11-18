@@ -5,6 +5,14 @@
  * Handles interactive maps with vehicle locations using Leaflet.js and OpenStreetMap
  * Note: L is the Leaflet.js global variable
  */
+// Safe translation helper to avoid inserting 'undefined' into templates
+function t(key, fallback = '') {
+    try {
+        return (window.TRANSLATIONS && window.TRANSLATIONS[key]) || fallback;
+    } catch (e) {
+        return fallback;
+    }
+}
 
 const Maps = {
     map: null,
@@ -143,7 +151,7 @@ const Maps = {
             zIndexOffset: 1000
         }).addTo(this.map);
         
-        this.userMarker.bindPopup('<b>La teva ubicació</b>');
+        this.userMarker.bindPopup(`<b>${t('vehicle.your_location', 'Your location')}</b>`);
     },
     
     /**
@@ -332,10 +340,10 @@ const Maps = {
                     ${vehicle.model}
                 </h3>
                 <p style="margin: 4px 0;">
-                    <strong>Matrícula:</strong> ${vehicle.license_plate}
+                    <strong>${t('vehicle.license_plate', 'License Plate:')}</strong> ${vehicle.license_plate}
                 </p>
                 <p style="margin: 4px 0;">
-                    <strong>Bateria:</strong> 
+                    <strong>${t('vehicle.battery', 'Battery:')}</strong> 
                     <span style="color: ${color}; font-weight: bold;">
                         ${vehicle.battery}%
                     </span>
@@ -358,11 +366,11 @@ const Maps = {
                     onmouseover="this.style.opacity='0.9'"
                     onmouseout="this.style.opacity='1'"
                 >
-                    Reclamar Vehicle
+                    ${t('details.claim_this_vehicle', 'Claim this vehicle')}
                 </button>
             </div>
         `;
-        
+
         marker.bindPopup(popupContent);
         
         // Store marker reference
@@ -476,8 +484,8 @@ const Maps = {
         if (vehicles.length === 0) {
             listElement.innerHTML = `
                 <li class="bg-gray-100 p-4 rounded-lg shadow-sm text-center text-gray-500">
-                    No hi ha vehicles disponibles
-                </li>
+                        ${t('vehicle.no_vehicles_available', 'No vehicles available')}
+                    </li>
             `;
             return;
         }
@@ -498,14 +506,14 @@ const Maps = {
                     onclick="Maps.focusVehicle(${vehicle.id})">
                     <div>
                         <h3 class="font-bold text-base">${vehicle.model || vehicle.license_plate}</h3>
-                        <p class="text-gray-700 text-sm">Bateria: ${vehicle.battery}%</p>
+                        <p class="text-gray-700 text-sm">${vehicle.battery}% ${t('vehicle.battery_unit', 'battery')}</p>
                         ${accessibilityText}
                         ${distanceText}
                     </div>
                     <button 
                         onclick="event.stopPropagation(); Maps.handleClaimFromList(${vehicle.id})"
                         class="bg-[#1565C0] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#1151a3] transition-colors duration-300">
-                        Reclamar
+                        ${t('vehicle.claim', 'Claim')}
                     </button>
                 </li>
             `;

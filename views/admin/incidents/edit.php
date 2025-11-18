@@ -1,4 +1,5 @@
 <?php
+$currentPage = 'incidents';
 $pageTitle = __("incident.edit_title");
 require_once __DIR__ . '/../admin-header.php';
 ?>
@@ -6,7 +7,7 @@ require_once __DIR__ . '/../admin-header.php';
 <div class="min-h-screen bg-gray-50 py-8">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-            <div class="px-6 py-4 bg-blue-600 border-b border-gray-200">
+            <div class="px-6 py-4 bg-[#1565C0] border-b border-gray-200">
                 <h1 class="text-2xl font-bold text-white"><?php echo __("incident.edit_title"); ?> #<?= $incident['id'] ?></h1>
                 <p class="text-blue-100 mt-1"><?php echo __("incident.edit_heading"); ?></p>
             </div>
@@ -36,8 +37,10 @@ require_once __DIR__ . '/../admin-header.php';
                             </label>
                             <select id="type" name="type" data-required="true"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                <option value="mechanical" <?= $incident['type'] === 'mechanical' ? 'selected' : '' ?>><?php echo __("incident.type_mechanical"); ?></option>
-                                <option value="electrical" <?= $incident['type'] === 'electrical' ? 'selected' : '' ?>><?php echo __("incident.type_electrical"); ?></option>
+                                <option value="technical" <?= $incident['type'] === 'technical' ? 'selected' : '' ?>><?php echo __("incident.type_technical"); ?></option>
+                                <option value="maintenance" <?= $incident['type'] === 'maintenance' ? 'selected' : '' ?>><?php echo __("incident.type_maintenance"); ?></option>
+                                <option value="user_complaint" <?= $incident['type'] === 'user_complaint' ? 'selected' : '' ?>><?php echo __("incident.type_user_complaint"); ?></option>
+                                <option value="accident" <?= $incident['type'] === 'accident' ? 'selected' : '' ?>><?php echo __("incident.type_accident"); ?></option>
                                 <option value="other" <?= $incident['type'] === 'other' ? 'selected' : '' ?>><?php echo __("incident.type_other"); ?></option>
                             </select>
                         </div>
@@ -124,12 +127,15 @@ require_once __DIR__ . '/../admin-header.php';
                     <!-- Botons -->
                     <div class="flex justify-between items-center pt-6 border-t border-gray-200">
                         <a href="/admin/incidents"
-                           class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            <i class="fas fa-arrow-left mr-2"></i><?php echo __("incident.back"); ?>
+                           class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1565C0]">
+                            <?php echo __("incident.back"); ?>
                         </a>
                         <button type="submit"
-                                class="px-4 py-2 bg-blue-600 border border-transparent rounded-md text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            <i class="fas fa-save mr-2"></i><?php echo __("actions.save"); ?>
+                                class="px-4 py-2 bg-[#1565C0] border border-transparent rounded-md text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1565C0] flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <?php echo __("actions.save"); ?>
                         </button>
                     </div>
                 </form>

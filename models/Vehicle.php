@@ -164,8 +164,8 @@ class Vehicle {
      * 
      * @return array Llista de tots els vehicles
      */
-    public function getAllVehicles() {
-        $stmt = $this->db->prepare("
+    public function getAllVehicles($limit = null, $offset = null, $search = '', $filters = []) {
+        $query = "
             SELECT 
                 v.id,
                 v.plate as license_plate,
@@ -176,15 +176,172 @@ class Vehicle {
                 v.latitude,
                 v.longitude,
                 v.status,
-                v.vehicle_type,
                 v.is_accessible,
                 v.price_per_minute,
                 v.image_url
             FROM vehicles v
-        ");
+            WHERE 1=1
+        ";
+        
+        $params = [];
+        $types = '';
+        
+        // Búsqueda global por matrícula, marca o modelo
+        // Si se usan filtros avanzados de marca/modelo, ignorar completamente la búsqueda global
+        $hasAdvancedFilters = !empty($filters['brand']) || !empty($filters['model']);
+        
+        if (!empty($search) && !$hasAdvancedFilters) {
+            // Dividir la búsqueda en palabras
+            $searchWords = array_filter(explode(' ', trim($search)));
+            
+            if (!empty($searchWords)) {
+                $searchConditions = [];
+                
+                foreach ($searchWords as $word) {
+                    // Cada palabra debe aparecer en al menos uno de los campos (matrícula, marca o modelo)
+                    $searchConditions[] = "(v.plate LIKE ? OR v.brand LIKE ? OR v.model LIKE ?)";
+                    $wordParam = "%$word%";
+                    $params[] = $wordParam;
+                    $params[] = $wordParam;
+                    $params[] = $wordParam;
+                    $types .= 'sss';
+                }
+                
+                // Unir todas las condiciones con AND (todas las palabras deben coincidir)
+                if (!empty($searchConditions)) {
+                    $query .= " AND (" . implode(" AND ", $searchConditions) . ")";
+                }
+            }
+        }
+        
+        // Filtros avanzados
+        if (!empty($filters['brand'])) {
+            $query .= " AND v.brand LIKE ?";
+            $params[] = '%' . $filters['brand'] . '%';
+            $types .= 's';
+        }
+        
+        if (!empty($filters['model'])) {
+            $query .= " AND v.model LIKE ?";
+            $params[] = '%' . $filters['model'] . '%';
+            $types .= 's';
+        }
+        
+        // Filtros opcionales
+        if (!empty($filters['status'])) {
+            $query .= " AND v.status = ?";
+            $params[] = $filters['status'];
+            $types .= 's';
+        }
+        
+        if (isset($filters['is_accessible']) && $filters['is_accessible'] !== '') {
+            $query .= " AND v.is_accessible = ?";
+            $params[] = (int)$filters['is_accessible'];
+            $types .= 'i';
+        }
+        
+        if (!empty($filters['min_battery'])) {
+            $query .= " AND v.battery_level >= ?";
+            $params[] = (int)$filters['min_battery'];
+            $types .= 'i';
+        }
+        
+        $query .= " ORDER BY v.id DESC";
+        
+        // Paginación
+        if ($limit !== null && $offset !== null) {
+            $query .= " LIMIT " . (int)$limit . " OFFSET " . (int)$offset;
+        }
+        
+        $stmt = $this->db->prepare($query);
+        
+        if (!empty($params)) {
+            $stmt->bind_param($types, ...$params);
+        }
+        
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
+    }
+    
+    /**
+     * Contar vehículos totales (con filtros opcionales)
+     */
+    public function countVehicles($search = '', $filters = []) {
+        $query = "SELECT COUNT(*) as total FROM vehicles v WHERE 1=1";
+        
+        $params = [];
+        $types = '';
+        
+        // Búsqueda global
+        // Si se usan filtros avanzados de marca/modelo, ignorar completamente la búsqueda global
+        $hasAdvancedFilters = !empty($filters['brand']) || !empty($filters['model']);
+        
+        if (!empty($search) && !$hasAdvancedFilters) {
+            // Dividir la búsqueda en palabras
+            $searchWords = array_filter(explode(' ', trim($search)));
+            
+            if (!empty($searchWords)) {
+                $searchConditions = [];
+                
+                foreach ($searchWords as $word) {
+                    // Cada palabra debe aparecer en al menos uno de los campos (matrícula, marca o modelo)
+                    $searchConditions[] = "(v.plate LIKE ? OR v.brand LIKE ? OR v.model LIKE ?)";
+                    $wordParam = "%$word%";
+                    $params[] = $wordParam;
+                    $params[] = $wordParam;
+                    $params[] = $wordParam;
+                    $types .= 'sss';
+                }
+                
+                // Unir todas las condiciones con AND (todas las palabras deben coincidir)
+                if (!empty($searchConditions)) {
+                    $query .= " AND (" . implode(" AND ", $searchConditions) . ")";
+                }
+            }
+        }
+        
+        // Filtros avanzados
+        if (!empty($filters['brand'])) {
+            $query .= " AND v.brand LIKE ?";
+            $params[] = '%' . $filters['brand'] . '%';
+            $types .= 's';
+        }
+        
+        if (!empty($filters['model'])) {
+            $query .= " AND v.model LIKE ?";
+            $params[] = '%' . $filters['model'] . '%';
+            $types .= 's';
+        }
+        
+        // Filtros opcionales
+        if (!empty($filters['status'])) {
+            $query .= " AND v.status = ?";
+            $params[] = $filters['status'];
+            $types .= 's';
+        }
+        
+        if (isset($filters['is_accessible']) && $filters['is_accessible'] !== '') {
+            $query .= " AND v.is_accessible = ?";
+            $params[] = (int)$filters['is_accessible'];
+            $types .= 'i';
+        }
+        
+        if (!empty($filters['min_battery'])) {
+            $query .= " AND v.battery_level >= ?";
+            $params[] = (int)$filters['min_battery'];
+            $types .= 'i';
+        }
+        
+        $stmt = $this->db->prepare($query);
+        
+        if (!empty($params)) {
+            $stmt->bind_param($types, ...$params);
+        }
+        
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+        return $result['total'];
     }
     
     // ============================================
