@@ -131,6 +131,8 @@ return [
         'no_vehicles_available' => 'No hi ha vehicles disponibles',
         'claim_error' => 'No s\'ha pogut reclamar el vehicle',
         'claim_error_unknown' => 'Error desconegut en reclamar el vehicle',
+        'already_claimed' => 'Ja tens un vehicle reclamat. Has de finalitzar-lo abans de reclamar-ne un altre.',
+        'not_available' => 'El vehicle no està disponible',
         'model' => 'Model:',
         'accessible_label' => 'Accessible:',
         'claimed_success' => 'Vehicle reclamat amb èxit! Redirigint...',

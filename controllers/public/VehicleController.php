@@ -101,7 +101,7 @@ class VehicleController {
             error_log("ERROR: Vehicle not available or not found");
             return Router::json([
                 'success' => false,
-                'message' => 'Vehicle not available'
+                'message' => __('vehicle.not_available')
             ], 404);
         }
         
@@ -113,7 +113,7 @@ class VehicleController {
             error_log("ERROR: User already has active booking: " . json_encode($activeBooking));
             return Router::json([
                 'success' => false,
-                'message' => 'Ja tens un vehicle reclamat. Has de finalitzar-lo abans de reclamar-ne un altre.'
+                'message' => __('vehicle.already_claimed')
             ], 400);
         }
         

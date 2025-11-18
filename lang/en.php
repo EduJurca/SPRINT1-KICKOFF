@@ -130,6 +130,8 @@ return [
         'no_vehicles_available' => 'No vehicles available',
         'claim_error' => 'Failed to claim the vehicle',
         'claim_error_unknown' => 'Unknown error while claiming the vehicle',
+        'already_claimed' => 'You already have a claimed vehicle. Finish it before claiming another.',
+        'not_available' => 'Vehicle not available',
         'model' => 'Model:',
         'accessible_label' => 'Accessible:',
         'claimed_success' => 'Vehicle claimed successfully! Redirecting...',
