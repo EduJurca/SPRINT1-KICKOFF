@@ -123,10 +123,6 @@ Router::get('/api/session-status', ['AuthController', 'getSessionStatus']);
 Router::post('/api/users/language', ['ProfileController', 'updateLanguage']);
 
 
-Router::get('/accessibilitat', function() {
-    Router::view('commons.accessibility.accessibilitat');
-});
-
 // ==========================================
 // � CHAT / ASISTENTE IA
 // ==========================================

@@ -100,7 +100,7 @@
             <div class="p-6 border-b border-gray-200 flex items-center justify-between">
                 <h2 class="text-xl font-bold text-gray-900"><?php echo __('vehicle.reserve_vehicle'); ?></h2>
                 <button id="close-reserve-modal" class="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100 transition-colors">
-                    <i class="fas fa-car- text-xl mb-1"></i>
+                    <i class="fas fa-car text-xl mb-1"></i>
                 </button>
             </div>
             <div class="p-6 overflow-y-auto flex-1">

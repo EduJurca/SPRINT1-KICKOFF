@@ -265,6 +265,22 @@ return [
     ],
     'admin' => [
         'page_title' => 'VoltiaCar - Manage Vehicle',
+        'menu' => [
+            'general' => 'General',
+            'pages' => 'Pages',
+            'dashboard' => 'Dashboard',
+            'users' => 'Users',
+            'charging_stations' => 'Charging Stations',
+            'vehicles' => 'Vehicles',
+            'incidents' => 'Incidents',
+        ],
+        'notifications' => [
+            'title' => 'Notifications',
+            'new_booking' => 'New booking completed',
+            'new_user' => 'New user registered',
+            'incident_reported' => 'Incident reported',
+            'view_all' => 'View all'
+        ],
         'back' => '← Back',
         'control_vehicle' => 'Control Vehicle',
         'finish' => 'Finish',
@@ -502,6 +518,9 @@ return [
         'manage_title' => 'Incidents Management',
         'create_title' => 'Create Incident',
         'create_heading' => 'Report an issue or system incident',
+        'info_heading' => 'Incident Information',
+        'details_heading' => 'Details',
+        'validation_errors_title' => 'Validation errors:',
         'edit_title' => 'Edit Incident',
         'edit_heading' => 'Modify the incident details',
 
@@ -548,6 +567,9 @@ return [
         'create_new_incident' => 'Create New Incident',
         'actions' => 'Actions',
         'no_registered_incidents' => 'No incidents registered.',
+
+            'no_incidents_hint' => 'Start by creating your first incident',
+            'create_first_cta' => 'Create the first incident',
         'unknown' => 'Unknown',
         'unassigned' => 'Unassigned',
         'view_details' => 'View Details',

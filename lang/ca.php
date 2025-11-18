@@ -261,6 +261,22 @@ return [
     ],
     'admin' => [
         'page_title' => 'VoltiaCar - Administrar Vehicle',
+        'menu' => [
+            'general' => 'General',
+            'pages' => 'Pàgines',
+            'dashboard' => 'Dashboard',
+            'users' => 'Usuaris',
+            'charging_stations' => 'Punts de càrrega',
+            'vehicles' => 'Vehicles',
+            'incidents' => 'Incidències',
+        ],
+        'notifications' => [
+            'title' => 'Notificacions',
+            'new_booking' => 'Nova reserva completada',
+            'new_user' => 'Nou usuari registrat',
+            'incident_reported' => 'Incidència reportada',
+            'view_all' => 'Veure totes'
+        ],
         'back' => 'Tornar',
         'control_vehicle' => 'Controlar Vehicle',
         'finish' => 'Finalitzar',
@@ -498,6 +514,9 @@ return [
         'manage_title' => 'Gestió d\'Incidents',
         'create_title' => 'Crear Incidència',
         'create_heading' => 'Reporta un problema o incidència del sistema',
+        'info_heading' => 'Informació de la Incidència',
+        'details_heading' => 'Detalls',
+        'validation_errors_title' => 'Errors de validació:',
         'edit_title' => 'Editar Incidència',
         'edit_heading' => 'Modifica els detalls de la incidència',
 
@@ -548,6 +567,9 @@ return [
         'create_new_incident' => 'Crear nova',
         'actions' => 'Accions',
         'no_registered_incidents' => 'No hi ha incidents registrats.',
+
+        'no_incidents_hint' => 'Comença creant la primera incidència',
+        'create_first_cta' => 'Crear la primera incidència',
         'unknown' => 'Desconegut',
         'unassigned' => 'No assignat',
         'view_details' => 'Veure detalls',

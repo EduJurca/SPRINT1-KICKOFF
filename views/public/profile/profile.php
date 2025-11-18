@@ -82,26 +82,25 @@
         </div>
 
         <form method="POST" action="/api/users/language" class="mt-6 p-4 bg-gray-50 rounded-lg">
-          <label class="block text-gray-900 font-bold mb-2">
-            <svg class="inline w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+          <div class="flex items-center gap-3">
+            <svg class="w-5 h-5 text-gray-700" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
               <path fill-rule="evenodd" d="M7 2a1 1 0 011 1v1h3a1 1 0 110 2H9.578a18.87 18.87 0 01-1.724 4.78c.29.354.596.696.914 1.026a1 1 0 11-1.44 1.389c-.188-.196-.373-.396-.554-.6a19.098 19.098 0 01-3.107 3.567 1 1 0 01-1.334-1.49 17.087 17.087 0 003.13-3.733 18.992 18.992 0 01-1.487-2.494 1 1 0 111.79-.89c.234.47.489.928.764 1.372.417-.934.752-1.913.997-2.927H3a1 1 0 110-2h3V3a1 1 0 011-1zm6 6a1 1 0 01.894.553l2.991 5.982a.869.869 0 01.02.037l.99 1.98a1 1 0 11-1.79.895L15.383 16h-4.764l-.724 1.447a1 1 0 11-1.788-.894l.99-1.98.019-.038 2.99-5.982A1 1 0 0113 8zm-1.382 6h2.764L13 11.236 11.618 14z" clip-rule="evenodd"/>
             </svg>
-            <?php echo __('profile.language'); ?>
-          </label>
-          <select name="language" onchange="this.form.submit()" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1565C0]">
-            <option value="ca" <?= (isset($_SESSION['user']['lang']) && $_SESSION['user']['lang'] === 'ca') || !isset($_SESSION['user']['lang']) ? 'selected' : '' ?>>
-              🇪🇸 Català
-            </option>
-            <option value="en" <?= (isset($_SESSION['user']['lang']) && $_SESSION['user']['lang'] === 'en') ? 'selected' : '' ?>>
-              🇬🇧 English
-            </option>
-          </select>
+            <select name="language" onchange="this.form.submit()" aria-label="<?php echo __('profile.language'); ?>" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1565C0]">
+              <option value="ca" <?= (isset($_SESSION['user']['lang']) && $_SESSION['user']['lang'] === 'ca') || !isset($_SESSION['user']['lang']) ? 'selected' : '' ?>>
+                🇪🇸 Català
+              </option>
+              <option value="en" <?= (isset($_SESSION['user']['lang']) && $_SESSION['user']['lang'] === 'en') ? 'selected' : '' ?>>
+                🇬🇧 English
+              </option>
+            </select>
+          </div>
         </form>
         <div class="mt-6">
           <form method="POST" action="/logout">
             <button type="submit"
               class="block w-full bg-blue-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-600 transition-colors duration-300 text-center">
-              <?php echo __('dashboard.logout') ?? 'Tancar Sessió'; ?>
+              <?php echo __('dashboard.logout'); ?>
             </button>
           </form>
         </div>
@@ -144,6 +143,8 @@
 
       </div>
     </div>
+  </div>
+
   </div>
 
   <script>

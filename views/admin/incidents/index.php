@@ -201,13 +201,13 @@ unset($_SESSION['success'], $_SESSION['error']);
                                 </div>
                                 <div>
                                     <p class="text-lg font-semibold text-gray-900 mb-1"><?php echo __('incident.no_registered_incidents'); ?></p>
-                                    <p class="text-sm text-gray-500 mb-4">Comença creant la primera incidència</p>
+                                    <p class="text-sm text-gray-500 mb-4"><?php echo __('incident.no_incidents_hint'); ?></p>
                                 </div>
                                 <a href="/admin/incidents/create" class="text-[#1565C0] hover:text-blue-700 font-semibold inline-flex items-center gap-2">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                                     </svg>
-                                    Crear la primera incidència
+                                    <?php echo __('incident.create_first_cta'); ?>
                                 </a>
                             </div>
                         </td>

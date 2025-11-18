@@ -146,25 +146,28 @@ class ProfileController {
 
     public function updateLanguage() {
         $userId = AuthController::requireAuth();
-        
+
         $language = $_POST['language'] ?? null;
-        
+
+        // BEFORE URL
+        $previousUrl = $_SERVER['HTTP_REFERER'] ?? '/'; // fallback to '/' if not existing
+
         if (!in_array($language, ['en', 'ca'])) {
             $_SESSION['error'] = 'Invalid language';
-            return Router::redirect('/profile');
+            return Router::redirect($previousUrl);
         }
-        
+
         if ($this->userModel->updateProfile($userId, ['lang' => $language])) {
             $_SESSION['user']['lang'] = $language;
             $_SESSION['lang'] = $language;
-            
-            return Router::redirect('/profile');
+
+            return Router::redirect($previousUrl);
         }
-        
+
         $_SESSION['error'] = 'Error updating language';
-        return Router::redirect('/profile');
+        return Router::redirect($previousUrl);
     }
-    
+
     /**
      * Mostrar la pàgina de pagaments amb les targetes de l'usuari
      */
