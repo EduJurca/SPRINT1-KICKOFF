@@ -315,13 +315,10 @@ unset($_SESSION['success'], $_SESSION['error']);
                 <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-700">
-                            <?php echo __('incident.pagination_showing'); ?>
-                            <span class="font-medium"><?= min(($page - 1) * $itemsPerPage + 1, $totalIncidents) ?></span>
-                            -
-                            <span class="font-medium"><?= min($page * $itemsPerPage, $totalIncidents) ?></span>
-                            <?php echo __('incident.pagination_of'); ?>
-                            <span class="font-medium"><?= $totalIncidents ?></span>
-                            <?php echo __('incident.pagination_results'); ?>
+                            <?php 
+                            $showing = count($incidents);
+                            echo __('incident.pagination_showing') . " $showing " . __('incident.pagination_of') . " $totalIncidents " . __('incident.pagination_results');
+                            ?>
                         </p>
                     </div>
                     <div>

@@ -187,7 +187,10 @@ require_once VIEWS_PATH . '/admin/admin-header.php';
             <div class="bg-gray-200 px-6 py-4 border-t border-gray-200">
                 <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
                     <p class="text-sm font-medium text-gray-700">
-                        Mostrant <?= (($page - 1) * $perPage) + 1 ?> - <?= min($page * $perPage, $totalUsers) ?> de <?= $totalUsers ?> usuaris
+                        <?php
+                        $showing = count($users);
+                        echo "Mostrant $showing de $totalUsers usuaris";
+                        ?>
                     </p>
                     
                     <nav class="flex items-center gap-2">

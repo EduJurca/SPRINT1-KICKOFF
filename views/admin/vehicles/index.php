@@ -300,10 +300,14 @@ unset($_SESSION['success'], $_SESSION['error']);
                         <p class="text-sm font-medium text-gray-700">
                             <?php
                             $showing = count($vehicles);
-                            $startItem = (($currentPage - 1) * $perPage) + 1;
-                            $endItem = min($startItem + $showing - 1, $totalVehicles);
+                            $totalVehiclesInt = max(0, (int)($totalVehicles ?? 0));
+                            
+                            if ($totalVehiclesInt > 0 && $showing > 0) {
+                                echo "Mostrant $showing de $totalVehiclesInt vehicles";
+                            } else {
+                                echo "No hi ha vehicles per mostrar";
+                            }
                             ?>
-                            Mostrando <?= $startItem ?> - <?= $endItem ?> de <?= $totalVehicles ?> vehículos
                         </p>
                         
                         <!-- Paginación dinámica -->
@@ -331,8 +335,8 @@ unset($_SESSION['success'], $_SESSION['error']);
                         ?>
                         <nav class="flex items-center gap-2" aria-label="Pagination">
                             <!-- Botón Anterior -->
-                            <a href="<?= $baseUrl . $separator ?>page=<?= max(1, $currentPage - 1) ?>" 
-                               class="px-3 py-1.5 text-sm font-medium <?= $currentPage <= 1 ? 'text-gray-400 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' ?> bg-white border border-gray-300 rounded-lg transition-colors <?= $currentPage <= 1 ? 'pointer-events-none' : '' ?>">
+                            <a href="<?= $baseUrl . $separator ?>page=<?= max(1, $currentPageInt - 1) ?>" 
+                               class="px-3 py-1.5 text-sm font-medium <?= $currentPageInt <= 1 ? 'text-gray-400 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' ?> bg-white border border-gray-300 rounded-lg transition-colors <?= $currentPageInt <= 1 ? 'pointer-events-none' : '' ?>">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                                 </svg>
@@ -342,8 +346,8 @@ unset($_SESSION['success'], $_SESSION['error']);
                                 <?php
                                 // Lógica para mostrar números de página
                                 $range = 2; // Páginas a mostrar a cada lado de la actual
-                                $start = max(1, $currentPage - $range);
-                                $end = min($totalPages, $currentPage + $range);
+                                $start = max(1, $currentPageInt - $range);
+                                $end = min($totalPages, $currentPageInt + $range);
                                 
                                 // Mostrar primera página si no está en el rango
                                 if ($start > 1):
@@ -358,7 +362,7 @@ unset($_SESSION['success'], $_SESSION['error']);
                                 <!-- Páginas del rango -->
                                 <?php for ($i = $start; $i <= $end; $i++): ?>
                                     <a href="<?= $baseUrl . $separator ?>page=<?= $i ?>" 
-                                       class="px-3 py-1.5 text-sm font-<?= $i === $currentPage ? 'semibold text-white bg-[#1565C0]' : 'medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50' ?> rounded-lg transition-colors">
+                                       class="px-3 py-1.5 text-sm font-<?= $i === $currentPageInt ? 'semibold text-white bg-[#1565C0]' : 'medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50' ?> rounded-lg transition-colors">
                                         <?= $i ?>
                                     </a>
                                 <?php endfor; ?>
@@ -376,8 +380,8 @@ unset($_SESSION['success'], $_SESSION['error']);
                             </div>
                             
                             <!-- Botón Siguiente -->
-                            <a href="<?= $baseUrl . $separator ?>page=<?= min($totalPages, $currentPage + 1) ?>" 
-                               class="px-3 py-1.5 text-sm font-medium <?= $currentPage >= $totalPages ? 'text-gray-400 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' ?> bg-white border border-gray-300 rounded-lg transition-colors <?= $currentPage >= $totalPages ? 'pointer-events-none' : '' ?>">
+                            <a href="<?= $baseUrl . $separator ?>page=<?= min($totalPages, $currentPageInt + 1) ?>" 
+                               class="px-3 py-1.5 text-sm font-medium <?= $currentPageInt >= $totalPages ? 'text-gray-400 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' ?> bg-white border border-gray-300 rounded-lg transition-colors <?= $currentPageInt >= $totalPages ? 'pointer-events-none' : '' ?>">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                 </svg>

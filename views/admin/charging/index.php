@@ -278,10 +278,8 @@ $perPage = $perPage ?? 10;
                 <p class="text-sm font-medium text-gray-700">
                     <?php
                     $showing = count($stations);
-                    $startItem = (($page - 1) * $perPage) + 1;
-                    $endItem = min($startItem + $showing - 1, $totalStations);
+                    echo "Mostrant $showing de $totalStations estacions";
                     ?>
-                    Mostrando <?= $startItem ?> - <?= $endItem ?> de <?= $totalStations ?> estaciones
                 </p>
                 
                 <!-- Paginación dinámica -->
