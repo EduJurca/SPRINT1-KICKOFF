@@ -72,6 +72,9 @@ function switchTab(tabName) {
     }
 }
 </script>
+<div class="mb-8">
+        <h2 class="text-3xl font-bold text-gray-800 mb-2">Estadístiques</h2>
+    </div>
 
 <div class="inline-flex gap-1 bg-gray-100 p-0.5 rounded-lg mb-6 shadow-md">
     <button onclick="switchTab('general')" class="tab-button px-3 py-1.5 rounded-md text-sm bg-blue-900 text-white hover:bg-blue-700 hover:text-gray-100 transition-colors" id="btn-general">
@@ -114,12 +117,9 @@ function switchTab(tabName) {
 </div>
 
 <!-- Tab: Estadístiques -->
+ 
 <div id="tab-estadistiques" class="tab-content-section" style="display:none;">
-    <div class="mb-8">
-        <h2 class="text-3xl font-bold text-gray-800 mb-2">📊 Estadístiques v2</h2>
-        <p class="text-gray-600">✓ NUEVAS TARJETAS VISIBLES - Timestamp: 1763427514</p>
-    </div>
-
+  
     <!-- Primera fila: 3 tarjetes -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <!-- 1. Total Clients -->
@@ -172,37 +172,37 @@ function switchTab(tabName) {
                 <div class="w-12 h-12 bg-cyan-100 rounded-xl flex items-center justify-center">
                     <i class="fa fa-calendar text-cyan-600 text-xl"></i>
                 </div>
-                <span class="text-xs font-bold text-cyan-600 uppercase">Reserves</span>
+                <span class="text-xs font-bold text-cyan-600 uppercase">Consum Energètic</span>
             </div>
-            <div class="text-3xl font-bold text-gray-800 mb-1"><?php echo $totalBookings ?? 0; ?></div>
-            <div class="text-xs font-semibold text-gray-600 uppercase">Reserves Actives</div>
-            <div class="text-xs text-gray-500 mt-2">Sense completar</div>
+            <div class="text-3xl font-bold text-gray-800 mb-1"><?php echo number_format($energyThisMonth ?? 0, 2); ?> kWh</div>
+            <div class="text-xs font-semibold text-gray-600 uppercase">Consum aquest mes</div>
+            <div class="text-xs text-gray-500 mt-2">Basat en sessions de càrrega</div>
         </div>
 
-        <!-- 5. INCIDENCIES NOVES - UPDATED -->
+        <!-- 5. NOUS CLIENTS -->
         <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-emerald-500 p-5">
             <div class="flex items-center justify-between mb-3">
                 <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
-                    <i class="fa fa-euro text-emerald-600 text-xl"></i>
+                    <i class="fa fa-users text-emerald-600 text-xl"></i>
                 </div>
-                <span class="text-xs font-bold text-emerald-600 uppercase">Ingressos</span>
+                <span class="text-xs font-bold text-emerald-600 uppercase">Nous Clients</span>
             </div>
-            <div class="text-3xl font-bold text-gray-800 mb-1">€<?php echo number_format($totalRevenue ?? 0, 2); ?></div>
-            <div class="text-xs font-semibold text-gray-600 uppercase">Ingressos Mensuals</div>
-            <div class="text-xs text-gray-500 mt-2">Aquest mes</div>
+            <div class="text-3xl font-bold text-gray-800 mb-1"><?php echo $newClientsMonth ?? 0; ?></div>
+            <div class="text-xs font-semibold text-gray-600 uppercase">Nous aquest mes</div>
+            <div class="text-xs text-gray-500 mt-2">Clients amb rol=3</div>
         </div>
 
-        <!-- 6. NOUS CLIENTS - UPDATED -->
+        <!-- 6. NOVES INCIDÈNCIES -->
         <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-orange-500 p-5">
             <div class="flex items-center justify-between mb-3">
                 <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
-                    <i class="fa fa-chart-line text-orange-600 text-xl"></i>
+                    <i class="fa fa-exclamation-circle text-orange-600 text-xl"></i>
                 </div>
-                <span class="text-xs font-bold text-orange-600 uppercase">Evolució</span>
+                <span class="text-xs font-bold text-orange-600 uppercase">Noves Incidències</span>
             </div>
-            <div class="text-3xl font-bold text-gray-800 mb-1">↑ 12%</div>
-            <div class="text-xs font-semibold text-gray-600 uppercase">Creixement Mensual</div>
-            <div class="text-xs text-emerald-600 mt-2 font-semibold">+3% respecte mes passat</div>
+            <div class="text-3xl font-bold text-gray-800 mb-1"><?php echo $newIncidentsMonth ?? 0; ?></div>
+            <div class="text-xs font-semibold text-gray-600 uppercase">Aquest mes</div>
+            <div class="text-xs text-gray-500 mt-2">Incidències creades en 30 dies</div>
         </div>
     </div>
 </div>

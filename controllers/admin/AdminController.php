@@ -32,6 +32,11 @@ class AdminController {
         $monthlyBookings = $this->getMonthlyBookings();
         $recentUsers = $this->getRecentUsers(5);
         
+        // Quick KPIs
+        $energyThisMonth = $this->getEnergyConsumptionThisMonth();
+        $newClientsMonth = $this->getNewClientsMonth();
+        $newIncidentsMonth = $this->getNewIncidentsMonth();
+        
         return Router::view('admin.dashboard', [
             'totalUsers' => $totalUsers,
             'totalVehicles' => $totalVehicles,
@@ -40,10 +45,51 @@ class AdminController {
             'totalIncidents' => $totalIncidents,
             'monthlyBookings' => $monthlyBookings,
             'recentUsers' => $recentUsers,
+            'energyThisMonth' => $energyThisMonth,
+            'newClientsMonth' => $newClientsMonth,
+            'newIncidentsMonth' => $newIncidentsMonth,
             'pageTitle' => 'Dashboard'
         ]);
     }
     
+    private function getEnergyConsumptionThisMonth() {
+        // Safely get energy consumed this month. If the table doesn't exist or query fails, return 0.0
+        try {
+            $check = $this->db->query("SHOW TABLES LIKE 'charging_sessions'");
+            if (!$check || $check->num_rows === 0) {
+                return 0.0;
+            }
+
+            $res = $this->db->query("SELECT SUM(IFNULL(energy_consumed_kwh,0)) as total_kwh FROM charging_sessions WHERE MONTH(start_time)=MONTH(CURRENT_DATE()) AND YEAR(start_time)=YEAR(CURRENT_DATE())");
+            if ($res) {
+                $row = $res->fetch_assoc();
+                return (float)($row['total_kwh'] ?? 0);
+            }
+        } catch (\Throwable $e) {
+            // Log could be added here. Fallback to 0.0
+            return 0.0;
+        }
+
+        return 0.0;
+    }
+
+    private function getNewClientsMonth() {
+        $res = $this->db->query("SELECT COUNT(*) as cnt FROM users WHERE role_id = 3 AND created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)");
+        if ($res) {
+            $row = $res->fetch_assoc();
+            return (int)($row['cnt'] ?? 0);
+        }
+        return 0;
+    }
+
+    private function getNewIncidentsMonth() {
+        $res = $this->db->query("SELECT COUNT(*) as cnt FROM incidents WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)");
+        if ($res) {
+            $row = $res->fetch_assoc();
+            return (int)($row['cnt'] ?? 0);
+        }
+        return 0;
+    }
     private function getTotalUsers() {
         $result = $this->db->query("SELECT COUNT(*) as total FROM users");
         $row = $result->fetch_assoc();
