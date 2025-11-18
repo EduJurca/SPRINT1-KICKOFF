@@ -2,95 +2,124 @@
     <div class="container mx-auto px-2">
         <div class="flex justify-around items-end">
             <div class="flex flex-col items-center">
-                <a href="/dashboard" class="flex flex-col items-center text-black hover:text-gray-500 transition-colors p-2 rounded-lg">
+                <a href="/dashboard"
+                    class="flex flex-col items-center text-black hover:text-gray-500 transition-colors p-2 rounded-lg">
                     <i class="fas fa-home text-xl mb-1"></i>
                     <span class="text-xs"><?php echo __('footer.home'); ?></span>
                 </a>
             </div>
 
             <div class="flex flex-col items-center">
-                <a href="/administrar-vehicle" class="flex flex-col items-center text-black hover:text-gray-500 transition-colors p-2 rounded-lg">
+                <a href="/administrar-vehicle"
+                    class="flex flex-col items-center text-black hover:text-gray-500 transition-colors p-2 rounded-lg">
                     <i class="fas fa-car text-xl mb-1"></i>
                     <span class="text-xs"><?php echo __('footer.vehicles'); ?></span>
                 </a>
             </div>
 
             <div class="flex flex-col items-center">
-                <a href="/profile" class="flex flex-col items-center text-black hover:text-gray-500 transition-colors p-2 rounded-lg">
+                <a href="/profile"
+                    class="flex flex-col items-center text-black hover:text-gray-500 transition-colors p-2 rounded-lg">
                     <i class="fas fa-user text-xl mb-1"></i>
                     <span class="text-xs"><?php echo __('footer.profile'); ?></span>
                 </a>
             </div>
 
             <div class="flex flex-col items-center">
-                <a href="/report-incident" class="flex flex-col items-center text-black hover:text-gray-500 transition-colors p-2 rounded-lg">
+                <a href="/report-incident"
+                    class="flex flex-col items-center text-black hover:text-gray-500 transition-colors p-2 rounded-lg">
                     <i class="fas fa-exclamation-triangle text-xl mb-1"></i>
                     <span class="text-xs"><?php echo __('footer.incidents'); ?></span>
                 </a>
             </div>
 
             <div class="flex flex-col items-center">
-                <button id="footer-chat-toggle" class=" border-1 flex flex-col items-center text-blue-500 hover:text-gray-500 transition-colors p-2 rounded-lg">
+                <button id="footer-chat-toggle"
+                    class=" border-1 flex flex-col items-center text-blue-500 hover:text-gray-500 transition-colors p-2 rounded-lg">
                     <i class="fas fa-comment-dots text-xl mb-1"></i>
                     <span class="text-xs"><?php echo __('footer.chatbot'); ?></span>
                 </button>
-            </div>            
+            </div>
         </div>
     </div>
 </footer>
 <script>
-  (function() {
-    var href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
-    var already = Array.from(document.styleSheets || []).some(function(ss){
-      return ss.href && ss.href.indexOf('font-awesome') !== -1 || ss.href && ss.href.indexOf('cdnjs.cloudflare.com/ajax/libs/font-awesome') !== -1;
-    }) || !!document.querySelector('link[href*="font-awesome"]') || !!document.querySelector('link[href*="cdnjs.cloudflare.com/ajax/libs/font-awesome"]');
-    if (!already) {
-      var l = document.createElement('link');
-      l.rel = 'stylesheet';
-      l.href = href;
-      document.head.appendChild(l);
-    }
-  })();
+    (function () {
+        var href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+        var already = Array.from(document.styleSheets || []).some(function (ss) {
+            return ss.href && ss.href.indexOf('font-awesome') !== -1 || ss.href && ss.href.indexOf('cdnjs.cloudflare.com/ajax/libs/font-awesome') !== -1;
+        }) || !!document.querySelector('link[href*="font-awesome"]') || !!document.querySelector('link[href*="cdnjs.cloudflare.com/ajax/libs/font-awesome"]');
+        if (!already) {
+            var l = document.createElement('link');
+            l.rel = 'stylesheet';
+            l.href = href;
+            document.head.appendChild(l);
+        }
+    })();
 </script>
-    
-    <?php 
-    $hideChatToggle = true; // Ocultar el botón flotante cuando se usa desde footer
-    include __DIR__ . '/../../commons/chatbot-widget.php'; 
-    ?>
-    
-    <script src="/assets/js/main.js"></script>
-    
-    <?php if (isset($additionalJS)): ?>
-        <?php foreach ($additionalJS as $js): ?>
-            <script src="<?php echo $js; ?>"></script>
-        <?php endforeach; ?>
-    <?php endif; ?>
+
+<?php
+$hideChatToggle = true; // Ocultar el botón flotante cuando se usa desde footer
+include __DIR__ . '/../../commons/chatbot-widget.php';
+?>
+
+<script src="/assets/js/main.js"></script>
+
+<?php if (isset($additionalJS)): ?>
+    <?php foreach ($additionalJS as $js): ?>
+        <script src="<?php echo $js; ?>"></script>
+    <?php endforeach; ?>
+<?php endif; ?>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const footerToggle = document.getElementById('footer-chat-toggle');
         const chatToggle = document.getElementById('chat-toggle');
-        
+
         if (footerToggle && chatToggle) {
-            footerToggle.addEventListener('click', function() {
+            footerToggle.addEventListener('click', function () {
                 chatToggle.click();
             });
         }
     });
 </script>
+<?php
+$export = Lang::export(['vehicle', 'errors', 'search']);
+$export['footer.home'] = __('footer.home');
+$export['footer.vehicles'] = __('footer.vehicles');
+$export['footer.profile'] = __('footer.profile');
+$export['footer.incidents'] = __('footer.incidents');
+$export['footer.chatbot'] = __('footer.chatbot');
+?>
 <script>
     window.TRANSLATIONS = window.TRANSLATIONS || {};
-    (function() {
-        $export = Lang::export(['vehicle', 'errors', 'search']);
-        $export['footer.home'] = __('footer.home');
-        $export['footer.vehicles'] = __('footer.vehicles');
-        $export['footer.profile'] = __('footer.profile');
-        $export['footer.incidents'] = __('footer.incidents');
-        $export['footer.chatbot'] = __('footer.chatbot');
-
+    (function () {
         const translations = <?php echo json_encode($export); ?>;
         Object.assign(window.TRANSLATIONS, translations);
     })();
 </script>
+
+<?php if (!empty($_SESSION['success'])): ?>
+    <script>window.Toast && window.Toast.success(<?php echo json_encode($_SESSION['success']); ?>, 5000);</script>
+    <?php unset($_SESSION['success']); ?>
+<?php endif; ?>
+<?php if (!empty($_SESSION['error'])): ?>
+    <script>window.Toast && window.Toast.error(<?php echo json_encode($_SESSION['error']); ?>, 5000);</script>
+    <?php unset($_SESSION['error']); ?>
+<?php endif; ?>
+<?php if (!empty($_SESSION['warning'])): ?>
+    <script>window.Toast && window.Toast.warning(<?php echo json_encode($_SESSION['warning']); ?>, 5000);</script>
+    <?php unset($_SESSION['warning']); ?>
+<?php endif; ?>
+<?php if (!empty($_SESSION['info'])): ?>
+    <script>window.Toast && window.Toast.info(<?php echo json_encode($_SESSION['info']); ?>, 5000);</script>
+    <?php unset($_SESSION['info']); ?>
+<?php endif; ?>
+<?php if (!empty($_SESSION['alert'])): ?>
+    <script>window.Toast && window.Toast.alert(<?php echo json_encode($_SESSION['alert']); ?>, 5000);</script>
+    <?php unset($_SESSION['alert']); ?>
+<?php endif; ?>
+
 </body>
+
 </html>

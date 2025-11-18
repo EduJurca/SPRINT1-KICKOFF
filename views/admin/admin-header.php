@@ -114,7 +114,7 @@ if (!isset($_SESSION['alert']))
                     <a href="/admin/incidents"
                         class="nav-link flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-blue-700 hover:text-gray-100 <?php echo ($currentPage ?? '') === 'incidents' ? 'bg-blue-900 text-white' : 'text-gray-900'; ?>"
                         <?php echo ($currentPage ?? '') === 'incidents' ? 'data-active="true"' : ''; ?>>
-                        <i class="fa fa-flag text-current"></i> <?php echo __('admin.menu.incidents'); ?>
+                        <i class="fa fa-exclamation-triangle text-current"></i> <?php echo __('admin.menu.incidents'); ?>
                     </a>
                 </div>
             </nav>

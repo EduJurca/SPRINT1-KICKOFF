@@ -538,7 +538,7 @@ return [
         'notes' => 'Notes',
         'placeholder_notes' => 'Additional information (optional)',
         'optional' => 'optional',
-        'submit' => 'Send incident',
+        'submit' => 'Create incident',
         'created_success' => 'Incident created successfully.',
         'created_error' => 'An error occurred while creating the incident.',
 

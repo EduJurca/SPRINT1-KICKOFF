@@ -352,7 +352,7 @@ unset($_SESSION['success'], $_SESSION['error']);
                             
                             <?php for ($i = $start; $i <= $end; $i++): ?>
                                 <a href="?page=<?= $i ?><?= !empty($_GET['search']) ? '&search=' . urlencode($_GET['search']) : '' ?><?= !empty($_GET['type']) ? '&type=' . urlencode($_GET['type']) : '' ?><?= !empty($_GET['assignee']) ? '&assignee=' . urlencode($_GET['assignee']) : '' ?><?= !empty($_GET['status']) ? '&status=' . urlencode($_GET['status']) : '' ?><?= !empty($_GET['created_date']) ? '&created_date=' . urlencode($_GET['created_date']) : '' ?>" 
-                                   class="px-3 py-1.5 text-sm font-<?= $i === $page ? 'semibold text-white bg-[#1565C0]' : 'medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50' ?> rounded-lg transition-colors">
+                                   class="px-3 py-1.5 text-sm font-<?= $i === $page ? 'semibold text-white bg-[#1565C0]' : 'medium bg-white border border-gray-300 hover:bg-gray-50' ?> rounded-lg transition-colors">
                                     <?= $i ?>
                                 </a>
                             <?php endfor; ?>

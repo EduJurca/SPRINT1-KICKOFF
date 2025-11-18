@@ -534,7 +534,7 @@ return [
         'notes' => 'Notes',
         'placeholder_notes' => 'Informació addicional (opcional)',
         'optional' => 'opcional',
-        'submit' => 'Enviar incidència',
+        'submit' => 'Crear incidència',
         'created_success' => 'Incidència creada correctament.',
         'created_error' => 'S\'ha produït un error en crear la incidència.',
 

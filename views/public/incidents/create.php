@@ -108,7 +108,7 @@
                 document.getElementById('error-type').textContent = '<?php echo addslashes(__('form.validations.required_field')); ?>';
                 valid = false;
             }
-            if (description.length < 10) {
+            if (!description) {
                 document.getElementById('error-description').textContent = '<?php echo addslashes(__('form.validations.required_field')); ?>';
                 valid = false;
             }
