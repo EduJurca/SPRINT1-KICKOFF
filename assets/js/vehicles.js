@@ -31,7 +31,6 @@ const Vehicles = {
                 const contentType = response.headers.get('content-type');
                 if (contentType && contentType.includes('application/json')) {
                     const data = await response.json();
-                    console.log('🚗 Vehicles API response:', data);
                     if (data.success && data.vehicles) {
                         return data.vehicles;
                     }
@@ -39,7 +38,6 @@ const Vehicles = {
             }
             
             // Return mock data for development
-            console.log('⚠️ Using mock vehicles data');
             return this.getMockVehicles();
         } catch (error) {
             return this.getMockVehicles();
