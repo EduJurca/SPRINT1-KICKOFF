@@ -69,7 +69,7 @@ class Vehicle {
             return null;
         }
         
-        $vehicle = $result->fetch_assoc(); //Todo:
+        $vehicle = $result->fetch_assoc();
         
         // Formatear ubicació
         if (isset($vehicle['latitude']) && isset($vehicle['longitude'])) {
