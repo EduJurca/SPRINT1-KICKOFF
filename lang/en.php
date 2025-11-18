@@ -383,6 +383,33 @@ return [
             'confirm_delete' => 'Are you sure you want to delete the vehicle :plate? This action cannot be undone.',
             'showing' => 'Showing :count vehicle(s)'
         ],
+        'dashboard' => [
+            'tabs' => [
+                'overview' => 'Overview',
+                'statistics' => 'Statistics'
+            ],
+            'description' => 'Manage system users',
+            'new_user' => 'New User',
+            'overview_title' => 'Overview',
+            'metrics' => [
+                'users' => [
+                    'title' => 'Total Users',
+                    'change' => 'Registered users'
+                ],
+                'vehicles' => [
+                    'title' => 'Vehicles',
+                    'change' => 'Available vehicles'
+                ],
+                'incidents' => [
+                    'title' => 'Incidents',
+                    'change' => 'Active incidents'
+                ],
+                'revenue' => [
+                    'title' => 'Revenue',
+                    'change' => 'This month'
+                ]
+            ]
+        ],
     ],
     'profile' => [
         'page_title' => 'SIMS - Profile',

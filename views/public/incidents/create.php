@@ -4,6 +4,8 @@
 <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="/assets/images/favicon.png" type="image/png">
+        <link rel="apple-touch-icon" href="/assets/images/favicon.png">
         <title><?php echo __('incident.title'); ?></title>
         <script src="https://cdn.tailwindcss.com"></script>
 
@@ -54,8 +56,10 @@
                         <label for="type" class="block text-gray-900 font-semibold mb-2"><?php echo __('incident.type'); ?></label>
                         <select id="type" name="type" class="w-full px-4 py-2 bg-[#F5F5F5] rounded-lg border-0 shadow-none appearance-none focus:outline-none focus:ring-2 focus:ring-[#1565C0] focus:border-transparent">
                             <option value=""><?php echo __('incident.type_select'); ?></option>
-                            <option value="mechanical"><?php echo __('incident.type_mechanical'); ?></option>
-                            <option value="electrical"><?php echo __('incident.type_electrical'); ?></option>
+                            <option value="technical"><?php echo __('incident.type_technical'); ?></option>
+                            <option value="maintenance"><?php echo __('incident.type_maintenance'); ?></option>
+                            <option value="user_complaint"><?php echo __('incident.type_user_complaint'); ?></option>
+                            <option value="accident"><?php echo __('incident.type_accident'); ?></option>
                             <option value="other"><?php echo __('incident.type_other'); ?></option>
                         </select>
                         <div class="error-msg" id="error-type"></div>

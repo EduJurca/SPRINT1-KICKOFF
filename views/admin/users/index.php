@@ -91,7 +91,6 @@ require_once VIEWS_PATH . '/admin/admin-header.php';
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider bg-gray-200">ID</th>
                             <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider bg-gray-200">Username</th>
                             <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider bg-gray-200">Email</th>
                             <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider bg-gray-200">Nom Complet</th>
@@ -128,7 +127,6 @@ require_once VIEWS_PATH . '/admin/admin-header.php';
                     <?php else: ?>
                         <?php foreach ($users as $user): ?>
                             <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900"><?= $user['id'] ?></td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm font-medium text-gray-900"><?= htmlspecialchars($user['username']) ?></div>
                                 </td>

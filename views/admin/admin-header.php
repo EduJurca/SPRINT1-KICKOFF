@@ -51,7 +51,7 @@ if (!isset($_SESSION['alert']))
     </style>
 </head>
 
-<body class="font-sans bg-white text-black leading-normal">
+<body class="font-sans bg-white text-black leading-normal border-b">
     <?php if (!empty($_SESSION['success'])): ?>
         <script>window.Toast && window.Toast.success(<?php echo json_encode($_SESSION['success']); ?>, 5000);</script>
         <?php unset($_SESSION['success']); ?>
@@ -124,7 +124,7 @@ if (!isset($_SESSION['alert']))
         <!-- NAVBAR -->
         <main class="flex-1 overflow-auto">
             <div class="p-10">
-                <div class="flex justify-between items-center mb-8">
+                <div class="flex justify-between items-center mb-8 border-b border-gray-200 pb-4">
                     <h1 class="text-2xl font-semibold"></h1>
                     <div class="flex items-center gap-4">
                         <div class="relative">

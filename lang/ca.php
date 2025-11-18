@@ -379,6 +379,33 @@ return [
                 'confirm_delete' => 'Estàs segur que vols eliminar el vehicle :plate? Aquesta acció no es pot desfer.',
                 'showing' => 'Mostrant :count vehicle(s)'
         ],
+        'dashboard' => [
+            'tabs' => [
+                'overview' => 'Vista General',
+                'statistics' => 'Estadístiques'
+            ],
+            'description' => 'Gestiona els usuaris del sistema',
+            'new_user' => 'Nou Usuari',
+            'overview_title' => 'Vista',
+            'metrics' => [
+                'users' => [
+                    'title' => 'Total Usuaris',
+                    'change' => 'Usuaris registrats'
+                ],
+                'vehicles' => [
+                    'title' => 'Vehicles',
+                    'change' => 'Vehicles disponibles'
+                ],
+                'incidents' => [
+                    'title' => 'Incidències',
+                    'change' => 'Incidències actives'
+                ],
+                'revenue' => [
+                    'title' => 'Ingressos',
+                    'change' => 'Aquest mes'
+                ]
+            ]
+        ],
     ],
     'profile' => [
         'page_title' => 'SIMS - Perfil',
