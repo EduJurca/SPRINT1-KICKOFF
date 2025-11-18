@@ -257,6 +257,48 @@
                         behavior: 'smooth'
                     });
                 }
+            },
+            /**
+             * Close all modals present on the page.
+             * It removes inline properties that could block reopening via classes
+             * and then applies the `hidden` class so the modal visually closes.
+             */
+            closeAllModals() {
+                try {
+                    const selectors = [
+                        '[id$="-modal"]',
+                        '[id*="modal"]',
+                        '.modal',
+                        '.claim-modal-overlay',
+                        '[role="dialog"]'
+                    ];
+
+                    const nodes = document.querySelectorAll(selectors.join(','));
+                    nodes.forEach(el => {
+                        // Remove inline styles that can block reopen via classes
+                        try { el.style.removeProperty('display'); } catch (e) {}
+                        try { el.style.removeProperty('opacity'); } catch (e) {}
+                        try { el.style.removeProperty('visibility'); } catch (e) {}
+
+                        // Ensure hidden class is present and remove visible classes
+                        try { el.classList.add('hidden'); } catch (e) {}
+                        try { el.classList.remove('flex', 'block', 'visible', 'opacity-100', 'translate-y-0'); } catch (e) {}
+                    });
+
+                    // Additionally handle known overlay ids
+                    const overlays = ['vehicle-details-overlay', 'reserve-modal', 'claim-modal', 'vehicle-details-modal'];
+                    overlays.forEach(id => {
+                        const o = document.getElementById(id);
+                        if (o) {
+                            try { o.style.removeProperty('display'); } catch (e) {}
+                            try { o.style.removeProperty('opacity'); } catch (e) {}
+                            try { o.style.removeProperty('visibility'); } catch (e) {}
+                            try { o.classList.add('hidden'); } catch (e) {}
+                        }
+                    });
+                } catch (err) {
+                    console.error('closeAllModals error', err);
+                }
             }
         };
     }
@@ -432,6 +474,15 @@
         window.addEventListener('popstate', (event) => {
             // Handle browser back/forward navigation
             console.log('Navigation:', event);
+        });
+        // Close any open modals when the user presses ESC
+        document.addEventListener('keydown', (ev) => {
+            const key = ev.key || ev.keyCode;
+            if (key === 'Escape' || key === 'Esc' || key === 27) {
+                if (window.Utils && typeof window.Utils.closeAllModals === 'function') {
+                    window.Utils.closeAllModals();
+                }
+            }
         });
     });
 
