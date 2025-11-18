@@ -381,7 +381,108 @@ unset($_SESSION['success'], $_SESSION['error']);
     </div>
 </div>
 
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="mt-3 text-center">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+                <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+            </div>
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mt-4">Eliminar incidència</h3>
+            <div class="mt-2 px-7 py-3">
+                <p class="text-sm text-gray-500" id="deleteMessage"></p>
+            </div>
+            <div class="flex gap-3 justify-center mt-4">
+                <button onclick="closeDeleteModal()" 
+                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">
+                    Cancel·lar
+                </button>
+                <form id="deleteForm" method="POST" class="inline">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" 
+                            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                        Eliminar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Resolve Confirmation Modal -->
+<div id="resolveModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="mt-3 text-center">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+                <i class="fas fa-check-circle text-green-600 text-xl"></i>
+            </div>
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mt-4">Resoldre incidència</h3>
+            <div class="mt-2 px-7 py-3">
+                <p class="text-sm text-gray-500" id="resolveMessage"></p>
+            </div>
+            <div class="flex gap-3 justify-center mt-4">
+                <button onclick="closeResolveModal()" 
+                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">
+                    Cancel·lar
+                </button>
+                <form id="resolveForm" method="POST" class="inline">
+                    <button type="submit" 
+                            class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                        Resoldre
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+// Handle delete confirmation modals for incidents
+document.addEventListener('DOMContentLoaded', function() {
+    // Interceptar botones de eliminar
+    document.querySelectorAll('form.js-confirm[action*="/admin/incidents/"] button[type="submit"]').forEach(button => {
+        button.addEventListener('click', function(e) {
+            const form = this.closest('form');
+            const action = form.getAttribute('action');
+            
+            // Si es delete (contiene método DELETE)
+            if (form.querySelector('input[name="_method"][value="DELETE"]')) {
+                e.preventDefault();
+                const incidentId = action.split('/').pop();
+                showDeleteModal(incidentId);
+            }
+            // Si es resolve
+            else if (action.includes('/resolve')) {
+                e.preventDefault();
+                const incidentId = action.split('/')[3];
+                showResolveModal(incidentId);
+            }
+        });
+    });
+});
+
+function showDeleteModal(id) {
+    document.getElementById('deleteModal').classList.remove('hidden');
+    document.getElementById('deleteMessage').textContent = 
+        `Estàs segur que vols eliminar aquesta incidència? Aquesta acció no es pot desfer.`;
+    document.getElementById('deleteForm').action = `/admin/incidents/${id}`;
+}
+
+function closeDeleteModal() {
+    document.getElementById('deleteModal').classList.add('hidden');
+}
+
+function showResolveModal(id) {
+    document.getElementById('resolveModal').classList.remove('hidden');
+    document.getElementById('resolveMessage').textContent = 
+        `Estàs segur que vols marcar aquesta incidència com a resolta?`;
+    document.getElementById('resolveForm').action = `/admin/incidents/${id}/resolve`;
+}
+
+function closeResolveModal() {
+    document.getElementById('resolveModal').classList.add('hidden');
+}
+
 // Toggle para filtros avanzados
 document.addEventListener('DOMContentLoaded', function() {
     const toggleButton = document.getElementById('toggleFilters');
