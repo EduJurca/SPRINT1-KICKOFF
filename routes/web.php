@@ -151,6 +151,22 @@ Router::get('/admin/users', function() {
     $controller->index();
 });
 
+// Backwards-compatible routes that accept query-string id (e.g. /admin/users/edit?id=5)
+Router::get('/admin/users/edit', function() {
+    $controller = new UserController();
+    $controller->edit();
+});
+
+Router::post('/admin/users/update', function() {
+    $controller = new UserController();
+    $controller->update();
+});
+
+Router::post('/admin/users/delete', function() {
+    $controller = new UserController();
+    $controller->delete();
+});
+
 Router::get('/admin/users/create', function() {
     $controller = new UserController();
     $controller->create();
@@ -161,17 +177,28 @@ Router::post('/admin/users/store', function() {
     $controller->store();
 });
 
-Router::get('/admin/users/{id}/edit', function() {
+Router::get('/admin/users/{id}/edit', function($id = null) {
+    if ($id !== null) {
+        // ensure controller reads id from GET as before
+        $_GET['id'] = $id;
+    }
     $controller = new UserController();
     $controller->edit();
 });
 
-Router::post('/admin/users/{id}/update', function() {
+Router::post('/admin/users/{id}/update', function($id = null) {
+    if ($id !== null) {
+        // ensure controller reads id from POST as before
+        $_POST['id'] = $id;
+    }
     $controller = new UserController();
     $controller->update();
 });
 
-Router::post('/admin/users/{id}/delete', function() {
+Router::post('/admin/users/{id}/delete', function($id = null) {
+    if ($id !== null) {
+        $_POST['id'] = $id;
+    }
     $controller = new UserController();
     $controller->delete();
 });
