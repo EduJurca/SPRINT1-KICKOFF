@@ -16,7 +16,7 @@
         }
 
         /* Hide the scrollbar for a cleaner appearance */
-        */ .no-scrollbar::-webkit-scrollbar {
+        .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
 

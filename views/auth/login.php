@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/assets/images/favicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/assets/images/favicon.png">
     <title>SIMS - Inicia Sessió</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="/assets/js/toast.js"></script>

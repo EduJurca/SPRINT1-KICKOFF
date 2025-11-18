@@ -18,7 +18,8 @@ if (!isset($_SESSION['alert']))
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VoltiaCar</title>
-    <link rel="icon" href="assets/images/logo.png" type="image/png" />
+    <link rel="icon" href="/assets/images/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/assets/images/favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="/assets/js/toast.js"></script>
@@ -124,7 +125,7 @@ if (!isset($_SESSION['alert']))
         <main class="flex-1 overflow-auto">
             <div class="p-10">
                 <div class="flex justify-between items-center mb-8">
-                    <h1 class="text-2xl font-semibold"><?php echo $pageTitle ?? 'Dashboard'; ?></h1>
+                    <h1 class="text-2xl font-semibold"></h1>
                     <div class="flex items-center gap-4">
                         <div class="relative">
                             <div class="flex items-center gap-2">

@@ -1,25 +1,21 @@
--- VoltiaCar MariaDB Initialization Script
--- Creates database, tables, and sample data
-
 SET FOREIGN_KEY_CHECKS = 0;
-DROP TABLE IF EXISTS payments;
-DROP TABLE IF EXISTS vehicle_usage;
-DROP TABLE IF EXISTS subscriptions;
+DROP TABLE IF EXISTS nationalities;
+DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS payment_methods;
 DROP TABLE IF EXISTS vehicles;
 DROP TABLE IF EXISTS locations;
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS nationalities;
+DROP TABLE IF EXISTS vehicle_usage;
+DROP TABLE IF EXISTS incidents;
+DROP TABLE IF EXISTS payments;
 DROP TABLE IF EXISTS bookings;
 DROP TABLE IF EXISTS charging_sessions;
 DROP TABLE IF EXISTS charging_stations;
-DROP TABLE IF EXISTS incidents;
 
 
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- ==========================================
--- SISTEMA DE ROLS (Hardcoded)
+-- ROLS SYSTEM (Hardcoded)
 -- ==========================================
 CREATE TABLE roles (
     id INT PRIMARY KEY,
@@ -86,22 +82,6 @@ CREATE TABLE payment_methods (
     INDEX idx_provider (provider)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Table: subscriptions
-CREATE TABLE subscriptions (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    type ENUM('basic', 'premium') NOT NULL DEFAULT 'basic',
-    start_date DATE NOT NULL,
-    end_date DATE NOT NULL,
-    free_minutes INT DEFAULT 25,
-    unlock_fee_waived BOOLEAN DEFAULT TRUE,
-    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    INDEX idx_user_id (user_id),
-    INDEX idx_type (type),
-    INDEX idx_dates (start_date, end_date)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 -- Table: vehicles
 CREATE TABLE vehicles (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -154,6 +134,7 @@ CREATE TABLE vehicle_usage (
     INDEX idx_start_time (start_time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Table: incidents
 CREATE TABLE incidents (
     id INT AUTO_INCREMENT PRIMARY KEY,
     type ENUM('technical', 'maintenance', 'user_complaint', 'accident', 'other') NOT NULL,
@@ -195,29 +176,8 @@ CREATE TABLE payments (
     INDEX idx_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Insert sample nationalities
-INSERT INTO nationalities (name) VALUES
-('Spain'),
-('France'),
-('Germany'),
-('Italy'),
-('United Kingdom'),
-('Portugal'),
-('Netherlands'),
-('Belgium'),
-('Sweden'),
-('Norway');
-
--- Insert sample locations (Amposta area)
-INSERT INTO locations (name, latitude, longitude, address) VALUES
-('Amposta Centre', 40.71170000, 0.57830000, 'Plaça de l''Ajuntament, Amposta'),
-('Parc Natural Delta de l''Ebre', 40.72000000, 0.73500000, 'Deltebre, Tarragona'),
-('Port dels Alfacs', 40.62500000, 0.87000000, 'Sant Carles de la Ràpita'),
-('Platja de la Marquesa', 40.68000000, 0.60000000, 'Amposta, Tarragona'),
-('Centre Esportiu', 40.71500000, 0.58500000, 'Avinguda de la Ràpita, Amposta');
-
 -- Table: bookings
-CREATE TABLE IF NOT EXISTS bookings (
+CREATE TABLE bookings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     vehicle_id INT NOT NULL,
@@ -240,57 +200,7 @@ CREATE TABLE IF NOT EXISTS bookings (
     INDEX idx_user_vehicle (user_id, vehicle_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Insert sample vehicles with Amposta locations
-INSERT INTO vehicles (plate, brand, model, year, status, battery_level, latitude, longitude, vehicle_type, is_accessible, price_per_minute, image_url) VALUES
-('1234ABC', 'Tesla', 'Model 3', 2023, 'available', 85, 40.71170000, 0.57830000, 'car', 0, 0.40, '/assets/images/cars/tesla-model3.png'),
-('5678DEF', 'Nissan', 'Leaf', 2022, 'available', 92, 40.71350000, 0.57650000, 'car', 1, 0.35, '/assets/images/cars/nissan-leaf.png'),
-('9012GHI', 'Renault', 'Zoe', 2023, 'available', 78, 40.71000000, 0.58100000, 'car', 0, 0.35, '/assets/images/cars/renault-zoe.png'),
-('3456JKL', 'BMW', 'i3', 2022, 'available', 65, 40.71450000, 0.57500000, 'car', 1, 0.45, '/assets/images/cars/bmw-i3.png'),
-('7890MNO', 'Volkswagen', 'ID.3', 2023, 'available', 88, 40.70950000, 0.58300000, 'car', 0, 0.38, '/assets/images/cars/vw-id3.png');
-
--- ==========================================
--- USUARIS DE PROVA AMB ROLS
--- ==========================================
-INSERT INTO users (username, email, password, fullname, role_id, created_at) VALUES
--- SuperAdmin (password: admin123)
-('admin', 'admin@sims.cat', '$2y$10$FDHmfPCgzisG0KHG2Q9K8eoAodytkui9A0nMmtDY4W6sIbbN2FfA.', 'Administrator', 1, NOW()),
-
--- Treballadors (password: treballador123)
-('treballador1', 'treballador1@sims.cat', '$2y$10$uvFEE/dr3fKA.Do/CC7f3uv9IWw71o2zlSX40vCNu05rcx8wgqFU6', 'Joan Pérez', 2, NOW()),
-('treballador2', 'treballador2@sims.cat', '$2y$10$uvFEE/dr3fKA.Do/CC7f3uv9IWw71o2zlSX40vCNu05rcx8wgqFU6', 'Maria García', 2, NOW()),
-
--- Clients (password: client123)
-('client1', 'client1@example.com', '$2y$10$LMsChqzpt0EcZu.VQWdPLu6ZEu8DaEJfHK3/h8zzAWrNbJIfKgPtW', 'Pau Martínez', 3, NOW()),
-('client2', 'client2@example.com', '$2y$10$LMsChqzpt0EcZu.VQWdPLu6ZEu8DaEJfHK3/h8zzAWrNbJIfKgPtW', 'Anna López', 3, NOW()),
-('client3', 'client3@example.com', '$2y$10$LMsChqzpt0EcZu.VQWdPLu6ZEu8DaEJfHK3/h8zzAWrNbJIfKgPtW', 'Marc Vila', 3, NOW());
-
--- ==========================================
--- DADES DE PROVA: HISTORIAL DE VIATGES
--- ==========================================
-
--- Viatges del client1 (user_id = 4)
-INSERT INTO vehicle_usage (user_id, vehicle_id, start_time, end_time, start_location_id, end_location_id, total_distance_km) VALUES
-(4, 1, '2025-10-25 10:30:00', '2025-10-25 11:00:00', 1, 2, 5.2),
-(4, 2, '2025-10-28 15:15:00', '2025-10-28 15:45:00', 2, 3, 8.7),
-(4, 3, '2025-10-30 09:00:00', '2025-10-30 09:35:00', 1, 4, 6.3),
-(4, 1, '2025-11-01 14:20:00', '2025-11-01 15:10:00', 3, 5, 12.5);
-
--- Viatges del client2 (user_id = 5)
-INSERT INTO vehicle_usage (user_id, vehicle_id, start_time, end_time, start_location_id, end_location_id, total_distance_km) VALUES
-(5, 4, '2025-10-26 08:45:00', '2025-10-26 09:20:00', 1, 3, 7.1),
-(5, 5, '2025-10-29 12:30:00', '2025-10-29 13:05:00', 4, 1, 9.8),
-(5, 2, '2025-10-31 16:00:00', NULL, 2, NULL, NULL);  -- Viatge en curs
-
--- Viatges del client3 (user_id = 6)
-INSERT INTO vehicle_usage (user_id, vehicle_id, start_time, end_time, start_location_id, end_location_id, total_distance_km) VALUES
-(6, 3, '2025-10-27 11:15:00', '2025-10-27 11:55:00', 5, 2, 11.2),
-(6, 1, '2025-11-01 10:00:00', '2025-11-01 10:40:00', 1, 5, 8.9);
-
--- Success message
-SELECT 'MariaDB database initialized successfully!' AS message;
-
-
-CREATE TABLE IF NOT EXISTS charging_stations (
+CREATE TABLE charging_stations (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     address VARCHAR(500) NOT NULL,
@@ -312,7 +222,7 @@ CREATE TABLE IF NOT EXISTS charging_stations (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Create charging_sessions table
-CREATE TABLE IF NOT EXISTS charging_sessions (
+CREATE TABLE charging_sessions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     station_id INT NOT NULL,
     vehicle_id INT NOT NULL,
@@ -333,7 +243,67 @@ CREATE TABLE IF NOT EXISTS charging_sessions (
     INDEX idx_user (user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Insert sample charging stations
+
+
+INSERT INTO nationalities (name) VALUES
+('Spain'),
+('France'),
+('Germany'),
+('Italy'),
+('United Kingdom'),
+('Portugal'),
+('Netherlands'),
+('Belgium'),
+('Sweden'),
+('Norway');
+
+
+INSERT INTO locations (name, latitude, longitude, address) VALUES
+('Amposta Centre', 40.71170000, 0.57830000, 'Plaça de l''Ajuntament, Amposta'),
+('Parc Natural Delta de l''Ebre', 40.72000000, 0.73500000, 'Deltebre, Tarragona'),
+('Port dels Alfacs', 40.62500000, 0.87000000, 'Sant Carles de la Ràpita'),
+('Platja de la Marquesa', 40.68000000, 0.60000000, 'Amposta, Tarragona'),
+('Centre Esportiu', 40.71500000, 0.58500000, 'Avinguda de la Ràpita, Amposta');
+
+INSERT INTO vehicles (plate, brand, model, year, status, battery_level, latitude, longitude, vehicle_type, is_accessible, price_per_minute, image_url) VALUES
+('1234ABC', 'Tesla', 'Model 3', 2023, 'available', 85, 40.71170000, 0.57830000, 'car', 0, 0.40, '/assets/images/cars/tesla-model3.png'),
+('5678DEF', 'Nissan', 'Leaf', 2022, 'available', 92, 40.71350000, 0.57650000, 'car', 1, 0.35, '/assets/images/cars/nissan-leaf.png'),
+('9012GHI', 'Renault', 'Zoe', 2023, 'available', 78, 40.71000000, 0.58100000, 'car', 0, 0.35, '/assets/images/cars/renault-zoe.png'),
+('3456JKL', 'BMW', 'i3', 2022, 'available', 65, 40.71450000, 0.57500000, 'car', 1, 0.45, '/assets/images/cars/bmw-i3.png'),
+('7890MNO', 'Volkswagen', 'ID.3', 2023, 'available', 88, 40.70950000, 0.58300000, 'car', 0, 0.38, '/assets/images/cars/vw-id3.png');
+
+INSERT INTO users (username, email, password, fullname, role_id, created_at) VALUES
+-- SuperAdmin (password: admin123)
+('admin', 'admin@sims.cat', '$2y$10$FDHmfPCgzisG0KHG2Q9K8eoAodytkui9A0nMmtDY4W6sIbbN2FfA.', 'Administrator', 1, NOW()),
+
+-- Treballadors (password: treballador123)
+('treballador1', 'treballador1@sims.cat', '$2y$10$uvFEE/dr3fKA.Do/CC7f3uv9IWw71o2zlSX40vCNu05rcx8wgqFU6', 'Joan Pérez', 2, NOW()),
+('treballador2', 'treballador2@sims.cat', '$2y$10$uvFEE/dr3fKA.Do/CC7f3uv9IWw71o2zlSX40vCNu05rcx8wgqFU6', 'Maria García', 2, NOW()),
+
+-- Clients (password: client123)
+('client1', 'client1@example.com', '$2y$10$LMsChqzpt0EcZu.VQWdPLu6ZEu8DaEJfHK3/h8zzAWrNbJIfKgPtW', 'Pau Martínez', 3, NOW()),
+('client2', 'client2@example.com', '$2y$10$LMsChqzpt0EcZu.VQWdPLu6ZEu8DaEJfHK3/h8zzAWrNbJIfKgPtW', 'Anna López', 3, NOW()),
+('client3', 'client3@example.com', '$2y$10$LMsChqzpt0EcZu.VQWdPLu6ZEu8DaEJfHK3/h8zzAWrNbJIfKgPtW', 'Marc Vila', 3, NOW());
+
+
+INSERT INTO vehicle_usage (user_id, vehicle_id, start_time, end_time, start_location_id, end_location_id, total_distance_km) VALUES
+(4, 1, '2025-10-25 10:30:00', '2025-10-25 11:00:00', 1, 2, 5.2),
+(4, 2, '2025-10-28 15:15:00', '2025-10-28 15:45:00', 2, 3, 8.7),
+(4, 3, '2025-10-30 09:00:00', '2025-10-30 09:35:00', 1, 4, 6.3),
+(4, 1, '2025-11-01 14:20:00', '2025-11-01 15:10:00', 3, 5, 12.5);
+
+INSERT INTO vehicle_usage (user_id, vehicle_id, start_time, end_time, start_location_id, end_location_id, total_distance_km) VALUES
+(5, 4, '2025-10-26 08:45:00', '2025-10-26 09:20:00', 1, 3, 7.1),
+(5, 5, '2025-10-29 12:30:00', '2025-10-29 13:05:00', 4, 1, 9.8),
+(5, 2, '2025-10-31 16:00:00', NULL, 2, NULL, NULL); 
+
+INSERT INTO vehicle_usage (user_id, vehicle_id, start_time, end_time, start_location_id, end_location_id, total_distance_km) VALUES
+(6, 3, '2025-10-27 11:15:00', '2025-10-27 11:55:00', 5, 2, 11.2),
+(6, 1, '2025-11-01 10:00:00', '2025-11-01 10:40:00', 1, 5, 8.9);
+
+SELECT 'MariaDB database initialized successfully!' AS message;
+
+
 INSERT INTO charging_stations (name, address, city, postal_code, latitude, longitude, total_slots, available_slots, power_kw, status) VALUES
 ('Amposta Centre Station', 'Placa de Espanya, 1', 'Amposta', '43870', 40.708889, 0.578333, 4, 4, 50, 'active'),
 ('Delta Ebre Station', 'Avinguda Sant Jaume, 50', 'Amposta', '43870', 40.712500, 0.582778, 6, 5, 50, 'active'),
