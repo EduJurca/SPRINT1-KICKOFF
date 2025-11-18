@@ -1,7 +1,7 @@
 <?php 
 
 class Incident {
-    private const ALLOWED_TYPES = ['mechanical', 'electrical', 'other'];
+    private const ALLOWED_TYPES = ['technical', 'maintenance', 'user_complaint', 'accident', 'other'];
     private const ALLOWED_STATUSES = ['pending', 'in_progress', 'resolved'];
 
     private $db;

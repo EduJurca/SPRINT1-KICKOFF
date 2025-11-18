@@ -54,6 +54,53 @@ class Lang
         return self::$availableLangs;
     }
 
+
+    public static function export(array $prefixes = [])
+    {
+        if (empty(self::$translations)) {
+            // Ensure current translations are loaded
+            self::init(self::$currentLang);
+        }
+
+        $out = [];
+
+        foreach ($prefixes as $prefix) {
+            $keys = explode('.', $prefix);
+            $sub = self::$translations;
+            foreach ($keys as $k) {
+                if (isset($sub[$k])) {
+                    $sub = $sub[$k];
+                } else {
+                    $sub = null;
+                    break;
+                }
+            }
+
+            if (is_array($sub)) {
+                $out = array_merge($out, self::flatten($sub, $prefix));
+            } elseif ($sub !== null) {
+                $out[$prefix] = $sub;
+            }
+        }
+
+        return $out;
+    }
+
+    private static function flatten(array $arr, string $prefix = ''): array
+    {
+        $result = [];
+        foreach ($arr as $k => $v) {
+            $key = $prefix === '' ? $k : $prefix . '.' . $k;
+            if (is_array($v)) {
+                $result = array_merge($result, self::flatten($v, $key));
+            } else {
+                $result[$key] = $v;
+            }
+        }
+
+        return $result;
+    }
+
     public static function url($path = '')
     {
         $path = ltrim($path, '/');

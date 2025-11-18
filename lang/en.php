@@ -97,6 +97,11 @@ return [
     ],
     'footer' => [
         'copyright' => '© :year VoltiaCar. All rights reserved.',
+        'home' => 'Home',
+        'vehicles' => 'Vehicles',
+        'profile' => 'Profile',
+        'incidents' => 'Incidents',
+        'chatbot' => 'Chatbot',
     ],
     'vehicle' => [
         'page_title' => 'VoltiaCar - Locate Vehicles',
@@ -107,15 +112,49 @@ return [
         'accessible_vehicles_alt' => 'Accessible Vehicles',
         'loading_vehicles' => 'Loading vehicles...',
         'loading_accessible_vehicles' => 'Loading accessible vehicles...',
+        'reserve' => 'Reserve',
+        'reserve_vehicle' => 'Reserve Vehicle',
+        'unknown_vehicle' => 'Vehicle',
+        'close' => 'Close',
         'logo_app_alt' => 'App Logo',
         'locate_vehicles_title' => 'Locate Vehicles',
         'loading' => 'Loading...',
+        'your_location' => 'Your location',
         'confirm_claim' => 'Confirm Claim',
         'unlock_cost' => 'Unlock Cost',
         'unlock_fee_warning' => 'An unlock fee will be charged when claiming this vehicle. This charge will be made immediately.',
         'terms_acceptance' => 'By confirming, you accept the terms and conditions of the service',
         'cancel' => 'Cancel',
         'accept_and_claim' => 'Accept and Claim',
+        'claim' => 'Claim',
+        'no_vehicles_available' => 'No vehicles available',
+        'claim_error' => 'Failed to claim the vehicle',
+        'claim_error_unknown' => 'Unknown error while claiming the vehicle',
+        'already_claimed' => 'You already have a claimed vehicle. Finish it before claiming another.',
+        'not_available' => 'Vehicle not available',
+        'model' => 'Model:',
+        'accessible_label' => 'Accessible:',
+        'claimed_success' => 'Vehicle claimed successfully! Redirecting...',
+        'no_vehicle_selected' => 'No vehicle selected',
+        'claim_processing_error' => 'Error processing claim',
+        'battery_unit' => 'battery',
+        'rental_duration' => 'Rental Duration',
+        'rental_30min' => '30 minutes',
+        'rental_1h' => '1 hour',
+        'rental_1h30' => '1 hour 30 min',
+        'rental_2h' => '2 hours',
+        'rental_3h' => '3 hours',
+        'rental_4h' => '4 hours',
+        'rental_6h' => '6 hours',
+        'rental_8h' => '8 hours',
+        'rental_12h' => '12 hours',
+        'rental_24h' => '24 hours',
+        'price_per_minute' => 'Price per minute:',
+        'selected_time' => 'Selected time:',
+        'time_cost' => 'Time cost:',
+        'unlock_fee' => 'Unlock fee:',
+        'total' => 'Total to PAY NOW:',
+        'payment_info' => 'You will pay this FULL amount NOW. Even if you return the vehicle earlier, there will be NO refund. The selected time is what you will pay.',
         'search_page_title' => 'VoltiaCar - Search Vehicles',
         'search_title' => 'Search Vehicles',
         'search_description' => 'Use filters to find the perfect vehicle',
@@ -144,6 +183,11 @@ return [
         'sort_by' => 'Sort by',
         'battery' => 'Battery',
         'price' => 'Price',
+        'label_type' => 'Type:',
+        'label_battery' => 'Battery:',
+        'label_price' => 'Price:',
+        'label_license' => 'License:',
+        'book_now' => 'Book Now',
         'distance' => 'Distance',
         'search' => '🔍 Search',
         'clear_filters' => 'Clear Filters',
@@ -200,8 +244,6 @@ return [
         'purchase_time' => 'Purchase Time',
         'logo_app_alt' => 'App Logo',
         'upgrade_to' => 'Upgrade to',
-        'premium' => 'Premium',
-        'premium_price' => '9.99€ / month',
         'or_select_time_option' => 'Or select a time option:',
         'unlock_fee_reminder' => 'Remember: each trip has an unlock cost of **0.50€**.',
         'minutes_10' => '10 minutes',
@@ -225,6 +267,22 @@ return [
     ],
     'admin' => [
         'page_title' => 'VoltiaCar - Manage Vehicle',
+        'menu' => [
+            'general' => 'General',
+            'pages' => 'Pages',
+            'dashboard' => 'Dashboard',
+            'users' => 'Users',
+            'charging_stations' => 'Charging Stations',
+            'vehicles' => 'Vehicles',
+            'incidents' => 'Incidents',
+        ],
+        'notifications' => [
+            'title' => 'Notifications',
+            'new_booking' => 'New booking completed',
+            'new_user' => 'New user registered',
+            'incident_reported' => 'Incident reported',
+            'view_all' => 'View all'
+        ],
         'back' => '← Back',
         'control_vehicle' => 'Control Vehicle',
         'finish' => 'Finish',
@@ -259,7 +317,6 @@ return [
         'current_speed' => 'Current Speed',
         'distance_traveled' => 'Distance Traveled',
         'time_used' => 'Time Used',
-        'last_charge' => 'Last Charge',
         'total_charges' => 'Total Charges',
         'this_month' => 'This Month',
         'average_cost' => 'Average Cost',
@@ -328,6 +385,34 @@ return [
             'confirm_delete' => 'Are you sure you want to delete the vehicle :plate? This action cannot be undone.',
             'showing' => 'Showing :count vehicle(s)'
         ],
+        'dashboard' => [
+            'tabs' => [
+                'overview' => 'Overview',
+                'statistics' => 'Statistics'
+            ],
+            'description' => 'Manage system users',
+            'chart_label' => 'Monthly bookings',
+            'new_user' => 'New User',
+            'overview_title' => 'Overview',
+            'metrics' => [
+                'users' => [
+                    'title' => 'Total Users',
+                    'change' => 'Registered users'
+                ],
+                'vehicles' => [
+                    'title' => 'Vehicles',
+                    'change' => 'Available vehicles'
+                ],
+                'incidents' => [
+                    'title' => 'Incidents',
+                    'change' => 'Active incidents'
+                ],
+                'revenue' => [
+                    'title' => 'Revenue',
+                    'change' => 'This month'
+                ]
+            ]
+        ],
     ],
     'profile' => [
         'page_title' => 'SIMS - Profile',
@@ -373,6 +458,22 @@ return [
         'delete_card_confirm' => 'Are you sure you want to delete this card?',
         'delete_card_title' => 'Delete card',
         'cancel' => 'Cancel',
+        'verify_license_title' => 'Verify License',
+        'upload_license_photos' => 'Upload two photos of your driver\'s license:',
+        'front_photo_instruction' => 'Front of the license with photo and name visible.',
+        'back_photo_instruction' => 'Back of the license with clear data.',
+        'front_photo' => 'Front Photo',
+        'back_photo' => 'Back Photo',
+        'license_front_preview' => 'Driver\'s license preview (front)',
+        'license_back_preview' => 'Driver\'s license preview (back)',
+        'submit_for_verification' => 'Submit for verification',
+        'trip_history_title' => "Trip history",
+        'no_trips_title' => 'You have no trips yet',
+        'no_trips_message' => 'When you claim your first vehicle, trips will appear here.',
+        'no_trips_cta' => 'Locate Vehicles',
+        'in_progress' => 'In progress',
+        'origin' => 'Origin:',
+        'destination' => 'Destination:'
     ],
     'dashboard' => [
         'management_window' => 'Management Window',
@@ -408,6 +509,12 @@ return [
         'license_back_preview' => 'Driver\'s license preview (back)',
         'submit_for_verification' => 'Submit for verification',
     ],
+    'search' => [
+        'no_results' => 'No vehicles found matching your criteria'
+    ],
+    'errors' => [
+        'loading_vehicles' => 'Error loading vehicles',
+    ],
     'chat' => [
         'title' => 'Virtual Assistant',
         'subtitle' => 'Ask me anything about VoltiaCar',
@@ -434,13 +541,16 @@ return [
         'notes' => 'Notes',
         'placeholder_notes' => 'Additional information (optional)',
         'optional' => 'optional',
-        'submit' => 'Send incident',
+        'submit' => 'Create incident',
         'created_success' => 'Incident created successfully.',
         'created_error' => 'An error occurred while creating the incident.',
 
         'manage_title' => 'Incidents Management',
         'create_title' => 'Create Incident',
         'create_heading' => 'Report an issue or system incident',
+        'info_heading' => 'Incident Information',
+        'details_heading' => 'Details',
+        'validation_errors_title' => 'Validation errors:',
         'edit_title' => 'Edit Incident',
         'edit_heading' => 'Modify the incident details',
 
@@ -451,9 +561,6 @@ return [
         'label_description' => 'Description',
         'label_notes' => 'Additional Notes',
         'label_assignee' => "Assign to",
-
-        'option_unassigned' => 'Unassigned',
-        'option_select_type' => 'Select type...',
 
         'button_back' => 'Back',
         'button_save_changes' => 'Save Changes',
@@ -490,6 +597,9 @@ return [
         'create_new_incident' => 'Create New Incident',
         'actions' => 'Actions',
         'no_registered_incidents' => 'No incidents registered.',
+
+            'no_incidents_hint' => 'Start by creating your first incident',
+            'create_first_cta' => 'Create the first incident',
         'unknown' => 'Unknown',
         'unassigned' => 'Unassigned',
         'view_details' => 'View Details',

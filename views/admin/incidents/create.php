@@ -41,7 +41,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
                     </svg>
                     <div>
-                        <p class="font-semibold mb-2">Errors de validació:</p>
+                        <p class="font-semibold mb-2"><?php echo __('incident.validation_errors_title'); ?></p>
                         <ul class="list-disc list-inside space-y-1">
                             <?php foreach ($errors as $error): ?>
                                 <li><?= htmlspecialchars($error) ?></li>
@@ -58,7 +58,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
                 
                 <!-- Información Básica -->
                 <div class="border-b border-gray-200 pb-6">
-                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Informació de la Incidència</h2>
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4"><?php echo __('incident.info_heading'); ?></h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         
                         <div>
@@ -95,7 +95,7 @@ unset($_SESSION['errors'], $_SESSION['old_data']);
 
                 <!-- Descripció i Notes -->
                 <div class="pb-6">
-                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Detalls</h2>
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4"><?php echo __('incident.details_heading'); ?></h2>
                     <div class="space-y-6">
                         
                         <div>

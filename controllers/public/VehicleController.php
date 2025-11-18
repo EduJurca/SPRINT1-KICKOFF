@@ -74,19 +74,6 @@ class VehicleController {
             'vehicle' => $vehicle
         ], 200);
     }
-    
-  
-    public function show($id) {
-        $vehicle = $this->vehicleModel->getVehicleById($id);
-        
-        if (!$vehicle) {
-            Router::redirect('/vehicles');
-            return;
-        }
-        
-        Router::view('public.vehicle.detalls-vehicle', ['vehicle' => $vehicle]);
-    }
-    
    
     public function claimVehicle() {
     
@@ -114,7 +101,7 @@ class VehicleController {
             error_log("ERROR: Vehicle not available or not found");
             return Router::json([
                 'success' => false,
-                'message' => 'Vehicle not available'
+                'message' => __('vehicle.not_available')
             ], 404);
         }
         
@@ -126,11 +113,13 @@ class VehicleController {
             error_log("ERROR: User already has active booking: " . json_encode($activeBooking));
             return Router::json([
                 'success' => false,
-                'message' => 'You already have an active booking'
+                'message' => __('vehicle.already_claimed')
             ], 400);
         }
         
         error_log("No active bookings for user");
+        
+        $duration = isset($data['duration']) ? (int)$data['duration'] : 30;
         
         // Actualitzar estat del vehicle
         error_log("Updating vehicle status to 'in_use'...");
@@ -144,10 +133,10 @@ class VehicleController {
         
         error_log("Vehicle status updated successfully");
         
-        // Crear booking
+        // Crear booking amb durada i càlcul de preu
         error_log("Creating booking...");
         $unlockFee = 0.50;
-        $bookingId = $this->bookingModel->createBooking($userId, $vehicleId, $unlockFee);
+        $bookingId = $this->bookingModel->createBooking($userId, $vehicleId, $unlockFee, $duration);
         
         if (!$bookingId) {
             error_log("ERROR: Failed to create booking");
@@ -283,90 +272,16 @@ class VehicleController {
             ]
         ], 200);
     }
-    
  
     public function search() {
         return $this->getAvailableVehicles();
     }
-    
-
 
     public function bookVehicle() {
         return $this->claimVehicle();
     }
     
 
-    public function purchaseTime() {
-   
-        $userId = AuthController::requireAuth();
-        
-        $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
-        
-        if (strpos($contentType, 'application/json') !== false) {
-            $data = json_decode(file_get_contents('php://input'), true);
-        } else {
-            $data = $_POST;
-        }
-        
-        if (!isset($data['minutes'])) {
-            if (strpos($contentType, 'application/json') === false) {
-                $_SESSION['error'] = 'Els minuts són obligatoris';
-                return Router::redirect('/report-incident');
-            }
-            
-            return Router::json([
-                'success' => false,
-                'message' => 'Minutes are required'
-            ], 400);
-        }
-        
-        $minutes = (int)$data['minutes'];
-        $price = (float)($data['price'] ?? ($minutes * 0.35));
-        
-        require_once MODELS_PATH . '/User.php';
-        $db = Database::getMariaDBConnection();
-        $userModel = new User($db);
-        
-        if (!$userModel->addMinutes($userId, $minutes)) {
-            error_log("ERROR: Failed to add minutes for user $userId");
-            
-            if (strpos($contentType, 'application/json') === false) {
-                $_SESSION['error'] = 'Error al processar la compra. Intenta-ho de nou.';
-                return Router::redirect('/report-incident');
-            }
-            
-            return Router::json([
-                'success' => false,
-                'message' => 'Failed to update minute balance'
-            ], 500);
-        }
-        
-        error_log("SUCCESS: User $userId purchased $minutes minutes for €$price");
-        
-        if (strpos($contentType, 'application/json') === false) {
-            $_SESSION['success'] = "Compra realitzada! Has rebut $minutes minuts per €" . number_format($price, 2);
-            return Router::redirect('/dashboard');
-        }
-        
-        return Router::json([
-            'success' => true,
-            'message' => 'Time purchased successfully',
-            'minutes' => $minutes,
-            'cost' => $price
-        ], 200);
-    }
-    
-    /**
-     * Mostrar vista de localitzar vehicles (amb autenticació)
-     */
-    public function showLocalitzar() {
-   
-        AuthController::requireAuth();
-        
-      
-        return Router::view('public.vehicle.localitzar-vehicle');
-    }
-    
     /**
      * Activar botzina del vehicle
      */

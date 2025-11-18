@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404 - Pàgina no trobada</title>
+        <link rel="icon" href="/assets/images/favicon.png" type="image/png">
+        <link rel="apple-touch-icon" href="/assets/images/favicon.png">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="font-sans flex justify-center items-center h-screen m-0 bg-gradient-to-br from-indigo-500 to-purple-600 text-white">

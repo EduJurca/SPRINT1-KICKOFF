@@ -64,14 +64,23 @@ class AdminController {
     
     private function getTotalRevenue() {
         $result = $this->db->query("
-            SELECT SUM(total_cost) as revenue 
-            FROM bookings 
-            WHERE MONTH(created_at) = MONTH(CURRENT_DATE())
-            AND YEAR(created_at) = YEAR(CURRENT_DATE())
-            AND status IN ('completed', 'active')
+            SELECT 
+                COALESCE(SUM(
+                    CASE 
+                        WHEN b.total_cost IS NOT NULL AND b.total_cost > 0 THEN b.total_cost
+                        WHEN b.end_datetime IS NOT NULL THEN 
+                            (TIMESTAMPDIFF(MINUTE, b.start_datetime, b.end_datetime) * v.price_per_minute) + 0.50
+                        ELSE 0
+                    END
+                ), 0) as revenue 
+            FROM bookings b
+            INNER JOIN vehicles v ON b.vehicle_id = v.id
+            WHERE b.status = 'completed'
+            AND MONTH(b.created_at) = MONTH(CURRENT_DATE())
+            AND YEAR(b.created_at) = YEAR(CURRENT_DATE())
         ");
         $row = $result->fetch_assoc();
-        return $row['revenue'] ?? 0;
+        return round($row['revenue'] ?? 0, 2);
     }
     
     private function getMonthlyBookings() {

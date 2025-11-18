@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/assets/images/favicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/assets/images/favicon.png">
     <title><?php echo __('profile.payments_title'); ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -21,7 +23,7 @@
         <div class="bg-white p-5 rounded-2xl shadow-inner w-full h-full flex flex-col relative space-y-6">
             <header class="grid grid-cols-3 items-center mb-6 w-full">
                 <div class="text-left">
-                    <a href="/perfil" class="text-[#1565C0] text-sm font-semibold"><?php echo __('profile.back_to_profile'); ?></a>
+                    <a href="/profile" class="text-[#1565C0] text-sm font-semibold"><?php echo __('profile.back_to_profile'); ?></a>
                 </div>
                 <h1 class="text-2xl font-bold text-gray-900 text-center"><?php echo __('profile.payments_title'); ?></h1>
                 <div class="flex justify-end">
@@ -79,7 +81,7 @@
                 </button>
 
                 <!-- Add new card form (hidden by default) -->
-                <form id="add-card-form" action="/perfil/pagaments/add" method="POST" class="space-y-4 hidden" novalidate>
+                <form id="add-card-form" action="/profile/pagaments/add" method="POST" class="space-y-4 hidden" novalidate>
                     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token); ?>">                    <div>
                         <label for="card-number" class="block text-sm font-medium text-gray-700"><?php echo __('profile.card_number') ?? 'Número de targeta'; ?></label>
                         <input id="card-number" name="card_number" inputmode="numeric" autocomplete="cc-number" placeholder="1234 5678 9012 3456" maxlength="23" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2" required>
@@ -174,7 +176,7 @@
         // Confirm delete
         confirmDeleteBtn.addEventListener('click', function() {
             if (currentCardId) {
-                deleteForm.action = `/perfil/pagaments/delete/${currentCardId}`;
+                deleteForm.action = `/profile/pagaments/delete/${currentCardId}`;
                 deleteForm.submit();
             }
         });
@@ -293,6 +295,6 @@
         
         
     </script>
-
+  <?php require_once __DIR__ . '/../layouts/footer.php'; ?>
 </body>
 </html>

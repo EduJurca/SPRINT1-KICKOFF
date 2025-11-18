@@ -15,7 +15,7 @@ include_once __DIR__ . '/../../php/components/header.php';
     <div class="max-w-4xl mx-auto">
         <!-- Page Header -->
         <div class="mb-8">
-            <a href="/localitzar-vehicle" class="text-primary-blue hover:text-primary-blue-dark mb-4 inline-flex items-center">
+            <a href="/dashboard" class="text-primary-blue hover:text-primary-blue-dark mb-4 inline-flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
@@ -182,7 +182,4 @@ include_once __DIR__ . '/../../php/components/header.php';
 <!-- Include booking.js -->
 <script src="/assets/js/booking.js"></script>
 
-<?php
-// Include footer
-include_once __DIR__ . '/../../php/components/footer.php';
-?>
+<?php require_once __DIR__ . '/../layouts/footer.php'; ?>

@@ -1,21 +1,9 @@
 <?php
-/**
- * 📍 Definició CENTRALITZADA de rutes
- * Totes les rutes de l'aplicació es defineixen aquí
- */
-
-// ==========================================
-// 🏠 RUTES PÚBLIQUES
-// ==========================================
 
 // Pàgina principal
 Router::get('/', function() {
     Router::view('auth.home');
 });
-
-// ==========================================
-// 🔐 AUTENTICACIÓ
-// ==========================================
 
 // Login
 Router::get('/login', function() {
@@ -42,21 +30,7 @@ Router::get('/recover-password', function() {
 
 Router::post('/recover-password', ['AuthController', 'recoverPassword']);
 
-// ==========================================
-// 📊 DASHBOARD
-// ==========================================
-
-// Dashboard principal (gestió)
-Router::get('/dashboard', ['DashboardController', 'showGestio']);
-Router::get('/gestio', ['DashboardController', 'showGestio']);
-
-// ==========================================
-// 👤 PERFIL D'USUARI
-// ==========================================
-
 // Perfil
-Router::get('/perfil', ['ProfileController', 'showProfile']);
-
 Router::get('/profile', ['ProfileController', 'showProfile']);
 
 // Completar perfil
@@ -77,52 +51,48 @@ Router::get('/historial', function() {
 });
 
 // Pagaments
-Router::get('/perfil/pagaments', ['ProfileController', 'showPayments']);
-
-Router::post('/perfil/pagaments/add', ['ProfileController', 'addPaymentMethod']);
-
-Router::post('/perfil/pagaments/delete/{id}', ['ProfileController', 'deletePaymentMethod']);
-
-// Premium
-Router::get('/premium', function() {
-    Router::view('public.profile.premium');
+Router::get('/pagaments', function() {
+    Router::view('public.profile.pagaments');
 });
 
-// ==========================================
-// 🚗 VEHICLES
-// ==========================================
 
-// Localitzar vehicle
-Router::get('/localitzar-vehicle', ['VehicleController', 'showLocalitzar']);
+// Dashboard principal (gestió)
+Router::get('/dashboard', ['DashboardController', 'showGestio']);
+
+
+
+Router::get('/profile', ['ProfileController', 'showProfile']);
+
+Router::get('/completar-perfil', ['ProfileController', 'showCompleteProfile']);
+Router::post('/completar-perfil', ['ProfileController', 'completeProfile']);
+
+Router::get('/verificar-conduir', function() {
+    Router::view('public.profile.verificar-conduir');
+});
+Router::post('/verificar-conduir', ['ProfileController', 'verifyLicense']);
+
+Router::get('/historial', function() {
+    Router::view('public.profile.historial');
+});
+
+Router::get('/profile/pagaments', ['ProfileController', 'showPayments']);
+Router::post('/profile/pagaments/add', ['ProfileController', 'addPaymentMethod']);
+Router::post('/profile/pagaments/delete/{id}', ['ProfileController', 'deletePaymentMethod']);
+
 
 Router::get('/vehicles/search', ['VehicleController', 'search']);
-
-// Administrar vehicle
 Router::get('/administrar-vehicle', function() {
     Router::view('public.vehicle.administrar-vehicle');
 });
 
-// Detalls del vehicle
-Router::get('/detalls-vehicle', function() {
-    Router::view('public.vehicle.detalls-vehicle');
-});
-
 Router::get('/vehicles/{id}', ['VehicleController', 'show']);
 
-// Booking
 Router::get('/booking', function() {
     Router::view('public.vehicle.booking');
 });
 
 Router::post('/book-vehicle', ['VehicleController', 'bookVehicle']);
 
-
-// Endpoint POST de compra (compatibilitat)
-Router::post('/purchase-time', ['VehicleController', 'purchaseTime']);
-
-// ==========================================
-// 📡 API ENDPOINTS
-// ==========================================
 
 // Vehicles API
 Router::get('/api/vehicles', ['VehicleController', 'getAvailableVehicles']);
@@ -150,16 +120,8 @@ Router::delete('/api/bookings/{id}', ['BookingController', 'delete']);
 Router::get('/api/session-check', ['AuthController', 'checkSession']);
 Router::get('/api/session-status', ['AuthController', 'getSessionStatus']);
 
-// Gestió (dashboard data)
-Router::get('/api/gestio', ['DashboardController', 'getGestioData']);
+Router::post('/api/users/language', ['ProfileController', 'updateLanguage']);
 
-// ==========================================
-// ♿ ACCESSIBILITAT
-// ==========================================
-
-Router::get('/accessibilitat', function() {
-    Router::view('commons.accessibility.accessibilitat');
-});
 
 // ==========================================
 // � CHAT / ASISTENTE IA

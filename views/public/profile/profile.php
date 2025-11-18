@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="/assets/images/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/images/favicon.png">
   <title><?php echo __('profile.page_title'); ?></title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="/assets/js/toast.js"></script>
@@ -79,37 +81,30 @@
           <p><strong><?php echo __('profile.name'); ?></strong> <span id="fullname_span"><?php echo htmlspecialchars($fullname ?? $username ?? __('profile.not_defined')); ?></span></p>
           <p><strong><?php echo __('profile.dni'); ?></strong> <span id="dni_span"><?php echo htmlspecialchars($dni ?? __('profile.not_defined')); ?></span></p>
           <p><strong><?php echo __('profile.phone'); ?></strong> <span id="phone_span"><?php echo htmlspecialchars($phone ?? __('profile.not_defined')); ?></span></p>
-          <p><strong><?php echo __('profile.birth_date'); ?></strong> <span id="birthdate_span"><?php echo htmlspecialchars($birthdate ?? __('profile.not_defined')); ?></span></p>
-          <p><strong><?php echo __('profile.address'); ?></strong> <span id="address_span"><?php echo htmlspecialchars($address ?? __('profile.not_defined')); ?></span></p>
-          <p><strong><?php echo __('profile.gender'); ?></strong> <span id="sex_span"><?php 
-            if (isset($sex)) {
-              echo $sex === 'M' ? __('profile.male') : ($sex === 'F' ? __('profile.female') : ($sex === 'O' ? __('profile.other') : __('profile.not_defined')));
-            } else {
-              echo __('profile.not_defined');
-            }
-          ?></span></p>
         </div>
 
         <form method="POST" action="/api/users/language" class="mt-6 p-4 bg-gray-50 rounded-lg">
-          <label class="block text-gray-900 font-bold mb-2">
-            <svg class="inline w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+          <div class="flex items-center gap-3">
+            <svg class="w-5 h-5 text-gray-700" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
               <path fill-rule="evenodd" d="M7 2a1 1 0 011 1v1h3a1 1 0 110 2H9.578a18.87 18.87 0 01-1.724 4.78c.29.354.596.696.914 1.026a1 1 0 11-1.44 1.389c-.188-.196-.373-.396-.554-.6a19.098 19.098 0 01-3.107 3.567 1 1 0 01-1.334-1.49 17.087 17.087 0 003.13-3.733 18.992 18.992 0 01-1.487-2.494 1 1 0 111.79-.89c.234.47.489.928.764 1.372.417-.934.752-1.913.997-2.927H3a1 1 0 110-2h3V3a1 1 0 011-1zm6 6a1 1 0 01.894.553l2.991 5.982a.869.869 0 01.02.037l.99 1.98a1 1 0 11-1.79.895L15.383 16h-4.764l-.724 1.447a1 1 0 11-1.788-.894l.99-1.98.019-.038 2.99-5.982A1 1 0 0113 8zm-1.382 6h2.764L13 11.236 11.618 14z" clip-rule="evenodd"/>
             </svg>
-            <?php echo __('profile.language'); ?>
-          </label>
-          <select name="language" onchange="this.form.submit()" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1565C0]">
-            <option value="ca" <?= (isset($_SESSION['user']['lang']) && $_SESSION['user']['lang'] === 'ca') || !isset($_SESSION['user']['lang']) ? 'selected' : '' ?>>
-              🇪🇸 Català
-            </option>
-            <option value="en" <?= (isset($_SESSION['user']['lang']) && $_SESSION['user']['lang'] === 'en') ? 'selected' : '' ?>>
-              🇬🇧 English
-            </option>
-          </select>
+            <select name="language" onchange="this.form.submit()" aria-label="<?php echo __('profile.language'); ?>" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1565C0]">
+              <option value="ca" <?= (isset($_SESSION['user']['lang']) && $_SESSION['user']['lang'] === 'ca') || !isset($_SESSION['user']['lang']) ? 'selected' : '' ?>>
+                🇪🇸 Català
+              </option>
+              <option value="en" <?= (isset($_SESSION['user']['lang']) && $_SESSION['user']['lang'] === 'en') ? 'selected' : '' ?>>
+                🇬🇧 English
+              </option>
+            </select>
+          </div>
         </form>
-
-        <div class="mt-4 flex gap-2">
-          <button id="editBtn" class="pushable flex-1"><?php echo __('profile.edit'); ?></button>
-          <button id="saveBtn" class="pushable flex-1 bg-green-600 hidden"><?php echo __('profile.save'); ?></button>
+        <div class="mt-6">
+          <form method="POST" action="/logout">
+            <button type="submit"
+              class="block w-full bg-blue-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-600 transition-colors duration-300 text-center">
+              <?php echo __('dashboard.logout'); ?>
+            </button>
+          </form>
         </div>
       </div>
 
@@ -140,7 +135,7 @@
           <?php echo __('profile.trip_history'); ?>
         </a>
 
-        <a href="/perfil/pagaments" class="action-card">
+        <a href="/profile/pagaments" class="action-card">
           <svg viewBox="0 0 24 24">
             <path
               d="M21 4H3c-1.1 0-2 .9-2 2v2h22V6c0-1.1-.9-2-2-2zm0 4H1v10c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8zm-2 3c0 .6-.4 1-1 1s-1-.4-1-1 .4-1 1-1 1 .4 1 1z" />
@@ -165,7 +160,7 @@
   </script>
 
   <!-- Widget de Chatbot Flotante -->
-  <?php include __DIR__ . '/../../commons/chatbot-widget.php'; ?>
+  <?php require_once __DIR__ . '/../layouts/footer.php'; ?>
 
 </body>
 

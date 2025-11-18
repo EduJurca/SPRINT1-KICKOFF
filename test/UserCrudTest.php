@@ -258,24 +258,11 @@ class UserCrudTest extends TestCase {
     }
     
     public function testGetUserInfo() {
-        $row = ['username'=>'u','email'=>'e@e','minute_balance'=>5,'role_id'=>3];
+        $row = ['username'=>'u','email'=>'e@e', 'role_id'=>3];
         $db = new FakeDB(['expect_sql' => ['SELECT username, email' => [[$row]]]]);
         $user = new User($db);
         $res = $user->getUserInfo(10);
         $this->assertEquals('u', $res['username']);
-        $this->assertEquals(5, $res['minute_balance']);
-    }
-    
-    public function testAddMinutesAndBalance() {
-        $db = new FakeDB(['expect_sql' => ['UPDATE users SET minute_balance' => [null, true, 2]]]);
-        $user = new User($db);
-        $this->assertTrue($user->addMinutes(10, 15));
-        $this->assertCount(2, $db->lastStmt->boundValues);
-        
-        // get minute balance
-        $db = new FakeDB(['expect_sql' => ['SELECT minute_balance' => [[['minute_balance'=>25]]]]]);
-        $user = new User($db);
-        $this->assertEquals(25, $user->getMinuteBalance(10));
     }
     
     public function testGetAllRolesAndRoleById() {

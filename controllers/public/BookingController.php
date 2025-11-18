@@ -78,6 +78,7 @@ class BookingController {
         
         $vehicleId = $data['vehicle_id'];
         $unlockFee = $data['unlock_fee'] ?? 0.50;
+        $duration = $data['duration'] ?? 30;
         
         // Verificar que el vehicle està disponible
         if (!$this->vehicleModel->isAvailable($vehicleId)) {
@@ -87,8 +88,8 @@ class BookingController {
             ], 400);
         }
         
-        // Crear reserva
-        $bookingId = $this->bookingModel->createBooking($userId, $vehicleId, $unlockFee);
+        // Crear reserva amb durada
+        $bookingId = $this->bookingModel->createBooking($userId, $vehicleId, $unlockFee, $duration);
         
         if ($bookingId) {
             // Actualitzar estat del vehicle
